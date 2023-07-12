@@ -1,0 +1,1 @@
+import {RootStore} from "../../RootStore";export class AuthStoreService {    rootStore: typeof RootStore;    constructor(rootStore: typeof RootStore) {        this.rootStore = rootStore;    }}export default AuthStoreService;
