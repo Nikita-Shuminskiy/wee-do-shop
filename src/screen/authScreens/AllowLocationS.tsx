@@ -1,27 +1,32 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {BaseWrapperComponent} from "../../components/baseWrapperComponent";
 import {Box, Image, Text} from "native-base";
 import location from '../../assets/images/locationBig.png'
-import {StyleSheet, TouchableOpacity} from "react-native";
+import {StyleSheet} from "react-native";
 import arrowLeft from "../../assets/images/arrow-left.png";
 import Button from "../../components/Button";
 import {colors} from "../../assets/colors/colors";
-import {MapViews} from "../../components/MapViews";
 import ArrowBack from "../../components/ArrowBack";
+import {allowLocation} from "../../utils/utils";
+import AddressAutocomplete from "../../components/AddressAutocomplete";
+import {routerConstants} from "../../constants/routerConstants";
 
 const AllowLocationS = ({navigation}) => {
-    const [showLocationMap, setShowLocationMap] = useState(false)
+
     const onPressGoBack = () => {
         navigation.goBack()
     }
     const onPressAllowLocation = () => {
-        setShowLocationMap(true)
+        allowLocation()
+    }
+    const onPressEnterLocation = () => {
+        navigation.navigate(routerConstants.AUTOCOMPLETE_MAP)
     }
     return (
         <>
             <BaseWrapperComponent>
                 <Box mt={5} mb={5} position={'absolute'} left={5}>
-                    <ArrowBack goBackPress={onPressGoBack}  img={arrowLeft}/>
+                    <ArrowBack goBackPress={onPressGoBack} img={arrowLeft}/>
                 </Box>
                 <Box alignItems={'center'} justifyContent={'space-evenly'} flex={1} paddingX={10}>
                     <Box w={'100%'}>
@@ -32,23 +37,22 @@ const AllowLocationS = ({navigation}) => {
                     </Box>
                     <Box w={'100%'}>
                         <Box>
-                            <Button backgroundColor={colors.green}  onPress={onPressAllowLocation}
+                            <Button backgroundColor={colors.green} onPress={onPressAllowLocation}
                                     title={'Allow location access'}/>
                         </Box>
                         <Box mt={5}>
-                            <Button backgroundColor={'transparent'} styleText={{color: colors.black}} onPress={onPressAllowLocation}
+                            <Button backgroundColor={'transparent'} styleText={{color: colors.black}}
+                                    onPress={onPressEnterLocation}
                                     title={'Enter my location'}/>
                         </Box>
                     </Box>
                 </Box>
             </BaseWrapperComponent>
-            {showLocationMap && <MapViews close={() => setShowLocationMap(false)} visible={showLocationMap}/>}
+
         </>
     );
 };
-const styles = StyleSheet.create({
-
-})
+const styles = StyleSheet.create({})
 
 
 export default AllowLocationS;

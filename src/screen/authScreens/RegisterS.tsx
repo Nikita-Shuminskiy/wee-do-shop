@@ -4,21 +4,21 @@ import {NavigationProp, ParamListBase} from '@react-navigation/native'
 import {BaseWrapperComponent} from '../../components/baseWrapperComponent'
 import {Box, Image, Text} from 'native-base'
 import TextInput from '../../components/TextInput'
-import {MaterialCommunityIcons} from '@expo/vector-icons'
+import {AntDesign, MaterialCommunityIcons} from '@expo/vector-icons'
 import logoImg from '../../assets/images/logoWeeDo.png'
 import {useFormik} from 'formik'
 import {validateEmail} from '../../utils/utils'
 import {colors} from '../../assets/colors/colors'
 import Button from '../../components/Button'
-import {AntDesign} from '@expo/vector-icons'
 import PhoneNumberField from '../../components/PhoneField'
 import location from '../../assets/images/location-register.png'
 import arrowLeft from '../../assets/images/arrow-left.png'
 import rootStore from '../../store/RootStore'
 import {RoleType} from 'api/apiAuth'
-import {MapViews} from "../../components/MapViews";
 import {routerConstants} from "../../constants/routerConstants";
 import ArrowBack from "../../components/ArrowBack";
+import {observer} from "mobx-react-lite";
+import AuthStore from "../../store/AuthStore/auth-store";
 
 type LoginSProps = {
     navigation: NavigationProp<ParamListBase>
@@ -33,16 +33,19 @@ export type UserRegisterDataType = {
     location: string,
     role: RoleType,
 }
-const RegisterS = ({navigation}: LoginSProps) => {
+const RegisterS = observer(({navigation}: LoginSProps) => {
     const {AuthStoreService} = rootStore
+    const {currentLocation} = AuthStore
     const [isValidPhone, setIsValidPhone] = useState(false)
 
     const onSubmit = (values: UserRegisterDataType) => {
-        const {phone, lastName, firstName, password, email, location} = values
-        AuthStoreService.registration(values)
+        AuthStoreService.registration({
+            ...values,
+            location: currentLocation?.address?.formatted_address
+        })
         setSubmitting(false)
     }
-    const {handleChange, handleBlur, touched, handleSubmit, values, errors, isSubmitting, setSubmitting} =
+    const {handleChange, handleBlur, touched, handleSubmit, values, errors, isSubmitting, setSubmitting, setValues} =
         useFormik({
             initialValues: {
                 email: '',
@@ -50,7 +53,7 @@ const RegisterS = ({navigation}: LoginSProps) => {
                 confirmPassword: '',
                 firstName: '',
                 lastName: '',
-                location: '123',
+                location: '',
                 phone: '',
                 role: 'customer'
             },
@@ -92,10 +95,11 @@ const RegisterS = ({navigation}: LoginSProps) => {
     const onPressNavigateToLocation = () => {
         navigation.navigate(routerConstants.ALLOW_LOCATION)
     }
+
     return (<BaseWrapperComponent isKeyboardAwareScrollView={true}>
             <Box alignItems={'center'}>
                 <Box mt={5} mb={5} position={'absolute'} left={5}>
-                    <ArrowBack goBackPress={onPressGoBack}  img={arrowLeft}/>
+                    <ArrowBack goBackPress={onPressGoBack} img={arrowLeft}/>
                 </Box>
                 <Image w={123} h={158} alt={'logo'} source={logoImg} mt={5} mb={5}/>
             </Box>
@@ -176,8 +180,11 @@ const RegisterS = ({navigation}: LoginSProps) => {
                 <Box alignItems={'center'}>
                     <TouchableOpacity onPress={onPressNavigateToLocation}>
                         <Image w={170} h={105} alt={'location'} source={location}/>
-                        <Text color={colors.gray} mt={2} fontWeight={'500'}>Add you location address*</Text>
+                        <Text color={colors.gray} mt={2} fontWeight={'500'}> Add you location address*</Text>
                     </TouchableOpacity>
+                    {currentLocation?.address?.formatted_address &&
+                        <Text fontSize={16} fontWeight={'600'}>{currentLocation?.address?.formatted_address }</Text>}
+
                 </Box>
                 <Box w={'100%'} mt={5}>
                     <Button styleContainer={styles.styleContainerBtnUp} disabled={
@@ -188,7 +195,7 @@ const RegisterS = ({navigation}: LoginSProps) => {
             </Box>
         </BaseWrapperComponent>
     )
-}
+})
 const styles = StyleSheet.create({
     styleContainerBtn: {
         borderWidth: 1,

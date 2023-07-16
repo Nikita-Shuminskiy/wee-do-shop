@@ -13,6 +13,7 @@ import RegisterS from '../screen/authScreens/RegisterS'
 import rootStore from '../store/RootStore'
 import { deviceStorage } from '../utils/storage/storage'
 import AllowLocationS from "../screen/authScreens/AllowLocationS";
+import GoogleAutocompleteMapS from "../screen/authScreens/GoogleAutocompleteMapS";
 
 const RootStack = createNativeStackNavigator()
 const RootNavigation = observer(() => {
@@ -42,6 +43,11 @@ deviceStorage.removeItem('accessToken')*/
 					options={{ headerShown: false }}
 					name={routerConstants.ALLOW_LOCATION}
 					component={AllowLocationS}
+				/>
+				<RootStack.Screen
+					options={{ headerShown: false }}
+					name={routerConstants.AUTOCOMPLETE_MAP}
+					component={GoogleAutocompleteMapS}
 				/>
 			</RootStack.Navigator>
 		</NavigationContainer>

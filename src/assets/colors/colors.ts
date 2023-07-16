@@ -6,6 +6,7 @@ export const colors: { [key: string]: string } = {
 	green: '#699315',
 
 	grayLight: '#E8DADA',
+	blueLight: 'rgba(0,31,91,0.08)',
 
 	grayDarkLight: '#E8E8E8',
 	red: '#FF0000',
@@ -14,7 +15,7 @@ export const colors: { [key: string]: string } = {
 
 	gray: '#8F8F8F',
 	white: '#FFFFFF',
-	blueLight: '#D5E3FE',
+
 	blueLightMedium: '#7FA8DA',
 	blueMedium: '#1F8298',
 	blue: '#51658D',
