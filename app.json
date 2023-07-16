@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "SOSnative",
-    "slug": "sos",
+    "name": "weDoo",
+    "slug": "wedoo",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -31,10 +31,10 @@
     },
     "extra": {
       "eas": {
-        "projectId": "a07842e7-b2bd-48ce-9355-0799be4aebf1"
+        "projectId": "e8ce69e0-2fdf-40ff-bc17-043ca9a10ccd"
       }
     },
-    "owner": "nick11111",
+    "owner": "nick111111",
     "plugins": [
       "expo-localization"
     ]

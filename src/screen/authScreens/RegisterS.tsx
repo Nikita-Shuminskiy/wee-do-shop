@@ -1,159 +1,194 @@
-import React, {useState} from 'react';
-import {BaseWrapperComponent} from "../../components/baseWrapperComponent";
-import {StyleSheet, Text, TouchableOpacity, View} from "react-native";
-import {colors} from "../../assets/colors/colors";
-import TextInput from "../../components/TextInput";
-import {LinearGradient} from "expo-linear-gradient";
-import ArrowBack from "../../components/ArrowBack";
-import arrowBack from "../../assets/images/keyboard_arrow_left-He.png"
-import Picker from "../../components/Picker";
-import {Checkbox} from "expo-checkbox";
-import ButtonGradient from "../../components/ButtonGradient";
-import * as Localization from 'expo-localization';
-import {routerConstants} from "../../constants/routerConstants";
+import React, { useState } from 'react'
+import { StyleSheet, TouchableOpacity } from 'react-native'
+import { NavigationProp, ParamListBase } from '@react-navigation/native'
+import { BaseWrapperComponent } from '../../components/baseWrapperComponent'
+import { Box, Image, Text } from 'native-base'
+import TextInput from '../../components/TextInput'
+import { MaterialCommunityIcons } from '@expo/vector-icons'
+import logoImg from '../../assets/images/logoWeeDo.png'
+import { useFormik } from 'formik'
+import { validateEmail } from '../../utils/utils'
+import { colors } from '../../assets/colors/colors'
+import Button from '../../components/Button'
+import { AntDesign } from '@expo/vector-icons'
+import PhoneNumberField from '../../components/PhoneField'
+import location from '../../assets/images/location-register.png'
+import arrowLeft from '../../assets/images/arrow-left.png'
+import rootStore from '../../store/RootStore'
 
-const RegisterS = ({navigation}) => {
-    const [isVolunteer, setIsVolunteer] = useState(false)
-    const checkLanguage = Localization.locale.includes('he')
+type LoginSProps = {
+	navigation: NavigationProp<ParamListBase>
+}
 
-    return (
-        <BaseWrapperComponent isKeyboardAwareScrollView={true}>
-            <ArrowBack img={checkLanguage ? arrowBack : null} goBackPress={() => navigation.goBack()}/>
+const RegisterS = ({ navigation }: LoginSProps) => {
+	const { AuthStoreService } = rootStore
+	const [isValidPhone, setIsValidPhone] = useState(false)
+	const onSubmit = (values) => {
 
-            <View style={styles.container}>
-                <View style={{justifyContent: 'center', flex: 1}}>
-                    <Text style={styles.textHeader}>Create an account</Text>
-                </View>
+		setSubmitting(false)
+	}
+	const { handleChange, handleBlur, touched, handleSubmit, values, errors, isSubmitting, setSubmitting } =
+		useFormik({
+			initialValues: {
+				email: '',
+				password: '',
+				confirmPassword: '',
+				firstName: '',
+				lastName: '',
+				phone: '',
+			},
+			onSubmit: onSubmit,
+			validateOnChange: false,
+			validateOnMount: false,
+			validateOnBlur: false,
+			validate: (values) => {
+				const errors = {}
+				if (!validateEmail(values.email)) {
+					errors['email'] = true
+				}
+				if (values.password.length <= 3) {
+					errors['password'] = true
+				}
+				if (!values.firstName.trim()) {
+					errors['firstName'] = true
+				}
+				if (values.password !== values.confirmPassword) {
+					errors['confirmPassword'] = true
+				}
+				return errors
+			},
+		})
 
-                <View
-                    style={{flex: 1, flexDirection: 'column', justifyContent: 'space-between', paddingHorizontal: 20}}>
-                    <View style={{flex: 1, width: '100%'}}>
-                        <View style={{flexDirection: 'row', justifyContent: 'space-between', flex: 1}}>
-                            <ButtonGradient
-                                styleTouchable={{marginRight: 10}}
-                                styleGradient={styles.button}
-                                colorsGradient={isVolunteer ? ['#D5E3FE', '#D5E3FE'] : null}
-                                styleText={styles.textBtn}
-                                colorText={isVolunteer ? colors.gray : colors.white}
-                                btnText={'I need help'}
-                                onPress={() => setIsVolunteer(false)}
-                            />
-                            <ButtonGradient
+	const onValidNumberHandler = (isValidNumber: boolean) => {
+		setIsValidPhone(isValidNumber)
+	}
+	const onPressGoBack = () => {
+		navigation.goBack()
+	}
+	const disabledBtnSignUp = !!(errors.email && !validateEmail(values.email.trim())) ||
+		!!(errors.password && values.password.length <= 3) ||
+		!!(errors.phone && !values.phone) ||
+		!!(errors.firstName && !values.firstName.trim()) ||
+		!!(errors.confirmPassword && !values.confirmPassword) ||
+		isSubmitting ||
+		!!(!isValidPhone && touched.phone)
+	return (<BaseWrapperComponent isKeyboardAwareScrollView={true}>
+			<Box alignItems={'center'}>
+				<TouchableOpacity style={{ position: 'absolute', left: 15 }} onPress={onPressGoBack}>
+					<Image alt={'arrow'} source={arrowLeft} mt={5} mb={5} />
+				</TouchableOpacity>
+				<Image w={123} h={158} alt={'logo'} source={logoImg} mt={5} mb={5} />
+			</Box>
+			<Box w={'100%'} alignItems={'center'} justifyContent={'flex-start'} flex={1} paddingX={5}>
 
-                                styleGradient={styles.button}
-                                colorsGradient={!isVolunteer ? ['#D5E3FE', '#D5E3FE'] : null}
-                                styleText={styles.textBtn}
-                                colorText={!isVolunteer ? colors.gray : colors.white}
-                                btnText={'I am a volunteer'}
-                                onPress={() => navigation.navigate(routerConstants.DASHBOARD)}
-                            />
-                        </View>
-                    </View>
+				<Box w={'100%'} mb={5}>
+					<TextInput onChangeText={handleChange('firstName')}
+										 placeholder={'First name*'}
+										 value={values.firstName}
+										 onBlur={handleBlur('firstName')}
+										 errorMessage={!values.firstName.trim() && 'Enter a name'}
+										 isInvalid={!!(errors.email && !validateEmail(values.email.trim()))}
+										 isRequired={true}
+										 borderRadius={16}
+										 iconRight={<AntDesign name='user' size={24} color={colors.gray} />}
+										 type={'text'} />
 
-                    <View>
-                        <TextInput placeholder={'Your name'} style={styles.input}/>
-                        <Text style={[styles.textAnyName]}>You can use any name you want to
-                            stay {"\n"} anonymous.</Text>
+					<TextInput onChangeText={handleChange('lastName')}
+										 placeholder={'Last name'}
+										 value={values.lastName}
+										 onBlur={handleBlur('lastName')}
+										 errorMessage={!values.firstName.trim() && 'Enter a name'}
+										 isInvalid={!!(errors.email && !validateEmail(values.email.trim()))}
+										 isRequired={true}
+										 borderRadius={16}
+										 iconRight={<AntDesign name='user' size={24} color={colors.gray} />}
+										 type={'text'} />
 
-                        <TextInput placeholder={'Email Address'} style={styles.input}/>
-                        <TextInput placeholder={'Password'} style={styles.input}/>
-                        <TextInput placeholder={'Confirm password'} style={styles.input}/>
-                        <View style={styles.blockPicker}>
-                            <Picker/>
-                        </View>
+					<TextInput onChangeText={handleChange('email')}
+										 placeholder={'Email*'}
+										 value={values.email}
+										 onBlur={handleBlur('email')}
+										 errorMessage={!validateEmail(values.email.trim()) && errors.email && 'Incorrect email address entered'}
+										 isInvalid={!!(errors.email && !validateEmail(values.email.trim()))}
+										 isRequired={true}
+										 borderRadius={16}
+										 type={'text'}
+										 iconRight={<MaterialCommunityIcons name={'email-edit-outline'} size={24} color={colors.gray} />} />
+					{/*	<TextInput onChangeText={handleChange('phone')}
+										 placeholder={'Phone*'}
+										 value={values.phone}
+										 onBlur={handleBlur('phone')}
+										 errorMessage={!values.phone.trim() && errors.phone && 'Incorrect email address entered'}
+										 isInvalid={!!(errors.phone && !values.phone)}
+										 isRequired={true}
+										 borderRadius={16}
+										 type={'text'}
+										 iconRight={<AntDesign name="phone" size={24} color={colors.gray}/>} />*/}
+					<Box mt={2}>
+						<PhoneNumberField onValidNumber={onValidNumberHandler}
+															errorMessage={'Incorrect phone number'}
+															isInvalid={!!(!isValidPhone && touched.phone)}
+															isRequired={true}
+															defaultValue={values.phone}
+															onChangeText={handleChange('phone')} />
+					</Box>
+					<TextInput onChangeText={handleChange('password')}
+										 placeholder={'Password*'}
+										 onBlur={handleBlur('password')}
+										 isInvalid={!!(errors.password && values.password.length <= 3)}
+										 errorMessage={
+											 !!errors.password &&
+											 values.password.length <= 3 &&
+											 'The password must be at least 4 characters long'
+										 }
+										 value={values.password}
+										 isRequired={true}
+										 type={'password'} borderRadius={16} />
 
-                        <View style={{
-                            flexDirection: checkLanguage ? 'row-reverse' : 'row',
-                            alignItems: 'center',
-                            justifyContent: 'flex-start',
-                        }}>
-                            <Checkbox value={true} color={colors.blue}
-                                      style={{borderColor: colors.blue, borderRadius: 8, marginRight: 15}}/>
+					<TextInput onChangeText={handleChange('confirmPassword')}
+										 placeholder={'Confirm password*'}
+										 onBlur={handleBlur('confirmPassword')}
+										 value={values.confirmPassword}
+										 errorMessage={
+											 (touched.confirmPassword && errors.confirmPassword && !values.confirmPassword) ||
+											 (values.confirmPassword !== values.password && touched.confirmPassword)
+												 ? 'The passwords dont match'
+												 : ''
+										 }
+										 isRequired={true}
+										 isInvalid={
+											 !!(touched.confirmPassword && errors.confirmPassword && !values.confirmPassword) ||
+											 !!(values.confirmPassword !== values.password && touched.confirmPassword)
+										 }
+										 type={'password'} borderRadius={16} />
+				</Box>
+				<Box alignItems={'center'}>
+					<TouchableOpacity>
+						<Image w={170} h={105} alt={'location'} source={location} />
+						<Text color={colors.gray} mt={2} fontWeight={'500'}>Add you location address*</Text>
+					</TouchableOpacity>
+				</Box>
+				<Box w={'100%'} mt={5}>
+					<Button styleContainer={styles.styleContainerBtnUp} backgroundColor={'white'} disabled={
+						disabledBtnSignUp
+					} onPress={handleSubmit} title={'Sign up'} />
 
-                            <View style={{marginTop: 20, marginBottom: 20, marginLeft: 10,
-                                flexDirection: checkLanguage ? 'row-reverse' : 'row'}}>
-                                <Text style={[styles.textAgree]}>
-                                    I agree with{' '}
-                                </Text>
-
-                                <TouchableOpacity style={{borderBottomWidth: 1, borderColor: colors.blue}}>
-                                    <Text style={styles.textAgree}>Terms and Conditions</Text>
-                                </TouchableOpacity>
-                            </View>
-
-                        </View>
-
-                        <TouchableOpacity>
-                            <LinearGradient
-                                colors={['#89BDE7', '#7EA7D9']}
-                                style={[{
-                                    width: '100%', height: 67, alignItems: 'center',
-                                    justifyContent: 'center',
-                                    borderRadius: 8,
-                                }]}>
-                                <Text style={styles.text}>Log in</Text>
-                            </LinearGradient>
-                        </TouchableOpacity>
-                    </View>
-                </View>
-            </View>
-        </BaseWrapperComponent>
-    );
-};
+				</Box>
+			</Box>
+		</BaseWrapperComponent>
+	)
+}
 const styles = StyleSheet.create({
-    textAgree: {color: colors.blue, fontSize: 18, fontFamily: 'Onest-light'},
-    textBtn: {
-        fontFamily: 'Onest-light',
-        fontWeight: '500',
-        fontSize: 18
-    },
-    blockPicker: {
-        backgroundColor: '#D5E3FE',
-        height: 67,
-        width: 341,
-        paddingRight: 20,
-        paddingLeft: 20,
-        marginTop: 20,
-        borderRadius: 8,
-    },
-    textAnyName: {
-        textAlign: 'left',
-        marginTop: 5,
-        marginLeft: 20,
-        color: '#909597',
-        fontSize: 14,
-        fontFamily: 'Onest-light'
-    },
-    button: {
-        alignItems: 'center',
-        justifyContent: 'center',
-        borderRadius: 8,
-        height: 53,
-        width: 162,
-    },
-    text: {
-        fontFamily: 'Onest-medium',
-        fontWeight: '500',
-        fontSize: 18,
-        color: colors.white,
-    },
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginBottom: 40,
-        marginHorizontal: 20
-    },
-    input: {},
-    textHeader: {
-        fontFamily: 'Onest-medium',
-        textAlign: 'center',
-        fontSize: 30,
-        fontWeight: '400',
-        color: '#51658D',
-        lineHeight: 37,
-        marginTop: 10,
-        marginBottom: 30
-    },
+	styleContainerBtn: {
+		borderWidth: 1,
+		backgroundColor: 'transparent',
+		borderColor: colors.gray,
+	},
+	styleContainerBtnUp: {
+		marginTop: 10,
+		backgroundColor: colors.green,
+	},
 })
-export default RegisterS;
+
+
+export default RegisterS

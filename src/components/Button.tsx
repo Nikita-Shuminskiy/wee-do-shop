@@ -1,30 +1,59 @@
-import React, {useState} from 'react';
-import {Pressable, StyleProp, StyleSheet, Text, TouchableOpacity} from "react-native";
+import React from 'react'
+import { StyleProp, Text, TouchableOpacity } from 'react-native'
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
+import {Box} from 'native-base'
+import { colors } from '../assets/colors/colors'
 
 type ButtonProps = {
-    onPress: () => void
-    styleContainer?: StyleProp<any>
-    styleText?: StyleProp<any>
-    title: string
+  onPress: () => void
+  title: string
+  styleContainer?: StyleProp<any>
+  styleText?: StyleProp<any>
+  disabled?: boolean
+  backgroundColor?: string
 }
-const Button = ({title, onPress, styleText, onPressIn, onPressOut, activeOpacity, styleContainer, activeHover}: any) => {
-    const [activeBtn, setActiveBtn] = useState(false)
-    return (
-        <TouchableOpacity     onPressIn={() => setActiveBtn(true)}
-                              onPressOut={() => setActiveBtn(false)}
-                          style={{
-                              backgroundColor:  activeHover && activeBtn ? '#D5E3FE' : 'rgba(213,227,254,0)',
-                              alignItems: 'center',
-                              justifyContent: 'center',
-                              borderRadius: 8,
-                              height: 66, ...styleContainer
-                          }} activeOpacity={activeOpacity ?? 1}
-                          onPress={onPress}>
-            <Text style={{
-                ...styleText
-            }}>{title}</Text>
-        </TouchableOpacity>
-    );
-};
-const styles = StyleSheet.create({});
-export default Button;
+const Button = ({
+                  onPress,
+                  title,
+                  styleContainer,
+                  disabled,
+                  styleText,
+                  backgroundColor,
+                  ...rest
+                }: ButtonProps) => {
+  return (
+    <TouchableOpacity
+      style={{
+        backgroundColor: backgroundColor ?? colors.white,
+        padding: 10,
+        borderRadius: 16,
+        alignItems: 'center',
+        width: 'auto',
+        minWidth: 120,
+        ...styleContainer,
+      }}
+      disabled={disabled}
+      onPress={!disabled ? onPress : null}
+      {...rest}
+    >
+      <Box flexDirection={'row'} alignItems={'center'}>
+        <Text
+          style={{
+            fontSize: 13,
+            fontWeight: '500',
+            color: disabled ? colors.red : colors.white,
+            ...styleText,
+          }}
+        >
+          {title}
+        </Text>
+        {disabled && (
+          <Box ml={2}>
+            <MaterialIcons name="error-outline" size={24} color={colors.red}/>
+          </Box>
+        )}
+      </Box>
+    </TouchableOpacity>
+  )
+}
+export default Button
