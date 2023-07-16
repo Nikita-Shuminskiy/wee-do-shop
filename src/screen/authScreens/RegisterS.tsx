@@ -15,16 +15,27 @@ import PhoneNumberField from '../../components/PhoneField'
 import location from '../../assets/images/location-register.png'
 import arrowLeft from '../../assets/images/arrow-left.png'
 import rootStore from '../../store/RootStore'
+import { RoleType } from 'api/apiAuth'
 
 type LoginSProps = {
 	navigation: NavigationProp<ParamListBase>
 }
-
+export type UserRegisterDataType = {
+	email: string,
+	password: string,
+	confirmPassword: string,
+	firstName: string,
+	lastName: string,
+	phone: string,
+	location: string,
+	role: RoleType,
+}
 const RegisterS = ({ navigation }: LoginSProps) => {
 	const { AuthStoreService } = rootStore
 	const [isValidPhone, setIsValidPhone] = useState(false)
-	const onSubmit = (values) => {
-
+	const onSubmit = (values: UserRegisterDataType) => {
+		const {phone, lastName, firstName, password, email, location} = values
+		AuthStoreService.registration(values)
 		setSubmitting(false)
 	}
 	const { handleChange, handleBlur, touched, handleSubmit, values, errors, isSubmitting, setSubmitting } =
@@ -35,7 +46,9 @@ const RegisterS = ({ navigation }: LoginSProps) => {
 				confirmPassword: '',
 				firstName: '',
 				lastName: '',
+				location: '123',
 				phone: '',
+				role: 'customer'
 			},
 			onSubmit: onSubmit,
 			validateOnChange: false,

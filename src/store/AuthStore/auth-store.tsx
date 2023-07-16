@@ -1,6 +1,7 @@
 import {action, makeObservable, observable} from "mobx";
 import { deviceStorage } from '../../utils/storage/storage'
 import { authApi, UserType } from '../../api/apiAuth'
+import { UserRegisterDataType } from "screen/authScreens/RegisterS";
 
 export class AuthStore {
 	user: UserType = {} as UserType
@@ -25,7 +26,9 @@ export class AuthStore {
 		await deviceStorage.saveItem('refreshToken', data.refreshToken)
 		this.setAuth(true)
 	}
-
+ async registration(dataUser: UserRegisterDataType) {
+	 const {data} = await authApi.register(dataUser)
+ }
 	async getMe(): Promise<void> {
 		const { data } = await authApi.getMe()
 		this.setUser(data)
