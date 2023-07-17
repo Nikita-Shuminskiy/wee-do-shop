@@ -16,52 +16,51 @@ import MainNavigation from "./MainNavigation";
 
 const RootStack = createNativeStackNavigator()
 const RootNavigation = observer(() => {
-	const { isLoading } = NotificationStore
-	const { AuthStoreService, AuthStore} = rootStore
-	const { isAuth } = AuthStore
-	useEffect(() => {
-		AuthStoreService.checkAuth()
-	}, [])
+    const {isLoading} = NotificationStore
+    const {AuthStoreService, AuthStore} = rootStore
+    const {isAuth} = AuthStore
+    useEffect(() => {
+        AuthStoreService.checkAuth()
+    }, [])
 
-/*deviceStorage.removeItem('refreshToken')
-deviceStorage.removeItem('accessToken')*/
-	return (
-		<NavigationContainer>
-			{isLoading === LoadingEnum.fetching && <Loading visible={true} />}
-			<RootStack.Navigator>
-				{
-					isAuth ? <>
-						<RootStack.Screen
-							options={{ headerShown: false }}
-							name={routerConstants.MAIN}
-							component={MainNavigation}
-						/>
-					</> : <>
-						<RootStack.Screen
-							options={{ headerShown: false }}
-							name={routerConstants.LOGIN}
-							component={LoginS}
-						/>
-						<RootStack.Screen
-							options={{ headerShown: false }}
-							name={routerConstants.REGISTRATION}
-							component={RegisterS}
-						/>
-						<RootStack.Screen
-							options={{ headerShown: false }}
-							name={routerConstants.ALLOW_LOCATION}
-							component={AllowLocationS}
-						/>
-						<RootStack.Screen
-							options={{ headerShown: false }}
-							name={routerConstants.AUTOCOMPLETE_MAP}
-							component={GoogleAutocompleteMapS}
-						/>
-					</>
-				}
-			</RootStack.Navigator>
-		</NavigationContainer>
-	)
+    /*deviceStorage.removeItem('refreshToken')
+    deviceStorage.removeItem('accessToken')*/
+
+    return (
+        <NavigationContainer>
+            <Loading visible={isLoading === LoadingEnum.fetching}/>
+            <RootStack.Navigator>
+                {
+                    isAuth ? <RootStack.Screen
+                        options={{headerShown: false}}
+                        name={routerConstants.MAIN}
+                        component={MainNavigation}
+                    /> : <React.Fragment>
+                        <RootStack.Screen
+                            options={{headerShown: false}}
+                            name={routerConstants.LOGIN}
+                            component={LoginS}
+                        />
+                        <RootStack.Screen
+                            options={{headerShown: false}}
+                            name={routerConstants.REGISTRATION}
+                            component={RegisterS}
+                        />
+                        <RootStack.Screen
+                            options={{headerShown: false}}
+                            name={routerConstants.ALLOW_LOCATION}
+                            component={AllowLocationS}
+                        />
+                        <RootStack.Screen
+                            options={{headerShown: false}}
+                            name={routerConstants.AUTOCOMPLETE_MAP}
+                            component={GoogleAutocompleteMapS}
+                        />
+                    </React.Fragment>
+                }
+            </RootStack.Navigator>
+        </NavigationContainer>
+    )
 })
 
 export default RootNavigation

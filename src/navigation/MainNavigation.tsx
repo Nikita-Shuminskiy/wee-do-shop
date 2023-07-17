@@ -10,8 +10,10 @@ const TabMainStack = createBottomTabNavigator();
 
 const MainNavigation = ({navigation, route}) => {
     const {keyboardStatus} = useKeyBoardStatus()
+
     return (
             <TabMainStack.Navigator
+                initialRouteName={routerConstants.HOME}
                 screenOptions={({route}) => ({
                     tabBarStyle: {
                         width: '100%',

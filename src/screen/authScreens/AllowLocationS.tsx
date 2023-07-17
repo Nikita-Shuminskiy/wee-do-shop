@@ -7,17 +7,16 @@ import arrowLeft from "../../assets/images/arrow-left.png";
 import Button from "../../components/Button";
 import {colors} from "../../assets/colors/colors";
 import ArrowBack from "../../components/ArrowBack";
-import {allowLocation} from "../../utils/utils";
-import AddressAutocomplete from "../../components/AddressAutocomplete";
 import {routerConstants} from "../../constants/routerConstants";
+import {allowLocation} from "../../components/MapViews/utils";
 
 const AllowLocationS = ({navigation}) => {
 
     const onPressGoBack = () => {
         navigation.goBack()
     }
-    const onPressAllowLocation = () => {
-        allowLocation()
+    const onPressAllowLocation = async () => {
+      await allowLocation()
     }
     const onPressEnterLocation = () => {
         navigation.navigate(routerConstants.AUTOCOMPLETE_MAP)
