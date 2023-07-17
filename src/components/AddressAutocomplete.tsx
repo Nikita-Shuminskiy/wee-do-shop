@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
-import {StyleSheet, View} from 'react-native';
-import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
+import React from 'react';
+import {StyleSheet} from 'react-native';
+import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
 import search from '../assets/images/search.png'
 import {Image} from "native-base";
 import {colors} from "../assets/colors/colors";
+
 type AddressAutocompleteProps = {
     onSave: (data: AutoCompleteDataType) => void
 }
@@ -20,8 +21,6 @@ const AddressAutocomplete = ({onSave}: AddressAutocompleteProps) => {
             styles={styles}
             fetchDetails={true}
             placeholder={'Enter an address'}
-            /*currentLocation={true}
-            currentLocationLabel="Current Location"*/
             onPress={(data, details = null) => {
                 const { geometry, name, formatted_address  } = details;
                 if (geometry && geometry.location) {
@@ -40,7 +39,7 @@ const AddressAutocomplete = ({onSave}: AddressAutocompleteProps) => {
             debounce={200}
             query={{
                 key: 'AIzaSyC-Zb10nysj6jYlw_rMIptMyWYOe82GmMM',
-                language: 'en', // Язык результатов автокомплита
+                language: 'en',
             }}
         />
     );

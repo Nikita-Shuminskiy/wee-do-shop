@@ -1,19 +1,20 @@
 import React, {useEffect, useState} from 'react'
 import MapView, {Marker} from 'react-native-maps'
-import {Modal, StyleSheet, TouchableOpacity, View, Image} from 'react-native'
+import {Image, Modal, StyleSheet, TouchableOpacity, View} from 'react-native'
 import {Box, Text} from 'native-base'
-import arrowLeft from "../assets/images/arrow-left.png";
-import myLocationImg from "../assets/images/myLocation.png";
-import rootStore from "../store/RootStore/root-store";
-import ArrowBack from "./ArrowBack";
-import {AutoCompleteDataType} from "./AddressAutocomplete";
-import Button from "./Button";
-import {colors} from "../assets/colors/colors";
+import arrowLeft from "../../assets/images/arrow-left.png";
+import myLocationImg from "../../assets/images/myLocation.png";
+import ArrowBack from "../ArrowBack";
+import {AutoCompleteDataType} from "../AddressAutocomplete";
+import Button from "../Button";
+import {colors} from "../../assets/colors/colors";
 import * as Location from 'expo-location';
-import {allowLocation} from "../utils/utils";
-import AuthStore from "../store/AuthStore";
-import {routerConstants} from "../constants/routerConstants";
+import AuthStore from "../../store/AuthStore";
+import {routerConstants} from "../../constants/routerConstants";
 import {useNavigation} from "@react-navigation/native";
+import NotificationStore from "../../store/NotificationStore/notification-store";
+import {LoadingEnum} from "../../store/types/types";
+import {allowLocation, getInfoAddressForCoords} from "./utils";
 
 type MapViewsProps = {
     currentDataMap: AutoCompleteDataType
@@ -23,54 +24,57 @@ type MapViewsProps = {
 }
 export const MapViews = ({visible, close, currentDataMap}: MapViewsProps) => {
     const {setLocation} = AuthStore
+    const {setIsLoading} = NotificationStore
     const navigation = useNavigation<any>();
+    const [mapInteractionEnabled, setMapInteractionEnabled] = useState(true);
     const onPressGoBack = () => {
         close()
     }
     const [myLocation, setMyLocation] = useState(null);
-   // const [markerPosition, setMarkerPosition] = useState(null);
     const [address, setAddress] = useState(null);
     const [mapRef, setMapRef] = useState(null);
-
     useEffect(() => {
         setMyLocation(currentDataMap.location)
-        //setMarkerPosition(currentDataMap.positionMarker)
         setAddress(currentDataMap.address)
     }, [])
 
     if (!myLocation) {
         return <View style={styles.container}/>;
     }
-    const getCurrentPositionHandler = async () => {
-        const status = await allowLocation()
-        if(status) {
-            let currentLocation = await Location.getCurrentPositionAsync({});
-            const {latitude, longitude} = currentLocation.coords;
-            const reverseGeocode = await Location.reverseGeocodeAsync({
-                latitude,
-                longitude,
-            });
-
-            if (reverseGeocode && reverseGeocode.length > 0) {
-                const { country, city, street, postalCode } = reverseGeocode[0];
-                const formatted_address = `${country}, ${city}, ${street}`;
-                setAddress({...address, formatted_address});
+    const getCurrentPositionHandler = async (event) => {
+        event.stopPropagation();
+        setMapInteractionEnabled(false); // Отключаем взаимодействие с картой
+        setIsLoading(LoadingEnum.fetching)
+        try {
+            const status = await allowLocation()
+            if (status) {
+                let currentLocation = await Location.getCurrentPositionAsync({accuracy: Location.Accuracy.BestForNavigation});
+                const {latitude, longitude} = currentLocation.coords;
+                const formatted_address = await getInfoAddressForCoords({latitude, longitude})
+                setAddress({formatted_address})
+                setMyLocation({latitude, longitude});
+                if (mapRef) {
+                    mapRef.animateToRegion({
+                        latitude,
+                        longitude,
+                        latitudeDelta: 0.0922,
+                        longitudeDelta: 0.0421,
+                    });
+                }
             }
-            setMyLocation({latitude, longitude});
-           // setMarkerPosition({latitude, longitude});
-            if (mapRef) {
-                mapRef.animateToRegion({
-                    latitude,
-                    longitude,
-                    latitudeDelta: 0.0922,
-                    longitudeDelta: 0.0421,
-                });
-            }
+            setMapInteractionEnabled(true)
+        } catch (e) {
+            console.log('err', e)
+        } finally {
+            setIsLoading(LoadingEnum.success)
         }
     }
-    const handleMapPress = (event) => {
+    const handleMapPress = async (event) => {
+        if(!mapInteractionEnabled) return
         const {latitude, longitude} = event.nativeEvent.coordinate;
-       // setMarkerPosition({latitude, longitude});
+        const formatted_address = await getInfoAddressForCoords({latitude, longitude})
+        setAddress({formatted_address})
+        setMyLocation({latitude, longitude});
     };
     const onPressSaveLocationHandler = () => {
         setLocation({location: myLocation, address: address})
@@ -81,6 +85,10 @@ export const MapViews = ({visible, close, currentDataMap}: MapViewsProps) => {
             <Box mt={5} zIndex={10} mb={5} position={'absolute'} left={5}>
                 <ArrowBack goBackPress={onPressGoBack} img={arrowLeft}/>
             </Box>
+            <Box zIndex={10} position={'absolute'} top={50} justifyContent={'center'} flex={1} w={'100%'}>
+                <Text textAlign={'center'} fontSize={24}
+                      fontWeight={'500'}>{address?.formatted_address}</Text>
+            </Box>
             <MapView
                 ref={(ref) => setMapRef(ref)}
                 style={styles.map}
@@ -90,15 +98,8 @@ export const MapViews = ({visible, close, currentDataMap}: MapViewsProps) => {
                     latitudeDelta: 0.0922,
                     longitudeDelta: 0.0421,
                 }}
-                focusable={true}
                 onPress={handleMapPress}
             >
-                {/* {currentDataMap.positionMarker && (
-                    <Marker
-                        coordinate={currentDataMap.positionMarker}
-                        title={currentDataMap.address.formatted_address}
-                    />
-                )}*/}
                 <Marker
                     coordinate={{
                         latitude: myLocation?.latitude,
@@ -108,13 +109,11 @@ export const MapViews = ({visible, close, currentDataMap}: MapViewsProps) => {
                 />
             </MapView>
             <Box mt={5} zIndex={10} position={'absolute'} w={'100%'} bottom={5}>
-                <Box position={'absolute'} bottom={140} right={0}>
-                    <TouchableOpacity onPress={getCurrentPositionHandler}>
-                        <Image style={{width: 82, height: 82}} source={myLocationImg} alt={'my-location'}/>
+                <Box zIndex={100}  position={'absolute'} bottom={100} right={0}>
+                    <TouchableOpacity style={{ pointerEvents: 'auto' }} onPress={getCurrentPositionHandler}>
+                        <Image  style={{width: 120, height: 120}} source={myLocationImg} alt={'my-location'}/>
                     </TouchableOpacity>
                 </Box>
-                <Text textAlign={'center'} fontSize={24}
-                      fontWeight={'500'}>{address?.formatted_address}</Text>
                 <Box w={'100%'} mt={5} flex={1}>
                     <Button backgroundColor={colors.green}
                             styleContainer={styles.styleContainerBtn}

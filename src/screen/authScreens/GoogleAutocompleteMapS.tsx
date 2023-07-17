@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {BaseWrapperComponent} from "../../components/baseWrapperComponent";
 import AddressAutocomplete, {AutoCompleteDataType} from "../../components/AddressAutocomplete";
 import {NavigationProp, ParamListBase} from "@react-navigation/native";
-import {MapViews} from "../../components/MapViews";
+import {MapViews} from "../../components/MapViews/MapViews";
 import {Box, Text} from "native-base";
 import ArrowBack from "../../components/ArrowBack";
 
