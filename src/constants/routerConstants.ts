@@ -4,4 +4,6 @@ export const routerConstants = {
     AUTOCOMPLETE_MAP: 'autocomplete-map',
     RESET_PASSWORD: 'reset-password',
     LOGIN: 'login',
+    MAIN: 'main',
+    HOME: 'home',
 }

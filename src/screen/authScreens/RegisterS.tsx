@@ -97,7 +97,7 @@ const RegisterS = observer(({navigation}: LoginSProps) => {
     }
 
     return (<BaseWrapperComponent isKeyboardAwareScrollView={true}>
-            <Box alignItems={'center'}>
+            <Box alignItems={'center'} >
                 <Box mt={5} mb={5} position={'absolute'} left={5}>
                     <ArrowBack goBackPress={onPressGoBack} img={arrowLeft}/>
                 </Box>
@@ -186,7 +186,7 @@ const RegisterS = observer(({navigation}: LoginSProps) => {
                         <Text fontSize={16} fontWeight={'600'}>{currentLocation?.address?.formatted_address }</Text>}
 
                 </Box>
-                <Box w={'100%'} mt={5}>
+                <Box w={'100%'} mt={5} mb={5}>
                     <Button styleContainer={styles.styleContainerBtnUp} disabled={
                         disabledBtnSignUp
                     } onPress={handleSubmit} title={'Sign up'}/>
