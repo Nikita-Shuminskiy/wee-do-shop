@@ -13,6 +13,7 @@ import rootStore from '../store/RootStore'
 import AllowLocationS from "../screen/authScreens/AllowLocationS";
 import GoogleAutocompleteMapS from "../screen/authScreens/GoogleAutocompleteMapS";
 import MainNavigation from "./MainNavigation";
+import StoreS from "../screen/mainScreens/StoreS";
 
 const RootStack = createNativeStackNavigator()
 const RootNavigation = observer(() => {
@@ -31,11 +32,19 @@ const RootNavigation = observer(() => {
             <Loading visible={isLoading === LoadingEnum.fetching}/>
             <RootStack.Navigator>
                 {
-                    isAuth ? <RootStack.Screen
-                        options={{headerShown: false}}
-                        name={routerConstants.MAIN}
-                        component={MainNavigation}
-                    /> : <React.Fragment>
+                    isAuth ? <React.Fragment>
+
+                        <RootStack.Screen
+                            options={{headerShown: false}}
+                            name={routerConstants.MAIN}
+                            component={MainNavigation}
+                        />
+                        <RootStack.Screen
+                            options={{headerShown: false}}
+                            name={routerConstants.STORE}
+                            component={StoreS}
+                        />
+                    </React.Fragment> : <React.Fragment>
                         <RootStack.Screen
                             options={{headerShown: false}}
                             name={routerConstants.LOGIN}

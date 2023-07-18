@@ -6,4 +6,5 @@ export const routerConstants = {
     LOGIN: 'login',
     MAIN: 'main',
     HOME: 'home',
+    STORE: 'store',
 }

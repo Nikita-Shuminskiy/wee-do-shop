@@ -17,6 +17,8 @@ import {useEffect} from "react/index";
 import rootStore from "../../store/RootStore/root-store";
 import {StoreType} from "../../api/storesApi";
 import {CategoryType} from "../../api/categoriesApi";
+import {routerConstants} from "../../constants/routerConstants";
+import {NavigationProp, ParamListBase} from "@react-navigation/native";
 
 type TouchableWrappedProps = TouchableOpacityProps & {
     children: JSX.Element
@@ -26,17 +28,21 @@ const TouchableWrapped = ({children, ...rest}: TouchableWrappedProps) => {
         {children}
     </TouchableOpacity>
 }
-const HomeS = observer(() => {
+
+type HomeSProps = {
+    navigation: NavigationProp<ParamListBase>
+}
+const HomeS = observer(({navigation}: HomeSProps) => {
     const {user} = AuthStore
     const {StoresService, StoresStore, CategoriesService, CategoriesStore} = rootStore
-    const {stores} = StoresStore
+    const {stores, setStore} = StoresStore
     const {categories} = CategoriesStore
 
     const [search, setSearch] = useState('')
     const onChangeTextSearch = (e) => {
         setSearch(e)
     }
-    const categoriesViews = ({item}: {item: CategoryType}) => {
+    const categoriesViews = ({item}: { item: CategoryType }) => {
         return (
             <CategoriesViewer
                 category={item}
@@ -44,8 +50,13 @@ const HomeS = observer(() => {
         )
     }
     const storesViews = ({item}: { item: StoreType }) => {
+        const onPress = () => {
+            setStore(item)
+            navigation.navigate(routerConstants.STORE)
+        }
         return (
             <StoresViewer
+                onPress={onPress}
                 stores={item}
             />
         )

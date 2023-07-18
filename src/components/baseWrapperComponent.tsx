@@ -20,7 +20,7 @@ export const BaseWrapperComponent = ({
 																		 }: BaseWrapperComponentType) => {
 
 	return (
-		<SafeAreaView style={{ flex: 1, marginTop: Platform.OS === 'ios' ? 10 : 40, ...styleSafeArea }}>
+		<SafeAreaView style={{ flex: 1, marginTop: Platform.OS === 'ios' ? 10 : 29, backgroundColor: 'white', ...styleSafeArea }}>
 			{isKeyboardAwareScrollView ? (
 				<KeyboardAwareScrollView
 					enableOnAndroid={true}

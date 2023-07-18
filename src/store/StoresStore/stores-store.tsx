@@ -3,31 +3,31 @@ import {storesApi, StoreType} from "../../api/storesApi";
 
 export class StoresStore {
     stores: StoreType[] = [] as StoreType[]
-    story: StoreType = {} as StoreType
+    store: StoreType = {} as StoreType
 
     async getStores(): Promise<void> {
         const {data} = await storesApi.getStories()
         this.setStores(data.results)
 
     }
-    async getStory(id: number): Promise<void> {
+    async getStore(id: number): Promise<void> {
         const {data} = await storesApi.getStores(id)
-        this.setStory(data)
+        this.setStore(data)
 
     }
     setStores(stores: StoreType[]) {
         this.stores = stores
     }
-    setStory(stores: StoreType) {
-        this.story = stores
+    setStore(stores: StoreType) {
+        this.store = stores
     }
     constructor() {
         makeObservable(this, {
             stores: observable,
-            story: observable,
+            store: observable,
             getStores: action,
-            getStory: action,
-            setStory: action,
+            getStore: action,
+            setStore: action,
             setStores: action,
         })
 

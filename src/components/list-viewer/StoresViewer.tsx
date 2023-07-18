@@ -6,14 +6,14 @@ import {TouchableOpacity} from "react-native";
 import motorcycle from '../../assets/images/moto.png'
 import {StoreType} from "../../api/storesApi";
 
-type StoresViewerType = {
+type StoresViewerType =  {
     stores: StoreType
+    onPress: () => void
 }
 
-const StoresViewer = ({stores}: StoresViewerType) => {
-
+const StoresViewer = ({stores, onPress}: StoresViewerType) => {
     return (
-        <TouchableOpacity style={{alignItems: 'center', flex: 1}}>
+        <TouchableOpacity onPress={onPress} style={{alignItems: 'center', flex: 1}}>
             <Box backgroundColor={'rgba(203,203,203,0.27)'}
                  borderRadius={16}
                  alignItems={'flex-start'} justifyContent={'space-between'} m={1}
@@ -56,7 +56,6 @@ const StoresViewer = ({stores}: StoresViewerType) => {
                     <Box ml={4} flexDirection={'row'} flexWrap={'wrap'} w={'90%'} alignItems={'center'}>
                         {stores?.products?.map((product, key) => {
                             const lastElem = stores?.products?.length - 1 === key
-                            console.log(lastElem)
                             return <Text key={`${product}-${key}`}
                                          fontWeight={'500'}>{product}{lastElem ? '' : ','}</Text>
                         })}
