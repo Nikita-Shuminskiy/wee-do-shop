@@ -4,13 +4,13 @@ import {colors} from "../../assets/colors/colors";
 import test from '../../assets/images/test.png'
 import {TouchableOpacity} from "react-native";
 import motorcycle from '../../assets/images/moto.png'
-import {StoreType} from "../../api/storeApi";
+import {StoreType} from "../../api/storesApi";
 
 type StoresViewerType = {
-    data: StoreType
+    stores: StoreType
 }
 
-const StoresViewer = ({data}: StoresViewerType) => {
+const StoresViewer = ({stores}: StoresViewerType) => {
 
     return (
         <TouchableOpacity style={{alignItems: 'center', flex: 1}}>
@@ -33,7 +33,7 @@ const StoresViewer = ({data}: StoresViewerType) => {
                          justifyContent={'center'}
                          backgroundColor={'transparent'}>
                         <Image source={motorcycle} h={17} w={26} alt={'moto'}/>
-                        <Text ml={2} color={colors.white} fontSize={16} fontWeight={'500'}>{data?.deliveryTime}</Text>
+                        <Text ml={2} color={colors.white} fontSize={16} fontWeight={'500'}>{stores?.deliveryTime}</Text>
                     </Box>
                     <Image alt={'image-store'} borderRadius={16} source={test}/>
                     <Box position={'absolute'}
@@ -42,7 +42,7 @@ const StoresViewer = ({data}: StoresViewerType) => {
                          backgroundColor={colors.green}
                          borderRadius={16} borderRightRadius={0} paddingY={1} paddingX={3}>
                         <Text color={colors.white} fontWeight={'600'} fontSize={14}>Open
-                            until {data?.workingHours}</Text>
+                            until {stores?.workingHours}</Text>
                     </Box>
                 </Box>
                 <Box paddingY={2}
@@ -52,10 +52,10 @@ const StoresViewer = ({data}: StoresViewerType) => {
                     <Text ml={3}
                           fontSize={18}
                           fontWeight={'700'}
-                          color={colors.balck}>{data?.name}</Text>
+                          color={colors.balck}>{stores?.name}</Text>
                     <Box ml={4} flexDirection={'row'} flexWrap={'wrap'} w={'90%'} alignItems={'center'}>
-                        {data?.products?.map((product, key) => {
-                            const lastElem = data?.products?.length - 1 === key
+                        {stores?.products?.map((product, key) => {
+                            const lastElem = stores?.products?.length - 1 === key
                             console.log(lastElem)
                             return <Text key={`${product}-${key}`}
                                          fontWeight={'500'}>{product}{lastElem ? '' : ','}</Text>

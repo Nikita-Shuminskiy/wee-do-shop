@@ -5,13 +5,15 @@ import {colors} from "../../assets/colors/colors";
 
 type EmptyListProps = {
 	text: string
+	height: number
 	onPressLink: () => void
 	styleLink?: StyleProp<TextStyle>
 	styleText?: StyleProp<TextStyle>
 }
-const EmptyList = ({ text, onPressLink, styleText, styleLink }: EmptyListProps) => {
+const EmptyList = ({ text, onPressLink, styleText, styleLink, height }: EmptyListProps) => {
+
 	return (
-		<Box alignItems={'center'} justifyContent={'flex-start'}  height={Dimensions.get('window').height}>
+		<Box alignItems={'center'} justifyContent={'flex-start'}  height={height}>
 			<Text fontSize={18} color={colors.gray}>
 				{text}
 			</Text>

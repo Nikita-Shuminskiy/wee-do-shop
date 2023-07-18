@@ -7,7 +7,7 @@ import likeImg from '../../assets/images/likeGreen.png'
 import userImg from '../../assets/images/userGreen.png'
 import searchImg from '../../assets/images/search.png'
 import settingImg from '../../assets/images/setting.png'
-import {FlatList, StyleSheet, TouchableOpacity, TouchableOpacityProps} from "react-native";
+import {Dimensions, FlatList, StyleSheet, TouchableOpacity, TouchableOpacityProps} from "react-native";
 import {colors} from "../../assets/colors/colors";
 import TextInput from "../../components/TextInput";
 import EmptyList from "../../components/list-viewer/empty-list";
@@ -15,43 +15,9 @@ import CategoriesViewer from "../../components/list-viewer/CategoriesViewer";
 import StoresViewer from "../../components/list-viewer/StoresViewer";
 import {useEffect} from "react/index";
 import rootStore from "../../store/RootStore/root-store";
-import {StoreType} from "../../api/storeApi";
+import {StoreType} from "../../api/storesApi";
+import {CategoryType} from "../../api/categoriesApi";
 
-const categories = [
-    {_id: '13', name: 'Food'},
-    {_id: '132', name: 'Drink'},
-    {_id: '132', name: 'Alcohol'},
-    {_id: '132', name: 'Alcohol'},
-    {_id: '1312', name: 'Alcohol'},
-    {_id: '1332', name: 'Alcohol'},
-    {_id: '1322', name: 'Alcohol'},
-]
-const store = [
-    {
-        _id: '1',
-        name: 'store',
-        description: 'test',
-        phone: '14',
-        website: '113131',
-        address: '1313131'
-    },
-    {
-        _id: '2',
-        name: 'store',
-        description: 'test',
-        phone: '14',
-        website: '113131',
-        address: '1313131'
-    },
-    {
-        _id: '3',
-        name: 'store',
-        description: 'test',
-        phone: '14',
-        website: '113131',
-        address: '1313131'
-    },
-]
 type TouchableWrappedProps = TouchableOpacityProps & {
     children: JSX.Element
 }
@@ -62,34 +28,36 @@ const TouchableWrapped = ({children, ...rest}: TouchableWrappedProps) => {
 }
 const HomeS = observer(() => {
     const {user} = AuthStore
-    const {StoresService, StoresStore} = rootStore
+    const {StoresService, StoresStore, CategoriesService, CategoriesStore} = rootStore
     const {stores} = StoresStore
+    const {categories} = CategoriesStore
 
     const [search, setSearch] = useState('')
     const onChangeTextSearch = (e) => {
         setSearch(e)
     }
-    const categoriesViews = ({item}) => {
+    const categoriesViews = ({item}: {item: CategoryType}) => {
         return (
             <CategoriesViewer
-                data={item}
+                category={item}
             />
         )
     }
-    const storesViews = ({item}: {item: StoreType}) => {
+    const storesViews = ({item}: { item: StoreType }) => {
         return (
             <StoresViewer
-                data={item}
+                stores={item}
             />
         )
     }
-    const renderEmptyContainer = () => {
+    const renderEmptyContainer = (height, text) => {
         const onPressLink = () => {
 
         }
         return (
             <EmptyList
-                text={'Store list is empty'}
+                height={height}
+                text={text}
                 onPressLink={onPressLink}
             />
         )
@@ -97,6 +65,7 @@ const HomeS = observer(() => {
 
     useEffect(() => {
         StoresService.getStores()
+        CategoriesService.getCategories()
     }, [])
     return (
         <BaseWrapperComponent isKeyboardAwareScrollView={true}>
@@ -138,7 +107,15 @@ const HomeS = observer(() => {
                             renderItem={categoriesViews}
                             keyExtractor={(item, index) => index.toString()}
                             style={{width: '100%'}}
-                            ListEmptyComponent={renderEmptyContainer}
+                            contentContainerStyle={
+                                !categories?.length && {
+                                    flex: 1,
+                                    width: '100%',
+                                    alignItems: 'center',
+                                    justifyContent: 'center'
+                                }
+                            }
+                            ListEmptyComponent={() => renderEmptyContainer(0, '')}
                             horizontal={true}
                             showsVerticalScrollIndicator={false}
                         />
@@ -149,7 +126,7 @@ const HomeS = observer(() => {
                             renderItem={storesViews}
                             keyExtractor={(item, index) => index.toString()}
                             style={{width: '100%'}}
-                            ListEmptyComponent={renderEmptyContainer}
+                            ListEmptyComponent={() => renderEmptyContainer(Dimensions.get('window').height, 'List is empty')}
                             contentContainerStyle={
                                 !stores?.length ? {
                                     flex: 1,

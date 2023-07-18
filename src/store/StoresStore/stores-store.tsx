@@ -1,17 +1,17 @@
 import {action, makeObservable, observable} from "mobx";
-import {storeApi, StoreType} from "../../api/storeApi";
+import {storesApi, StoreType} from "../../api/storesApi";
 
 export class StoresStore {
     stores: StoreType[] = [] as StoreType[]
     story: StoreType = {} as StoreType
 
     async getStores(): Promise<void> {
-        const {data} = await storeApi.getStories()
+        const {data} = await storesApi.getStories()
         this.setStores(data.results)
 
     }
     async getStory(id: number): Promise<void> {
-        const {data} = await storeApi.getStores(id)
+        const {data} = await storesApi.getStores(id)
         this.setStory(data)
 
     }

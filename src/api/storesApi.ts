@@ -1,8 +1,7 @@
 import {instance} from "./config";
-import {DataLoginType} from "./apiAuth";
 
 
-export const storeApi = {
+export const storesApi = {
     async getStories() {
         return await instance.get<StoriesType>(`stores`)
     },
