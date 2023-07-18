@@ -18,7 +18,7 @@ const CategoriesViewer = ({category}: CategoriesViewerType) => {
                  backgroundColor={colors.grayDarkLight}
                  alignItems={'center'}
                  justifyContent={'center'} m={1}>
-                <Text fontSize={14} fontWeight={'600'} color={colors.green}>{category.name}</Text>
+                <Text fontSize={14} fontWeight={'600'} color={colors.black}>{category.name}1</Text>
             </Box>
         </TouchableOpacity>
     );
