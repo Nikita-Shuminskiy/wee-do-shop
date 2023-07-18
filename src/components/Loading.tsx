@@ -24,7 +24,7 @@ const Loading = memo(({visible}: any) => {
 
     return (
         <Modal style={{ backgroundColor: 'rgba(255, 0, 0, 0,2)' }} animationType={'fade'} transparent={true} visible={visible} >
-           {/* <BlurView intensity={10} tint="light" style={StyleSheet.absoluteFillObject} />*/}
+       {/*     <BlurView intensity={10} tint="light" style={StyleSheet.absoluteFillObject} />*/}
             <Box flex={1}   justifyContent={'center'} alignItems={'center'}>
                 <ImageBackground  style={styles.imgLogo} source={logo}>
                     <Animated.Image

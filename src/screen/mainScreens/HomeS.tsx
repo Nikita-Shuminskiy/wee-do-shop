@@ -13,6 +13,9 @@ import TextInput from "../../components/TextInput";
 import EmptyList from "../../components/list-viewer/empty-list";
 import CategoriesViewer from "../../components/list-viewer/CategoriesViewer";
 import StoresViewer from "../../components/list-viewer/StoresViewer";
+import {useEffect} from "react/index";
+import rootStore from "../../store/RootStore/root-store";
+import {StoreType} from "../../api/storeApi";
 
 const categories = [
     {_id: '13', name: 'Food'},
@@ -59,6 +62,9 @@ const TouchableWrapped = ({children, ...rest}: TouchableWrappedProps) => {
 }
 const HomeS = observer(() => {
     const {user} = AuthStore
+    const {StoresService, StoresStore} = rootStore
+    const {stores} = StoresStore
+
     const [search, setSearch] = useState('')
     const onChangeTextSearch = (e) => {
         setSearch(e)
@@ -70,7 +76,7 @@ const HomeS = observer(() => {
             />
         )
     }
-    const storesViews = ({item}) => {
+    const storesViews = ({item}: {item: StoreType}) => {
         return (
             <StoresViewer
                 data={item}
@@ -83,15 +89,17 @@ const HomeS = observer(() => {
         }
         return (
             <EmptyList
-                text={'У вас нет кошельков'}
-                textLink={'Создать кошелек'}
+                text={'Store list is empty'}
                 onPressLink={onPressLink}
             />
         )
     }
 
+    useEffect(() => {
+        StoresService.getStores()
+    }, [])
     return (
-        <BaseWrapperComponent>
+        <BaseWrapperComponent isKeyboardAwareScrollView={true}>
             <Box mt={2}>
                 <Box paddingX={5} h={45} w={'100%'} flexDirection={'row'} justifyContent={'space-between'}>
                     <TouchableWrapped>
@@ -131,34 +139,28 @@ const HomeS = observer(() => {
                             keyExtractor={(item, index) => index.toString()}
                             style={{width: '100%'}}
                             ListEmptyComponent={renderEmptyContainer}
-                            /*  contentContainerStyle={
-                                  !wallets?.length ? styles.contentContainerStyle : {width: '100%', padding: 10}
-                              }*/
                             horizontal={true}
                             showsVerticalScrollIndicator={false}
                         />
                     </Box>
-                    <Box flexGrow={1} w={'100%'}>
+                    <Box>
                         <FlatList
-                            data={store}
+                            data={stores}
                             renderItem={storesViews}
                             keyExtractor={(item, index) => index.toString()}
                             style={{width: '100%'}}
                             ListEmptyComponent={renderEmptyContainer}
                             contentContainerStyle={
-                                !store?.length ? {
+                                !stores?.length ? {
                                     flex: 1,
                                     width: '100%',
                                     alignItems: 'center',
                                     justifyContent: 'center'
-                                } : {width: '100%', padding: 10}
+                                } : {width: '100%', flex: 1}
                             }
-                            horizontal={false}
-                            showsVerticalScrollIndicator={true}
                         />
                     </Box>
                 </Box>
-
             </Box>
         </BaseWrapperComponent>
     );

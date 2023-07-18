@@ -1,18 +1,22 @@
 import React from 'react';
-import {Box, Text, Pressable, Image} from "native-base";
+import {Box, Image, Text} from "native-base";
 import {colors} from "../../assets/colors/colors";
-import {LinearGradient} from "expo-linear-gradient";
 import test from '../../assets/images/test.png'
-import dot from '../../assets/images/dot.png'
 import {TouchableOpacity} from "react-native";
-import motorcycle from '../../assets/images/motorcycle.png'
+import motorcycle from '../../assets/images/moto.png'
+import {StoreType} from "../../api/storeApi";
 
-const StoresViewer = ({data}) => {
+type StoresViewerType = {
+    data: StoreType
+}
+
+const StoresViewer = ({data}: StoresViewerType) => {
+
     return (
-        <TouchableOpacity style={{ alignItems: 'center',flex: 1 }}>
+        <TouchableOpacity style={{alignItems: 'center', flex: 1}}>
             <Box backgroundColor={'rgba(203,203,203,0.27)'}
-                 borderRadius={16} w={324}
-                 alignItems={'center'} justifyContent={'space-between'} m={1}
+                 borderRadius={16}
+                 alignItems={'flex-start'} justifyContent={'space-between'} m={1}
                  borderColor={colors.green}>
                 <Box>
                     <Box w={24}
@@ -28,24 +32,34 @@ const StoresViewer = ({data}) => {
                          alignItems={'center'}
                          justifyContent={'center'}
                          backgroundColor={'transparent'}>
-                        <Image source={motorcycle} alt={'moto'}/>
-                        <Text ml={2} color={colors.white} fontSize={16} fontWeight={'500'}> 30min</Text>
+                        <Image source={motorcycle} h={17} w={26} alt={'moto'}/>
+                        <Text ml={2} color={colors.white} fontSize={16} fontWeight={'500'}>{data?.deliveryTime}</Text>
                     </Box>
                     <Image alt={'image-store'} borderRadius={16} source={test}/>
                     <Box position={'absolute'}
                          bottom={0}
                          right={0}
                          backgroundColor={colors.green}
-                         borderRadius={16} borderRightRadius={0} paddingY={1} paddingX={3} >
-                        <Text color={colors.white} fontWeight={'600'} fontSize={14}>Open until 23:00</Text>
+                         borderRadius={16} borderRightRadius={0} paddingY={1} paddingX={3}>
+                        <Text color={colors.white} fontWeight={'600'} fontSize={14}>Open
+                            until {data?.workingHours}</Text>
                     </Box>
                 </Box>
-                <Box paddingY={2} borderBottomRightRadius={16}
-                     borderBottomLeftRadius={16} w={'100%'}>
-                    <Text ml={3}  fontSize={18} fontWeight={'700'} color={colors.balck}>Simply Crafted Store</Text>
-                    <Box ml={4} flexDirection={'row'} alignItems={'center'}>
-                        <Image alt={'dot'} mr={1} source={dot}/>
-                        <Text fontWeight={'500'} >Flowers, prerolls, muffins</Text>
+                <Box paddingY={2}
+                     w={'100%'}
+                     borderBottomRightRadius={16}
+                     borderBottomLeftRadius={16}>
+                    <Text ml={3}
+                          fontSize={18}
+                          fontWeight={'700'}
+                          color={colors.balck}>{data?.name}</Text>
+                    <Box ml={4} flexDirection={'row'} flexWrap={'wrap'} w={'90%'} alignItems={'center'}>
+                        {data?.products?.map((product, key) => {
+                            const lastElem = data?.products?.length - 1 === key
+                            console.log(lastElem)
+                            return <Text key={`${product}-${key}`}
+                                         fontWeight={'500'}>{product}{lastElem ? '' : ','}</Text>
+                        })}
                     </Box>
                 </Box>
             </Box>
