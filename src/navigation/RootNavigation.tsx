@@ -21,9 +21,8 @@ const RootNavigation = observer(() => {
     const {AuthStoreService, AuthStore} = rootStore
     const {isAuth} = AuthStore
     useEffect(() => {
-        AuthStoreService.checkAuth()
+        AuthStoreService.getMe()
     }, [])
-
     /*deviceStorage.removeItem('refreshToken')
     deviceStorage.removeItem('accessToken')*/
 

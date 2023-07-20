@@ -1,17 +1,20 @@
 import React from 'react';
 import {Box, Pressable, Text} from "native-base";
 import {colors} from "../../assets/colors/colors";
-import {TouchableOpacity} from "react-native";
+import {TouchableOpacity, StyleSheet} from "react-native";
 import {CategoryType} from "../../api/categoriesApi";
 
 type CategoriesViewerType = {
     category: CategoryType
+    onPress: () => void
+    selectedSubCategoryId: string
 }
-const CategoriesViewer = ({category}: CategoriesViewerType) => {
+const SubCategoriesViewer = ({category, onPress, selectedSubCategoryId}: CategoriesViewerType) => {
     return (
-        <TouchableOpacity style={{marginBottom: 10}}>
+        <TouchableOpacity onPress={onPress} style={[{marginBottom: 10}]}>
             {/*<BlurView intensity={10} tint="light" style={StyleSheet.absoluteFillObject}/>*/}
             <Box borderRadius={16}
+                 style={selectedSubCategoryId && styles.activeSubCategory}
                  p={2}
                  w={76}
                  h={10}
@@ -23,5 +26,10 @@ const CategoriesViewer = ({category}: CategoriesViewerType) => {
         </TouchableOpacity>
     );
 };
-
-export default CategoriesViewer;
+const styles = StyleSheet.create({
+    activeSubCategory: {
+        borderWidth: 1,
+        borderColor: colors.green
+    }
+})
+export default SubCategoriesViewer;

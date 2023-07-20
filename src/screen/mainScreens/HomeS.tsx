@@ -11,7 +11,7 @@ import {Dimensions, FlatList, StyleSheet, TouchableOpacity, TouchableOpacityProp
 import {colors} from "../../assets/colors/colors";
 import TextInput from "../../components/TextInput";
 import EmptyList from "../../components/list-viewer/empty-list";
-import CategoriesViewer from "../../components/list-viewer/CategoriesViewer";
+import SubCategoriesViewer from "../../components/list-viewer/CategoriesViewer";
 import StoresViewer from "../../components/list-viewer/StoresViewer";
 import {useEffect} from "react/index";
 import rootStore from "../../store/RootStore/root-store";
@@ -44,7 +44,7 @@ const HomeS = observer(({navigation}: HomeSProps) => {
     }
     const categoriesViews = ({item}: { item: CategoryType }) => {
         return (
-            <CategoriesViewer
+            <SubCategoriesViewer
                 category={item}
             />
         )

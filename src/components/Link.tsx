@@ -17,11 +17,15 @@ const Link = ({ onPress, text, styleLink, styleText, ...rest }: LinkProps) => {
 }
 const styles = StyleSheet.create({
 	link: {
-		marginTop: 10,
+		width: 'auto',
+		justifyContent: 'center',
+		alignItems: 'center',
+		marginTop: 5,
+		marginBottom: 5,
 	},
 	text: {
-		fontSize: 18,
-		color: colors.white,
+		fontSize: 13,
+		color: colors.black,
 	},
 })
 
