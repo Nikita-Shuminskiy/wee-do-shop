@@ -8,33 +8,35 @@ import test from "../../assets/images/test.png";
 import relaxImg from "../../assets/images/relaxTagImg.png";
 import Button from "../Button";
 import InputNumber from "../InputNumber";
+import {ProductType} from "../../api/productApi";
+import {CartType, ProductCartType} from "../../store/CartStore/cart-store";
 
 type StoreViewerProps = {
-    store: any
-    //  cartProductValue: number
+    product: ProductType
     onPressProduct: () => void
     saveProductToCart: (valueProduct: number) => void
+    currentCartStore: CartType
 }
-const ProductViewer = ({store, onPressProduct, saveProductToCart}: StoreViewerProps) => {
-    const [currentCartStore, setCurrentCardStore] = useState(0)
-    const {height, width} = Dimensions.get('window');
-    const itemWidth = (width - 15) / 2;
+const ProductViewer = ({product, onPressProduct, saveProductToCart, currentCartStore}: StoreViewerProps) => {
+    const {width} = Dimensions.get('window');
+    const productWidth = (width - 15) / 2;
+    const currentValueToCartProduct = currentCartStore?.products.find(cart => cart._id === product?._id)
+
     const onPressProductHandler = () => {
-        setCurrentCardStore(1)
         saveProductToCart(1)
     }
     const onChangeValueNumber = (valueProduct: number) => {
-        setCurrentCardStore(valueProduct)
         saveProductToCart(valueProduct)
     }
+    // подумать над эфектом, это должна быть картинка скорее
     return (
-        <Pressable style={{alignItems: 'center', minWidth: itemWidth, maxWidth: itemWidth}} onPress={onPressProduct}>
+        <Pressable style={{alignItems: 'center', paddingHorizontal: 5, minWidth: productWidth, maxWidth: productWidth}}
+                   onPress={onPressProduct}>
             <Box style={styles.shadow}
                  borderRadius={16}
                  alignItems={'center'}
-                 justifyContent={'space-between'}
-                 m={1}
-                 borderColor={colors.green}>
+                 w={'100%'}
+                 mb={5}>
                 <Box>
                     <Box w={24}
                          position={'absolute'}
@@ -45,23 +47,30 @@ const ProductViewer = ({store, onPressProduct, saveProductToCart}: StoreViewerPr
                          backgroundColor={'transparent'}>
                         <Image source={relaxImg} borderRadius={16} alt={'degree'}/>
                     </Box>
-                    <Image alt={'image-store'} borderRadius={16} source={productImg}/>
+                    <Box w={'100%'}>
+                        <Image alt={'image-store'} width={200} borderTopRightRadius={16} borderTopLeftRadius={16}
+                               source={productImg}/>
+                    </Box>
                 </Box>
-                <Box paddingY={2}
+                <Box paddingY={1}
+                     paddingX={2}
                      w={'100%'}
+                     minWidth={'100%'}
                      justifyContent={'space-evenly'}
                      borderBottomRightRadius={16}
                      borderBottomLeftRadius={16}>
-                    <Text ml={2}
-                          fontSize={14}
-                          fontWeight={'700'}
-                          color={colors.balck}>Gary Payton And Family</Text>
+                    <Text
+                        fontSize={14}
+                        fontWeight={'700'}
+                        color={colors.balck}>{product?.name}</Text>
                     <Box mt={5} height={50}>
                         {
-                            !currentCartStore ? <Button styleText={styles.styleTextBtn}
-                                                        backgroundColor={colors.grayDarkLight}
-                                                        onPress={onPressProductHandler} title={'฿ 900 '}/> :
-                                <InputNumber values={currentCartStore} onChangeValue={onChangeValueNumber}/>
+                            !currentValueToCartProduct?.productValue ? <Button styleText={styles.styleTextBtn}
+                                                                               backgroundColor={colors.grayDarkLight}
+                                                                               onPress={onPressProductHandler}
+                                                                               title={`฿ ${product?.price}`}/> :
+                                <InputNumber values={currentValueToCartProduct?.productValue}
+                                             onChangeValue={onChangeValueNumber}/>
                         }
 
                     </Box>
@@ -78,16 +87,15 @@ const styles = StyleSheet.create({
     },
     shadow: {
         backgroundColor: colors.white,
-        borderTopLeftRadius: 30,
-        borderTopRightRadius: 30,
-        shadowColor: "#000000",
+        shadowColor: "#000",
         shadowOffset: {
             width: 0,
-            height: 18,
+            height: 6,
         },
-        shadowOpacity: 0.25,
-        shadowRadius: 20.00,
-        elevation: 24
+        shadowOpacity: 0.37,
+        shadowRadius: 7.49,
+
+        elevation: 7,
     },
 });
 export default ProductViewer;

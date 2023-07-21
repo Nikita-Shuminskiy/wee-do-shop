@@ -1,5 +1,7 @@
 import {instance} from "./config";
 import {DataLoginType} from "./apiAuth";
+import {StoreType} from "./storesApi";
+import {ProductType} from "./productApi";
 
 // подкатегории шишки. гашиш
 export const categoriesApi = {
@@ -20,6 +22,7 @@ type SebCategoriesResType = {
     "results": SubCategoryType[],
     "totalCount": number
 }
+
 export type SubCategoryType = {
     "_id": string,
     "name": string,
@@ -29,12 +32,14 @@ export type SubCategoryType = {
         "createdAt": string,
         "updatedAt": string
     },
-    "products": string[],
+    "products": ProductType[],
     "createdAt": string,
     "updatedAt": string
+    "store": StoreType | string // при получении get store тут строка (id магаза) дублируються с _id,
 }
 export type UpdateSubCategory = {
     "name": string,
     "categoryId": string,
+    "storeId": string,
     "products": string[]
 }

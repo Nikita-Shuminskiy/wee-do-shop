@@ -1,24 +1,22 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {BaseWrapperComponent} from "../../components/baseWrapperComponent";
 import arrowLeftBack from '../../assets/images/arrow-left-back.png'
 import testBackground from '../../assets/images/testBackground.png'
-import photoTest from '../../assets/images/photoTest.png'
-import {Box, Image, Text} from "native-base";
+import {Box, Text} from "native-base";
 import ArrowBack from "../../components/ArrowBack";
 import {NavigationProp, ParamListBase, useNavigation} from "@react-navigation/native";
 import {colors} from "../../assets/colors/colors";
 import Button from "../../components/Button";
-import {Dimensions, FlatList, ImageBackground, TouchableOpacity, View} from "react-native";
-import {CategoryType} from "../../api/categoriesApi";
+import {Dimensions, FlatList, ImageBackground, StyleSheet} from "react-native";
 import SubCategoriesViewer from "../../components/list-viewer/CategoriesViewer";
 import EmptyList from "../../components/list-viewer/empty-list";
 import {observer} from "mobx-react-lite";
 import rootStore from "../../store/RootStore/root-store";
 import ProductViewer from "../../components/list-viewer/ProductViewer";
 import {SubCategoryType} from "../../api/subCategoriesApi";
-import ModalPopup from "../../components/pop-up";
 import {ProductType} from "../../api/productApi";
 import PopUpProduct from "../../components/modalPopUp/PopUpProduct";
+import {CartType} from "../../store/CartStore/cart-store";
 
 const renderEmptyContainer = (height, text) => {
     const onPressLink = () => {
@@ -32,25 +30,62 @@ const renderEmptyContainer = (height, text) => {
         />
     )
 }
+const updateProduct = (currentCartStore, item, productValue, setCurrentCartStore) => {
+    const updatedProducts = currentCartStore.products.map((product) => {
+        if (product._id === item._id) {
+            return {
+                ...product,
+                productValue: productValue,
+            };
+        }
+        return product;
+    });
 
+    const totalSum = updatedProducts.reduce(
+        (sum, product) => sum + product.productValue * product.price,
+        0
+    );
+    setCurrentCartStore({
+        ...currentCartStore,
+        totalSum: totalSum,
+        products: updatedProducts,
+    });
+};
+const addProductToCart = (currentCartStore, item, productValue, setCurrentCartStore) => {
+    const newProduct = {...item, productValue: productValue}
+    setCurrentCartStore({
+        ...currentCartStore,
+        totalSum: currentCartStore.totalSum ?
+            currentCartStore.totalSum + productValue * item.price
+            : productValue * item.price,
+        products: [...currentCartStore.products, newProduct]
+    })
+}
 type StoreSProps = {
     navigation: NavigationProp<ParamListBase>
 }
 const StoreS = observer(({navigation}: StoreSProps) => {
+    const {StoresStore} = rootStore
+    const {store} = StoresStore
+
+    // need get All product for first screen
     const navigate = useNavigation()
+    const [currentCartStore, setCurrentCartStore] = useState<CartType>()
 
-    const {StoresService, StoresStore, CategoriesService, CategoriesStore} = rootStore
-    const {store, setStore} = StoresStore
-    const {categories} = CategoriesStore
+    useEffect(() => {
+        const newCart: CartType = {
+            idStore: store._id,
+            totalSum: 0,
+            products: []
+        }
+        setCurrentCartStore(newCart)
+    }, [])
 
-    const [isConfirmButton, setIsConfirmButton] = useState<boolean>(false)
     const [isShowModalProduct, setIsShowModalProduct] = useState<boolean>(false)
+    const [selectedSubCategory, setSelectedSubCategory] = useState<SubCategoryType>()
     const [selectedProduct, setSelectedProduct] = useState<ProductType>()
-
-    const [currentCartStore, setCurrentCardStore] = useState()
-
     const [selectedSubCategoryId, setSelectedSubCategoryId] = useState<string>('');
-
+    const currentValueToCartProduct = currentCartStore?.products.find(cart => cart?._id === selectedProduct?._id)
 
     const onPressGoBack = () => {
         navigate.goBack()
@@ -61,39 +96,61 @@ const StoreS = observer(({navigation}: StoreSProps) => {
     const onPressConfirmButton = () => {
 
     }
+    const onClosePopUpProduct = () => {
+        setIsShowModalProduct(false)
+    }
+    const saveProductValueToCard = (productValue: number) => {
+        const findProduct = currentCartStore.products.find(
+            (product) => product._id === selectedProduct._id
+        );
+        if (findProduct) {
+            updateProduct(currentCartStore, selectedProduct, productValue, setCurrentCartStore);
+            return;
+        }
+        addProductToCart(currentCartStore, selectedProduct, productValue, setCurrentCartStore)
+    }
 
-    const productViews = ({item}: { item: any }) => {
+
+    const productViews = ({item}: { item: ProductType }) => {
         const onPressProduct = () => {
             setSelectedProduct(item)
             setIsShowModalProduct(true)
         }
+
         const saveProductToCard = (productValue: number) => {
-            //setIsConfirmButton(true)
+            const findProduct = currentCartStore.products.find(
+                (product) => product._id === item._id
+            );
+            if (findProduct) {
+                updateProduct(currentCartStore, item, productValue, setCurrentCartStore);
+                return;
+            }
+            addProductToCart(currentCartStore, item, productValue, setCurrentCartStore)
         }
+
         return (
             <ProductViewer
-                //cartProductValue={currentCartStore}
+                currentCartStore={currentCartStore}
                 saveProductToCart={saveProductToCard}
                 onPressProduct={onPressProduct}
-                store={item}
+                product={item}
             />
         )
     }
-    const sebCategoriesViews = ({item}: { item: any }) => {  //SubCategoryType
+    const sebCategoriesViews = ({item}: { item: SubCategoryType }) => {
         const onPressSelectedSubCategory = () => {
+            setSelectedSubCategory(item)
             setSelectedSubCategoryId(item?._id);
         }
         return (
             <SubCategoriesViewer
                 selectedSubCategoryId={selectedSubCategoryId}
                 onPress={onPressSelectedSubCategory}
-                category={item}
+                subCategory={item}
             />
         )
     }
-    const onClosePopUpProduct = () => {
-        setIsShowModalProduct(false)
-    }
+
     return (
         <>
             <BaseWrapperComponent isKeyboardAwareScrollView={true}>
@@ -122,54 +179,102 @@ const StoreS = observer(({navigation}: StoreSProps) => {
                         <Box mt={5} mb={2}>
                             <FlatList
                                 extraData={selectedSubCategoryId}
-                                data={[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]}
+                                data={store.subCategories}
                                 renderItem={sebCategoriesViews}
                                 keyExtractor={(item, index) => item.toString()}
                                 style={{width: '100%'}}
                                 contentContainerStyle={
-                                    ![1, 2, 3, 4]?.length && {
-                                        flex: 1,
-                                        width: '100%',
-                                        alignItems: 'center',
-                                        justifyContent: 'center'
-                                    }
+                                    !store.subCategories?.length &&
+                                    styles.contentContainerStyleSubCategories
                                 }
                                 ListEmptyComponent={() => renderEmptyContainer(0, '')}
                                 horizontal={true}
                                 showsVerticalScrollIndicator={false}
                             />
                         </Box>
-                        <Box flex={1}>
+                        <Box mb={20}>
                             <FlatList
-                                data={[1, 2, 3, 4, 5]}
+                                data={selectedSubCategory?.products}
                                 horizontal={false}
                                 renderItem={productViews}
                                 keyExtractor={(item, index) => index.toString()}
                                 style={{width: '100%'}}
                                 ListEmptyComponent={() => renderEmptyContainer(Dimensions.get('window').height, 'List is empty')}
                                 numColumns={2}
-                                columnWrapperStyle={{ justifyContent:'space-between' }}
+                                columnWrapperStyle={{justifyContent: 'space-between'}}
                                 contentContainerStyle={
-                                    ![1, 2, 3, 4, 5] ? {
-                                        flex: 1,
-                                        width: '100%',
-                                        alignItems: 'center',
-                                        justifyContent: 'center'
-                                    } : null
+                                    !selectedSubCategory?.products &&
+                                    styles.contentContainerStyleProducts
                                 }
                             />
                         </Box>
                     </Box>
                 </Box>
-                {
-                    isConfirmButton && <Box position={'absolute'} flex={1} w={'100%'} bottom={0}>
-                        <Button onPress={onPressConfirmButton} title={'Confirm'}/>
-                    </Box>
-                }
+
             </BaseWrapperComponent>
-            <PopUpProduct onClose={onClosePopUpProduct} show={isShowModalProduct}/>
+            {
+                !!currentCartStore?.totalSum && <Box style={styles.shadow}
+                                                     position={'absolute'}
+                                                     borderTopRightRadius={16}
+                                                     borderTopLeftRadius={16}
+                                                     height={90}
+                                                     justifyContent={'center'} w={'100%'} bottom={0}>
+                    <Box w={'100%'} height={54} paddingX={2}>
+                        <Button backgroundColor={colors.green}
+                                styleContainer={styles.styleContainer}
+                                onPress={onPressConfirmButton}>
+                            <Box flexDirection={'row'}
+                                 alignItems={'center'}
+                                 flex={1}
+                                 w={'100%'}
+                                 justifyContent={'space-between'}>
+                                <Text style={styles.styleTextBtn}>฿ {currentCartStore?.totalSum}</Text>
+                                <Text color={colors.white} fontWeight={'700'} fontSize={16}>Confirm</Text>
+                                <Text style={styles.styleTextBtn}>{store?.deliveryTime} min</Text>
+                            </Box>
+                        </Button>
+                    </Box>
+                </Box>
+            }
+            <PopUpProduct totalSumCart={currentCartStore?.totalSum} saveProductValueToCard={saveProductValueToCard}
+                          currentValueToCartProduct={currentValueToCartProduct}
+                          product={selectedProduct} onClose={onClosePopUpProduct}
+                          show={isShowModalProduct}/>
         </>
     );
 });
+const styles = StyleSheet.create({
+    contentContainerStyleSubCategories: {
+        flex: 1,
+        width: '100%',
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    contentContainerStyleProducts: {
+        flex: 1,
+        width: '100%',
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    styleContainer: {
+        height: 54,
+    },
+    styleTextBtn: {
+        fontWeight: '600',
+        fontSize: 14,
+        color: colors.white
+    },
+    shadow: {
+        backgroundColor: colors.white,
+        shadowColor: "#000000",
+        shadowOffset: {
+            width: 0,
+            height: 18,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 10.00,
+        elevation: 24
+    },
+})
 
 export default StoreS;

@@ -10,17 +10,21 @@ export class StoresStore {
         this.setStores(data.results)
 
     }
+
     async getStore(id: number): Promise<void> {
         const {data} = await storesApi.getStores(id)
         this.setStore(data)
 
     }
+
     setStores(stores: StoreType[]) {
         this.stores = stores
     }
+
     setStore(stores: StoreType) {
         this.store = stores
     }
+
     constructor() {
         makeObservable(this, {
             stores: observable,
@@ -30,7 +34,8 @@ export class StoresStore {
             setStore: action,
             setStores: action,
         })
-
+        this.setStores = this.setStores.bind(this)
+        this.setStore = this.setStore.bind(this)
     }
 }
 

@@ -43,9 +43,14 @@ const HomeS = observer(({navigation}: HomeSProps) => {
         setSearch(e)
     }
     const categoriesViews = ({item}: { item: CategoryType }) => {
+        const onPressCategory = () => {
+
+        }
         return (
             <SubCategoriesViewer
-                category={item}
+                selectedSubCategoryId={'12'} // временно
+                onPress={onPressCategory}
+                subCategory={item}
             />
         )
     }

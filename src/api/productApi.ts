@@ -1,6 +1,8 @@
 import {instance} from "./config";
 import {DataLoginType} from "./apiAuth";
 import {CategoryType} from "./categoriesApi";
+import {StoreType} from "./storesApi";
+import {ImageSourcePropType} from "react-native";
 
 
 export const productApi = {
@@ -44,9 +46,10 @@ export type ProductType = {
         "createdAt": string,
         "updatedAt": string
     },
+    "store": string
     "price": number,
     "effect": string,
-    "image": string,
+    "image": ImageSourcePropType,
     "createdAt": string,
     "updatedAt": string
 }

@@ -3,6 +3,7 @@ import {View, TextInput, TouchableOpacity, Text, StyleSheet, StyleProp, ViewStyl
 import {Ionicons} from '@expo/vector-icons';
 import {colors} from "../assets/colors/colors";
 import {isNaN} from "formik";
+
 const checkValidNumber = (value: string | number) => {
     const convertToNumber: number = typeof value === 'string' ? parseInt(value) : value
     return isNaN(convertToNumber) || value < 0
@@ -12,19 +13,19 @@ type InputNumberProps = {
     values: number
     styleBtn?: StyleProp<ViewStyle>
 }
-const InputNumber = ({onChangeValue, values, styleBtn}:InputNumberProps) => {
+const InputNumber = ({onChangeValue, values, styleBtn}: InputNumberProps) => {
 
     const handleIncrement = () => {
-        if(checkValidNumber(values)) return 0
+        if (checkValidNumber(values)) return onChangeValue(1)
         onChangeValue(values + 1)
     };
 
     const handleDecrement = () => {
-        if(checkValidNumber(values) || values === 0) return 0
+        if (checkValidNumber(values) || values === 0) return onChangeValue(1)
         onChangeValue(values - 1)
     };
     const onChangeText = (value: string) => {
-        if(checkValidNumber(value)) return
+        if (checkValidNumber(value)) return onChangeValue(1)
         onChangeValue(parseInt(value))
     }
     return (

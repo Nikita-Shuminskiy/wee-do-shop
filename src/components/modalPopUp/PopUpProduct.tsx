@@ -1,75 +1,88 @@
 import React, {useState} from 'react';
 import {Box, Image, Text} from "native-base";
 import photoTest from "../../assets/images/photoTest.png";
-import {Animated, StyleSheet, useWindowDimensions} from 'react-native';
-import {TouchableOpacity} from "react-native";
+import {StyleSheet} from 'react-native';
 import ModalPopup from "../pop-up";
 import {colors} from "../../assets/colors/colors";
 import Button from "../Button";
-import Link from "../Link";
 import SliderComponent from "../Slider";
 import InputNumber from "../InputNumber";
-import ShowMoreText from "../ShowMoreText";
+import {ProductType} from "../../api/productApi";
+import CartStore, {CartType, ProductCartType} from "../../store/CartStore/cart-store";
+
 
 type PopUpProductProps = {
     show: boolean
+    currentValueToCartProduct: ProductCartType
     onClose: () => void
+    product: ProductType
+    saveProductValueToCard: (productValue: number) => void
+    totalSumCart: number
 }
-const PopUpProduct = ({show, onClose}: PopUpProductProps) => {
-    const [currentCart, setCurrentCart] = useState<number>()
+const PopUpProduct = ({
+                          show,
+                          onClose,
+                          product,
+                          currentValueToCartProduct,
+                          saveProductValueToCard,
+                          totalSumCart
+                      }: PopUpProductProps) => {
+
     const onPressShowMore = () => {
 
     }
     const onPressGoToCardHandler = () => {
 
     }
-    const saveInputNumberValue = (value: number) => {
-        setCurrentCart(value)
+    const saveInputNumberValue = (productValue: number) => {
+        saveProductValueToCard(productValue)
     }
-    const saveSliderValue = (value: number) => {
-        setCurrentCart(value)
+    const saveSliderValue = (productValue: number) => {
+        saveProductValueToCard(productValue)
     }
-    const totalSumCurrentCart = currentCart * 800
+
     return (
         <>
             <ModalPopup visible={show} onClose={onClose}>
                 <Box flex={1} w={'100%'} justifyContent={'space-between'}>
                     <Image source={photoTest} alt={'photoProduct'}/>
-                    <Text mb={2} mt={2} fontSize={16} fontWeight={'600'}>Acai Berry CBD Flower</Text>
-                    <Text mb={2}>Simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
-                        industry's standard dummy text ever since the 1500s,</Text>
+                    <Text mb={2} mt={2} fontSize={16} fontWeight={'600'}> {product?.name}</Text>
+                    <Text mb={2}>{product?.description}</Text>
                     <Box>
-                        <Text fontWeight={'500'}>-THC 15%</Text>
+                        {/* <Text fontWeight={'500'}>-THC 15%</Text>
                         <Text fontWeight={'500'}>-CBD 12%</Text>
                         <Text fontWeight={'500'}>-Energizing</Text>
-                        <Text fontWeight={'500'}>-Uplifting</Text>
+                        <Text fontWeight={'500'}>-Uplifting</Text>*/}
+                        <Text fontWeight={'500'}>{product?.effect}</Text>
                     </Box>
-                    <Box flex={1} w={'25%'}>
+                    {/*  <Box flex={1} w={'25%'}>
                         <Link styleLink={{backgroundColor: colors.grayDarkLight, borderRadius: 16}}
                               onPress={onPressShowMore} text={'Show more'}/>
-                    </Box>
+                    </Box>*/}
                     <Box mt={2} w={'100%'} flex={1}>
                         <Box mb={4} flexDirection={'row'} flex={1} w={'100%'} justifyContent={'space-between'}>
                             <Text>Price: 1g</Text>
-                            <Text>฿ 800 </Text>
+                            <Text>฿ {product?.price}</Text>
                         </Box>
-                        <SliderComponent onChangeValue={saveSliderValue}/>
+                        <SliderComponent valueSlider={currentValueToCartProduct?.productValue ?? 0}
+                                         onChangeValue={saveSliderValue}/>
                     </Box>
                 </Box>
             </ModalPopup>
             {show && <Box
-                justifyContent={'space-between'}
+                justifyContent={'space-evenly'}
                 style={styles.shadow}
                 zIndex={9999}
                 height={91}
                 flexDirection={'row'}
                 alignItems={'center'}>
-                <Box w={'45%'}>
-                    <InputNumber values={currentCart} onChangeValue={saveInputNumberValue}/>
+                <Box w={'40%'}>
+                    <InputNumber values={currentValueToCartProduct?.productValue ?? 0} onChangeValue={saveInputNumberValue}/>
                 </Box>
-                <Box mr={5}>
-                    <Button backgroundColor={colors.green} styleText={styles.styleTextBtn} onPress={onPressGoToCardHandler}
-                            title={`Go to cart ฿${totalSumCurrentCart ?? ''}`}/>
+                <Box minWidth={150}>
+                    <Button backgroundColor={colors.green} styleContainer={styles.styleContainerBtn}
+                            styleText={styles.styleTextBtn} onPress={onPressGoToCardHandler}
+                            title={`Go to cart ฿${totalSumCart ?? ''}`}/>
                 </Box>
             </Box>}
 
@@ -77,6 +90,7 @@ const PopUpProduct = ({show, onClose}: PopUpProductProps) => {
     );
 };
 const styles = StyleSheet.create({
+    styleContainerBtn: {},
     styleTextBtn: {
         fontWeight: '600',
         fontSize: 16

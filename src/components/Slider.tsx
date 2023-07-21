@@ -5,14 +5,16 @@ import {colors} from "../assets/colors/colors";
 
 type SliderComponentProps = {
     onChangeValue: (value: number) => void
+    valueSlider: number
 }
-const SliderComponent = ({onChangeValue}: SliderComponentProps) => {
-    const [sliderValue, setSliderValue] = useState(0);
+const SliderComponent = ({onChangeValue, valueSlider}: SliderComponentProps) => {
+    const [sliderValue, setSliderValue] = useState(() => valueSlider);
 
     const handleSliderChange = (value) => {
-        onChangeValue(value)
         setSliderValue(value);
+        onChangeValue(sliderValue)
     };
+
 
     return (
         <Slider

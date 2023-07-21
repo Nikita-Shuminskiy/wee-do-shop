@@ -1,4 +1,5 @@
 import {instance} from "./config";
+import {SubCategoryType} from "./subCategoriesApi";
 
 
 export const storesApi = {
@@ -19,18 +20,22 @@ type StoriesType = {
     "results": StoreType[],
     "totalCount": number
 }
+type SubCategoryWithoutStore = Omit<SubCategoryType, 'store'>;
+
 export type StoreType = {
-    "_id": string,
-    "name": string,
-    "description": string,
-    "phone": string,
-    "website": string,
-    "address": string,
-    "image": string,
-    "deliveryTime": string,
-    "popularityCoefficient": number,
-    "workingHours": string,
-    "products": string[],
-    "createdAt"?: string,
+    "_id": string
+    "name": string
+    "description": string
+    "phone": string
+    "website": string
+    "address": string
+    "image": string
+    "deliveryTime": string
+    "popularityCoefficient": number
+    "workingHours": string
+    "products": string[]
+    "subCategories": SubCategoryType[]
+    "store": string // дубл с _id магазина
+    "createdAt"?: string
     "updatedAt"?: string
 }

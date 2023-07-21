@@ -30,6 +30,10 @@ export const BaseWrapperComponent = ({
 						flexGrow: 1,
 						width: '100%',
 					}}
+					style={{
+						flex: 1,
+						width: '100%'
+					}}
 					onTouchStart={onTouchStart}
 					onTouchEnd={onTouchEnd}
 				>
