@@ -17,6 +17,7 @@ import {SubCategoryType} from "../../api/subCategoriesApi";
 import {ProductType} from "../../api/productApi";
 import PopUpProduct from "../../components/modalPopUp/PopUpProduct";
 import {CartType} from "../../store/CartStore/cart-store";
+import PopUpAboutStore from "../../components/modalPopUp/PopUpAboutStore";
 
 const renderEmptyContainer = (height, text) => {
     const onPressLink = () => {
@@ -82,6 +83,8 @@ const StoreS = observer(({navigation}: StoreSProps) => {
     }, [])
 
     const [isShowModalProduct, setIsShowModalProduct] = useState<boolean>(false)
+    const [isShowModalAboutStore, setIsShowModalAboutStore] = useState<boolean>(false)
+
     const [selectedSubCategory, setSelectedSubCategory] = useState<SubCategoryType>()
     const [selectedProduct, setSelectedProduct] = useState<ProductType>()
     const [selectedSubCategoryId, setSelectedSubCategoryId] = useState<string>('');
@@ -91,7 +94,10 @@ const StoreS = observer(({navigation}: StoreSProps) => {
         navigate.goBack()
     }
     const onPressAboutStore = () => {
-
+        setIsShowModalAboutStore(true)
+    }
+    const onClosePopUpAboutStore = () => {
+        setIsShowModalAboutStore(false)
     }
     const onPressConfirmButton = () => {
 
@@ -176,7 +182,7 @@ const StoreS = observer(({navigation}: StoreSProps) => {
                     <Box w={'100%'} position={'relative'} top={-13} backgroundColor={colors.white}
                          borderTopLeftRadius={16}
                          borderTopRightRadius={16}>
-                        <Box mt={5} mb={2}>
+                        <Box mt={5}>
                             <FlatList
                                 extraData={selectedSubCategoryId}
                                 data={store.subCategories}
@@ -192,6 +198,10 @@ const StoreS = observer(({navigation}: StoreSProps) => {
                                 showsVerticalScrollIndicator={false}
                             />
                         </Box>
+                        <Box ml={3} mb={4}>
+                            <Text fontSize={24} fontWeight={'700'}>{selectedSubCategory?.name ?? 'All products'}</Text>
+                        </Box>
+
                         <Box mb={20}>
                             <FlatList
                                 data={selectedSubCategory?.products}
@@ -240,6 +250,7 @@ const StoreS = observer(({navigation}: StoreSProps) => {
                           currentValueToCartProduct={currentValueToCartProduct}
                           product={selectedProduct} onClose={onClosePopUpProduct}
                           show={isShowModalProduct}/>
+            <PopUpAboutStore currentStore={store} show={isShowModalAboutStore} onClose={onClosePopUpAboutStore}/>
         </>
     );
 });
