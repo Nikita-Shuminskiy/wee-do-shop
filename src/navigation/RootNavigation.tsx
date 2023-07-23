@@ -14,16 +14,20 @@ import AllowLocationS from "../screen/authScreens/AllowLocationS";
 import GoogleAutocompleteMapS from "../screen/authScreens/GoogleAutocompleteMapS";
 import MainNavigation from "./MainNavigation";
 import StoreS from "../screen/mainScreens/StoreS";
+import FavoriteS from "../screen/mainScreens/FavoriteS";
+import {deviceStorage} from "../utils/storage/storage";
 
 const RootStack = createNativeStackNavigator()
 const RootNavigation = observer(() => {
     const {isLoading} = NotificationStore
     const {AuthStoreService, AuthStore} = rootStore
     const {isAuth} = AuthStore
+
     useEffect(() => {
         AuthStoreService.getMe()
+        //AuthStore.getUser('64bd488958016e5f24c370e2')
     }, [])
-    /*deviceStorage.removeItem('refreshToken')
+  /*  deviceStorage.removeItem('refreshToken')
     deviceStorage.removeItem('accessToken')*/
 
     return (
@@ -42,6 +46,11 @@ const RootNavigation = observer(() => {
                             options={{headerShown: false}}
                             name={routerConstants.STORE}
                             component={StoreS}
+                        />
+                        <RootStack.Screen
+                            options={{headerShown: false}}
+                            name={routerConstants.FAVORITE}
+                            component={FavoriteS}
                         />
                     </React.Fragment> : <React.Fragment>
                         <RootStack.Screen

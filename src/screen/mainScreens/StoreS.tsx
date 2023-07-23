@@ -149,7 +149,7 @@ const StoreS = observer(({navigation}: StoreSProps) => {
             setSelectedSubCategoryId(item?._id);
         }
         return (
-            <SubCategoriesViewer
+            <SubCategoriesViewer<SubCategoryType>
                 selectedSubCategoryId={selectedSubCategoryId}
                 onPress={onPressSelectedSubCategory}
                 subCategory={item}
@@ -159,7 +159,7 @@ const StoreS = observer(({navigation}: StoreSProps) => {
 
     return (
         <>
-            <BaseWrapperComponent isKeyboardAwareScrollView={true}>
+            <BaseWrapperComponent backgroundColor={'white'} isKeyboardAwareScrollView={true}>
                 <Box>
                     <Box w={'100%'} height={239} flex={1}>
                         <ImageBackground style={{flex: 1, width: '100%'}} alt={'shop-image'} source={testBackground}>

@@ -5,12 +5,12 @@ import {TouchableOpacity, StyleSheet} from "react-native";
 import {CategoryType} from "../../api/categoriesApi";
 import {SubCategoryType} from "../../api/subCategoriesApi";
 
-type CategoriesViewerType = {
-    subCategory: SubCategoryType
+type CategoriesViewerType<T> = {
+    subCategory: T
     onPress: () => void
     selectedSubCategoryId: string
 }
-const SubCategoriesViewer = ({subCategory, onPress, selectedSubCategoryId}: CategoriesViewerType) => {
+const SubCategoriesViewer = <T extends { name: string }>({subCategory, onPress, selectedSubCategoryId}: CategoriesViewerType<T>) => {
     return (
         <TouchableOpacity onPress={onPress} style={[{marginBottom: 10}]}>
             {/*<BlurView intensity={10} tint="light" style={StyleSheet.absoluteFillObject}/>*/}

@@ -2,10 +2,13 @@ import {action, makeObservable, observable} from "mobx";
 import {deviceStorage} from '../../utils/storage/storage'
 import {authApi, UserType} from '../../api/apiAuth'
 import {UserRegisterDataType} from "screen/authScreens/RegisterS";
+import {userApi} from "../../api/userApi";
+
 export type CurrentLocationType = {
-    location:  { latitude: number, longitude: number }
-    address: {name: string, formatted_address: string}
+    location: { latitude: number, longitude: number }
+    address: { name: string, formatted_address: string }
 }
+
 export class AuthStore {
     user: UserType = {} as UserType
     isAuth: boolean = false
@@ -42,6 +45,20 @@ export class AuthStore {
         const {data} = await authApi.getMe()
         this.setUser(data)
     }
+    async getUser(idUser: string): Promise<void> {
+        const {data} = await userApi.getUser(idUser)
+        this.setUser(data)
+    }
+
+    async saveFavoriteStore(idStore: string): Promise<void> {
+        const {data} = await userApi.saveFavoriteStore(this.user._id, idStore)
+        this.setUser(data)
+    }
+
+    async deleteFavoriteStore(idStore: string): Promise<void> {
+        const {data} = await userApi.deleteFavoriteStore(this.user._id, idStore)
+        this.setUser(data)
+    }
 
     setLocation(data: CurrentLocationType) {
         this.currentLocation = data
@@ -53,12 +70,18 @@ export class AuthStore {
             isAuth: observable,
             currentLocation: observable,
             setUser: action,
+            getUser: action,
+            deleteFavoriteStore: action,
+            saveFavoriteStore: action,
             setLocation: action,
             setAuth: action,
             getMe: action,
             login: action
         })
         this.setAuth = this.setAuth.bind(this)
+        this.getUser = this.getUser.bind(this)
+        this.deleteFavoriteStore = this.deleteFavoriteStore.bind(this)
+        this.saveFavoriteStore = this.saveFavoriteStore.bind(this)
         this.setLocation = this.setLocation.bind(this)
     }
 }

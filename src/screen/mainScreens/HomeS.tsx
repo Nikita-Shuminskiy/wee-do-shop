@@ -34,7 +34,7 @@ type HomeSProps = {
 }
 const HomeS = observer(({navigation}: HomeSProps) => {
     const {user} = AuthStore
-    const {StoresService, StoresStore, CategoriesService, CategoriesStore} = rootStore
+    const {StoresService, StoresStore, CategoriesService, CategoriesStore, AuthStoreService} = rootStore
     const {stores, setStore} = StoresStore
     const {categories} = CategoriesStore
 
@@ -47,7 +47,7 @@ const HomeS = observer(({navigation}: HomeSProps) => {
 
         }
         return (
-            <SubCategoriesViewer
+            <SubCategoriesViewer<CategoryType>
                 selectedSubCategoryId={'12'} // временно
                 onPress={onPressCategory}
                 subCategory={item}
@@ -59,8 +59,17 @@ const HomeS = observer(({navigation}: HomeSProps) => {
             setStore(item)
             navigation.navigate(routerConstants.STORE)
         }
+        const onPressSaveFavoriteStore = () => {
+            AuthStoreService.saveFavoriteStore(item._id)
+        }
+        const onPressRemoveFavoriteStore = () => {
+            AuthStoreService.deleteFavoriteStore(item._id)
+        }
         return (
             <StoresViewer
+                onPressSaveFavoriteStore={onPressSaveFavoriteStore}
+                onPressRemoveFavoriteStore={onPressRemoveFavoriteStore}
+                user={user}
                 onPress={onPress}
                 stores={item}
             />
@@ -83,21 +92,24 @@ const HomeS = observer(({navigation}: HomeSProps) => {
         StoresService.getStores()
         CategoriesService.getCategories()
     }, [])
+    const onPressFavoriteHandler = () => {
+        navigation.navigate(routerConstants.FAVORITE)
+    }
     return (
         <BaseWrapperComponent isKeyboardAwareScrollView={true}>
-            <Box mt={2}>
-                <Box paddingX={5} h={45} w={'100%'} flexDirection={'row'} justifyContent={'space-between'}>
+            <Box>
+                <Box paddingX={5} mt={4} h={45} w={'100%'} flexDirection={'row'} justifyContent={'space-between'}>
                     <TouchableWrapped>
                         <Image source={userImg} alt={'user'}/>
                     </TouchableWrapped>
                     <Text fontSize={16} w={'60%'} textAlign={'center'}
                           fontWeight={'600'}>{user?.location}1313111113</Text>
-                    <TouchableWrapped>
+                    <TouchableWrapped onPress={onPressFavoriteHandler}>
                         <Image source={likeImg} alt={'like'}/>
                     </TouchableWrapped>
                 </Box>
 
-                <Box mt={10} w={'100%'} backgroundColor={colors.white} borderTopLeftRadius={16}
+                <Box mt={2} w={'100%'} backgroundColor={colors.white} borderTopLeftRadius={16}
                      borderTopRightRadius={16}>
                     <Box w={'100%'} paddingX={5}>
                         <TextInput
@@ -124,12 +136,7 @@ const HomeS = observer(({navigation}: HomeSProps) => {
                             keyExtractor={(item, index) => index.toString()}
                             style={{width: '100%'}}
                             contentContainerStyle={
-                                !categories?.length && {
-                                    flex: 1,
-                                    width: '100%',
-                                    alignItems: 'center',
-                                    justifyContent: 'center'
-                                }
+                                !categories?.length && styles.contentContainerStyle
                             }
                             ListEmptyComponent={() => renderEmptyContainer(0, '')}
                             horizontal={true}
@@ -144,12 +151,7 @@ const HomeS = observer(({navigation}: HomeSProps) => {
                             style={{width: '100%'}}
                             ListEmptyComponent={() => renderEmptyContainer(Dimensions.get('window').height, 'List is empty')}
                             contentContainerStyle={
-                                !stores?.length ? {
-                                    flex: 1,
-                                    width: '100%',
-                                    alignItems: 'center',
-                                    justifyContent: 'center'
-                                } : {width: '100%', flex: 1}
+                                !stores?.length ? styles.contentContainerStyle : {width: '100%', flex: 1}
                             }
                         />
                     </Box>
@@ -158,6 +160,13 @@ const HomeS = observer(({navigation}: HomeSProps) => {
         </BaseWrapperComponent>
     );
 });
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+    contentContainerStyle: {
+        flex: 1,
+        width: '100%',
+        alignItems: 'center',
+        justifyContent: 'center'
+    }
+})
 
 export default HomeS;

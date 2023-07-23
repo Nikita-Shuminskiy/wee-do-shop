@@ -2,16 +2,23 @@ import React from 'react';
 import {Box, Image, Text} from "native-base";
 import {colors} from "../../assets/colors/colors";
 import test from '../../assets/images/test.png'
+import like from '../../assets/images/like.png'
+import likeActive from '../../assets/images/likeActive.png'
 import {TouchableOpacity} from "react-native";
 import motorcycle from '../../assets/images/moto.png'
 import {StoreType} from "../../api/storesApi";
+import {UserType} from "../../api/apiAuth";
 
 type StoresViewerType =  {
     stores: StoreType
     onPress: () => void
+    user: UserType
+    onPressSaveFavoriteStore: () => void
+    onPressRemoveFavoriteStore: () => void
 }
 
-const StoresViewer = ({stores, onPress}: StoresViewerType) => {
+const StoresViewer = ({stores, onPress, user, onPressSaveFavoriteStore}: StoresViewerType) => {
+
     return (
         <TouchableOpacity onPress={onPress} style={{alignItems: 'center', flex: 1}}>
             <Box backgroundColor={'rgba(203,203,203,0.27)'}
@@ -23,7 +30,7 @@ const StoresViewer = ({stores, onPress}: StoresViewerType) => {
                          position={'absolute'}
                          p={1}
                          top={2}
-                         left={0}
+                         left={2}
                          borderWidth={1}
                          zIndex={10}
                          borderColor={colors.green}
@@ -34,6 +41,15 @@ const StoresViewer = ({stores, onPress}: StoresViewerType) => {
                          backgroundColor={'transparent'}>
                         <Image source={motorcycle} h={17} w={26} alt={'moto'}/>
                         <Text ml={2} color={colors.white} fontSize={16} fontWeight={'500'}>{stores?.deliveryTime}</Text>
+                    </Box>
+                    <Box position={'absolute'}
+                         p={1}
+                         zIndex={10}
+                         top={2}
+                         right={2}>
+                        <TouchableOpacity onPress={onPressSaveFavoriteStore}>
+                            <Image source={like} alt={'like'}/>
+                        </TouchableOpacity>
                     </Box>
                     <Image alt={'image-store'} borderRadius={16} source={test}/>
                     <Box position={'absolute'}
