@@ -28,7 +28,7 @@ const ProductViewer = ({product, onPressProduct, saveProductToCart, currentCartS
     const onChangeValueNumber = (valueProduct: number) => {
         saveProductToCart(valueProduct)
     }
-    // подумать над эфектом, это должна быть картинка скорее
+
     return (
         <Pressable style={{alignItems: 'center', paddingHorizontal: 5, minWidth: productWidth, maxWidth: productWidth}}
                    onPress={onPressProduct}>
@@ -38,14 +38,21 @@ const ProductViewer = ({product, onPressProduct, saveProductToCart, currentCartS
                  w={'100%'}
                  mb={5}>
                 <Box>
-                    <Box w={24}
+                    <Box w={20}
                          position={'absolute'}
                          p={1}
                          top={2}
                          left={0}
                          zIndex={10}
                          backgroundColor={'transparent'}>
-                        <Image source={relaxImg} borderRadius={16} alt={'degree'}/>
+                        <Text backgroundColor={'transparent'}
+                              color={colors.white}
+                              borderColor={colors.white}
+                              borderRadius={16}
+                              textAlign={'center'}
+                              borderWidth={1}>
+                            {product.effect}
+                        </Text>
                     </Box>
                     <Box w={'100%'}>
                         <Image alt={'image-store'} width={200} borderTopRightRadius={16} borderTopLeftRadius={16}

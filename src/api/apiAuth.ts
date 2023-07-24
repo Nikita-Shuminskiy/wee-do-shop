@@ -9,7 +9,7 @@ export const authApi = {
 		return await instance.post<DataLoginType>(`auth/signin`, { email, password })
 	},
 	async getMe() {
-		return await instance.get<UserType>(`auth/getMe`)
+		return await instance.get<UserType>(`auth/getme`)
 	},
 	async register(data: UserRegisterDataType) {
 		return await instance.post<DataLoginType>(`auth/signup`, data)

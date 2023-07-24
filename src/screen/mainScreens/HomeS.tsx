@@ -98,15 +98,18 @@ const HomeS = observer(({navigation}: HomeSProps) => {
     const onPressFavoriteHandler = () => {
         navigation.navigate(routerConstants.FAVORITE)
     }
+    const onPressUserHandler = () => {
+        navigation.navigate(routerConstants.PROFILE_USER)
+    }
     return (
-        <BaseWrapperComponent isKeyboardAwareScrollView={true}>
+        <BaseWrapperComponent backgroundColor={colors.white} isKeyboardAwareScrollView={true}>
             <Box>
-                <Box paddingX={5} mt={4} h={45} w={'100%'} flexDirection={'row'} justifyContent={'space-between'}>
-                    <TouchableWrapped>
+                <Box paddingX={5} mt={6} mb={2} h={45} w={'100%'} flexDirection={'row'} justifyContent={'space-between'}>
+                    <TouchableWrapped onPress={onPressUserHandler}>
                         <Image source={userImg} alt={'user'}/>
                     </TouchableWrapped>
                     <Text fontSize={16} w={'60%'} textAlign={'center'}
-                          fontWeight={'600'}>{user?.location}1313111113</Text>
+                          fontWeight={'600'}>{user?.location}</Text>
                     <TouchableWrapped onPress={onPressFavoriteHandler}>
                         <Image source={likeImg} alt={'like'}/>
                     </TouchableWrapped>

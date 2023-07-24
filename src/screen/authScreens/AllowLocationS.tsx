@@ -24,7 +24,7 @@ const AllowLocationS = ({navigation}) => {
     return (
         <>
             <BaseWrapperComponent>
-                <Box mt={10} mb={5}>
+                <Box mt={5} ml={5} mb={5}>
                     <ArrowBack goBackPress={onPressGoBack} img={arrowLeft}/>
                 </Box>
                 <Box alignItems={'center'} justifyContent={'space-evenly'} flex={1} paddingX={10}>

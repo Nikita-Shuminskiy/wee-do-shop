@@ -53,6 +53,12 @@ export class AuthStore {
         return data
     }
 
+    logOut() {
+        this.user = null
+        this.isAuth = false
+        deviceStorage.removeItem('refreshToken')
+        deviceStorage.removeItem('accessToken')
+    }
 
     setLocation(data: CurrentLocationType) {
         this.currentLocation = data
@@ -66,12 +72,14 @@ export class AuthStore {
             setUser: action,
             getUser: action,
             setLocation: action,
+            logOut: action,
             setAuth: action,
             getMe: action,
             login: action
         })
         this.setAuth = this.setAuth.bind(this)
         this.getUser = this.getUser.bind(this)
+        this.logOut = this.logOut.bind(this)
 
         this.setLocation = this.setLocation.bind(this)
     }

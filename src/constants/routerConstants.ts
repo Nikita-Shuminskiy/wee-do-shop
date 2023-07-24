@@ -8,4 +8,5 @@ export const routerConstants = {
     HOME: 'home',
     STORE: 'store',
     FAVORITE: 'favorite',
+    PROFILE_USER: 'profile-user',
 }

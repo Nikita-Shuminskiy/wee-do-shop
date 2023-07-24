@@ -12,6 +12,7 @@ import { colors } from '../../assets/colors/colors'
 import Button from '../../components/Button'
 import { routerConstants } from '../../constants/routerConstants'
 import rootStore from '../../store/RootStore'
+import PrivacyPolicy from "../../components/PrivacyPolicy";
 
 type LoginSProps = {
 	navigation: NavigationProp<ParamListBase>
@@ -89,6 +90,7 @@ const LoginS = ({ navigation }: LoginSProps) => {
 					<Button styleContainer={styles.styleContainerBtnUp} backgroundColor={'white'} onPress={onPressSignUpHandler}
 									title={'Sign up'} />
 				</Box>
+				<PrivacyPolicy/>
 			</Box>
 		</BaseWrapperComponent>
 	)
