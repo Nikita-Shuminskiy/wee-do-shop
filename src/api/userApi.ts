@@ -1,6 +1,7 @@
 import { instance } from './config'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { UserRegisterDataType } from 'screen/authScreens/RegisterS'
+import {StoreType} from "./storesApi";
 
 
 export const userApi = {
@@ -21,7 +22,7 @@ export type DataUserType = {
 	"email": string,
 	"phone": string,
 	"location": string,
-	"favoritesStores": string[],
+	"favoritesStores": StoreType[],
 	"role": RoleType,
 	"createdAt": string,
 	"updatedAt": string

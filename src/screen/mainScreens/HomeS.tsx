@@ -19,6 +19,7 @@ import {StoreType} from "../../api/storesApi";
 import {CategoryType} from "../../api/categoriesApi";
 import {routerConstants} from "../../constants/routerConstants";
 import {NavigationProp, ParamListBase} from "@react-navigation/native";
+import {StoreTypeLocalType} from "../../store/StoresStore/stores-store";
 
 type TouchableWrappedProps = TouchableOpacityProps & {
     children: JSX.Element
@@ -35,7 +36,7 @@ type HomeSProps = {
 const HomeS = observer(({navigation}: HomeSProps) => {
     const {user} = AuthStore
     const {StoresService, StoresStore, CategoriesService, CategoriesStore, AuthStoreService} = rootStore
-    const {stores, setStore} = StoresStore
+    const {stores, setStore, favoriteStores} = StoresStore
     const {categories} = CategoriesStore
 
     const [search, setSearch] = useState('')
@@ -54,19 +55,21 @@ const HomeS = observer(({navigation}: HomeSProps) => {
             />
         )
     }
-    const storesViews = ({item}: { item: StoreType }) => {
+    const storesViews = ({item}: { item: StoreTypeLocalType }) => {
         const onPress = () => {
             setStore(item)
             navigation.navigate(routerConstants.STORE)
         }
         const onPressSaveFavoriteStore = () => {
-            AuthStoreService.saveFavoriteStore(item._id)
+            StoresService.saveFavoriteStore(item._id)
         }
         const onPressRemoveFavoriteStore = () => {
-            AuthStoreService.deleteFavoriteStore(item._id)
+            StoresService.deleteFavoriteStore(item._id)
         }
+
         return (
             <StoresViewer
+                checkFavoriteStore={item?.isFavorite}
                 onPressSaveFavoriteStore={onPressSaveFavoriteStore}
                 onPressRemoveFavoriteStore={onPressRemoveFavoriteStore}
                 user={user}
@@ -147,7 +150,7 @@ const HomeS = observer(({navigation}: HomeSProps) => {
                         <FlatList
                             data={stores}
                             renderItem={storesViews}
-                            keyExtractor={(item, index) => index.toString()}
+                            keyExtractor={(item, index) => item._id}
                             style={{width: '100%'}}
                             ListEmptyComponent={() => renderEmptyContainer(Dimensions.get('window').height, 'List is empty')}
                             contentContainerStyle={

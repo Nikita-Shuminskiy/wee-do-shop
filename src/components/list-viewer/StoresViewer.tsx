@@ -1,23 +1,32 @@
 import React from 'react';
-import {Box, Image, Text} from "native-base";
+import {Box, Text} from "native-base";
 import {colors} from "../../assets/colors/colors";
 import test from '../../assets/images/test.png'
 import like from '../../assets/images/like.png'
 import likeActive from '../../assets/images/likeActive.png'
-import {TouchableOpacity} from "react-native";
+import {Image, TouchableOpacity} from "react-native";
 import motorcycle from '../../assets/images/moto.png'
 import {StoreType} from "../../api/storesApi";
 import {UserType} from "../../api/apiAuth";
 
-type StoresViewerType =  {
+type StoresViewerType = {
     stores: StoreType
     onPress: () => void
     user: UserType
     onPressSaveFavoriteStore: () => void
     onPressRemoveFavoriteStore: () => void
+    checkFavoriteStore: boolean
 }
 
-const StoresViewer = ({stores, onPress, user, onPressSaveFavoriteStore}: StoresViewerType) => {
+const StoresViewer = ({
+                          stores,
+                          onPress,
+                          user,
+                          checkFavoriteStore,
+                          onPressSaveFavoriteStore,
+                          onPressRemoveFavoriteStore,
+                      }: StoresViewerType) => {
+
 
     return (
         <TouchableOpacity onPress={onPress} style={{alignItems: 'center', flex: 1}}>
@@ -39,7 +48,7 @@ const StoresViewer = ({stores, onPress, user, onPressSaveFavoriteStore}: StoresV
                          alignItems={'center'}
                          justifyContent={'center'}
                          backgroundColor={'transparent'}>
-                        <Image source={motorcycle} h={17} w={26} alt={'moto'}/>
+                        <Image source={motorcycle} style={{ width: 26, height: 17 }} alt={'moto'}/>
                         <Text ml={2} color={colors.white} fontSize={16} fontWeight={'500'}>{stores?.deliveryTime}</Text>
                     </Box>
                     <Box position={'absolute'}
@@ -47,8 +56,9 @@ const StoresViewer = ({stores, onPress, user, onPressSaveFavoriteStore}: StoresV
                          zIndex={10}
                          top={2}
                          right={2}>
-                        <TouchableOpacity onPress={onPressSaveFavoriteStore}>
-                            <Image source={like} alt={'like'}/>
+                        <TouchableOpacity
+                            onPress={checkFavoriteStore ? onPressRemoveFavoriteStore : onPressSaveFavoriteStore}>
+                            <Image source={checkFavoriteStore ? likeActive : like} alt={'like'}/>
                         </TouchableOpacity>
                     </Box>
                     <Image alt={'image-store'} borderRadius={16} source={test}/>

@@ -1,6 +1,7 @@
 import React from 'react'
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
 import {GestureResponderEvent, Platform, SafeAreaView} from 'react-native'
+import {VirtualizedList} from "./virtualized-list";
 
 type BaseWrapperComponentType = {
     children: JSX.Element | JSX.Element[]
@@ -27,6 +28,7 @@ export const BaseWrapperComponent = ({
             backgroundColor: backgroundColor, ...styleSafeArea
         }}>
             {isKeyboardAwareScrollView ? (
+                <VirtualizedList>
                 <KeyboardAwareScrollView
                     enableOnAndroid={true}
                     keyboardShouldPersistTaps={'handled'}
@@ -44,6 +46,7 @@ export const BaseWrapperComponent = ({
                 >
                     {children}
                 </KeyboardAwareScrollView>
+                </VirtualizedList>
             ) : (
                 children
             )}
