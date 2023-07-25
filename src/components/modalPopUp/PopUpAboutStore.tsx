@@ -1,12 +1,12 @@
 import React from 'react';
 import {Box, Text} from "native-base";
-import {StyleSheet} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import ModalPopup from "../pop-up";
 import {colors} from "../../assets/colors/colors";
 import {StoreType} from "../../api/storesApi";
 import Link from "../Link";
 import {Feather, Fontisto, Ionicons, SimpleLineIcons} from '@expo/vector-icons';
-import MapView, {Marker} from "react-native-maps";
+import MapView, {Marker, PROVIDER_GOOGLE} from "react-native-maps";
 
 type PopUpAboutStoreProps = {
     show: boolean
@@ -22,7 +22,9 @@ const PopUpAboutStore = ({
     const onPressLink = () => {
 
     }
-
+ /*   if (!myLocation) {
+        return <View style={styles.container}/>;
+    }*/
     return (
         <ModalPopup visible={show} onClose={onClose}>
             <Box flex={1} w={'100%'} alignItems={'flex-start'} justifyContent={'space-between'}>
@@ -54,6 +56,8 @@ const PopUpAboutStore = ({
                             latitudeDelta: 0.0922,
                             longitudeDelta: 0.0421,
                         }}
+                       // key={'4139a6460624d97f'}
+                        provider={PROVIDER_GOOGLE}
                     >
                         <Marker
                             coordinate={{

@@ -20,6 +20,7 @@ import {CategoryType} from "../../api/categoriesApi";
 import {routerConstants} from "../../constants/routerConstants";
 import {NavigationProp, ParamListBase} from "@react-navigation/native";
 import {StoreTypeLocalType} from "../../store/StoresStore/stores-store";
+import SearchStores from "../../components/SearchStores";
 
 type TouchableWrappedProps = TouchableOpacityProps & {
     children: JSX.Element
@@ -39,10 +40,7 @@ const HomeS = observer(({navigation}: HomeSProps) => {
     const {stores, setStore, favoriteStores} = StoresStore
     const {categories} = CategoriesStore
 
-    const [search, setSearch] = useState('')
-    const onChangeTextSearch = (e) => {
-        setSearch(e)
-    }
+
     const categoriesViews = ({item}: { item: CategoryType }) => {
         const onPressCategory = () => {
 
@@ -104,7 +102,8 @@ const HomeS = observer(({navigation}: HomeSProps) => {
     return (
         <BaseWrapperComponent backgroundColor={colors.white} isKeyboardAwareScrollView={true}>
             <Box>
-                <Box paddingX={5} mt={6} mb={2} h={45} w={'100%'} flexDirection={'row'} justifyContent={'space-between'}>
+                <Box paddingX={5} mt={6} mb={2} h={45} w={'100%'} flexDirection={'row'}
+                     justifyContent={'space-between'}>
                     <TouchableWrapped onPress={onPressUserHandler}>
                         <Image source={userImg} alt={'user'}/>
                     </TouchableWrapped>
@@ -117,25 +116,9 @@ const HomeS = observer(({navigation}: HomeSProps) => {
 
                 <Box mt={2} w={'100%'} backgroundColor={colors.white} borderTopLeftRadius={16}
                      borderTopRightRadius={16}>
-                    <Box w={'100%'} paddingX={5}>
-                        <TextInput
-                            iconLeft={<Image ml={2} source={searchImg} alt={'search'}/>}
-                            iconRight={
-                                <Box flexDirection={'row'} mr={2}>
-                                    <Box borderRightWidth={1} borderColor={colors.gray} mr={4}/>
-                                    <Image source={settingImg} alt={'setting'}/>
-                                </Box>
-                            }
-                            h={50}
-                            placeholder={'Name, strain or shop'}
-                            borderRadius={16}
-                            backgroundColor={'transparent'}
-                            borderColor={colors.grayLight}
-                            value={search}
-                            onChangeText={onChangeTextSearch}/>
-                    </Box>
+                    <SearchStores/>
 
-                    <Box mt={5} mb={2}>
+                    <Box mt={5} marginX={2} mb={2}>
                         <FlatList
                             data={categories}
                             renderItem={categoriesViews}
@@ -147,6 +130,7 @@ const HomeS = observer(({navigation}: HomeSProps) => {
                             ListEmptyComponent={() => renderEmptyContainer(0, '')}
                             horizontal={true}
                             showsVerticalScrollIndicator={false}
+                            showsHorizontalScrollIndicator={false}
                         />
                     </Box>
                     <Box>

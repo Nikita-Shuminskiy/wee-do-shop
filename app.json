@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "weDoo",
+    "name": "weeDo",
     "slug": "wedoo",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -9,7 +9,7 @@
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#000000"
     },
     "assetBundlePatterns": [
       "**/*"
@@ -17,22 +17,22 @@
     "ios": {
       "userInterfaceStyle": "light",
       "supportsTablet": true,
-      "infoPlist": {
-        "NSLocationWhenInUseUsageDescription": "Your location is required to provide relevant search results.",
-        "NSLocationAlwaysAndWhenInUseUsageDescription": "Your location is required to provide relevant search results."
+      "config": {
+        "googleMapsApiKey": "AIzaSyByfj-wyu2Pvn1u2SV20OIgp1B7bAEiW6U"
       }
     },
     "android": {
-      "permissions": [
-        "ACCESS_FINE_LOCATION",
-        "ACCESS_COARSE_LOCATION"
-      ],
+      "package": "com.nick_1995.SOSnative",
       "userInterfaceStyle": "light",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.nick_1995.SOSnative"
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyCDu3dMvEFIDgw_uqJWabVuauq0JVsu3NI"
+        }
+      }
     },
     "web": {
       "favicon": "./assets/favicon.png"

@@ -1,9 +1,7 @@
 import React from 'react';
-import {Box, Pressable, Text} from "native-base";
+import {Box, Text} from "native-base";
 import {colors} from "../../assets/colors/colors";
-import {TouchableOpacity, StyleSheet} from "react-native";
-import {CategoryType} from "../../api/categoriesApi";
-import {SubCategoryType} from "../../api/subCategoriesApi";
+import {StyleSheet, TouchableOpacity} from "react-native";
 
 type CategoriesViewerType<T> = {
     subCategory: T

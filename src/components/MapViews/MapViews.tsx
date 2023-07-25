@@ -99,6 +99,8 @@ export const MapViews = ({visible, close, currentDataMap}: MapViewsProps) => {
                     longitudeDelta: 0.0421,
                 }}
                 onPress={handleMapPress}
+                key={'4139a6460624d97f'}
+
             >
                 <Marker
                     coordinate={{

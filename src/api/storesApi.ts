@@ -15,6 +15,9 @@ export const storesApi = {
     async deleteStores(id:number) {
         return await instance.delete<{success: boolean}>(`stores${id}`)
     },
+    async searchStores(text: string) {
+        return await instance.get<StoriesType>(`stores?search=${text}`)
+    },
 }
 type StoriesType = {
     "results": StoreType[],

@@ -39,6 +39,12 @@ export class StoresStore {
 
     }
 
+    async searchStores(text: string): Promise<void> {
+        const {data} = await storesApi.searchStores(text)
+        this.setStores(data.results)
+
+    }
+
     updateFavoriteStores(stores: StoreType[]) {
         return stores.map((store) => {
             return {
@@ -67,6 +73,7 @@ export class StoresStore {
             setFavoriteStore: action,
             deleteFavoriteStore: action,
             saveFavoriteStore: action,
+            searchStores: action,
             setStores: action,
             updateFavoriteStores: action,
         })
@@ -74,6 +81,7 @@ export class StoresStore {
         this.deleteFavoriteStore = this.deleteFavoriteStore.bind(this)
         this.saveFavoriteStore = this.saveFavoriteStore.bind(this)
         this.setStores = this.setStores.bind(this)
+        this.searchStores = this.searchStores.bind(this)
         this.updateFavoriteStores = this.updateFavoriteStores.bind(this)
         this.setStore = this.setStore.bind(this)
     }
