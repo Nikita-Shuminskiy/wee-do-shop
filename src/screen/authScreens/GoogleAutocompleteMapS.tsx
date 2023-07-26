@@ -28,7 +28,7 @@ const GoogleAutocompleteMapS = ({navigation}: GoogleAutocompleteMapSProps) => {
     return (
         <>
             <BaseWrapperComponent isKeyboardAwareScrollView={false}>
-                <Box w={'100%'} alignItems={'center'} mb={10} justifyContent={'space-between'} flexDirection={'row'}>
+                <Box w={'100%'} alignItems={'center'} mb={10} mt={5} justifyContent={'space-between'} flexDirection={'row'}>
                     <ArrowBack styleTouchable={{flex: 2, marginLeft: 10}} goBackPress={goBackPress}/>
                     <Text flexGrow={2} fontSize={28} fontWeight={'700'}>Enter the address</Text>
                 </Box>

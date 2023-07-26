@@ -18,6 +18,9 @@ const PhoneNumberField: React.FC<PhoneNumberFieldProps> = ({ isRequired, isInval
 			<FormControl isInvalid={isInvalid} isRequired={isRequired}>
 				<PhoneInput
 					ref={phoneInput}
+					textInputProps={{
+						keyboardType: 'numeric'
+					}}
 					containerStyle={{
 						width: '100%',
 						height: 40,

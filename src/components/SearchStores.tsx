@@ -14,13 +14,9 @@ const SearchStores = () => {
         setSearch(newText);
     };
 
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            StoresService.searchStores(search)
-        }, 600);
-
-        return () => clearTimeout(timer);
-    }, [search]);
+    const onSubmitEditing = () => {
+        StoresService.searchStores(search)
+    }
     return (
         <Box w={'100%'} paddingX={5}>
             <TextInput
@@ -31,12 +27,14 @@ const SearchStores = () => {
                         <Image source={settingImg} alt={'setting'}/>
                     </Box>
                 }
+                returnKeyType={"search"}
                 h={50}
                 placeholder={'Name, strain or shop'}
                 borderRadius={16}
                 backgroundColor={'transparent'}
                 borderColor={colors.grayLight}
                 value={search}
+                onSubmitEditing={onSubmitEditing}
                 onChangeText={handleTextChange}/>
         </Box>
     );

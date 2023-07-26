@@ -8,6 +8,7 @@ import {Image, TouchableOpacity} from "react-native";
 import motorcycle from '../../assets/images/moto.png'
 import {StoreType} from "../../api/storesApi";
 import {UserType} from "../../api/apiAuth";
+import {getCurrentDay} from "../../utils/utils";
 
 type StoresViewerType = {
     stores: StoreType
@@ -26,8 +27,6 @@ const StoresViewer = ({
                           onPressSaveFavoriteStore,
                           onPressRemoveFavoriteStore,
                       }: StoresViewerType) => {
-
-
     return (
         <TouchableOpacity onPress={onPress} style={{alignItems: 'center', flex: 1}}>
             <Box backgroundColor={'rgba(203,203,203,0.27)'}
@@ -68,7 +67,7 @@ const StoresViewer = ({
                          backgroundColor={colors.green}
                          borderRadius={16} borderRightRadius={0} paddingY={1} paddingX={3}>
                         <Text color={colors.white} fontWeight={'600'} fontSize={14}>Open
-                            until {stores?.workingHours}</Text>
+                            until {getCurrentDay(stores?.workingHours)}</Text>
                     </Box>
                 </Box>
                 <Box paddingY={2}

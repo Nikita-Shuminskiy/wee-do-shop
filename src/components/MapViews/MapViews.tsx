@@ -82,13 +82,14 @@ export const MapViews = ({visible, close, currentDataMap}: MapViewsProps) => {
     }
     return <Modal visible={visible}>
         <Box style={styles.container}>
-            <Box mt={5} zIndex={10} mb={5} position={'absolute'} left={5}>
-                <ArrowBack goBackPress={onPressGoBack} img={arrowLeft}/>
-            </Box>
             <Box zIndex={10} position={'absolute'} top={50} justifyContent={'center'} flex={1} w={'100%'}>
                 <Text textAlign={'center'} fontSize={24}
                       fontWeight={'500'}>{address?.formatted_address}</Text>
             </Box>
+            <Box mt={5} zIndex={10} mb={5} top={20} position={'absolute'} left={5}>
+                <ArrowBack goBackPress={onPressGoBack} img={arrowLeft}/>
+            </Box>
+
             <MapView
                 ref={(ref) => setMapRef(ref)}
                 style={styles.map}
