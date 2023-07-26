@@ -15,7 +15,6 @@ const SubCategoriesViewer = <T extends { name: string }>({subCategory, onPress, 
             <Box
                  style={selectedSubCategoryId && styles.activeSubCategory}
                  p={2}
-                 w={76}
                  h={10}
                  alignItems={'center'}
                  justifyContent={'center'} m={1}>

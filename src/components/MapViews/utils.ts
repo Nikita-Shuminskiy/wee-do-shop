@@ -27,7 +27,6 @@ export const getInfoAddressForCoords = async ({latitude, longitude}) => {
 
        if (reverseGeocode && reverseGeocode.length > 0) {
            const { country, city, street, postalCode, district, streetNumber } = reverseGeocode[0];
-           console.log(reverseGeocode[0])
            const formatted_address = `${country} ${city ?? ""} ${street ?? ''} ${streetNumber ?? ''}`;
            return formatted_address
        }

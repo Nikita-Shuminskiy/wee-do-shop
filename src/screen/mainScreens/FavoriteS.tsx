@@ -12,9 +12,7 @@ import rootStore from "../../store/RootStore/root-store";
 import ArrowBack from "../../components/ArrowBack";
 import arrowLeftBack from "../../assets/images/arrow-left.png";
 import {colors} from "../../assets/colors/colors";
-import {StoreTypeLocalType} from "../../store/StoresStore/stores-store";
 import {StoreType} from "../../api/storesApi";
-import {VirtualizedList} from "../../components/virtualized-list";
 
 type FavoriteSType = {
     navigation: NavigationProp<ParamListBase>

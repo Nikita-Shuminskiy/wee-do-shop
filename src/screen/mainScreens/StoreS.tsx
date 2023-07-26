@@ -67,9 +67,8 @@ type StoreSProps = {
 }
 const StoreS = observer(({navigation}: StoreSProps) => {
     const {StoresStore} = rootStore
-    const {store} = StoresStore
+    const {store, allProductStore, getAndSetAllProduct} = StoresStore
 
-    // need get All product for first screen
     const navigate = useNavigation()
     const [currentCartStore, setCurrentCartStore] = useState<CartType>()
 
@@ -80,6 +79,7 @@ const StoreS = observer(({navigation}: StoreSProps) => {
             products: []
         }
         setCurrentCartStore(newCart)
+        getAndSetAllProduct(store.subCategories)
     }, [])
 
     const [isShowModalProduct, setIsShowModalProduct] = useState<boolean>(false)
@@ -156,7 +156,6 @@ const StoreS = observer(({navigation}: StoreSProps) => {
             />
         )
     }
-
     return (
         <>
             <BaseWrapperComponent backgroundColor={'white'} isKeyboardAwareScrollView={true}>
@@ -168,8 +167,7 @@ const StoreS = observer(({navigation}: StoreSProps) => {
                             </Box>
                             <Box flex={1} w={'100%'} alignItems={'flex-start'} justifyContent={'center'}>
                                 <Box ml={4} mt={5} justifyContent={'flex-start'}>
-                                    <Text color={colors.white} fontWeight={'700'} fontSize={32}>Simply crafted
-                                        store</Text>
+                                    <Text color={colors.white} fontWeight={'700'} fontSize={32}>{store?.name}</Text>
                                 </Box>
                                 <Box position={'absolute'} bottom={7} right={2}>
                                     <Button backgroundColor={'transparent'}
@@ -204,7 +202,7 @@ const StoreS = observer(({navigation}: StoreSProps) => {
 
                         <Box mb={20}>
                             <FlatList
-                                data={selectedSubCategory?.products}
+                                data={selectedSubCategory?.products ?? allProductStore}
                                 horizontal={false}
                                 renderItem={productViews}
                                 keyExtractor={(item, index) => index.toString()}

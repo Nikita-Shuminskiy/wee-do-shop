@@ -33,13 +33,21 @@ export type WorkingHoursType = {
     saturday: string
     sunday: string
 }
+export type AddressType = {
+    country: string
+    city: string
+    street: string
+    house: string
+    apartment: string
+    postalCode: string
+}
 export type StoreType = {
     "_id": string
     "name": string
     "description": string
     "phone": string
     "website": string
-    "address": string
+    "address": AddressType
     "image": string
     "deliveryTime": string
     "popularityCoefficient": number

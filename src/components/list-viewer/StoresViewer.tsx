@@ -8,7 +8,7 @@ import {Image, TouchableOpacity} from "react-native";
 import motorcycle from '../../assets/images/moto.png'
 import {StoreType} from "../../api/storesApi";
 import {UserType} from "../../api/apiAuth";
-import {getCurrentDay} from "../../utils/utils";
+import {getCurrentUntilTimeStoreTo} from "../../utils/utils";
 
 type StoresViewerType = {
     stores: StoreType
@@ -34,8 +34,7 @@ const StoresViewer = ({
                  alignItems={'flex-start'} justifyContent={'space-between'} m={1}
                  borderColor={colors.green}>
                 <Box>
-                    <Box w={24}
-                         position={'absolute'}
+                    <Box position={'absolute'}
                          p={1}
                          top={2}
                          left={2}
@@ -48,7 +47,7 @@ const StoresViewer = ({
                          justifyContent={'center'}
                          backgroundColor={'transparent'}>
                         <Image source={motorcycle} style={{ width: 26, height: 17 }} alt={'moto'}/>
-                        <Text ml={2} color={colors.white} fontSize={16} fontWeight={'500'}>{stores?.deliveryTime}</Text>
+                        <Text ml={2} color={colors.white} fontSize={16} fontWeight={'500'}>{stores?.deliveryTime}min</Text>
                     </Box>
                     <Box position={'absolute'}
                          p={1}
@@ -67,7 +66,7 @@ const StoresViewer = ({
                          backgroundColor={colors.green}
                          borderRadius={16} borderRightRadius={0} paddingY={1} paddingX={3}>
                         <Text color={colors.white} fontWeight={'600'} fontSize={14}>Open
-                            until {getCurrentDay(stores?.workingHours)}</Text>
+                            until {getCurrentUntilTimeStoreTo(stores?.workingHours)}</Text>
                     </Box>
                 </Box>
                 <Box paddingY={2}

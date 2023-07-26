@@ -1,6 +1,8 @@
 import {action, makeObservable, observable} from "mobx";
 import {storesApi, StoreType} from "../../api/storesApi";
 import {DataUserType, userApi} from "../../api/userApi";
+import {ProductType} from "../../api/productApi";
+import {SubCategoryType} from "../../api/subCategoriesApi";
 
 export type StoreTypeLocalType = StoreType & {
     isFavorite: boolean
@@ -10,6 +12,16 @@ export class StoresStore {
     stores: StoreTypeLocalType[] = [] as StoreTypeLocalType[]
     store: StoreType = {} as StoreType
     favoriteStores: StoreType[] = [] as StoreType[]
+    allProductStore: ProductType[] = [] as ProductType[]
+
+    getAndSetAllProduct(subCategories: SubCategoryType[]) {
+        subCategories?.map((subCategory) => {
+            subCategory.products?.map((product) => {
+                this.allProductStore.push(product)
+            })
+        })
+
+    }
 
     async saveFavoriteStore(idUser, idStore: string): Promise<DataUserType> {
         const {data} = await userApi.saveFavoriteStore(idUser, idStore)
@@ -65,6 +77,7 @@ export class StoresStore {
     constructor() {
         makeObservable(this, {
             stores: observable,
+            allProductStore: observable,
             store: observable,
             getStores: action,
             getStore: action,
@@ -78,6 +91,7 @@ export class StoresStore {
             updateFavoriteStores: action,
         })
         this.setFavoriteStore = this.setFavoriteStore.bind(this)
+        this.getAndSetAllProduct = this.getAndSetAllProduct.bind(this)
         this.deleteFavoriteStore = this.deleteFavoriteStore.bind(this)
         this.saveFavoriteStore = this.saveFavoriteStore.bind(this)
         this.setStores = this.setStores.bind(this)
