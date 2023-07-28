@@ -1,5 +1,5 @@
 import {action, makeObservable, observable} from "mobx";
-import {storesApi, StoreType} from "../../api/storesApi";
+import {dataSearchType, storesApi, StoreType} from "../../api/storesApi";
 import {userApi} from "../../api/userApi";
 import {ProductType} from "../../api/productApi";
 import {SubCategoryType} from "../../api/subCategoriesApi";
@@ -47,8 +47,8 @@ export class StoresStore {
 
     }
 
-    async searchStores(text: string): Promise<void> {
-        const {data} = await storesApi.searchStores(text)
+    async searchStores(dataSearch: dataSearchType): Promise<void> {
+        const {data} = await storesApi.searchStores(dataSearch)
         this.setStores(data.results)
 
     }

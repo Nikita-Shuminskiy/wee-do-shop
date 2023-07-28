@@ -33,7 +33,7 @@ type HomeSProps = {
 }
 const HomeS = observer(({navigation}: HomeSProps) => {
     const {user} = AuthStore
-    const {StoresService, StoresStore, CategoriesService, CategoriesStore, AuthStoreService} = rootStore
+    const {StoresService, StoresStore, CategoriesService, CategoriesStore} = rootStore
     const {stores, setStore, favoriteStores} = StoresStore
     const {categories} = CategoriesStore
     const [selectedSubCategoryId, setSelectedSubCategoryId] = useState<string>('');
@@ -43,6 +43,7 @@ const HomeS = observer(({navigation}: HomeSProps) => {
     const categoriesViews = ({item}: { item: CategoryType }) => {
         const onPressCategory = () => {
             setSelectedSubCategoryId(item._id)
+            StoresService.searchStores({categoryId: item._id})
         }
         return (
             <SubCategoriesViewer<CategoryType>
@@ -115,7 +116,7 @@ const HomeS = observer(({navigation}: HomeSProps) => {
 
                 <Box mt={2} w={'100%'} backgroundColor={colors.white} borderTopLeftRadius={16}
                      borderTopRightRadius={16}>
-                    <SearchStores/>
+                    <SearchStores selectedSubCategoryId={selectedSubCategoryId}/>
 
                     <Box mt={5} marginX={2} mb={2}>
                         <FlatList

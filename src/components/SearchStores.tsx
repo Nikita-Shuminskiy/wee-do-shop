@@ -5,8 +5,10 @@ import TextInput from "./TextInput";
 import searchImg from "../assets/images/search.png";
 import settingImg from "../assets/images/setting.png";
 import rootStore from "../store/RootStore/root-store";
-
-const SearchStores = () => {
+type SearchStoresType = {
+    selectedSubCategoryId: string
+}
+const SearchStores = ({selectedSubCategoryId}: SearchStoresType) => {
     const {StoresService} = rootStore
     const [search, setSearch] = useState('')
 
@@ -15,8 +17,9 @@ const SearchStores = () => {
     };
 
     const onSubmitEditing = () => {
-        StoresService.searchStores(search)
+        StoresService.searchStores({search, categoryId: selectedSubCategoryId ?? ''})
     }
+
     return (
         <Box w={'100%'} paddingX={5}>
             <TextInput

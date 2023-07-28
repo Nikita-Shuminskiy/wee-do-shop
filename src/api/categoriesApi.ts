@@ -4,7 +4,7 @@ import {DataLoginType} from "./apiAuth";
 
 export const categoriesApi = {
     async getCategories() {
-        return await instance.get<CategoriesType>(`category`)
+        return await instance.get<CategoryType[]>(`category/available`)
     },
     async getCategory(id: number) {
         return await instance.get<CategoryType>(`category${id}`)
@@ -16,10 +16,7 @@ export const categoriesApi = {
         return await instance.delete<{ success: boolean }>(`category${id}`)
     },
 }
-type CategoriesType = {
-    "results": CategoryType[],
-    "totalCount": number
-}
+
 export type CategoryType = {
     "_id": string,
     "name": string,

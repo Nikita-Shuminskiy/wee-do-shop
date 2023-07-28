@@ -29,7 +29,7 @@ export const getCurrentUntilTimeStoreTo = (workingHoursStores: WorkingHoursType)
 
     const currentDay = getCurrentDayName()
     const currentHourWorkStores = workingHoursStores[currentDay];
-    const utilTimeStore = currentHourWorkStores.slice(-5); // get time work(to)
+    const utilTimeStore = currentHourWorkStores?.slice(-5); // get time work(to)
     return utilTimeStore
 }
 

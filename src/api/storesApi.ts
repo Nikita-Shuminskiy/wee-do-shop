@@ -15,9 +15,20 @@ export const storesApi = {
     async deleteStores(id: number) {
         return await instance.delete<{ success: boolean }>(`stores${id}`)
     },
-    async searchStores(text: string) {
-        return await instance.get<StoriesType>(`stores?search=${text}`)
+    async searchStores({categoryId, search}: dataSearchType) {
+        const params: dataSearchType = {}
+        if (categoryId) {
+            params.categoryId = categoryId
+        }
+        if (search) {
+            params.search = search
+        }
+        return await instance.get<StoriesType>(`stores`, {params})
     },
+}
+export type dataSearchType = {
+    search?: string
+    categoryId?: string
 }
 type StoriesType = {
     "results": StoreType[],
@@ -40,6 +51,7 @@ export type AddressType = {
     house: string
     apartment: string
     postalCode: string
+
 }
 export type StoreType = {
     "_id": string
@@ -54,7 +66,7 @@ export type StoreType = {
     "workingHours": WorkingHoursType
     "location": {
         "type": string,
-        "coordinates": number[]
+        "coordinates": number[] //  [myLocation.longitude , myLocation.latitude]
     }
     "products": string[]
     "subCategories": SubCategoryType[]
