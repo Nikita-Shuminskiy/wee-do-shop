@@ -13,6 +13,7 @@ import {
     getCurrentUntilTimeStoreTo,
     isCurrentTimeInRange
 } from "../../utils/utils";
+import {getFormattedAddress} from "../MapViews/utils";
 
 type PopUpAboutStoreProps = {
     show: boolean
@@ -25,18 +26,20 @@ const PopUpAboutStore = ({
                              currentStore
                          }: PopUpAboutStoreProps) => {
     const workingHoursArray = Object.entries(currentStore?.workingHours ?? {});
-    const daysOfWeek = {
-        thursday: '10:21 - 12:00'
-    }
+
     const isOpenStoreNow = isCurrentTimeInRange(currentStore?.workingHours)
     const untilTimeStoreTo = getCurrentUntilTimeStoreTo(currentStore?.workingHours)
     const currentDayOfWeek = getCurrentDayName()
     const onPressLink = () => {
 
     }
-    /*   if (!myLocation) {
-           return <View style={styles.container}/>;
-       }*/
+    /*if (!myLocation) {
+        return <View style={styles.container}/>;
+    }*/
+    const formatted_address = getFormattedAddress({
+        fullAddress: currentStore?.address,
+        location: currentStore?.location
+    })
     return (
         <ModalPopup visible={show} onClose={onClose}>
             <Box flex={1} w={'100%'} alignItems={'flex-start'} justifyContent={'space-between'}>
@@ -88,26 +91,28 @@ const PopUpAboutStore = ({
                     <Text ml={2} mb={2}>{currentStore?.phone}</Text>
                 </Box>
                 <Box w={'100%'} flexGrow={1} h={300}>
-                    {/*  <MapView
-                        style={{ width: '100%',
-                            height: '100%',}}
+                    <MapView
+                        style={{
+                            width: '100%',
+                            height: '100%',
+                        }}
                         initialRegion={{
-                            latitude: 46.729553,
-                            longitude: -94.6858998,
+                            latitude: currentStore?.location?.coordinates[1],
+                            longitude: currentStore?.location?.coordinates[0],
                             latitudeDelta: 0.0922,
                             longitudeDelta: 0.0421,
                         }}
-                       // key={'4139a6460624d97f'}
+                        // key={'4139a6460624d97f'}
                         provider={PROVIDER_GOOGLE}
                     >
                         <Marker
                             coordinate={{
-                                latitude: 46.729553,
-                                longitude: -94.6858998,
+                                latitude: currentStore?.location?.coordinates[1],
+                                longitude: currentStore?.location?.coordinates[0],
                             }}
-                            title={'121'}
+                            title={formatted_address ?? ''}
                         />
-                    </MapView>*/}
+                    </MapView>
                 </Box>
                 <Link styleText={styles.styleTextLink} onPress={onPressLink} text={'Legal information'}/>
             </Box>

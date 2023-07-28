@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {observer} from "mobx-react-lite";
 import {BaseWrapperComponent} from "../../components/baseWrapperComponent";
 import {Box, Image, Text} from "native-base";
@@ -10,7 +10,6 @@ import {colors} from "../../assets/colors/colors";
 import EmptyList from "../../components/list-viewer/empty-list";
 import SubCategoriesViewer from "../../components/list-viewer/CategoriesViewer";
 import StoresViewer from "../../components/list-viewer/StoresViewer";
-import {useEffect} from "react/index";
 import rootStore from "../../store/RootStore/root-store";
 import {CategoryType} from "../../api/categoriesApi";
 import {routerConstants} from "../../constants/routerConstants";

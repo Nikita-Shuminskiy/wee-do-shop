@@ -17,7 +17,6 @@ export class StoresStore {
                 this.allProductStore.push(product)
             })
         })
-
     }
 
     async saveFavoriteStore(idUser, idStore: string): Promise<UserType> {
@@ -32,7 +31,6 @@ export class StoresStore {
 
     setFavoriteStore(stores: StoreType[]) {
         this.favoriteStores = stores
-
     }
 
     async getStores(): Promise<void> {

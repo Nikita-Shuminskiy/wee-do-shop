@@ -79,7 +79,7 @@ const StoreS = observer(({navigation}: StoreSProps) => {
             products: []
         }
         setCurrentCartStore(newCart)
-        getAndSetAllProduct(store.subCategories)
+        getAndSetAllProduct(store.subCategories) // фикс дублируються продукты
     }, [])
 
     const [isShowModalProduct, setIsShowModalProduct] = useState<boolean>(false)

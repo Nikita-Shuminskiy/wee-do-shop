@@ -21,6 +21,7 @@ const ProductViewer = ({product, onPressProduct, saveProductToCart, currentCartS
     const {width} = Dimensions.get('window');
     const productWidth = (width - 15) / 2;
     const currentValueToCartProduct = currentCartStore?.products.find(cart => cart._id === product?._id)
+    const productTotalPrice = Number(product.price / 100).toFixed(2) // добавить проверку на 100
 
     const onPressProductHandler = () => {
         saveProductToCart(1)
@@ -75,7 +76,7 @@ const ProductViewer = ({product, onPressProduct, saveProductToCart, currentCartS
                             !currentValueToCartProduct?.productValue ? <Button styleText={styles.styleTextBtn}
                                                                                backgroundColor={colors.grayDarkLight}
                                                                                onPress={onPressProductHandler}
-                                                                               title={`฿ ${product?.price}`}/> :
+                                                                               title={`฿ ${productTotalPrice}`}/> :
                                 <InputNumber values={currentValueToCartProduct?.productValue}
                                              onChangeValue={onChangeValueNumber}/>
                         }
