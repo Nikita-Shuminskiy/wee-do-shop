@@ -2,30 +2,18 @@ import { instance } from './config'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { UserRegisterDataType } from 'screen/authScreens/RegisterS'
 import {StoreType} from "./storesApi";
+import {AddressType} from "../store/AuthStore/auth-store";
+import {UserType} from "./apiAuth";
 
 
 export const userApi = {
 	async saveFavoriteStore(idUser: string, isStore: string) {
-		return await instance.patch<DataUserType>(`users/${idUser}/favoriteStore/${isStore}`)
+		return await instance.patch<UserType>(`users/${idUser}/favoriteStore/${isStore}`)
 	},
 	async deleteFavoriteStore(idUser: string, isStore: string) {
-		return await instance.delete<DataUserType>(`users/${idUser}/favoriteStore/${isStore}`)
+		return await instance.delete<UserType>(`users/${idUser}/favoriteStore/${isStore}`)
 	},
 	async getUser(idUser: string) {
-		return await instance.get<DataUserType>(`users/${idUser}`)
+		return await instance.get<UserType>(`users/${idUser}`)
 	},
 }
-export type DataUserType = {
-	"_id": string,
-	"firstName": string,
-	"lastName": string,
-	"email": string,
-	"phone": string,
-	"location": string,
-	"favoritesStores": StoreType[],
-	"role": RoleType,
-	"createdAt": string,
-	"updatedAt": string
-}
-
-export type RoleType = 'customer' | 'admin' | 'store' | 'courier'

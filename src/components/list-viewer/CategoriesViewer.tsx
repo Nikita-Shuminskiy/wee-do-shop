@@ -8,25 +8,39 @@ type CategoriesViewerType<T> = {
     onPress: () => void
     selectedSubCategoryId: string
 }
-const SubCategoriesViewer = <T extends { name: string }>({subCategory, onPress, selectedSubCategoryId}: CategoriesViewerType<T>) => {
+const SubCategoriesViewer = <T extends { name: string }>({
+                                                             subCategory,
+                                                             onPress,
+                                                             selectedSubCategoryId
+                                                         }: CategoriesViewerType<T>) => {
+    //@ts-ignore
+    const isChosenSubCategory = selectedSubCategoryId === subCategory?._id
     return (
         <TouchableOpacity onPress={onPress} style={[{marginBottom: 10}]}>
             {/*<BlurView intensity={10} tint="light" style={StyleSheet.absoluteFillObject}/>*/}
             <Box
-                 style={selectedSubCategoryId && styles.activeSubCategory}
-                 p={2}
-                 h={10}
-                 alignItems={'center'}
-                 justifyContent={'center'} m={1}>
-                <Text fontSize={14} fontWeight={'600'} color={colors.black}>{subCategory.name}</Text>
+                style={[styles.subCategoryBlock, isChosenSubCategory && styles.activeSubCategory]}
+                p={2}
+                h={10}
+                alignItems={'center'}
+                justifyContent={'center'} m={1}>
+                <Text fontSize={14} fontWeight={'600'}
+                      color={isChosenSubCategory ? colors.white : colors.black}>{subCategory.name}</Text>
             </Box>
         </TouchableOpacity>
     );
 };
 const styles = StyleSheet.create({
-    activeSubCategory: {
+    subCategoryBlock: {
         borderRadius: 16,
         backgroundColor: colors.grayDarkLight
+
+    },
+    activeSubCategory: {
+        borderWidth: 1,
+        backgroundColor: colors.green,
+        borderColor: colors.grayDarkLight,
+        borderRadius: 16,
     }
 })
 export default SubCategoriesViewer;

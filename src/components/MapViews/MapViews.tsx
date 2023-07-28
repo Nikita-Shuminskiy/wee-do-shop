@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react'
 import MapView, {Marker} from 'react-native-maps'
 import {Image, Modal, StyleSheet, TouchableOpacity, View} from 'react-native'
 import {Box, Text} from 'native-base'
-import arrowLeft from "../../assets/images/arrow-left.png";
+import arrowLeft from "../../assets/images/arrow-left-back.png";
 import myLocationImg from "../../assets/images/myLocation.png";
 import ArrowBack from "../ArrowBack";
 import {AutoCompleteDataType} from "../AddressAutocomplete";
@@ -15,6 +15,7 @@ import {useNavigation} from "@react-navigation/native";
 import NotificationStore from "../../store/NotificationStore/notification-store";
 import {LoadingEnum} from "../../store/types/types";
 import {allowLocation, getInfoAddressForCoords} from "./utils";
+import {fullAddressType} from "../../store/AuthStore/auth-store";
 
 type MapViewsProps = {
     currentDataMap: AutoCompleteDataType
@@ -33,9 +34,27 @@ export const MapViews = ({visible, close, currentDataMap}: MapViewsProps) => {
     const [myLocation, setMyLocation] = useState(null);
     const [address, setAddress] = useState(null);
     const [mapRef, setMapRef] = useState(null);
+    const [fullInfo, setFullInfo] = useState<fullAddressType>(null);
+
+    const getCurrentInfo = async () => {
+        const status = await allowLocation()
+        if (status) {
+            const {latitude, longitude} = currentDataMap.location
+            const {formatted_address, ...rest} = await getInfoAddressForCoords({latitude, longitude})
+            return {
+                formatted_address,
+                ...rest
+            }
+        }
+    }
     useEffect(() => {
         setMyLocation(currentDataMap.location)
         setAddress(currentDataMap.address)
+        getCurrentInfo().then((data) => {
+            const {formatted_address, ...rest} = data
+            setFullInfo({...rest})
+
+        })
     }, [])
 
     if (!myLocation) {
@@ -50,9 +69,10 @@ export const MapViews = ({visible, close, currentDataMap}: MapViewsProps) => {
             if (status) {
                 let currentLocation = await Location.getCurrentPositionAsync({accuracy: Location.Accuracy.BestForNavigation});
                 const {latitude, longitude} = currentLocation.coords;
-                const formatted_address = await getInfoAddressForCoords({latitude, longitude})
+                const {formatted_address, ...rest} = await getInfoAddressForCoords({latitude, longitude})
                 setAddress({formatted_address})
                 setMyLocation({latitude, longitude});
+                setFullInfo({...rest});
                 if (mapRef) {
                     mapRef.animateToRegion({
                         latitude,
@@ -70,14 +90,22 @@ export const MapViews = ({visible, close, currentDataMap}: MapViewsProps) => {
         }
     }
     const handleMapPress = async (event) => {
-        if(!mapInteractionEnabled) return
+        if (!mapInteractionEnabled) return
         const {latitude, longitude} = event.nativeEvent.coordinate;
-        const formatted_address = await getInfoAddressForCoords({latitude, longitude})
+
+        const {formatted_address, ...rest} = await getInfoAddressForCoords({latitude, longitude})
         setAddress({formatted_address})
+        setFullInfo({...rest})
         setMyLocation({latitude, longitude});
     };
     const onPressSaveLocationHandler = () => {
-        setLocation({location: myLocation, address: address})
+        setLocation({
+            fullAddress: {...fullInfo},
+            location: {
+                type: 'Point',
+                coordinates: [myLocation.longitude , myLocation.latitude]
+            }
+        })
         navigation.navigate(routerConstants.REGISTRATION)
     }
     return <Modal visible={visible}>
@@ -86,7 +114,7 @@ export const MapViews = ({visible, close, currentDataMap}: MapViewsProps) => {
                 <Text textAlign={'center'} fontSize={24}
                       fontWeight={'500'}>{address?.formatted_address}</Text>
             </Box>
-            <Box mt={5} zIndex={10} mb={5} top={20} position={'absolute'} left={5}>
+            <Box mt={5} zIndex={10} mb={5} top={0} position={'absolute'} left={5}>
                 <ArrowBack goBackPress={onPressGoBack} img={arrowLeft}/>
             </Box>
 
@@ -112,9 +140,9 @@ export const MapViews = ({visible, close, currentDataMap}: MapViewsProps) => {
                 />
             </MapView>
             <Box mt={5} zIndex={10} position={'absolute'} w={'100%'} bottom={5}>
-                <Box zIndex={100}  position={'absolute'} bottom={100} right={0}>
-                    <TouchableOpacity style={{ pointerEvents: 'auto' }} onPress={getCurrentPositionHandler}>
-                        <Image  style={{width: 120, height: 120}} source={myLocationImg} alt={'my-location'}/>
+                <Box zIndex={100} position={'absolute'} bottom={100} right={0}>
+                    <TouchableOpacity style={{pointerEvents: 'auto'}} onPress={getCurrentPositionHandler}>
+                        <Image style={{width: 120, height: 120}} source={myLocationImg} alt={'my-location'}/>
                     </TouchableOpacity>
                 </Box>
                 <Box w={'100%'} mt={5} flex={1}>

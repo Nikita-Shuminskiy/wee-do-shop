@@ -66,14 +66,5 @@ export function isCurrentTimeInRange(workingHoursStores: WorkingHoursType) {
     ) {
         return true; // Текущее время полностью совпадает с концом диапазона
     }
-    /*  console.log(currentHour, 'hour curr')
-      console.log(currentMinute, 'min curr')
-
-
-      console.log(startHour, 'hour start')
-      console.log(endHour, 'hour end')
-
-      console.log(endMinute, 'min end')
-      console.log(startMinute, 'min start')*/
     return false; // Текущее время НЕ совпадает с указанным диапазоном времени
 }

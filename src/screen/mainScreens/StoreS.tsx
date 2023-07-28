@@ -116,7 +116,6 @@ const StoreS = observer(({navigation}: StoreSProps) => {
         addProductToCart(currentCartStore, selectedProduct, productValue, setCurrentCartStore)
     }
 
-
     const productViews = ({item}: { item: ProductType }) => {
         const onPressProduct = () => {
             setSelectedProduct(item)
@@ -143,6 +142,7 @@ const StoreS = observer(({navigation}: StoreSProps) => {
             />
         )
     }
+
     const sebCategoriesViews = ({item}: { item: SubCategoryType }) => {
         const onPressSelectedSubCategory = () => {
             setSelectedSubCategory(item)

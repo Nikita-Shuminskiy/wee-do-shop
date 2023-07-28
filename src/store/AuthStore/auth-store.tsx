@@ -3,10 +3,20 @@ import {deviceStorage} from '../../utils/storage/storage'
 import {authApi, UserType} from '../../api/apiAuth'
 import {UserRegisterDataType} from "screen/authScreens/RegisterS";
 import {userApi} from "../../api/userApi";
-
-export type CurrentLocationType = {
-    location: { latitude: number, longitude: number }
-    address: { name: string, formatted_address: string }
+export type fullAddressType = {
+    country: string
+    city: string
+    street: string
+    house: string
+    apartment?: string
+    postalCode: string
+}
+export type AddressType = {
+    fullAddress: fullAddressType,
+    location: {
+        type: string
+        coordinates: number[]
+    }
 }
 
 export class AuthStore {
@@ -14,7 +24,7 @@ export class AuthStore {
         favoritesStores: []
     } as UserType
     isAuth: boolean = false
-    currentLocation: CurrentLocationType = {} as CurrentLocationType
+    currentLocation: AddressType = {} as AddressType
 
 
     setUser(userData: UserType): void {
@@ -50,6 +60,7 @@ export class AuthStore {
 
     async getUser(idUser: string): Promise<UserType> {
         const {data} = await userApi.getUser(idUser)
+        this.setUser(data)
         return data
     }
 
@@ -60,7 +71,7 @@ export class AuthStore {
         deviceStorage.removeItem('accessToken')
     }
 
-    setLocation(data: CurrentLocationType) {
+    setLocation(data: AddressType) {
         this.currentLocation = data
     }
 
@@ -78,6 +89,7 @@ export class AuthStore {
             login: action
         })
         this.setAuth = this.setAuth.bind(this)
+        this.getMe = this.getMe.bind(this)
         this.getUser = this.getUser.bind(this)
         this.logOut = this.logOut.bind(this)
 

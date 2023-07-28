@@ -1,15 +1,12 @@
 import {action, makeObservable, observable} from "mobx";
 import {storesApi, StoreType} from "../../api/storesApi";
-import {DataUserType, userApi} from "../../api/userApi";
+import {userApi} from "../../api/userApi";
 import {ProductType} from "../../api/productApi";
 import {SubCategoryType} from "../../api/subCategoriesApi";
-
-export type StoreTypeLocalType = StoreType & {
-    isFavorite: boolean
-}
+import {UserType} from "../../api/apiAuth";
 
 export class StoresStore {
-    stores: StoreTypeLocalType[] = [] as StoreTypeLocalType[]
+    stores: StoreType[] = []
     store: StoreType = {} as StoreType
     favoriteStores: StoreType[] = [] as StoreType[]
     allProductStore: ProductType[] = [] as ProductType[]
@@ -23,19 +20,18 @@ export class StoresStore {
 
     }
 
-    async saveFavoriteStore(idUser, idStore: string): Promise<DataUserType> {
+    async saveFavoriteStore(idUser, idStore: string): Promise<UserType> {
         const {data} = await userApi.saveFavoriteStore(idUser, idStore)
         return data
     }
 
-    async deleteFavoriteStore(idUser, idStore: string): Promise<DataUserType> {
+    async deleteFavoriteStore(idUser, idStore: string): Promise<UserType> {
         const {data} = await userApi.deleteFavoriteStore(idUser, idStore)
         return data
     }
 
     setFavoriteStore(stores: StoreType[]) {
         this.favoriteStores = stores
-        this.stores = this.updateFavoriteStores(this.stores)
 
     }
 
@@ -57,17 +53,8 @@ export class StoresStore {
 
     }
 
-    updateFavoriteStores(stores: StoreType[]) {
-        return stores.map((store) => {
-            return {
-                ...store,
-                isFavorite: !!this.favoriteStores.find(el => el._id === store._id)
-            }
-        });
-    }
-
     setStores(stores: StoreType[]) {
-        this.stores = this.updateFavoriteStores(stores)
+        this.stores = stores
     }
 
     setStore(store: StoreType) {
@@ -88,7 +75,6 @@ export class StoresStore {
             saveFavoriteStore: action,
             searchStores: action,
             setStores: action,
-            updateFavoriteStores: action,
         })
         this.setFavoriteStore = this.setFavoriteStore.bind(this)
         this.getAndSetAllProduct = this.getAndSetAllProduct.bind(this)
@@ -96,7 +82,6 @@ export class StoresStore {
         this.saveFavoriteStore = this.saveFavoriteStore.bind(this)
         this.setStores = this.setStores.bind(this)
         this.searchStores = this.searchStores.bind(this)
-        this.updateFavoriteStores = this.updateFavoriteStores.bind(this)
         this.setStore = this.setStore.bind(this)
     }
 }

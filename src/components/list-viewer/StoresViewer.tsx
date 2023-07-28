@@ -27,6 +27,7 @@ const StoresViewer = ({
                           onPressSaveFavoriteStore,
                           onPressRemoveFavoriteStore,
                       }: StoresViewerType) => {
+
     return (
         <TouchableOpacity onPress={onPress} style={{alignItems: 'center', flex: 1}}>
             <Box backgroundColor={'rgba(203,203,203,0.27)'}

@@ -5,22 +5,19 @@ import {Box, Image, Text} from "native-base";
 import AuthStore from "../../store/AuthStore/auth-store";
 import likeImg from '../../assets/images/likeGreen.png'
 import userImg from '../../assets/images/userGreen.png'
-import searchImg from '../../assets/images/search.png'
-import settingImg from '../../assets/images/setting.png'
 import {Dimensions, FlatList, StyleSheet, TouchableOpacity, TouchableOpacityProps} from "react-native";
 import {colors} from "../../assets/colors/colors";
-import TextInput from "../../components/TextInput";
 import EmptyList from "../../components/list-viewer/empty-list";
 import SubCategoriesViewer from "../../components/list-viewer/CategoriesViewer";
 import StoresViewer from "../../components/list-viewer/StoresViewer";
 import {useEffect} from "react/index";
 import rootStore from "../../store/RootStore/root-store";
-import {StoreType} from "../../api/storesApi";
 import {CategoryType} from "../../api/categoriesApi";
 import {routerConstants} from "../../constants/routerConstants";
 import {NavigationProp, ParamListBase} from "@react-navigation/native";
-import {StoreTypeLocalType} from "../../store/StoresStore/stores-store";
 import SearchStores from "../../components/SearchStores";
+import {getFormattedAddress} from "../../components/MapViews/utils";
+import {StoreType} from "../../api/storesApi";
 
 type TouchableWrappedProps = TouchableOpacityProps & {
     children: JSX.Element
@@ -39,21 +36,23 @@ const HomeS = observer(({navigation}: HomeSProps) => {
     const {StoresService, StoresStore, CategoriesService, CategoriesStore, AuthStoreService} = rootStore
     const {stores, setStore, favoriteStores} = StoresStore
     const {categories} = CategoriesStore
+    const [selectedSubCategoryId, setSelectedSubCategoryId] = useState<string>('');
 
+    const formatted_address = getFormattedAddress(user?.address)
 
     const categoriesViews = ({item}: { item: CategoryType }) => {
         const onPressCategory = () => {
-
+            setSelectedSubCategoryId(item._id)
         }
         return (
             <SubCategoriesViewer<CategoryType>
-                selectedSubCategoryId={'12'} // временно
+                selectedSubCategoryId={selectedSubCategoryId}
                 onPress={onPressCategory}
                 subCategory={item}
             />
         )
     }
-    const storesViews = ({item}: { item: StoreTypeLocalType }) => {
+    const storesViews = ({item}: { item: StoreType }) => {
         const onPress = () => {
             setStore(item)
             navigation.navigate(routerConstants.STORE)
@@ -64,10 +63,10 @@ const HomeS = observer(({navigation}: HomeSProps) => {
         const onPressRemoveFavoriteStore = () => {
             StoresService.deleteFavoriteStore(item._id)
         }
-
+        const test = favoriteStores.some((test1) => test1._id === item._id)
         return (
             <StoresViewer
-                checkFavoriteStore={item?.isFavorite}
+                checkFavoriteStore={test}
                 onPressSaveFavoriteStore={onPressSaveFavoriteStore}
                 onPressRemoveFavoriteStore={onPressRemoveFavoriteStore}
                 user={user}
@@ -108,7 +107,7 @@ const HomeS = observer(({navigation}: HomeSProps) => {
                         <Image source={userImg} alt={'user'}/>
                     </TouchableWrapped>
                     <Text fontSize={16} w={'60%'} textAlign={'center'}
-                          fontWeight={'600'}>{user?.location}</Text>
+                          fontWeight={'600'}>{formatted_address}</Text>
                     <TouchableWrapped onPress={onPressFavoriteHandler}>
                         <Image source={likeImg} alt={'like'}/>
                     </TouchableWrapped>

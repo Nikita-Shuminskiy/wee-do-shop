@@ -18,11 +18,13 @@ import {RoleType} from 'api/apiAuth'
 import {routerConstants} from "../../constants/routerConstants";
 import ArrowBack from "../../components/ArrowBack";
 import {observer} from "mobx-react-lite";
-import AuthStore from "../../store/AuthStore/auth-store";
+import AuthStore, {AddressType} from "../../store/AuthStore/auth-store";
+import {getFormattedAddress} from "../../components/MapViews/utils";
 
 type LoginSProps = {
     navigation: NavigationProp<ParamListBase>
 }
+
 export type UserRegisterDataType = {
     email: string,
     password: string,
@@ -30,7 +32,7 @@ export type UserRegisterDataType = {
     firstName: string,
     lastName: string,
     phone: string,
-    location: string,
+    address: AddressType,
     role: RoleType,
 }
 const RegisterS = observer(({navigation}: LoginSProps) => {
@@ -41,7 +43,7 @@ const RegisterS = observer(({navigation}: LoginSProps) => {
     const onSubmit = (values: UserRegisterDataType) => {
         AuthStoreService.registration({
             ...values,
-            location: currentLocation?.address?.formatted_address
+            address: currentLocation
         })
         setSubmitting(false)
     }
@@ -53,7 +55,7 @@ const RegisterS = observer(({navigation}: LoginSProps) => {
                 confirmPassword: '',
                 firstName: '',
                 lastName: '',
-                location: '',
+                address: {} as AddressType,
                 phone: '',
                 role: 'customer'
             },
@@ -96,8 +98,11 @@ const RegisterS = observer(({navigation}: LoginSProps) => {
         navigation.navigate(routerConstants.ALLOW_LOCATION)
     }
 
+
+    const formatted_address = getFormattedAddress(currentLocation)
+
     return (<BaseWrapperComponent isKeyboardAwareScrollView={true}>
-            <Box alignItems={'center'} >
+            <Box alignItems={'center'}>
                 <Box mt={5} mb={5} position={'absolute'} left={5}>
                     <ArrowBack goBackPress={onPressGoBack} img={arrowLeft}/>
                 </Box>
@@ -182,8 +187,8 @@ const RegisterS = observer(({navigation}: LoginSProps) => {
                         <Image w={170} h={105} alt={'location'} source={location}/>
                         <Text color={colors.gray} mt={2} fontWeight={'500'}> Add you location address*</Text>
                     </TouchableOpacity>
-                    {currentLocation?.address?.formatted_address &&
-                        <Text fontSize={16} fontWeight={'600'}>{currentLocation?.address?.formatted_address }</Text>}
+                    {formatted_address &&
+                        <Text fontSize={16} fontWeight={'600'}>{formatted_address}</Text>}
 
                 </Box>
                 <Box w={'100%'} mt={5} mb={5}>

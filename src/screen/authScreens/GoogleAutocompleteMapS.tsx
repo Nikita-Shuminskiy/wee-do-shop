@@ -5,6 +5,7 @@ import {NavigationProp, ParamListBase} from "@react-navigation/native";
 import {MapViews} from "../../components/MapViews/MapViews";
 import {Box, Text} from "native-base";
 import ArrowBack from "../../components/ArrowBack";
+import {allowLocation, getInfoAddressForCoords} from "../../components/MapViews/utils";
 
 type GoogleAutocompleteMapSProps = {
     navigation: NavigationProp<ParamListBase>
@@ -19,7 +20,7 @@ const GoogleAutocompleteMapS = ({navigation}: GoogleAutocompleteMapSProps) => {
         navigation.goBack()
     }
 
-    const onSaveAutoCompleteHandler = (data: AutoCompleteDataType) => {
+    const onSaveAutoCompleteHandler = async (data: AutoCompleteDataType) => {
         setLocation(data.location)
         setMarkerPosition(data.positionMarker)
         setCurrentAddress(data.address)
