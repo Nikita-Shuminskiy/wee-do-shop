@@ -9,6 +9,7 @@ import SliderComponent from "../Slider";
 import InputNumber from "../InputNumber";
 import {ProductType} from "../../api/productApi";
 import CartStore, {CartType, ProductCartType} from "../../store/CartStore/cart-store";
+import {formatProductPrice} from "../MapViews/utils";
 
 
 type PopUpProductProps = {
@@ -17,7 +18,7 @@ type PopUpProductProps = {
     onClose: () => void
     product: ProductType
     saveProductValueToCard: (productValue: number) => void
-    totalSumCart: number
+    totalSumCart: string
 }
 const PopUpProduct = ({
                           show,
@@ -62,7 +63,7 @@ const PopUpProduct = ({
                     <Box mt={2} w={'100%'} flex={1}>
                         <Box mb={4} flexDirection={'row'} flex={1} w={'100%'} justifyContent={'space-between'}>
                             <Text>Price: 1g</Text>
-                            <Text>฿ {product?.price}</Text>
+                            <Text>฿ {formatProductPrice(product?.price)}</Text>
                         </Box>
                         <SliderComponent valueSlider={currentValueToCartProduct?.productValue ?? 0}
                                          onChangeValue={saveSliderValue}/>

@@ -12,6 +12,9 @@ export class StoresStore {
     allProductStore: ProductType[] = [] as ProductType[]
 
     getAndSetAllProduct(subCategories: SubCategoryType[]) {
+        if(!subCategories?.length) {
+            return this.allProductStore = []
+        }
         subCategories?.map((subCategory) => {
             subCategory.products?.map((product) => {
                 this.allProductStore.push(product)

@@ -38,7 +38,6 @@ const FavoriteS = observer(({navigation}: FavoriteSType) => {
                     checkFavoriteStore={true}
                     onPressSaveFavoriteStore={onPressSaveFavoriteStore}
                     onPressRemoveFavoriteStore={onPressRemoveFavoriteStore}
-                    user={user}
                     onPress={onPress}
                     stores={item}
                 />

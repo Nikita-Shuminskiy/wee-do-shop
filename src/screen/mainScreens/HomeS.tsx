@@ -63,13 +63,12 @@ const HomeS = observer(({navigation}: HomeSProps) => {
         const onPressRemoveFavoriteStore = () => {
             StoresService.deleteFavoriteStore(item._id)
         }
-        const test = favoriteStores.some((test1) => test1._id === item._id)
+        const checkFavoriteStore = favoriteStores.some((storeF) => storeF._id === item._id)
         return (
             <StoresViewer
-                checkFavoriteStore={test}
+                checkFavoriteStore={checkFavoriteStore}
                 onPressSaveFavoriteStore={onPressSaveFavoriteStore}
                 onPressRemoveFavoriteStore={onPressRemoveFavoriteStore}
-                user={user}
                 onPress={onPress}
                 stores={item}
             />
@@ -121,7 +120,7 @@ const HomeS = observer(({navigation}: HomeSProps) => {
                         <FlatList
                             data={categories}
                             renderItem={categoriesViews}
-                            keyExtractor={(item, index) => index.toString()}
+                            keyExtractor={(item, index) => item._id.toString()}
                             style={{width: '100%'}}
                             contentContainerStyle={
                                 !categories?.length && styles.contentContainerStyle
@@ -136,7 +135,7 @@ const HomeS = observer(({navigation}: HomeSProps) => {
                         <FlatList
                             data={stores}
                             renderItem={storesViews}
-                            keyExtractor={(item, index) => item._id}
+                            keyExtractor={(item, index) => item._id.toString()}
                             style={{width: '100%'}}
                             ListEmptyComponent={() => renderEmptyContainer(Dimensions.get('window').height, 'List is empty')}
                             contentContainerStyle={

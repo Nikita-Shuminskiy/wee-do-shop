@@ -56,3 +56,7 @@ export const getFormattedAddress = (currentLocation: AddressType) => {
     const fullAddress = currentLocation?.fullAddress
     return `${fullAddress?.country ?? ''} ${fullAddress?.city ?? ""} ${fullAddress?.street ?? ''} ${fullAddress?.house ?? ''} ${fullAddress?.postalCode ?? ''}`;
 }
+export const formatProductPrice = (price) => {
+    const priceInDollars = price / 100;
+    return price % 100 === 0 ? String(priceInDollars) : priceInDollars.toFixed(2);
+}

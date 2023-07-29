@@ -1,5 +1,6 @@
 import {instance} from "./config";
 import {SubCategoryType} from "./subCategoriesApi";
+import {ProductType} from "./productApi";
 
 
 export const storesApi = {
@@ -68,7 +69,7 @@ export type StoreType = {
         "type": string,
         "coordinates": number[] //  [myLocation.longitude , myLocation.latitude]
     }
-    "products": string[]
+    "products": ProductType[]
     "subCategories": SubCategoryType[]
     "store": string // дубл с _id магазина
     "createdAt"?: string

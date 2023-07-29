@@ -18,6 +18,7 @@ import {ProductType} from "../../api/productApi";
 import PopUpProduct from "../../components/modalPopUp/PopUpProduct";
 import {CartType} from "../../store/CartStore/cart-store";
 import PopUpAboutStore from "../../components/modalPopUp/PopUpAboutStore";
+import {formatProductPrice} from "../../components/MapViews/utils";
 
 const renderEmptyContainer = (height, text) => {
     const onPressLink = () => {
@@ -68,7 +69,6 @@ type StoreSProps = {
 const StoreS = observer(({navigation}: StoreSProps) => {
     const {StoresStore} = rootStore
     const {store, allProductStore, getAndSetAllProduct} = StoresStore
-
     const navigate = useNavigation()
     const [currentCartStore, setCurrentCartStore] = useState<CartType>()
 
@@ -79,7 +79,10 @@ const StoreS = observer(({navigation}: StoreSProps) => {
             products: []
         }
         setCurrentCartStore(newCart)
-        getAndSetAllProduct(store.subCategories) // фикс дублируються продукты
+        getAndSetAllProduct(store.subCategories)
+        return () => {
+            getAndSetAllProduct([])
+        }
     }, [])
 
     const [isShowModalProduct, setIsShowModalProduct] = useState<boolean>(false)
@@ -89,7 +92,7 @@ const StoreS = observer(({navigation}: StoreSProps) => {
     const [selectedProduct, setSelectedProduct] = useState<ProductType>()
     const [selectedSubCategoryId, setSelectedSubCategoryId] = useState<string>('');
     const currentValueToCartProduct = currentCartStore?.products.find(cart => cart?._id === selectedProduct?._id)
-
+  const totalSumCart = formatProductPrice(currentCartStore?.totalSum)
     const onPressGoBack = () => {
         navigate.goBack()
     }
@@ -236,7 +239,7 @@ const StoreS = observer(({navigation}: StoreSProps) => {
                                  flex={1}
                                  w={'100%'}
                                  justifyContent={'space-between'}>
-                                <Text style={styles.styleTextBtn}>฿ {currentCartStore?.totalSum}</Text>
+                                <Text style={styles.styleTextBtn}>฿ {formatProductPrice(currentCartStore?.totalSum)}</Text>
                                 <Text color={colors.white} fontWeight={'700'} fontSize={16}>Confirm</Text>
                                 <Text style={styles.styleTextBtn}>{store?.deliveryTime} min</Text>
                             </Box>
@@ -244,7 +247,7 @@ const StoreS = observer(({navigation}: StoreSProps) => {
                     </Box>
                 </Box>
             }
-            <PopUpProduct totalSumCart={currentCartStore?.totalSum} saveProductValueToCard={saveProductValueToCard}
+            <PopUpProduct totalSumCart={totalSumCart} saveProductValueToCard={saveProductValueToCard}
                           currentValueToCartProduct={currentValueToCartProduct}
                           product={selectedProduct} onClose={onClosePopUpProduct}
                           show={isShowModalProduct}/>

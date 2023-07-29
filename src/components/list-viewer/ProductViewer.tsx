@@ -1,15 +1,13 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {Box, Image, Pressable, Text} from "native-base";
 import productImg from '../../assets/images/productTest.png'
-import {Dimensions, ImageBackground, StyleSheet, TouchableOpacity} from "react-native";
+import {Dimensions, StyleSheet} from "react-native";
 import {colors} from "../../assets/colors/colors";
-import motorcycle from "../../assets/images/moto.png";
-import test from "../../assets/images/test.png";
-import relaxImg from "../../assets/images/relaxTagImg.png";
 import Button from "../Button";
 import InputNumber from "../InputNumber";
 import {ProductType} from "../../api/productApi";
-import {CartType, ProductCartType} from "../../store/CartStore/cart-store";
+import {CartType} from "../../store/CartStore/cart-store";
+import {formatProductPrice} from "../MapViews/utils";
 
 type StoreViewerProps = {
     product: ProductType
@@ -21,7 +19,7 @@ const ProductViewer = ({product, onPressProduct, saveProductToCart, currentCartS
     const {width} = Dimensions.get('window');
     const productWidth = (width - 15) / 2;
     const currentValueToCartProduct = currentCartStore?.products.find(cart => cart._id === product?._id)
-    const productTotalPrice = Number(product.price / 100).toFixed(2) // добавить проверку на 100
+    const productTotalPrice = formatProductPrice(product.price)
 
     const onPressProductHandler = () => {
         saveProductToCart(1)

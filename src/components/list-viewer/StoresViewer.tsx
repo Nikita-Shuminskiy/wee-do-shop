@@ -8,12 +8,11 @@ import {Image, TouchableOpacity} from "react-native";
 import motorcycle from '../../assets/images/moto.png'
 import {StoreType} from "../../api/storesApi";
 import {UserType} from "../../api/apiAuth";
-import {getCurrentUntilTimeStoreTo} from "../../utils/utils";
+import {getCurrentUntilTimeStoreTo, isCurrentTimeInRange} from "../../utils/utils";
 
 type StoresViewerType = {
     stores: StoreType
     onPress: () => void
-    user: UserType
     onPressSaveFavoriteStore: () => void
     onPressRemoveFavoriteStore: () => void
     checkFavoriteStore: boolean
@@ -22,12 +21,10 @@ type StoresViewerType = {
 const StoresViewer = ({
                           stores,
                           onPress,
-                          user,
                           checkFavoriteStore,
                           onPressSaveFavoriteStore,
                           onPressRemoveFavoriteStore,
                       }: StoresViewerType) => {
-
     return (
         <TouchableOpacity onPress={onPress} style={{alignItems: 'center', flex: 1}}>
             <Box backgroundColor={'rgba(203,203,203,0.27)'}
@@ -66,8 +63,7 @@ const StoresViewer = ({
                          right={0}
                          backgroundColor={colors.green}
                          borderRadius={16} borderRightRadius={0} paddingY={1} paddingX={3}>
-                        <Text color={colors.white} fontWeight={'600'} fontSize={14}>Open
-                            until {getCurrentUntilTimeStoreTo(stores?.workingHours)}</Text>
+                        <Text color={colors.white} fontWeight={'600'} fontSize={14}>{isCurrentTimeInRange(stores?.workingHours, true)}</Text>
                     </Box>
                 </Box>
                 <Box paddingY={2}
@@ -82,7 +78,7 @@ const StoresViewer = ({
                         {stores?.products?.map((product, key) => {
                             const lastElem = stores?.products?.length - 1 === key
                             return <Text key={`${product}-${key}`}
-                                         fontWeight={'500'}>{product}{lastElem ? '' : ','}</Text>
+                                         fontWeight={'500'}>{`${product} ${lastElem ? '' : ','}`}</Text>
                         })}
                     </Box>
                 </Box>

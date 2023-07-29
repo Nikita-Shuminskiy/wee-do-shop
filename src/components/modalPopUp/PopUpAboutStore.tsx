@@ -1,6 +1,6 @@
 import React from 'react';
 import {Box, Text} from "native-base";
-import {StyleSheet, View} from 'react-native';
+import {Linking, StyleSheet, View} from 'react-native';
 import ModalPopup from "../pop-up";
 import {colors} from "../../assets/colors/colors";
 import {StoreType} from "../../api/storesApi";
@@ -30,6 +30,7 @@ const PopUpAboutStore = ({
     const isOpenStoreNow = isCurrentTimeInRange(currentStore?.workingHours)
     const untilTimeStoreTo = getCurrentUntilTimeStoreTo(currentStore?.workingHours)
     const currentDayOfWeek = getCurrentDayName()
+    console.log(currentDayOfWeek)
     const onPressLink = () => {
 
     }
@@ -40,6 +41,10 @@ const PopUpAboutStore = ({
         fullAddress: currentStore?.address,
         location: currentStore?.location
     })
+    const openWebsiteLink = (url: string) => {
+        Linking.openURL(url)
+            .catch((err) => console.error('An error occurred: ', err));
+    };
     return (
         <ModalPopup visible={show} onClose={onClose}>
             <Box flex={1} w={'100%'} alignItems={'flex-start'} justifyContent={'space-between'}>
@@ -47,8 +52,8 @@ const PopUpAboutStore = ({
                 <Text mb={2}>{currentStore?.description}</Text>
                 <Box flexDirection={'row'} mb={2} alignItems={'center'}>
                     <SimpleLineIcons name="location-pin" size={24} color={'#BABABA'}/>
-                    <Text fontSize={18} ml={2}>{currentStore?.address?.city}
-                        {currentStore?.address?.street} {currentStore?.address?.house}</Text>
+                    <Text fontSize={18} ml={2}>{currentStore?.address?.city}{' '}
+                        {currentStore?.address?.street}{' '}{currentStore?.address?.house}</Text>
                 </Box>
                 <Box alignItems={'flex-start'}>
                     <Box
@@ -84,13 +89,15 @@ const PopUpAboutStore = ({
                 </Box>
                 <Box flexDirection={'row'} mb={5} alignItems={'center'}>
                     <Fontisto name="world-o" size={24} color={'#BABABA'}/>
-                    <Text ml={2}>{currentStore?.website}</Text>
+                    <Link styleLink={{marginLeft: 10, borderBottomWidth: 1, borderBottomColor: colors.grayDarkLight}}
+                          onPress={() => openWebsiteLink(currentStore?.website)}
+                          text={currentStore?.website}/>
                 </Box>
                 <Box flexDirection={'row'} alignItems={'center'}>
                     <Feather name="phone-call" size={24} color={'#BABABA'}/>
                     <Text ml={2} mb={2}>{currentStore?.phone}</Text>
                 </Box>
-                <Box w={'100%'} flexGrow={1} h={300}>
+                <Box w={'100%'} mt={2} mb={2} flexGrow={1} h={300}>
                     <MapView
                         style={{
                             width: '100%',
