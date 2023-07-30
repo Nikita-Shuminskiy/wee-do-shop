@@ -16,4 +16,5 @@ export const userApi = {
 	async getUser(idUser: string) {
 		return await instance.get<UserType>(`users/${idUser}`)
 	},
+
 }

@@ -90,6 +90,7 @@ const HomeS = observer(({navigation}: HomeSProps) => {
     useEffect(() => {
         StoresService.getStores()
         CategoriesService.getCategories()
+        StoresService.getFavoriteStores()
     }, [])
     const onPressFavoriteHandler = () => {
         navigation.navigate(routerConstants.FAVORITE)

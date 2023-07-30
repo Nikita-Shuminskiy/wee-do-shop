@@ -48,6 +48,12 @@ export class StoresStore {
 
     }
 
+    async getFavoriteStores(id: string): Promise<void> {
+        const {data} = await storesApi.getFavoriteStores(id)
+        this.setFavoriteStore(data)
+
+    }
+
     async searchStores(dataSearch: dataSearchType): Promise<void> {
         const {data} = await storesApi.searchStores(dataSearch)
         this.setStores(data.results)
@@ -72,6 +78,7 @@ export class StoresStore {
             setStore: action,
             favoriteStores: observable,
             setFavoriteStore: action,
+            getFavoriteStores: action,
             deleteFavoriteStore: action,
             saveFavoriteStore: action,
             searchStores: action,

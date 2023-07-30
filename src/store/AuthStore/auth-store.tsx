@@ -64,6 +64,7 @@ export class AuthStore {
         return data
     }
 
+
     logOut() {
         this.user = null
         this.isAuth = false

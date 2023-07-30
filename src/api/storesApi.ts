@@ -7,6 +7,9 @@ export const storesApi = {
     async getStories() {
         return await instance.get<StoriesType>(`stores`)
     },
+    async getFavoriteStores(idUser: string) {
+        return await instance.get<StoreType[]>(`users/${idUser}/favoritesStores`)
+    },
     async getStores(id: number) {
         return await instance.get<StoreType>(`stores${id}`)
     },
