@@ -35,8 +35,8 @@ export function isCurrentTimeInRange(workingHoursStores: WorkingHoursType, isInf
         return false; // Если для текущего дня нет указанного времени
     }
     const [startTime, endTime] = currentHourWorkStores.split(' - ');
-    const currentHour = date.getUTCHours()
-    const currentMinute = date.getUTCMinutes()
+    const currentHour = date.getHours()
+    const currentMinute = date.getMinutes()
     const [startHour, startMinute] = startTime.split(':').map(Number);
     const [endHour, endMinute] = endTime.split(':').map(Number);
 
@@ -66,7 +66,7 @@ export function isCurrentTimeInRange(workingHoursStores: WorkingHoursType, isInf
         return true; // Текущее время полностью совпадает с концом диапазона
     }
     if (isInfo) {
-        return 'Closes ' + endTime
+        return 'Closed ' + endTime
     }
     return false; // Текущее время НЕ совпадает с указанным диапазоном времени
 }

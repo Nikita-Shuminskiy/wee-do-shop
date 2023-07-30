@@ -30,7 +30,7 @@ const PopUpAboutStore = ({
     const isOpenStoreNow = isCurrentTimeInRange(currentStore?.workingHours)
     const untilTimeStoreTo = getCurrentUntilTimeStoreTo(currentStore?.workingHours)
     const currentDayOfWeek = getCurrentDayName()
-    console.log(currentDayOfWeek)
+
     const onPressLink = () => {
 
     }

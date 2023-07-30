@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {BaseWrapperComponent} from "../../components/baseWrapperComponent";
 import {observer} from "mobx-react-lite";
 import AuthStore from "../../store/AuthStore/auth-store";
@@ -58,6 +58,9 @@ const FavoriteS = observer(({navigation}: FavoriteSType) => {
         const onPressGoBack = () => {
             navigation.goBack()
         }
+    useEffect(() => {
+        StoresService.getFavoriteStores()
+    }, [])
         return (
             <BaseWrapperComponent isKeyboardAwareScrollView={true}>
                 <Box paddingX={2} mt={5}>
