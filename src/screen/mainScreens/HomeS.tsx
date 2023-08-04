@@ -37,7 +37,7 @@ const HomeS = observer(({navigation}: HomeSProps) => {
     const categoriesViews = ({item}: { item: CategoryType }) => {
         const onPressCategory = () => {
             const isCurrentChosenSubCategory= item._id === selectedSubCategoryId
-            if (item._id === selectedSubCategoryId) {
+            if (isCurrentChosenSubCategory) {
                 setSelectedSubCategoryId('')
             } else {
                 setSelectedSubCategoryId(item._id)

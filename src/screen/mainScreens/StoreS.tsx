@@ -88,11 +88,11 @@ const StoreS = observer(({navigation}: StoreSProps) => {
     const [isShowModalProduct, setIsShowModalProduct] = useState<boolean>(false)
     const [isShowModalAboutStore, setIsShowModalAboutStore] = useState<boolean>(false)
 
-    const [selectedSubCategory, setSelectedSubCategory] = useState<SubCategoryType>()
+    const [selectedSubCategory, setSelectedSubCategory] = useState<SubCategoryType | null>()
     const [selectedProduct, setSelectedProduct] = useState<ProductType>()
     const [selectedSubCategoryId, setSelectedSubCategoryId] = useState<string>('');
     const currentValueToCartProduct = currentCartStore?.products.find(cart => cart?._id === selectedProduct?._id)
-  const totalSumCart = formatProductPrice(currentCartStore?.totalSum)
+    const totalSumCart = formatProductPrice(currentCartStore?.totalSum)
     const onPressGoBack = () => {
         navigate.goBack()
     }
@@ -148,6 +148,12 @@ const StoreS = observer(({navigation}: StoreSProps) => {
 
     const sebCategoriesViews = ({item}: { item: SubCategoryType }) => {
         const onPressSelectedSubCategory = () => {
+            const isCurrentChosenSubCategory= item._id === selectedSubCategoryId
+            if(isCurrentChosenSubCategory) {
+                setSelectedSubCategory(null)
+                setSelectedSubCategoryId('');
+                return
+            }
             setSelectedSubCategory(item)
             setSelectedSubCategoryId(item?._id);
         }

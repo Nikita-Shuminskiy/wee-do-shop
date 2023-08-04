@@ -14,6 +14,7 @@ import {
     isCurrentTimeInRange
 } from "../../utils/utils";
 import {getFormattedAddress} from "../MapViews/utils";
+import {PhoneNumberComponent} from "../PhoneNumberLink";
 
 type PopUpAboutStoreProps = {
     show: boolean
@@ -95,7 +96,7 @@ const PopUpAboutStore = ({
                 </Box>
                 <Box flexDirection={'row'} alignItems={'center'}>
                     <Feather name="phone-call" size={24} color={'#BABABA'}/>
-                    <Text ml={2} mb={2}>{currentStore?.phone}</Text>
+                  <PhoneNumberComponent phoneNumber={currentStore?.phone}/>
                 </Box>
                 <Box w={'100%'} mt={2} mb={2} flexGrow={1} h={300}>
                     <MapView
