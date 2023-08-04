@@ -7,8 +7,7 @@ import likeActive from '../../assets/images/likeActive.png'
 import {Image, TouchableOpacity} from "react-native";
 import motorcycle from '../../assets/images/moto.png'
 import {StoreType} from "../../api/storesApi";
-import {UserType} from "../../api/apiAuth";
-import {getCurrentUntilTimeStoreTo, isCurrentTimeInRange} from "../../utils/utils";
+import {isCurrentTimeInRange} from "../../utils/utils";
 
 type StoresViewerType = {
     stores: StoreType
@@ -44,8 +43,9 @@ const StoresViewer = ({
                          alignItems={'center'}
                          justifyContent={'center'}
                          backgroundColor={'transparent'}>
-                        <Image source={motorcycle} style={{ width: 26, height: 17 }} alt={'moto'}/>
-                        <Text ml={2} color={colors.white} fontSize={16} fontWeight={'500'}>{stores?.deliveryTime}min</Text>
+                        <Image source={motorcycle} style={{width: 26, height: 17}} alt={'moto'}/>
+                        <Text ml={2} color={colors.white} fontSize={16}
+                              fontWeight={'500'}>{stores?.deliveryTime} min</Text>
                     </Box>
                     <Box position={'absolute'}
                          p={1}
@@ -63,7 +63,8 @@ const StoresViewer = ({
                          right={0}
                          backgroundColor={colors.green}
                          borderRadius={16} borderRightRadius={0} paddingY={1} paddingX={3}>
-                        <Text color={colors.white} fontWeight={'600'} fontSize={14}>{isCurrentTimeInRange(stores?.workingHours, true)}</Text>
+                        <Text color={colors.white} fontWeight={'600'}
+                              fontSize={14}>{isCurrentTimeInRange(stores?.workingHours, true)}</Text>
                     </Box>
                 </Box>
                 <Box paddingY={2}

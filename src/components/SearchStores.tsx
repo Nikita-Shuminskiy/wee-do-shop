@@ -6,7 +6,7 @@ import searchImg from "../assets/images/search.png";
 import settingImg from "../assets/images/setting.png";
 import rootStore from "../store/RootStore/root-store";
 type SearchStoresType = {
-    selectedSubCategoryId: string
+    selectedSubCategoryId?: string
 }
 const SearchStores = ({selectedSubCategoryId}: SearchStoresType) => {
     const {StoresService} = rootStore

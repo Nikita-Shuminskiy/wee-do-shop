@@ -17,14 +17,10 @@ import {NavigationProp, ParamListBase} from "@react-navigation/native";
 import SearchStores from "../../components/SearchStores";
 import {getFormattedAddress} from "../../components/MapViews/utils";
 import {StoreType} from "../../api/storesApi";
+import HeaderUser from "../../components/headerUser";
 
 type TouchableWrappedProps = TouchableOpacityProps & {
     children: JSX.Element
-}
-const TouchableWrapped = ({children, ...rest}: TouchableWrappedProps) => {
-    return <TouchableOpacity {...rest}>
-        {children}
-    </TouchableOpacity>
 }
 
 type HomeSProps = {
@@ -37,12 +33,17 @@ const HomeS = observer(({navigation}: HomeSProps) => {
     const {categories} = CategoriesStore
     const [selectedSubCategoryId, setSelectedSubCategoryId] = useState<string>('');
 
-    const formatted_address = getFormattedAddress(user?.address)
 
     const categoriesViews = ({item}: { item: CategoryType }) => {
         const onPressCategory = () => {
-            setSelectedSubCategoryId(item._id)
-            StoresService.searchStores({categoryId: item._id})
+            const isCurrentChosenSubCategory= item._id === selectedSubCategoryId
+            if (item._id === selectedSubCategoryId) {
+                setSelectedSubCategoryId('')
+            } else {
+                setSelectedSubCategoryId(item._id)
+            }
+
+            StoresService.searchStores({categoryId: isCurrentChosenSubCategory? '' : item._id})
         }
         return (
             <SubCategoriesViewer<CategoryType>
@@ -92,27 +93,14 @@ const HomeS = observer(({navigation}: HomeSProps) => {
         CategoriesService.getCategories()
         StoresService.getFavoriteStores()
     }, [])
-    const onPressFavoriteHandler = () => {
-        navigation.navigate(routerConstants.FAVORITE)
-    }
-    const onPressUserHandler = () => {
-        navigation.navigate(routerConstants.PROFILE_USER)
-    }
+
     return (
         <BaseWrapperComponent backgroundColor={colors.white} isKeyboardAwareScrollView={true}>
             <Box>
-                <Box paddingX={5} mt={6} mb={2} h={45} w={'100%'} flexDirection={'row'}
-                     justifyContent={'space-between'}>
-                    <TouchableWrapped onPress={onPressUserHandler}>
-                        <Image source={userImg} alt={'user'}/>
-                    </TouchableWrapped>
-                    <Text fontSize={16} w={'60%'} textAlign={'center'}
-                          fontWeight={'600'}>{formatted_address}</Text>
-                    <TouchableWrapped onPress={onPressFavoriteHandler}>
-                        <Image source={likeImg} alt={'like'}/>
-                    </TouchableWrapped>
-                </Box>
-
+                <HeaderUser
+                    address={user?.address}
+                    navigation={navigation}
+                />
                 <Box mt={2} w={'100%'} backgroundColor={colors.white} borderTopLeftRadius={16}
                      borderTopRightRadius={16}>
                     <SearchStores selectedSubCategoryId={selectedSubCategoryId}/>
