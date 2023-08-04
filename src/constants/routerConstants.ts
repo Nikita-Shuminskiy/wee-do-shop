@@ -10,4 +10,6 @@ export const routerConstants = {
     FAVORITE: 'favorite',
     SHOPS: 'shops',
     PROFILE_USER: 'profile-user',
+    HISTORY: 'history',
+    CART: 'cart',
 }

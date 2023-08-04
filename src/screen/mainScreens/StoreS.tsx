@@ -19,6 +19,7 @@ import PopUpProduct from "../../components/modalPopUp/PopUpProduct";
 import {CartType} from "../../store/CartStore/cart-store";
 import PopUpAboutStore from "../../components/modalPopUp/PopUpAboutStore";
 import {formatProductPrice} from "../../components/MapViews/utils";
+import {routerConstants} from "../../constants/routerConstants";
 
 const renderEmptyContainer = (height, text) => {
     const onPressLink = () => {
@@ -67,7 +68,7 @@ type StoreSProps = {
     navigation: NavigationProp<ParamListBase>
 }
 const StoreS = observer(({navigation}: StoreSProps) => {
-    const {StoresStore} = rootStore
+    const {StoresStore, CartStore} = rootStore
     const {store, allProductStore, getAndSetAllProduct} = StoresStore
     const navigate = useNavigation()
     const [currentCartStore, setCurrentCartStore] = useState<CartType>()
@@ -75,6 +76,7 @@ const StoreS = observer(({navigation}: StoreSProps) => {
     useEffect(() => {
         const newCart: CartType = {
             idStore: store._id,
+            storeName: store.name,
             totalSum: 0,
             products: []
         }
@@ -103,7 +105,8 @@ const StoreS = observer(({navigation}: StoreSProps) => {
         setIsShowModalAboutStore(false)
     }
     const onPressConfirmButton = () => {
-
+        CartStore.setToCartStore(currentCartStore)
+        navigation.navigate(routerConstants.CART)
     }
     const onClosePopUpProduct = () => {
         setIsShowModalProduct(false)
@@ -148,8 +151,8 @@ const StoreS = observer(({navigation}: StoreSProps) => {
 
     const sebCategoriesViews = ({item}: { item: SubCategoryType }) => {
         const onPressSelectedSubCategory = () => {
-            const isCurrentChosenSubCategory= item._id === selectedSubCategoryId
-            if(isCurrentChosenSubCategory) {
+            const isCurrentChosenSubCategory = item._id === selectedSubCategoryId
+            if (isCurrentChosenSubCategory) {
                 setSelectedSubCategory(null)
                 setSelectedSubCategoryId('');
                 return

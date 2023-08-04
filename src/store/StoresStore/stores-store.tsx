@@ -50,7 +50,6 @@ export class StoresStore {
 
     async getFavoriteStores(id: string): Promise<void> {
         const {data} = await storesApi.getFavoriteStores(id)
-        console.log(data)
         this.setFavoriteStore(data)
 
     }

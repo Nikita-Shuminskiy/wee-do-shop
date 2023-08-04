@@ -7,6 +7,9 @@ import {useKeyBoardStatus} from "../utils/hook/useKeyBoardStatus";
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import ShopsS from "../screen/mainScreens/ShopsS";
 import {MaterialIcons} from '@expo/vector-icons';
+import {MaterialCommunityIcons} from '@expo/vector-icons';
+import HistoryS from "../screen/mainScreens/HistoryS";
+import CartS from "../screen/mainScreens/CartS";
 
 const TabMainStack = createBottomTabNavigator();
 
@@ -33,19 +36,20 @@ const MainNavigation = ({navigation, route}) => {
                     backgroundColor: colors.green,
                 },
                 tabBarLabelStyle: {
-                    fontSize: 10,
+                    marginBottom: 5,
+                    fontSize: 12,
                     color: colors.gray,
                 },
                 tabBarIcon: ({focused, color}) => {
                     let iconName
                     if (route.name === 'home') {
-                        iconName = <Ionicons name={focused ? "home" : 'home-outline'} size={24} color={color}/>
+                        iconName = <Ionicons name={focused ? "home" : 'home-outline'} size={30} color={color}/>
                     } else if (route.name === 'shops') {
-                        iconName = <MaterialIcons name={focused ? "store" : 'store'} size={24} color={color}/>
-                    } else if (route.name === 'chart-screen') {
-                        iconName = focused ? 'bar-chart' : 'bar-chart-outline'
-                    } else if (route.name === 'settings') {
-                        iconName = focused ? 'settings' : 'settings-outline'
+                        iconName = <MaterialIcons name={focused ? "store" : 'store'} size={30} color={color}/>
+                    } else if (route.name === 'history') {
+                        iconName = <MaterialCommunityIcons name="history" size={30} color={color}/>
+                    } else if (route.name === 'cart') {
+                        iconName = <MaterialCommunityIcons name="cart-outline" size={30} color={color}/>
                     }
 
                     return iconName
@@ -61,6 +65,16 @@ const MainNavigation = ({navigation, route}) => {
                 options={{tabBarLabel: 'Shops', headerShown: false}}
                 name={routerConstants.SHOPS}
                 component={ShopsS}
+            />
+            <TabMainStack.Screen
+                options={{tabBarLabel: 'History', headerShown: false}}
+                name={routerConstants.HISTORY}
+                component={HistoryS}
+            />
+            <TabMainStack.Screen
+                options={{tabBarLabel: 'Cart', headerShown: false}}
+                name={routerConstants.CART}
+                component={CartS}
             />
         </TabMainStack.Navigator>
     )

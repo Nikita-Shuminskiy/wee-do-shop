@@ -6,6 +6,7 @@ export type ProductCartType = ProductType & {
 }
 export type CartType = {
     idStore: string,
+    storeName: string
     products: ProductCartType[],
     totalSum: number
 }
@@ -14,30 +15,8 @@ export class CartStore {
 
     carts: CartType[] = [] as CartType[]
 
-    setToCartStore(product: ProductType, productValue: number, storeId) {
-        const findStore = this.carts.find(store => store.idStore === storeId)
-        if (findStore) {
-            const findProduct = findStore.products.find(products => products._id === product._id)
-            if (findProduct) {
-                findProduct.productValue = productValue
-            } else {
-                findStore.products.push({...product, productValue: productValue})
-            }
-            findStore.products.forEach((cart) => {
-                const totalSum = findStore.products.reduce(
-                    (sum, item) => sum + item?.price * item.productValue,
-                    0
-                );
-                findStore.totalSum = totalSum;
-            });
-            return
-        }
-        const newCart = {
-            idStore: product.store,
-            products: [{...product, productValue: productValue}],
-            totalSum: product.price * productValue
-        }
-        this.carts.push(newCart)
+    setToCartStore(carts: CartType) {
+        this.carts.push(carts)
     }
 
     constructor() {
