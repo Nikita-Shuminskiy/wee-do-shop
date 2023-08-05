@@ -16,6 +16,7 @@ type PopUpProductProps = {
     show: boolean
     currentValueToCartProduct: ProductCartType
     onClose: () => void
+    onPressGoToCardHandler: () => void
     product: ProductType
     saveProductValueToCard: (productValue: number) => void
     totalSumCart: string
@@ -26,13 +27,11 @@ const PopUpProduct = ({
                           product,
                           currentValueToCartProduct,
                           saveProductValueToCard,
-                          totalSumCart
+                          totalSumCart,
+                          onPressGoToCardHandler
                       }: PopUpProductProps) => {
 
     const onPressShowMore = () => {
-
-    }
-    const onPressGoToCardHandler = () => {
 
     }
     const saveInputNumberValue = (productValue: number) => {

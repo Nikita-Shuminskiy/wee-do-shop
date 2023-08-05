@@ -5,7 +5,6 @@ import {Modalize} from 'react-native-modalize';
 const ModalPopup = ({visible, onClose, children}) => {
     const modalizeRef = useRef(null);
     const {height} = useWindowDimensions();
-    const modalHeight = height;
 
     useEffect(() => {
         if (visible) {

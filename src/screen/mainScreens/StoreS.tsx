@@ -20,6 +20,7 @@ import {CartType} from "../../store/CartStore/cart-store";
 import PopUpAboutStore from "../../components/modalPopUp/PopUpAboutStore";
 import {formatProductPrice} from "../../components/MapViews/utils";
 import {routerConstants} from "../../constants/routerConstants";
+import {getTotalSumProductsCart, updateValueCartProducts} from "../../utils/utilsCart";
 
 const renderEmptyContainer = (height, text) => {
     const onPressLink = () => {
@@ -34,20 +35,8 @@ const renderEmptyContainer = (height, text) => {
     )
 }
 const updateProduct = (currentCartStore, item, productValue, setCurrentCartStore) => {
-    const updatedProducts = currentCartStore.products.map((product) => {
-        if (product._id === item._id) {
-            return {
-                ...product,
-                productValue: productValue,
-            };
-        }
-        return product;
-    });
-
-    const totalSum = updatedProducts.reduce(
-        (sum, product) => sum + product.productValue * product.price,
-        0
-    );
+    const updatedProducts = updateValueCartProducts(currentCartStore.products, productValue, item._id)
+    const totalSum = getTotalSumProductsCart(updatedProducts)
     setCurrentCartStore({
         ...currentCartStore,
         totalSum: totalSum,
@@ -84,6 +73,7 @@ const StoreS = observer(({navigation}: StoreSProps) => {
         getAndSetAllProduct(store.subCategories)
         return () => {
             getAndSetAllProduct([])
+            setCurrentCartStore({} as CartType)
         }
     }, [])
 
@@ -94,7 +84,7 @@ const StoreS = observer(({navigation}: StoreSProps) => {
     const [selectedProduct, setSelectedProduct] = useState<ProductType>()
     const [selectedSubCategoryId, setSelectedSubCategoryId] = useState<string>('');
     const currentValueToCartProduct = currentCartStore?.products.find(cart => cart?._id === selectedProduct?._id)
-    const totalSumCart = formatProductPrice(currentCartStore?.totalSum)
+    const totalSumCart = formatProductPrice(currentCartStore?.totalSum ?? 0)
     const onPressGoBack = () => {
         navigate.goBack()
     }
@@ -121,7 +111,6 @@ const StoreS = observer(({navigation}: StoreSProps) => {
         }
         addProductToCart(currentCartStore, selectedProduct, productValue, setCurrentCartStore)
     }
-
     const productViews = ({item}: { item: ProductType }) => {
         const onPressProduct = () => {
             setSelectedProduct(item)
@@ -197,7 +186,7 @@ const StoreS = observer(({navigation}: StoreSProps) => {
                                 extraData={selectedSubCategoryId}
                                 data={store.subCategories}
                                 renderItem={sebCategoriesViews}
-                                keyExtractor={(item, index) => item.toString()}
+                                keyExtractor={(item, index) => item?._id.toString()}
                                 style={{width: '100%'}}
                                 contentContainerStyle={
                                     !store.subCategories?.length &&
@@ -217,7 +206,7 @@ const StoreS = observer(({navigation}: StoreSProps) => {
                                 data={selectedSubCategory?.products ?? allProductStore}
                                 horizontal={false}
                                 renderItem={productViews}
-                                keyExtractor={(item, index) => index.toString()}
+                                keyExtractor={(item, index) => item?._id.toString()}
                                 style={{width: '100%'}}
                                 ListEmptyComponent={() => renderEmptyContainer(Dimensions.get('window').height, 'List is empty')}
                                 numColumns={2}
@@ -256,7 +245,8 @@ const StoreS = observer(({navigation}: StoreSProps) => {
                     </Box>
                 </Box>
             }
-            <PopUpProduct totalSumCart={totalSumCart} saveProductValueToCard={saveProductValueToCard}
+
+            <PopUpProduct onPressGoToCardHandler={onPressConfirmButton} totalSumCart={totalSumCart} saveProductValueToCard={saveProductValueToCard}
                           currentValueToCartProduct={currentValueToCartProduct}
                           product={selectedProduct} onClose={onClosePopUpProduct}
                           show={isShowModalProduct}/>
