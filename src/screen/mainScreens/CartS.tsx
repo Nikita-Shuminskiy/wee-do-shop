@@ -1,6 +1,6 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {BaseWrapperComponent} from "../../components/baseWrapperComponent";
-import cartStore, {CartType, ProductCartType} from "../../store/CartStore/cart-store";
+import cartStore, {ProductCartType} from "../../store/CartStore/cart-store";
 import {observer} from "mobx-react-lite";
 import PrivacyPolicy from "../../components/PrivacyPolicy";
 import {Box, Text} from "native-base";
@@ -11,21 +11,41 @@ import EmptyList from "../../components/list-viewer/empty-list";
 import ProductCartViewer from "../../components/list-viewer/ProductCartViewer";
 import {FontAwesome5} from '@expo/vector-icons';
 import {formatProductPrice} from "../../components/MapViews/utils";
-import storesStore from "../../store/StoresStore/stores-store";
 import EmptyCart from "../../components/EmptyCart";
 import {createAlert} from "../../components/Alert";
+import rootStore from "../../store/RootStore/root-store";
+import TextInput from "../../components/TextInput";
+import {SendDataOrderType} from "../../api/ordersApi";
+import authStore from "../../store/AuthStore/auth-store";
+import {NavigationProp, ParamListBase} from "@react-navigation/native";
+import {routerConstants} from "../../constants/routerConstants";
+type CartSProps = {
+    navigation: NavigationProp<ParamListBase>
+}
 
-const CartS = observer(() => {
-    const {cart, setToCartStore, removeCart, removeProductToCart, updateProductToCart} = cartStore
+const CartS = observer(({navigation}:CartSProps) => {
+    const {cart, removeCart, removeProductToCart, updateProductToCart} = cartStore
+    const {user} = authStore
+    const {OrderService} = rootStore
     const cartProducts = cart?.products
-    /* useEffect(() => {
-         return () => {
-             setToCartStore({} as CartType)
-         }
-     }, [])*/
-
+    const [textComment, setTextComment] = useState('')
+    const onChangeTextCommentHandler = (text: string) => {
+        setTextComment(text)
+    }
     const onPressCheckout = () => {
-
+        const getProductsForOrder = cart.products.map((product) => {
+            return {amount: product.productValue, productId: product._id}
+        })
+        const dataOrder: SendDataOrderType = {
+            comment: textComment,
+            products: getProductsForOrder,
+            userId: user._id
+        }
+       OrderService.sendOrder(dataOrder).then((data) => {
+           if(data) {
+               navigation.navigate(routerConstants.ORDER_STATUSES)
+           }
+       })
     }
     const renderEmptyContainer = (height, text) => {
         const onPressLink = () => {
@@ -65,6 +85,7 @@ const CartS = observer(() => {
 
     }
     const productTotalPrice = formatProductPrice(cart?.totalSum ?? 0)
+
     return (
         <>
             <BaseWrapperComponent backgroundColor={'white'} isKeyboardAwareScrollView={!!cartProducts}>
@@ -100,6 +121,11 @@ const CartS = observer(() => {
                                  borderBottomWidth={1} pb={2} borderColor={colors.grayDarkLight}>
                                 <Text>Delivery</Text>
                                 <Text color={colors.gray}>0</Text>
+                            </Box>
+                            <Box>
+                                <TextInput onChangeText={onChangeTextCommentHandler} heightInput={40}
+                                           placeholder={'Add comment'} textAlignVertical={'top'}
+                                           multiline={true} numberOfLines={4}/>
                             </Box>
                             <PrivacyPolicy/>
                             {/*   <Box mt={5}>

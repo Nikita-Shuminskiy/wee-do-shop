@@ -14,7 +14,7 @@ import PhoneNumberField from '../../components/PhoneField'
 import location from '../../assets/images/location-register.png'
 import arrowLeft from '../../assets/images/arrow-left.png'
 import rootStore from '../../store/RootStore'
-import {RoleType} from 'api/apiAuth'
+import {RoleType} from 'api/authApi'
 import {routerConstants} from "../../constants/routerConstants";
 import ArrowBack from "../../components/ArrowBack";
 import {observer} from "mobx-react-lite";

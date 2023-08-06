@@ -1,7 +1,4 @@
 import {instance} from "./config";
-import {DataLoginType} from "./apiAuth";
-import {CategoryType} from "./categoriesApi";
-import {StoreType} from "./storesApi";
 import {ImageSourcePropType} from "react-native";
 
 

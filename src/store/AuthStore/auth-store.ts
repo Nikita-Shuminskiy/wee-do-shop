@@ -1,6 +1,6 @@
 import {action, makeObservable, observable} from "mobx";
 import {deviceStorage} from '../../utils/storage/storage'
-import {authApi, UserType} from '../../api/apiAuth'
+import {authApi, UserType} from '../../api/authApi'
 import {UserRegisterDataType} from "screen/authScreens/RegisterS";
 import {userApi} from "../../api/userApi";
 export type fullAddressType = {

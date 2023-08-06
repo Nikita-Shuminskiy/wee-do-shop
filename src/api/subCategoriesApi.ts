@@ -1,9 +1,8 @@
 import {instance} from "./config";
-import {DataLoginType} from "./apiAuth";
+import {DataLoginType} from "./authApi";
 import {StoreType} from "./storesApi";
 import {ProductType} from "./productApi";
 
-// подкатегории шишки. гашиш
 export const categoriesApi = {
     async getSubCategories() {
         return await instance.get<SebCategoriesResType>(`sub-category`)

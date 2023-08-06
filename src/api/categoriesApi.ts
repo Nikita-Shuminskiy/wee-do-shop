@@ -1,5 +1,4 @@
 import {instance} from "./config";
-import {DataLoginType} from "./apiAuth";
 
 
 export const categoriesApi = {

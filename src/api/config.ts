@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import axios from 'axios';
-import {DataLoginType} from './apiAuth'
+import {DataLoginType} from './authApi'
 import {deviceStorage} from '../utils/storage/storage'
 
 export const url = 'https://weedo-demo-production.up.railway.app/';
@@ -13,7 +13,7 @@ export const instance = axios.create({
 instance.interceptors.request.use(
     async (config) => {
         const accessToken = await AsyncStorage.getItem('accessToken');
-        //await NotificationStore.checkInternet()
+        //await OrderStore.checkInternet()
         if (accessToken) {
             //@ts-ignore
             config.headers = {

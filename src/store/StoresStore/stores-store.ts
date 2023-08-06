@@ -3,7 +3,7 @@ import {dataSearchType, storesApi, StoreType} from "../../api/storesApi";
 import {userApi} from "../../api/userApi";
 import {ProductType} from "../../api/productApi";
 import {SubCategoryType} from "../../api/subCategoriesApi";
-import {UserType} from "../../api/apiAuth";
+import {UserType} from "../../api/authApi";
 
 export class StoresStore {
     stores: StoreType[] = []

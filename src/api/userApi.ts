@@ -3,7 +3,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import { UserRegisterDataType } from 'screen/authScreens/RegisterS'
 import {StoreType} from "./storesApi";
 import {AddressType} from "../store/AuthStore/auth-store";
-import {UserType} from "./apiAuth";
+import {UserType} from "./authApi";
 
 
 export const userApi = {
@@ -16,5 +16,4 @@ export const userApi = {
 	async getUser(idUser: string) {
 		return await instance.get<UserType>(`users/${idUser}`)
 	},
-
 }
