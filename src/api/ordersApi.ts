@@ -19,8 +19,8 @@ export const ordersApi = {
 	async getOrderUserId(idUser: string) {
 		return await instance.get<UserType>(`order/user/${idUser}`)
 	},
-	async updateOrder(id: string) {
-		return await instance.patch<UserType>(`order/${id}/status`)
+	async updateOrder(id: string, status: StatusType) {
+		return await instance.patch<UserType>(`order/${id}/status`, {status})
 	},
 }
 export type SendDataOrderType = {

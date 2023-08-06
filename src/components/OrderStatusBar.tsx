@@ -52,10 +52,10 @@ const OrderStatusBar = ({status}: OrderStatusBarType) => {
                 return <Box key={el} w={60} h={60} ml={2} mr={2} flexDirection={'row'} alignItems={'center'}>
                     <Box w={60} h={60} borderWidth={2}
                          alignItems={'center'}
-                         backgroundColor={getCurrentBackgroundFillScale(StatusType.Completed, el, colors.green, colors.white, 'background')}
+                         backgroundColor={getCurrentBackgroundFillScale(status, el, colors.green, colors.white, 'background')}
                          justifyContent={'center'}
                          borderColor={colors.grayWhite} borderRadius={50}>
-                        {renderStatusIco(el, getCurrentBackgroundFillScale(StatusType.Completed, el, colors.white, colors.green, 'ico-color'), status)}
+                        {renderStatusIco(el, getCurrentBackgroundFillScale(status, el, colors.white, colors.green, 'ico-color'), status)}
                     </Box>
                     {
                         el !== 5 && <Box borderBottomWidth={2} w={3} borderColor={colors.grayWhite}/>
