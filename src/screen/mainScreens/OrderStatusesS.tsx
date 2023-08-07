@@ -14,6 +14,7 @@ import {colors} from "../../assets/colors/colors";
 import {StatusType} from "../../api/ordersApi";
 import io from 'socket.io-client';
 import OrderStatusBar from "../../components/OrderStatusBar";
+import Button from "../../components/Button";
 
 
 const renderImgForStatuses = (status: StatusType) => {
@@ -40,21 +41,18 @@ const renderImgForStatuses = (status: StatusType) => {
 
 const OrderStatusesS = observer(() => {
     const {order, statusOrder, setStatus} = orderStore
+
     useEffect(() => {
-        // Подключение к серверу Socket.IO
         const socket = io('https://weedo-demo-production.up.railway.app/');
 
-        // Обработка события подключения
         socket.on('connect', () => {
             console.log('Подключено к серверу Socket.IO');
         });
-        socket.on(`orderStatusUpdated:${order._id}`, (data) => {
-            console.log(data)
+        socket.on(`orderStatusUpdated:${'64d0a29c781be0e0ae61184a'}`, (data: { orderId: string, status: StatusType }) => {
+            setStatus(data.status)
         })
-
-        // Возвращаем функцию для отключения сокета при размонтировании компонента
         /*return () => {
-            socket.disconnect(); // Отключение от сервера при размонтировании компонента (необязательно)
+            socket.disconnect();
         };*/
 
     }, []);
@@ -62,9 +60,10 @@ const OrderStatusesS = observer(() => {
     const onPressClose = () => {
 
     }
+    const isCanceled = statusOrder === StatusType.Canceled
     return (
-        <BaseWrapperComponent backgroundColor={colors.white} isKeyboardAwareScrollView={true}>
-            <Box paddingX={5} mt={5}>
+        <BaseWrapperComponent backgroundColor={colors.white} isKeyboardAwareScrollView={!isCanceled}>
+            <Box paddingX={5} mt={5} justifyContent={'space-evenly'} flex={1}>
                 <Box flexDirection={'row'} alignItems={'center'} justifyContent={'center'}>
                     <Box flex={9} justifyContent={'center'} alignItems={'center'}>
                         <Text fontSize={18} fontWeight={'500'}>Simply crafted store</Text>
@@ -75,22 +74,38 @@ const OrderStatusesS = observer(() => {
                         </TouchableOpacity>
                     </Box>
                 </Box>
-                <Box mt={5} alignItems={'center'} justifyContent={'center'}>
-                    <Image alt={'img'}
-                           source={renderImgForStatuses(statusOrder)}/>
-                </Box>
-                <Box flexDirection={'row'} alignItems={'center'} justifyContent={'space-evenly'} mt={5}>
-                    <OrderStatusBar status={statusOrder}/>
-                </Box>
-                <Box mt={5} alignItems={'center'}>
-                    <Text fontSize={24} fontWeight={'600'}>Order placed</Text>
-                    <Text color={colors.gray}>
-                        Some text details about this delivery stage</Text>
-                </Box>
+                {
+                    isCanceled ? (
+                        <Box flex={2} justifyContent={'center'} alignItems={'center'}>
+                            <Text mb={5} fontSize={23} fontWeight={'700'}>The store canceled the order</Text>
+                            <Button styleContainer={styles.styleContainerBtn} onPress={onPressClose} title={'Go to orders '}  />
+                        </Box>
+                    ) : (
+                        <>
+                            <Box mt={5} alignItems={'center'} justifyContent={'center'}>
+                                <Image alt={'img'}
+                                       source={renderImgForStatuses(statusOrder)}/>
+                            </Box>
+                            <Box flexDirection={'row'} alignItems={'center'} justifyContent={'space-evenly'} mt={5}>
+                                <OrderStatusBar status={statusOrder}/>
+                            </Box>
+                            <Box mt={5} alignItems={'center'}>
+                                <Text fontSize={24} fontWeight={'600'}>Order placed</Text>
+                                <Text color={colors.gray}>
+                                    Some text details about this delivery stage</Text>
+                            </Box>
+                        </>
+                    )
+                }
             </Box>
         </BaseWrapperComponent>
     );
 })
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+    styleContainerBtn: {
+        backgroundColor: colors.green,
+        width: '100%',
+    }
+})
 export default OrderStatusesS;

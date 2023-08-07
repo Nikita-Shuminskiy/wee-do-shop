@@ -34,11 +34,15 @@ export function isCurrentTimeInRange(workingHoursStores: WorkingHoursType, isInf
     if (!currentHourWorkStores) {
         return false; // Если для текущего дня нет указанного времени
     }
-    const [startTime, endTime] = currentHourWorkStores.split(' - ');
+
+    if(currentHourWorkStores === 'Closed') {
+        return 'Closed'
+    }
+    const [startTime, endTime] = currentHourWorkStores?.split(' - ');
     const currentHour = date.getHours()
     const currentMinute = date.getMinutes()
-    const [startHour, startMinute] = startTime.split(':').map(Number);
-    const [endHour, endMinute] = endTime.split(':').map(Number);
+    const [startHour, startMinute] = startTime?.split(':').map(Number);
+    const [endHour, endMinute] = endTime?.split(':').map(Number);
 
     if (
         currentHour > startHour &&
