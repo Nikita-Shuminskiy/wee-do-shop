@@ -19,6 +19,7 @@ import {deviceStorage} from "../utils/storage/storage";
 import UserProfileS from "../screen/mainScreens/UserProfileS";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import OrderStatusesS from "../screen/mainScreens/OrderStatusesS";
+import OrdersS from "../screen/mainScreens/OrdersS";
 
 const RootStack = createNativeStackNavigator()
 const RootNavigation = observer(() => {
@@ -56,6 +57,11 @@ const RootNavigation = observer(() => {
                             options={{headerShown: false}}
                             name={routerConstants.ORDER_STATUSES}
                             component={OrderStatusesS}
+                        />
+                        <RootStack.Screen
+                            options={{headerShown: false}}
+                            name={routerConstants.ORDERS}
+                            component={OrdersS}
                         />
                         <RootStack.Screen
                             options={{headerShown: false}}

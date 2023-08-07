@@ -12,6 +12,7 @@ import {Ionicons} from '@expo/vector-icons';
 import ArrowBack from "../../components/ArrowBack";
 import arrowLeftBack from "../../assets/images/arrow-left.png";
 import PrivacyPolicy from "../../components/PrivacyPolicy";
+import {routerConstants} from "../../constants/routerConstants";
 
 type UserProfileSProps = {
     navigation: NavigationProp<ParamListBase>
@@ -25,6 +26,9 @@ const UserProfileS = ({navigation}: UserProfileSProps) => {
     const onPressLogOut = () => {
         logOut()
     }
+    const onPressOrderHandler = () => {
+        navigation.navigate(routerConstants.ORDERS)
+    }
     return (
         <BaseWrapperComponent isKeyboardAwareScrollView={true}>
             <Box paddingX={2} mt={2}>
@@ -37,7 +41,7 @@ const UserProfileS = ({navigation}: UserProfileSProps) => {
                 <Box flexDirection={'row'} alignItems={'center'} pb={4} mt={4} borderBottomWidth={1}
                      borderColor={colors.grayLight}>
                     <FontAwesome5 name="clipboard-list" size={18} color="black"/>
-                    <Link styleText={styles.text} onPress={onPressLogOut}
+                    <Link styleText={styles.text} onPress={onPressOrderHandler}
                           text={'Orders'}/>
                 </Box>
                 <Box flexDirection={'row'} alignItems={'center'} pb={4} mt={4} borderBottomWidth={1}

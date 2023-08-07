@@ -15,6 +15,8 @@ import {StatusType} from "../../api/ordersApi";
 import io from 'socket.io-client';
 import OrderStatusBar from "../../components/OrderStatusBar";
 import Button from "../../components/Button";
+import {NavigationProp, ParamListBase} from "@react-navigation/native";
+import {routerConstants} from "../../constants/routerConstants";
 
 
 const renderImgForStatuses = (status: StatusType) => {
@@ -38,17 +40,19 @@ const renderImgForStatuses = (status: StatusType) => {
     }
 }
 
-
-const OrderStatusesS = observer(() => {
+type OrderStatusesSProps = {
+    navigation: NavigationProp<ParamListBase>
+}
+const OrderStatusesS = observer(({navigation}: OrderStatusesSProps) => {
     const {order, statusOrder, setStatus} = orderStore
 
     useEffect(() => {
         const socket = io('https://weedo-demo-production.up.railway.app/');
-
+        console.log(order._id)
         socket.on('connect', () => {
             console.log('Подключено к серверу Socket.IO');
         });
-        socket.on(`orderStatusUpdated:${'64d0a29c781be0e0ae61184a'}`, (data: { orderId: string, status: StatusType }) => {
+        socket.on(`orderStatusUpdated:${order._id}`, (data: { orderId: string, status: StatusType }) => {
             setStatus(data.status)
         })
         /*return () => {
@@ -58,7 +62,7 @@ const OrderStatusesS = observer(() => {
     }, []);
 
     const onPressClose = () => {
-
+        navigation.navigate(routerConstants.ORDERS)
     }
     const isCanceled = statusOrder === StatusType.Canceled
     return (

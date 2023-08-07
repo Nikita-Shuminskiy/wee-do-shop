@@ -24,7 +24,7 @@ type CartSProps = {
 }
 
 const CartS = observer(({navigation}:CartSProps) => {
-    const {cart, removeCart, removeProductToCart, updateProductToCart} = cartStore
+    const {cart, removeCart, removeProductToCart, updateProductToCart, setToCartStore} = cartStore
     const {user} = authStore
     const {OrderService} = rootStore
     const cartProducts = cart?.products
@@ -43,6 +43,7 @@ const CartS = observer(({navigation}:CartSProps) => {
         }
        OrderService.sendOrder(dataOrder).then((data) => {
            if(data) {
+               setToCartStore(null)
                navigation.navigate(routerConstants.ORDER_STATUSES)
            }
        })

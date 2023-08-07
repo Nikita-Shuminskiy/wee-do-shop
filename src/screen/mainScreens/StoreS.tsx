@@ -190,7 +190,7 @@ const StoreS = observer(({navigation}: StoreSProps) => {
                                 style={{width: '100%'}}
                                 contentContainerStyle={
                                     !store.subCategories?.length &&
-                                    styles.contentContainerStyleSubCategories
+                                    styles.contentContainerOrder
                                 }
                                 ListEmptyComponent={() => renderEmptyContainer(0, '')}
                                 horizontal={true}
@@ -255,7 +255,7 @@ const StoreS = observer(({navigation}: StoreSProps) => {
     );
 });
 const styles = StyleSheet.create({
-    contentContainerStyleSubCategories: {
+    contentContainerOrder: {
         flex: 1,
         width: '100%',
         alignItems: 'center',

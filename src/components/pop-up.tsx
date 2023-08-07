@@ -1,8 +1,13 @@
 import React, {useEffect, useRef} from 'react';
 import {Animated, StyleSheet, useWindowDimensions} from 'react-native';
 import {Modalize} from 'react-native-modalize';
-
-const ModalPopup = ({visible, onClose, children}) => {
+type ModalPopupProps = {
+    visible: boolean
+    onClose: () =>void
+    style: any
+    children: any
+}
+const ModalPopup = ({visible, onClose, children, style}: ModalPopupProps) => {
     const modalizeRef = useRef(null);
     const {height} = useWindowDimensions();
 
@@ -16,7 +21,7 @@ const ModalPopup = ({visible, onClose, children}) => {
 
     return (
         <Modalize
-            childrenStyle={styles.modalContent}
+            childrenStyle={{...styles.modalContent, ...style}}
             ref={modalizeRef}
             onClosed={onClose}
         >

@@ -14,9 +14,9 @@ export type CartType = {
 
 export class CartStore {
 
-    cart: CartType = {} as CartType
+    cart: CartType | null = null
 
-    setToCartStore(carts: CartType) {
+    setToCartStore(carts: CartType | null) {
         this.cart = carts
     }
 

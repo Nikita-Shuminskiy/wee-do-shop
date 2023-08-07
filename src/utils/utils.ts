@@ -1,5 +1,6 @@
 import regex from './helpers/regex'
 import {WorkingHoursType} from "../api/storesApi";
+import {format, parseISO} from 'date-fns'
 
 export const validateEmail = (email: string) => {
     return regex.email.test(email.trim())
@@ -35,7 +36,7 @@ export function isCurrentTimeInRange(workingHoursStores: WorkingHoursType, isInf
         return false; // Если для текущего дня нет указанного времени
     }
 
-    if(currentHourWorkStores === 'Closed') {
+    if (currentHourWorkStores === 'Closed') {
         return 'Closed'
     }
     const [startTime, endTime] = currentHourWorkStores?.split(' - ');
@@ -73,4 +74,13 @@ export function isCurrentTimeInRange(workingHoursStores: WorkingHoursType, isInf
         return 'Closed ' + endTime
     }
     return false; // Текущее время НЕ совпадает с указанным диапазоном времени
+}
+
+export const getFormatDateToString = (dateString: string) => {
+    if(!dateString) return ''
+    const date = parseISO(dateString);
+
+    const formattedDate = format(date, "d MMMM HH:mm");
+
+    return formattedDate
 }
