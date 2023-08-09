@@ -38,7 +38,7 @@ const GoogleAutocompleteMapS = ({navigation}: GoogleAutocompleteMapSProps) => {
                 </Box>
             </BaseWrapperComponent>
             {showLocationMap &&
-                <MapViews currentDataMap={{location: location, positionMarker: markerPosition, address: currentAddress}}
+                <MapViews from={'register'} currentDataMap={{location: location, positionMarker: markerPosition, address: currentAddress}}
                           close={() => setShowLocationMap(false)} visible={showLocationMap}/>}
         </>
     );

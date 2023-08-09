@@ -29,6 +29,9 @@ const UserProfileS = ({navigation}: UserProfileSProps) => {
     const onPressOrderHandler = () => {
         navigation.navigate(routerConstants.ORDERS)
     }
+    const onPressGoAddress = () => {
+        navigation.navigate(routerConstants.ADDRESS)
+    }
     return (
         <BaseWrapperComponent isKeyboardAwareScrollView={true}>
             <Box paddingX={2} mt={2}>
@@ -47,8 +50,8 @@ const UserProfileS = ({navigation}: UserProfileSProps) => {
                 <Box flexDirection={'row'} alignItems={'center'} pb={4} mt={4} borderBottomWidth={1}
                      borderColor={colors.grayLight}>
                     <Ionicons style={{marginLeft: -1}} name="md-location" size={18} color="black"/>
-                    <Link styleText={styles.text} onPress={onPressLogOut}
-                          text={'Adress'}/>
+                    <Link styleText={styles.text} onPress={onPressGoAddress}
+                          text={'Address'}/>
                 </Box>
                 <Box flexDirection={'row'} mt={4} alignItems={'center'}>
                     <Entypo name="log-out" size={18} color="black"/>

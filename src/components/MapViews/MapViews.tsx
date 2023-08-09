@@ -20,10 +20,11 @@ import {fullAddressType} from "../../store/AuthStore/auth-store";
 type MapViewsProps = {
     currentDataMap: AutoCompleteDataType
     visible: boolean
+    from: 'edit' | 'register'
     close: () => void
 
 }
-export const MapViews = ({visible, close, currentDataMap}: MapViewsProps) => {
+export const MapViews = ({visible, close, currentDataMap, from}: MapViewsProps) => {
     const {setLocation} = AuthStore
     const {setIsLoading} = NotificationStore
     const navigation = useNavigation<any>();
@@ -103,9 +104,12 @@ export const MapViews = ({visible, close, currentDataMap}: MapViewsProps) => {
             fullAddress: {...fullInfo},
             location: {
                 type: 'Point',
-                coordinates: [myLocation.longitude , myLocation.latitude]
+                coordinates: [myLocation.longitude, myLocation.latitude]
             }
         })
+        if (from === 'edit') {
+            return onPressGoBack()
+        }
         navigation.navigate(routerConstants.REGISTRATION)
     }
     return <Modal visible={visible}>

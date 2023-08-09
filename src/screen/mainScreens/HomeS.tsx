@@ -1,11 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import {observer} from "mobx-react-lite";
 import {BaseWrapperComponent} from "../../components/baseWrapperComponent";
-import {Box, Image, Text} from "native-base";
+import {Box} from "native-base";
 import AuthStore from "../../store/AuthStore/auth-store";
-import likeImg from '../../assets/images/likeGreen.png'
-import userImg from '../../assets/images/userGreen.png'
-import {Dimensions, FlatList, StyleSheet, TouchableOpacity, TouchableOpacityProps} from "react-native";
+import {Dimensions, FlatList, StyleSheet, TouchableOpacityProps} from "react-native";
 import {colors} from "../../assets/colors/colors";
 import EmptyList from "../../components/list-viewer/empty-list";
 import SubCategoriesViewer from "../../components/list-viewer/CategoriesViewer";
@@ -15,14 +13,20 @@ import {CategoryType} from "../../api/categoriesApi";
 import {routerConstants} from "../../constants/routerConstants";
 import {NavigationProp, ParamListBase} from "@react-navigation/native";
 import SearchStores from "../../components/SearchStores";
-import {getFormattedAddress} from "../../components/MapViews/utils";
 import {StoreType} from "../../api/storesApi";
 import HeaderUser from "../../components/headerUser";
+const renderEmptyContainer = (height, text) => {
+    const onPressLink = () => {
 
-type TouchableWrappedProps = TouchableOpacityProps & {
-    children: JSX.Element
+    }
+    return (
+        <EmptyList
+            height={height}
+            text={text}
+            onPressLink={onPressLink}
+        />
+    )
 }
-
 type HomeSProps = {
     navigation: NavigationProp<ParamListBase>
 }
@@ -75,18 +79,7 @@ const HomeS = observer(({navigation}: HomeSProps) => {
             />
         )
     }
-    const renderEmptyContainer = (height, text) => {
-        const onPressLink = () => {
 
-        }
-        return (
-            <EmptyList
-                height={height}
-                text={text}
-                onPressLink={onPressLink}
-            />
-        )
-    }
 
     useEffect(() => {
         StoresService.getStores()

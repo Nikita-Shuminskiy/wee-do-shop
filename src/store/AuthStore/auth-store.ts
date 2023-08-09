@@ -3,12 +3,13 @@ import {deviceStorage} from '../../utils/storage/storage'
 import {authApi, UserType} from '../../api/authApi'
 import {UserRegisterDataType} from "screen/authScreens/RegisterS";
 import {userApi} from "../../api/userApi";
+
 export type fullAddressType = {
     country: string
     city: string
     street: string
     house: string
-    apartment: string
+    apartment?: string
     postalCode: string
 }
 export type AddressType = {
@@ -64,8 +65,14 @@ export class AuthStore {
         return data
     }
 
+    async updateUser(dataAddress: AddressType): Promise<UserType> {
+        const {data} = await userApi.updateUser(this.user._id, dataAddress)
+        console.log(data)
+        this.setUser(data)
+        return data
+    }
 
-   async logOut() {
+    async logOut() {
         this.user = null
         this.isAuth = false
         await deviceStorage.removeItem('refreshToken')
@@ -87,9 +94,11 @@ export class AuthStore {
             logOut: action,
             setAuth: action,
             getMe: action,
-            login: action
+            login: action,
+            updateUser: action
         })
         this.setAuth = this.setAuth.bind(this)
+        this.updateUser = this.updateUser.bind(this)
         this.getMe = this.getMe.bind(this)
         this.getUser = this.getUser.bind(this)
         this.logOut = this.logOut.bind(this)

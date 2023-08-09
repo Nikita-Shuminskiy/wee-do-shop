@@ -16,4 +16,7 @@ export const userApi = {
 	async getUser(idUser: string) {
 		return await instance.get<UserType>(`users/${idUser}`)
 	},
+	async updateUser(idUser: string, dataAddress: AddressType) {
+		return await instance.patch<UserType>(`users/${idUser}`, {address: dataAddress})
+	},
 }

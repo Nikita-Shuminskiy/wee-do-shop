@@ -7,6 +7,7 @@ export const routerConstants = {
     MAIN: 'main',
     HOME: 'home',
     STORE: 'store',
+    ADDRESS: 'address',
     FAVORITE: 'favorite',
     ORDER_STATUSES: 'order-statuses',
     ORDERS: 'orders',

@@ -20,6 +20,7 @@ import UserProfileS from "../screen/mainScreens/UserProfileS";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import OrderStatusesS from "../screen/mainScreens/OrderStatusesS";
 import OrdersS from "../screen/mainScreens/OrdersS";
+import AddressS from "../screen/mainScreens/AddressS";
 
 const RootStack = createNativeStackNavigator()
 const RootNavigation = observer(() => {
@@ -68,6 +69,11 @@ const RootNavigation = observer(() => {
                             name={routerConstants.PROFILE_USER}
                             component={UserProfileS}
                         />
+                        <RootStack.Screen
+                            options={{headerShown: false}}
+                            name={routerConstants.ADDRESS}
+                            component={AddressS}
+                        />
                     </React.Fragment> : <React.Fragment>
                         <RootStack.Screen
                             options={{headerShown: false}}
@@ -79,18 +85,18 @@ const RootNavigation = observer(() => {
                             name={routerConstants.REGISTRATION}
                             component={RegisterS}
                         />
-                        <RootStack.Screen
-                            options={{headerShown: false}}
-                            name={routerConstants.ALLOW_LOCATION}
-                            component={AllowLocationS}
-                        />
-                        <RootStack.Screen
-                            options={{headerShown: false}}
-                            name={routerConstants.AUTOCOMPLETE_MAP}
-                            component={GoogleAutocompleteMapS}
-                        />
                     </React.Fragment>
                 }
+                <RootStack.Screen
+                    options={{headerShown: false}}
+                    name={routerConstants.ALLOW_LOCATION}
+                    component={AllowLocationS}
+                />
+                <RootStack.Screen
+                    options={{headerShown: false}}
+                    name={routerConstants.AUTOCOMPLETE_MAP}
+                    component={GoogleAutocompleteMapS}
+                />
             </RootStack.Navigator>
         </NavigationContainer>
     )

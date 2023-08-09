@@ -20,12 +20,12 @@ export const HeaderUser = ({navigation, address}:HeaderUserType) => {
         navigation.navigate(routerConstants.PROFILE_USER)
     }
     return (
-        <Box paddingX={5} mt={6} mb={2} h={45} w={'100%'} flexDirection={'row'}
+        <Box paddingX={5} mt={6} mb={2} w={'100%'} flexDirection={'row'}
              justifyContent={'space-between'}>
             <TouchableOpacity onPress={onPressUserHandler}>
                 <Image source={userImg} alt={'user'}/>
             </TouchableOpacity>
-            <Text fontSize={16} w={'60%'} textAlign={'center'}
+            <Text fontSize={14} w={'60%'} textAlign={'center'}
                   fontWeight={'600'}>{formatted_address}</Text>
             <TouchableOpacity onPress={onPressFavoriteHandler}>
                 <Image source={likeImg} alt={'like'}/>
