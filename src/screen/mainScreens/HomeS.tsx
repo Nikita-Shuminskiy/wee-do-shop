@@ -115,6 +115,7 @@ const HomeS = observer(({navigation}: HomeSProps) => {
                     </Box>
                     <Box flex={5} >
                         <FlatList
+                            scrollEnabled={false}
                             data={stores}
                             renderItem={storesViews}
                             keyExtractor={(item, index) => item._id.toString()}

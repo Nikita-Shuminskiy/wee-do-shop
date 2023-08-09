@@ -89,7 +89,7 @@ const CartS = observer(({navigation}:CartSProps) => {
 
     return (
         <>
-            <BaseWrapperComponent backgroundColor={'white'} isKeyboardAwareScrollView={!!cartProducts}>
+            <BaseWrapperComponent extraScrollHeight={50} backgroundColor={'white'} isKeyboardAwareScrollView={!!cartProducts}>
                 {
                     !cartProducts ? <EmptyCart/> : (
                         <Box paddingX={4} mt={2}>
@@ -108,6 +108,7 @@ const CartS = observer(({navigation}:CartSProps) => {
                             </Box>
                             <FlatList
                                 data={cartProducts ?? []}
+                                scrollEnabled={false}
                                 horizontal={false}
                                 renderItem={productCartViews}
                                 keyExtractor={(item, index) => item?._id.toString()}
@@ -125,6 +126,10 @@ const CartS = observer(({navigation}:CartSProps) => {
                             </Box>
                             <Box>
                                 <TextInput onChangeText={onChangeTextCommentHandler} heightInput={40}
+                                           /*onFocus={(event: Event) => {
+                                               // `bind` the function if you're using ES6 classes
+                                               inputRef.current(event.target)
+                                           }}*/
                                            placeholder={'Add comment'} textAlignVertical={'top'}
                                            multiline={true} numberOfLines={4}/>
                             </Box>
@@ -155,7 +160,6 @@ const CartS = observer(({navigation}:CartSProps) => {
                 <Button styleContainer={styles.styleBtnContainer} styleText={styles.styleTextBtn}
                         onPress={onPressCheckout} title={'Checkout'}/>
             </Box>}
-
         </>
     );
 })

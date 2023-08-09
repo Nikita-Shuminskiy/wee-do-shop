@@ -63,6 +63,7 @@ const ShopsS = observer(({navigation}: ShopsSType) => {
                     <Text ml={4} mt={2} mb={2} fontSize={24} fontWeight={'500'}>Shops near you</Text>
                     <Box mb={20}>
                         <FlatList
+                            scrollEnabled={false}
                             numColumns={2}
                             contentContainerStyle={
                                 !stores?.length &&

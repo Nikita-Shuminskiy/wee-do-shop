@@ -203,6 +203,7 @@ const StoreS = observer(({navigation}: StoreSProps) => {
 
                         <Box mb={20}>
                             <FlatList
+                                scrollEnabled={false}
                                 data={selectedSubCategory?.products ?? allProductStore}
                                 horizontal={false}
                                 renderItem={productViews}
