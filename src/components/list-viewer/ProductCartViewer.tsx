@@ -23,7 +23,7 @@ const ProductCartViewer = ({product, onChangeValueNumber, onPressRemoveProduct}:
                 <Box alignItems={'flex-start'} ml={4}>
                     <Text fontSize={16} fontWeight={'400'}>{product.name}</Text>
                     <Box w={120}>
-                        <InputNumber values={product?.productValue}
+                        <InputNumber values={product?.amount}
                                      onChangeValue={onChangeValueNumber}/>
                     </Box>
                 </Box>

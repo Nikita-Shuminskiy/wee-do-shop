@@ -34,7 +34,7 @@ const CartS = observer(({navigation}:CartSProps) => {
     }
     const onPressCheckout = () => {
         const getProductsForOrder = cart.products.map((product) => {
-            return {amount: product.productValue, productId: product._id}
+            return {amount: product.amount, productId: product._id}
         })
         const dataOrder: SendDataOrderType = {
             comment: textComment,

@@ -5,7 +5,7 @@ export const updateValueCartProducts = (products: ProductCartType[], productValu
         if (product._id === productId) {
             return {
                 ...product,
-                productValue: productValue,
+                amount: productValue,
             };
         }
         return product;
@@ -15,7 +15,7 @@ export const updateValueCartProducts = (products: ProductCartType[], productValu
 
 export const getTotalSumProductsCart = (products: ProductCartType[]): number => {
    return products.reduce(
-        (sum, product) => sum + product.productValue * product.price,
+        (sum, product) => sum + product.amount * product.price,
         0
     );
 }

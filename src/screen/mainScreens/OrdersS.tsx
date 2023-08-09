@@ -7,14 +7,14 @@ import ArrowBack from "../../components/ArrowBack";
 import arrowLeftBack from "../../assets/images/arrow-left.png";
 import {NavigationProp, ParamListBase} from "@react-navigation/native";
 import {colors} from "../../assets/colors/colors";
-import {FlatList, StyleSheet} from "react-native";
+import {FlatList, StyleSheet, RefreshControl} from "react-native";
 import EmptyList from "../../components/list-viewer/empty-list";
-
 import {ApiOrderType} from "../../api/ordersApi";
 import OrderViewer from "../../components/list-viewer/OrderViewer";
 import {observer} from "mobx-react-lite";
 import PopUpOrderDetails from "../../components/modalPopUp/PopUpOrderDetails";
 import {routerConstants} from "../../constants/routerConstants";
+import cartStore from "../../store/CartStore/cart-store";
 
 const renderEmptyContainer = (height, text) => {
     const onPressLink = () => {
@@ -33,8 +33,12 @@ type OrdersSProps = {
 const OrdersS = observer(({navigation}: OrdersSProps) => {
     const {orders} = orderStore
     const {OrderService} = rootStore
-    useEffect(() => {
+    const getOrders = () => {
         OrderService.getOrders()
+    }
+    const {setToCartStore} = cartStore
+    useEffect(() => {
+        getOrders()
     }, [])
 
     const onPressGoBack = () => {
@@ -55,8 +59,21 @@ const OrdersS = observer(({navigation}: OrdersSProps) => {
             setSelectedOrder(item)
             setIsShowPopupDetails(true)
         }
+        const onPressRepeat = () => {
+            const getProductsForOrder = item.products.map((product) => {
+                return {amount: product.amount, ...product.product}
+            })
+            setToCartStore({
+                idStore: item.store._id,
+                products: getProductsForOrder,
+                storeName: item.store.name,
+                totalSum: item.totalPrice
+            })
+            navigation.navigate(routerConstants.CART)
+        }
         return (
             <OrderViewer
+                onPressRepeat={onPressRepeat}
                 // selectedSubCategoryId={selectedSubCategoryId}
                 onPressDetails={onPressDetails}
                 order={item}
@@ -64,9 +81,16 @@ const OrdersS = observer(({navigation}: OrdersSProps) => {
         )
     }
     const ordersLength = orders?.length
+    const [refreshing, setRefreshing] = useState(false);
+    const onRefresh = () => {
+        setRefreshing(true)
+        OrderService.getOrders().finally(() => {
+            setRefreshing(false)
+        })
+    };
     return (
         <>
-            <BaseWrapperComponent backgroundColor={colors.white} isKeyboardAwareScrollView={true}>
+            <BaseWrapperComponent backgroundColor={colors.white} isKeyboardAwareScrollView={false}>
                 <Box flexDirection={'row'} mt={5} justifyContent={'space-between'} alignItems={'center'}>
                     <Box mb={5} position={'absolute'} left={5}>
                         <ArrowBack goBackPress={onPressGoBack} img={arrowLeftBack}/>
@@ -75,7 +99,7 @@ const OrdersS = observer(({navigation}: OrdersSProps) => {
                         <Text fontSize={28} fontWeight={'700'}>Orders</Text>
                     </Box>
                 </Box>
-                <Box mt={5} alignItems={'center'}>
+                <Box mt={5} alignItems={'center'} flex={1}>
                     <FlatList
                         data={orders ?? []}
                         renderItem={orderViews}
@@ -84,6 +108,12 @@ const OrdersS = observer(({navigation}: OrdersSProps) => {
                         contentContainerStyle={
                             !ordersLength &&
                             styles.contentContainerOrder
+                        }
+                        refreshControl={
+                            <RefreshControl
+                                refreshing={refreshing}
+                                onRefresh={onRefresh}
+                            />
                         }
                         ListEmptyComponent={() => renderEmptyContainer(0, '')}
                     />

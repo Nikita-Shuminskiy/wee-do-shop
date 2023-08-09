@@ -13,13 +13,13 @@ import orderStore from "../../store/OrderStore/order-store";
 type OrderViewerProps = {
     order: ApiOrderType
     onPressDetails: () => void
+    onPressRepeat: () => void
 }
-const OrderViewer = ({order, onPressDetails}: OrderViewerProps) => {
+const OrderViewer = ({order, onPressDetails, onPressRepeat}: OrderViewerProps) => {
     const {setOrderData, setStatus} = orderStore
-  const navigation = useNavigation<any>()
-    const onPressRepeat = () => {
 
-    }
+    const navigation = useNavigation<any>()
+
     const onPressCheckStatus = () => {
         setOrderData(order)
         setStatus(order.status)
@@ -47,7 +47,8 @@ const OrderViewer = ({order, onPressDetails}: OrderViewerProps) => {
                 }
                 {
                     !isCompletedStatuses &&
-                    <Button backgroundColor={colors.green} styleContainer={styles.containerBtn} onPress={onPressCheckStatus}
+                    <Button backgroundColor={colors.green} styleContainer={styles.containerBtn}
+                            onPress={onPressCheckStatus}
                             title={'Check status'}/>
                 }
 
@@ -61,7 +62,7 @@ const styles = StyleSheet.create({
         color: colors.black
     },
     containerBtn: {
-        maxWidth: 160,
+        maxWidth: 130,
         width: '100%'
     },
     container: {

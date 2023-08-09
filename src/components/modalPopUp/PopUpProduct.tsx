@@ -64,7 +64,7 @@ const PopUpProduct = ({
                             <Text>Price: 1g</Text>
                             <Text>฿ {formatProductPrice(product?.price)}</Text>
                         </Box>
-                        <SliderComponent valueSlider={currentValueToCartProduct?.productValue ?? 0}
+                        <SliderComponent valueSlider={currentValueToCartProduct?.amount ?? 0}
                                          onChangeValue={saveSliderValue}/>
                     </Box>
                 </Box>
@@ -77,7 +77,7 @@ const PopUpProduct = ({
                 flexDirection={'row'}
                 alignItems={'center'}>
                 <Box w={'40%'}>
-                    <InputNumber values={currentValueToCartProduct?.productValue ?? 0} onChangeValue={saveInputNumberValue}/>
+                    <InputNumber values={currentValueToCartProduct?.amount ?? 0} onChangeValue={saveInputNumberValue}/>
                 </Box>
                 <Box minWidth={150}>
                     <Button backgroundColor={colors.green} styleContainer={styles.styleContainerBtn}

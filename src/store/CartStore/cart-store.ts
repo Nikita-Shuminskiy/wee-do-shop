@@ -3,7 +3,7 @@ import {ProductType} from "../../api/productApi";
 import {getTotalSumProductsCart, updateValueCartProducts} from "../../utils/utilsCart";
 
 export type ProductCartType = ProductType & {
-    productValue: number
+    amount: number
 }
 export type CartType = {
     idStore: string,
@@ -16,8 +16,8 @@ export class CartStore {
 
     cart: CartType | null = null
 
-    setToCartStore(carts: CartType | null) {
-        this.cart = carts
+    setToCartStore(cart: CartType | null) {
+        this.cart = cart
     }
 
     removeCart() {

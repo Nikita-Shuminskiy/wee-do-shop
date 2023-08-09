@@ -71,11 +71,11 @@ const ProductViewer = ({product, onPressProduct, saveProductToCart, currentCartS
                         color={colors.balck}>{product?.name}</Text>
                     <Box mt={5} height={50}>
                         {
-                            !currentValueToCartProduct?.productValue ? <Button styleText={styles.styleTextBtn}
-                                                                               backgroundColor={colors.grayDarkLight}
-                                                                               onPress={onPressProductHandler}
-                                                                               title={`฿ ${productTotalPrice}`}/> :
-                                <InputNumber values={currentValueToCartProduct?.productValue}
+                            !currentValueToCartProduct?.amount ? <Button styleText={styles.styleTextBtn}
+                                                                         backgroundColor={colors.grayDarkLight}
+                                                                         onPress={onPressProductHandler}
+                                                                         title={`฿ ${productTotalPrice}`}/> :
+                                <InputNumber values={currentValueToCartProduct?.amount}
                                              onChangeValue={onChangeValueNumber}/>
                         }
 
