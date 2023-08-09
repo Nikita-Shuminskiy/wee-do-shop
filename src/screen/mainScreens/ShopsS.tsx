@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {BaseWrapperComponent} from "../../components/baseWrapperComponent";
 import {colors} from "../../assets/colors/colors";
 import {Box, Text} from "native-base";
@@ -31,7 +31,7 @@ export type ShopsSType = {
     navigation: NavigationProp<ParamListBase>
 }
 const ShopsS = observer(({navigation}: ShopsSType) => {
-
+    const {StoresService } = rootStore
     const {user} = AuthStore
     const {StoresStore} = rootStore
     const {stores, setStore} = StoresStore
@@ -47,7 +47,9 @@ const ShopsS = observer(({navigation}: ShopsSType) => {
             />
         )
     }
-
+    useEffect(() => {
+        StoresService.getStores()
+    }, [])
     return (
         <BaseWrapperComponent backgroundColor={colors.white} isKeyboardAwareScrollView={true}>
             <Box>

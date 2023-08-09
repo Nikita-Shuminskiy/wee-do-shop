@@ -26,8 +26,9 @@ const Loading = memo(({visible}: any) => {
     return (
         <Modal style={{ backgroundColor: 'rgba(255, 0, 0, 0,2)' }} animationType={'fade'} transparent={true} visible={visible} >
           {/*  <BlurView intensity={10} tint="light" style={StyleSheet.absoluteFillObject} />*/}
-            <Box flex={1}   justifyContent={'center'} alignItems={'center'}>
-                <ImageBackground  style={styles.imgLogo} source={logo}>
+            <Box style={[StyleSheet.absoluteFillObject, styles.blurBackground]}/>
+            <Box flex={1}  backgroundColor={'transparent'} justifyContent={'center'} alignItems={'center'}>
+                <ImageBackground   style={[styles.imgLogo]} source={logo}>
                     <Animated.Image
                         style={{
                             width: 92,
@@ -46,9 +47,13 @@ const styles = StyleSheet.create({
         alignItems: 'center', justifyContent: 'center', width: 60,
         height: 57,
     },
+    blurBackground: {
+        backgroundColor: 'rgba(255,255,255,0.32)',
+        backdropFilter: 10,
+    },
     blurContainer: {
         ...StyleSheet.absoluteFillObject,
-        backgroundColor: 'rgba(255,253,253,0.5)', // Подобрать цвет и уровень прозрачности по вашему выбору
+        backgroundColor: 'rgba(255,253,253,0.5)',
     },
 })
 export default Loading

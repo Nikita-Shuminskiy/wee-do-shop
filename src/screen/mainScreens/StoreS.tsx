@@ -44,7 +44,7 @@ const updateProduct = (currentCartStore, item, productValue, setCurrentCartStore
     });
 };
 const addProductToCart = (currentCartStore, item, productValue, setCurrentCartStore) => {
-    const newProduct = {...item, productValue: productValue}
+    const newProduct = {...item, amount: productValue}
     setCurrentCartStore({
         ...currentCartStore,
         totalSum: currentCartStore.totalSum ?
