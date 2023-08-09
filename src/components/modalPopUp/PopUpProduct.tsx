@@ -43,7 +43,7 @@ const PopUpProduct = ({
 
     return (
         <>
-            <ModalPopup visible={show} onClose={onClose}>
+            <ModalPopup style={{}} visible={show} onClose={onClose}>
                 <Box flex={1} w={'100%'} justifyContent={'space-between'}>
                     <Image source={photoTest} alt={'photoProduct'}/>
                     <Text mb={2} mt={2} fontSize={16} fontWeight={'600'}> {product?.name}</Text>

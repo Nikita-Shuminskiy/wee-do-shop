@@ -1,9 +1,9 @@
 import React, {useState} from 'react'
-import {StyleSheet, TouchableOpacity} from 'react-native'
+import {StyleSheet, TouchableOpacity, TextInput} from 'react-native'
 import {NavigationProp, ParamListBase} from '@react-navigation/native'
 import {BaseWrapperComponent} from '../../components/baseWrapperComponent'
 import {Box, Image, Text} from 'native-base'
-import TextInput from '../../components/TextInput'
+import CustomInput from '../../components/TextInput'
 import {AntDesign, MaterialCommunityIcons} from '@expo/vector-icons'
 import logoImg from '../../assets/images/logoWeeDo.png'
 import {useFormik} from 'formik'
@@ -37,7 +37,7 @@ export type UserRegisterDataType = {
 }
 const RegisterS = observer(({navigation}: LoginSProps) => {
     const {AuthStoreService} = rootStore
-    const {currentLocation} = AuthStore
+    const {currentLocation, setLocation} = AuthStore
     const [isValidPhone, setIsValidPhone] = useState(false)
 
     const onSubmit = (values: UserRegisterDataType) => {
@@ -111,38 +111,38 @@ const RegisterS = observer(({navigation}: LoginSProps) => {
             <Box w={'100%'} alignItems={'center'} justifyContent={'flex-start'} flex={1} paddingX={5}>
 
                 <Box w={'100%'} mb={5}>
-                    <TextInput onChangeText={handleChange('firstName')}
-                               placeholder={'First name*'}
-                               value={values.firstName}
-                               onBlur={handleBlur('firstName')}
-                               errorMessage={!values.firstName.trim() && 'Enter a name'}
-                               isInvalid={!!(errors.email && !validateEmail(values.email.trim()))}
-                               isRequired={true}
-                               borderRadius={16}
-                               iconRight={<AntDesign name='user' size={24} color={colors.gray}/>}
-                               type={'text'}/>
+                    <CustomInput onChangeText={handleChange('firstName')}
+                                 placeholder={'First name*'}
+                                 value={values.firstName}
+                                 onBlur={handleBlur('firstName')}
+                                 errorMessage={!values.firstName.trim() && 'Enter a name'}
+                                 isInvalid={!!(errors.email && !validateEmail(values.email.trim()))}
+                                 isRequired={true}
+                                 borderRadius={16}
+                                 iconRight={<AntDesign name='user' size={24} color={colors.gray}/>}
+                                 type={'text'}/>
 
-                    <TextInput onChangeText={handleChange('lastName')}
-                               placeholder={'Last name'}
-                               value={values.lastName}
-                               onBlur={handleBlur('lastName')}
-                               errorMessage={!values.firstName.trim() && 'Enter a name'}
-                               isInvalid={!!(errors.email && !validateEmail(values.email.trim()))}
-                               isRequired={true}
-                               borderRadius={16}
-                               iconRight={<AntDesign name='user' size={24} color={colors.gray}/>}
-                               type={'text'}/>
+                    <CustomInput onChangeText={handleChange('lastName')}
+                                 placeholder={'Last name'}
+                                 value={values.lastName}
+                                 onBlur={handleBlur('lastName')}
+                                 errorMessage={!values.firstName.trim() && 'Enter a name'}
+                                 isInvalid={!!(errors.email && !validateEmail(values.email.trim()))}
+                                 isRequired={true}
+                                 borderRadius={16}
+                                 iconRight={<AntDesign name='user' size={24} color={colors.gray}/>}
+                                 type={'text'}/>
 
-                    <TextInput onChangeText={handleChange('email')}
-                               placeholder={'Email*'}
-                               value={values.email}
-                               onBlur={handleBlur('email')}
-                               errorMessage={!validateEmail(values.email.trim()) && errors.email && 'Incorrect email address entered'}
-                               isInvalid={!!(errors.email && !validateEmail(values.email.trim()))}
-                               isRequired={true}
-                               borderRadius={16}
-                               type={'text'}
-                               iconRight={<MaterialCommunityIcons name={'email-edit-outline'} size={24}
+                    <CustomInput onChangeText={handleChange('email')}
+                                 placeholder={'Email*'}
+                                 value={values.email}
+                                 onBlur={handleBlur('email')}
+                                 errorMessage={!validateEmail(values.email.trim()) && errors.email && 'Incorrect email address entered'}
+                                 isInvalid={!!(errors.email && !validateEmail(values.email.trim()))}
+                                 isRequired={true}
+                                 borderRadius={16}
+                                 type={'text'}
+                                 iconRight={<MaterialCommunityIcons name={'email-edit-outline'} size={24}
                                                                   color={colors.gray}/>}/>
                     <Box mt={2}>
                         <PhoneNumberField onValidNumber={onValidNumberHandler}
@@ -152,35 +152,35 @@ const RegisterS = observer(({navigation}: LoginSProps) => {
                                           defaultValue={values.phone}
                                           onChangeText={handleChange('phone')}/>
                     </Box>
-                    <TextInput onChangeText={handleChange('password')}
-                               placeholder={'Password*'}
-                               onBlur={handleBlur('password')}
-                               isInvalid={!!(errors.password && values.password.length <= 3)}
-                               errorMessage={
+                    <CustomInput onChangeText={handleChange('password')}
+                                 placeholder={'Password*'}
+                                 onBlur={handleBlur('password')}
+                                 isInvalid={!!(errors.password && values.password.length <= 3)}
+                                 errorMessage={
                                    !!errors.password &&
                                    values.password.length <= 3 &&
                                    'The password must be at least 4 characters long'
                                }
-                               value={values.password}
-                               isRequired={true}
-                               type={'password'} borderRadius={16}/>
+                                 value={values.password}
+                                 isRequired={true}
+                                 type={'password'} borderRadius={16}/>
 
-                    <TextInput onChangeText={handleChange('confirmPassword')}
-                               placeholder={'Confirm password*'}
-                               onBlur={handleBlur('confirmPassword')}
-                               value={values.confirmPassword}
-                               errorMessage={
+                    <CustomInput onChangeText={handleChange('confirmPassword')}
+                                 placeholder={'Confirm password*'}
+                                 onBlur={handleBlur('confirmPassword')}
+                                 value={values.confirmPassword}
+                                 errorMessage={
                                    (touched.confirmPassword && errors.confirmPassword && !values.confirmPassword) ||
                                    (values.confirmPassword !== values.password && touched.confirmPassword)
                                        ? 'The passwords dont match'
                                        : ''
                                }
-                               isRequired={true}
-                               isInvalid={
+                                 isRequired={true}
+                                 isInvalid={
                                    !!(touched.confirmPassword && errors.confirmPassword && !values.confirmPassword) ||
                                    !!(values.confirmPassword !== values.password && touched.confirmPassword)
                                }
-                               type={'password'} borderRadius={16}/>
+                                 type={'password'} borderRadius={16}/>
                 </Box>
                 <Box alignItems={'center'}>
                     <TouchableOpacity onPress={onPressNavigateToLocation}>
@@ -190,6 +190,21 @@ const RegisterS = observer(({navigation}: LoginSProps) => {
                     {formatted_address &&
                         <Text fontSize={16} fontWeight={'600'}>{formatted_address}</Text>}
 
+                </Box>
+                <Box w={'100%'} alignItems={'flex-start'}>
+                    <Text color={colors.gray}>Apartment</Text>
+                    <TextInput
+                        placeholder={'Enter apartment'}
+                        style={styles.input}
+                        keyboardType="numeric"
+                        value={currentLocation?.fullAddress?.apartment}
+                        onChangeText={(text) => {
+                            setLocation({
+                                ...currentLocation,
+                                fullAddress: {...currentLocation?.fullAddress, apartment: text}
+                            })
+                        }}
+                    />
                 </Box>
                 <Box w={'100%'} mt={5} mb={5}>
                     <Button styleContainer={styles.styleContainerBtnUp} disabled={
@@ -202,6 +217,10 @@ const RegisterS = observer(({navigation}: LoginSProps) => {
     )
 })
 const styles = StyleSheet.create({
+    input: {
+        borderRadius: 16,
+        color: colors.gray
+    },
     styleContainerBtn: {
         borderWidth: 1,
         backgroundColor: 'transparent',

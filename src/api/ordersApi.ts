@@ -49,6 +49,7 @@ export type ApiOrderType = {
         amount: number,
         product: ProductType
     }[],
+    store: StoreType
     totalPrice: 0,
     status: StatusType,
     comment: string,

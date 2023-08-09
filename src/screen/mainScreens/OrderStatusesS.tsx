@@ -31,8 +31,6 @@ const renderImgForStatuses = (status: StatusType) => {
             return courierImg
         case StatusType.Completed:
             return arrivedImg
-
-        // временно
         case StatusType.Canceled:
             return placedImg
         default:
@@ -45,20 +43,14 @@ type OrderStatusesSProps = {
 }
 const OrderStatusesS = observer(({navigation}: OrderStatusesSProps) => {
     const {order, statusOrder, setStatus} = orderStore
-
     useEffect(() => {
         const socket = io('https://weedo-demo-production.up.railway.app/');
-        console.log(order._id)
         socket.on('connect', () => {
             console.log('Подключено к серверу Socket.IO');
         });
         socket.on(`orderStatusUpdated:${order._id}`, (data: { orderId: string, status: StatusType }) => {
             setStatus(data.status)
         })
-        /*return () => {
-            socket.disconnect();
-        };*/
-
     }, []);
 
     const onPressClose = () => {
@@ -70,7 +62,7 @@ const OrderStatusesS = observer(({navigation}: OrderStatusesSProps) => {
             <Box paddingX={5} mt={5} justifyContent={'space-evenly'} flex={1}>
                 <Box flexDirection={'row'} alignItems={'center'} justifyContent={'center'}>
                     <Box flex={9} justifyContent={'center'} alignItems={'center'}>
-                        <Text fontSize={18} fontWeight={'500'}>Simply crafted store</Text>
+                        <Text fontSize={18} fontWeight={'500'}>{order?.store.name}</Text>
                     </Box>
                     <Box flex={1}>
                         <TouchableOpacity onPress={onPressClose}>

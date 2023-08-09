@@ -8,7 +8,7 @@ export type fullAddressType = {
     city: string
     street: string
     house: string
-    apartment?: string
+    apartment: string
     postalCode: string
 }
 export type AddressType = {
@@ -65,11 +65,11 @@ export class AuthStore {
     }
 
 
-    logOut() {
+   async logOut() {
         this.user = null
         this.isAuth = false
-        deviceStorage.removeItem('refreshToken')
-        deviceStorage.removeItem('accessToken')
+        await deviceStorage.removeItem('refreshToken')
+        await deviceStorage.removeItem('accessToken')
     }
 
     setLocation(data: AddressType) {

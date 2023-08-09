@@ -28,7 +28,7 @@ const OrderViewer = ({order, onPressDetails}: OrderViewerProps) => {
     const isCompletedStatuses = order?.status === StatusType.Completed
     return (<Box style={styles.container}>
             <Box flexDirection={'row'} justifyContent={'space-between'}>
-                <Text fontWeight={'600'} fontSize={16}>Simply Crafted Store</Text>
+                <Text fontWeight={'600'} fontSize={16}>{order?.store?.name}</Text>
                 <Text fontWeight={'600'} fontSize={16}>฿{formatProductPrice(order.totalPrice)}</Text>
             </Box>
             <Box flexDirection={'row'} mt={1} justifyContent={'space-between'}>
