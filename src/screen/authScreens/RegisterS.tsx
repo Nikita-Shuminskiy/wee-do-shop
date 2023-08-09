@@ -182,7 +182,7 @@ const RegisterS = observer(({navigation}: LoginSProps) => {
                                }
                                  type={'password'} borderRadius={16}/>
                 </Box>
-                <Box alignItems={'center'}>
+                <Box alignItems={'center'} mb={1}>
                     <TouchableOpacity onPress={onPressNavigateToLocation}>
                         <Image w={170} h={105} alt={'location'} source={location}/>
                         <Text color={colors.gray} mt={2} fontWeight={'500'}> Add you location address*</Text>
@@ -191,14 +191,16 @@ const RegisterS = observer(({navigation}: LoginSProps) => {
                         <Text fontSize={16} fontWeight={'600'}>{formatted_address}</Text>}
 
                 </Box>
-                <Box w={'100%'} alignItems={'flex-start'}>
-                    <Text color={colors.gray}>Apartment</Text>
+                <Box w={'100%'} flex={1} alignItems={'flex-start'}>
                     <TextInput
                         placeholder={'Enter apartment'}
                         style={styles.input}
                         keyboardType="numeric"
                         value={currentLocation?.fullAddress?.apartment}
                         onChangeText={(text) => {
+                            if(text.length > 5) {
+                                return
+                            }
                             setLocation({
                                 ...currentLocation,
                                 fullAddress: {...currentLocation?.fullAddress, apartment: text}
@@ -218,7 +220,12 @@ const RegisterS = observer(({navigation}: LoginSProps) => {
 })
 const styles = StyleSheet.create({
     input: {
+        width: '100%',
+        paddingVertical: 5,
+        paddingLeft: 20,
         borderRadius: 16,
+        borderWidth: 1,
+        borderColor: colors.grayLight,
         color: colors.gray
     },
     styleContainerBtn: {

@@ -4,10 +4,10 @@ import {Image, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import logo from "../../assets/images/logoWitchWiFi.png";
 import TextInput from "../../components/TextInput";
 import {colors} from "../../assets/colors/colors";
-import {LinearGradient} from "expo-linear-gradient";
 import ArrowBack from "../../components/ArrowBack";
 import * as Localization from "expo-localization";
 import arrowBack from "../../assets/images/keyboard_arrow_left-He.png"
+
 const ResetPasswordS = ({navigation}) => {
     const checkLanguage = Localization.locale.includes('he')
     return (
@@ -15,20 +15,26 @@ const ResetPasswordS = ({navigation}) => {
             <ArrowBack img={checkLanguage ? arrowBack : null} goBackPress={() => navigation.goBack()}/>
             <View style={styles.container}>
                 <View
-                    style={{justifyContent: 'center', flex: 1,  alignItems: 'center', flexDirection: 'column', marginTop: 10, marginBottom: 30}}>
-                    <Image style={[styles.logo, {marginRight: checkLanguage ? 70 : 0, marginLeft: checkLanguage ? 0 : 70}]} source={logo}/>
+                    style={{
+                        justifyContent: 'center',
+                        flex: 1,
+                        alignItems: 'center',
+                        flexDirection: 'column',
+                        marginTop: 10,
+                        marginBottom: 30
+                    }}>
+                    <Image
+                        style={[styles.logo, {marginRight: checkLanguage ? 70 : 0, marginLeft: checkLanguage ? 0 : 70}]}
+                        source={logo}/>
                     <Text style={styles.textHeader}>Reset password</Text>
                 </View>
                 <View style={{flex: 1, flexDirection: 'column', alignItems: 'center', justifyContent: 'space-between'}}>
                     <View>
                         <TextInput placeholder={'Email Address'} style={styles.input}/>
 
-                        <TouchableOpacity onPress={() => {}}>
-                            <LinearGradient
-                                colors={['#89BDE7', '#7EA7D9']}
-                                style={styles.button}>
-                                <Text style={styles.text}>Reset password</Text>
-                            </LinearGradient>
+                        <TouchableOpacity onPress={() => {
+                        }}>
+                            <Text style={styles.text}>Reset password</Text>
                         </TouchableOpacity>
                     </View>
                 </View>

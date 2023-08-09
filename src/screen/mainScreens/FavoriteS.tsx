@@ -72,6 +72,7 @@ const FavoriteS = observer(({navigation}: FavoriteSType) => {
                     </Box>
 
                     <FlatList
+                        scrollEnabled={false}
                         data={favoriteStores}
                         renderItem={storesViews}
                         keyExtractor={(item, index) => index.toString()}

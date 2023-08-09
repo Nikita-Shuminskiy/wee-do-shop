@@ -17,7 +17,7 @@ type StoreViewerProps = {
 }
 const ProductViewer = ({product, onPressProduct, saveProductToCart, currentCartStore}: StoreViewerProps) => {
     const {width} = Dimensions.get('window');
-    const productWidth = (width - 15) / 2;
+    const productWidth = (width - 10) / 2;
     const currentValueToCartProduct = currentCartStore?.products.find(cart => cart._id === product?._id)
     const productTotalPrice = formatProductPrice(product.price)
 

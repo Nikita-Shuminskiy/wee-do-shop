@@ -111,7 +111,7 @@ const StoreS = observer(({navigation}: StoreSProps) => {
         }
         addProductToCart(currentCartStore, selectedProduct, productValue, setCurrentCartStore)
     }
-    const productViews = ({item}: { item: ProductType }) => {
+    const productViews = ({item, index}: { item: ProductType, index: number }) => {
         const onPressProduct = () => {
             setSelectedProduct(item)
             setIsShowModalProduct(true)
@@ -127,7 +127,6 @@ const StoreS = observer(({navigation}: StoreSProps) => {
             }
             addProductToCart(currentCartStore, item, productValue, setCurrentCartStore)
         }
-
         return (
             <ProductViewer
                 currentCartStore={currentCartStore}
