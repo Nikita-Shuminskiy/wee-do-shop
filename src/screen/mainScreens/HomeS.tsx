@@ -88,17 +88,17 @@ const HomeS = observer(({navigation}: HomeSProps) => {
     }, [])
 
     return (
-        <BaseWrapperComponent backgroundColor={colors.white} isKeyboardAwareScrollView={true}>
-            <Box>
+        <BaseWrapperComponent backgroundColor={colors.white} isKeyboardAwareScrollView={!!stores?.length}>
+            <Box w={'100%'} flex={1} >
                 <HeaderUser
                     address={user?.address}
                     navigation={navigation}
                 />
-                <Box mt={2} w={'100%'} backgroundColor={colors.white} borderTopLeftRadius={16}
+                <Box mt={2} w={'100%'} flex={1}  borderTopLeftRadius={16}
                      borderTopRightRadius={16}>
                     <SearchStores selectedSubCategoryId={selectedSubCategoryId}/>
 
-                    <Box mt={5} marginX={2} mb={2}>
+                    <Box mt={5} marginX={2} mb={2} w={'100%'} flex={1}>
                         <FlatList
                             data={categories}
                             renderItem={categoriesViews}
@@ -113,15 +113,15 @@ const HomeS = observer(({navigation}: HomeSProps) => {
                             showsHorizontalScrollIndicator={false}
                         />
                     </Box>
-                    <Box>
+                    <Box flex={5} >
                         <FlatList
                             data={stores}
                             renderItem={storesViews}
                             keyExtractor={(item, index) => item._id.toString()}
                             style={{width: '100%'}}
-                            ListEmptyComponent={() => renderEmptyContainer(Dimensions.get('window').height, 'List is empty')}
+                            ListEmptyComponent={() => renderEmptyContainer(0, 'List is empty')}
                             contentContainerStyle={
-                                !stores?.length ? styles.contentContainerStyle : {width: '100%', flex: 1}
+                                !stores?.length && styles.contentContainerStyle
                             }
                         />
                     </Box>

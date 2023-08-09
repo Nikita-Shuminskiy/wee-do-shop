@@ -13,7 +13,7 @@ type EmptyListProps = {
 const EmptyList = ({ text, onPressLink, styleText, styleLink, height }: EmptyListProps) => {
 
 	return (
-		<Box alignItems={'center'} justifyContent={'flex-start'}  height={height}>
+		<Box alignItems={'center'} flex={1} w={'100%'} justifyContent={'center'}  height={height}>
 			<Text fontSize={18} color={colors.gray}>
 				{text}
 			</Text>

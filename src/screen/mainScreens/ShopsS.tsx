@@ -14,6 +14,19 @@ import rootStore from "../../store/RootStore/root-store";
 import ShopsViewer from "../../components/list-viewer/ShopsViewer";
 import {observer} from "mobx-react-lite";
 
+const renderEmptyContainer = (height, text) => {
+    const onPressLink = () => {
+
+    }
+    return (
+        <EmptyList
+            height={height}
+            text={text}
+            onPressLink={onPressLink}
+        />
+    )
+}
+
 export type ShopsSType = {
     navigation: NavigationProp<ParamListBase>
 }
@@ -34,18 +47,6 @@ const ShopsS = observer(({navigation}: ShopsSType) => {
             />
         )
     }
-    const renderEmptyContainer = (height, text) => {
-        const onPressLink = () => {
-
-        }
-        return (
-            <EmptyList
-                height={height}
-                text={text}
-                onPressLink={onPressLink}
-            />
-        )
-    }
 
     return (
         <BaseWrapperComponent backgroundColor={colors.white} isKeyboardAwareScrollView={true}>
@@ -62,7 +63,7 @@ const ShopsS = observer(({navigation}: ShopsSType) => {
                         <FlatList
                             numColumns={2}
                             contentContainerStyle={
-                                !stores.length &&
+                                !stores?.length &&
                                 styles.contentContainerStyleProducts
                             }
                             columnWrapperStyle={{justifyContent: 'space-between'}}

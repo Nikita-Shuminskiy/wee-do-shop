@@ -10,14 +10,6 @@ import testImg from '../../assets/images/test.png'
 import {ProductType} from "../../api/productApi";
 import {getFormatDateToString} from "../../utils/utils";
 import {formatProductPrice} from "../MapViews/utils";
-
-type PopUpOrderDetailsProps = {
-    show: boolean
-    order: ApiOrderType
-    onClose: () => void
-    onPressRepeat: () => void
-}
-
 const renderEmptyContainer = (height, text) => {
     const onPressLink = () => {
     }
@@ -49,6 +41,14 @@ const orderViews = ({item}: { item: { amount: number; product: ProductType } }) 
         </Box>
     )
 }
+type PopUpOrderDetailsProps = {
+    show: boolean
+    order: ApiOrderType
+    onClose: () => void
+    onPressRepeat: (order: ApiOrderType) => void
+}
+
+
 const PopUpOrderDetails = ({
                                show,
                                onClose,
@@ -74,7 +74,7 @@ const PopUpOrderDetails = ({
                     {
                         order?.status === StatusType.Completed && <Box mt={4}>
                             <Button backgroundColor={colors.green} styleContainer={styles.containerBtn}
-                                    onPress={onPressRepeat}
+                                    onPress={() => onPressRepeat(order)}
                                     title={'Repeat order'}/>
                         </Box>
                     }

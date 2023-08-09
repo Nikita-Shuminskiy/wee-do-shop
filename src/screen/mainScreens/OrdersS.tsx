@@ -42,13 +42,22 @@ const OrdersS = observer(({navigation}: OrdersSProps) => {
     }, [])
 
     const onPressGoBack = () => {
-        navigation.navigate(routerConstants.MAIN)
+        navigation.navigate(routerConstants.PROFILE_USER)
     }
     const [isShowPopupDetails, setIsShowPopupDetails] = useState<boolean>(false)
     const [selectedOrder, setSelectedOrder] = useState<ApiOrderType>()
 
-    const onPressRepeat = () => {
-
+    const onPressRepeat = (item: ApiOrderType) => {
+        const getProductsForOrder = item.products.map((product) => {
+            return {amount: product.amount, ...product.product}
+        })
+        setToCartStore({
+            idStore: item.store._id,
+            products: getProductsForOrder,
+            storeName: item.store.name,
+            totalSum: item.totalPrice
+        })
+        navigation.navigate(routerConstants.CART)
     }
     const onClosePopUpAboutStore = () => {
         setIsShowPopupDetails(false)
@@ -59,21 +68,10 @@ const OrdersS = observer(({navigation}: OrdersSProps) => {
             setSelectedOrder(item)
             setIsShowPopupDetails(true)
         }
-        const onPressRepeat = () => {
-            const getProductsForOrder = item.products.map((product) => {
-                return {amount: product.amount, ...product.product}
-            })
-            setToCartStore({
-                idStore: item.store._id,
-                products: getProductsForOrder,
-                storeName: item.store.name,
-                totalSum: item.totalPrice
-            })
-            navigation.navigate(routerConstants.CART)
-        }
+
         return (
             <OrderViewer
-                onPressRepeat={onPressRepeat}
+                onPressRepeat={() =>  onPressRepeat(item)}
                 // selectedSubCategoryId={selectedSubCategoryId}
                 onPressDetails={onPressDetails}
                 order={item}
@@ -99,7 +97,7 @@ const OrdersS = observer(({navigation}: OrdersSProps) => {
                         <Text fontSize={28} fontWeight={'700'}>Orders</Text>
                     </Box>
                 </Box>
-                <Box mt={5} alignItems={'center'} flex={1}>
+                <Box mt={5} alignItems={'center'} flex={1} w={'100%'}>
                     <FlatList
                         data={orders ?? []}
                         renderItem={orderViews}
@@ -115,7 +113,7 @@ const OrdersS = observer(({navigation}: OrdersSProps) => {
                                 onRefresh={onRefresh}
                             />
                         }
-                        ListEmptyComponent={() => renderEmptyContainer(0, '')}
+                        ListEmptyComponent={() => renderEmptyContainer(0, 'You haven’t placed\n any orders yet.')}
                     />
                 </Box>
             </BaseWrapperComponent>

@@ -21,7 +21,7 @@ const UserProfileS = ({navigation}: UserProfileSProps) => {
     const {user, logOut} = AuthStore
 
     const onPressGoBack = () => {
-        navigation.goBack()
+        navigation.navigate(routerConstants.HOME)
     }
     const onPressLogOut = () => {
         logOut()
@@ -44,12 +44,14 @@ const UserProfileS = ({navigation}: UserProfileSProps) => {
                 <Box flexDirection={'row'} alignItems={'center'} pb={4} mt={4} borderBottomWidth={1}
                      borderColor={colors.grayLight}>
                     <FontAwesome5 name="clipboard-list" size={18} color="black"/>
-                    <Link styleText={styles.text} onPress={onPressOrderHandler}
-                          text={'Orders'}/>
+                    <Box ml={1}>
+                        <Link styleText={styles.text} onPress={onPressOrderHandler}
+                              text={'Orders'}/>
+                    </Box>
                 </Box>
                 <Box flexDirection={'row'} alignItems={'center'} pb={4} mt={4} borderBottomWidth={1}
                      borderColor={colors.grayLight}>
-                    <Ionicons style={{marginLeft: -1}} name="md-location" size={18} color="black"/>
+                    <Ionicons  name="md-location" size={18} color="black"/>
                     <Link styleText={styles.text} onPress={onPressGoAddress}
                           text={'Address'}/>
                 </Box>

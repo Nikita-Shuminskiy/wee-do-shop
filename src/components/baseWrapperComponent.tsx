@@ -24,6 +24,7 @@ export const BaseWrapperComponent = ({
     return (
         <SafeAreaView style={{
             flex: 1,
+            width: '100%',
             marginTop: Platform.OS === 'ios' ? 0 : 29,
             backgroundColor: backgroundColor, ...styleSafeArea
         }}>
