@@ -15,9 +15,7 @@ import GoogleAutocompleteMapS from "../screen/authScreens/GoogleAutocompleteMapS
 import MainNavigation from "./MainNavigation";
 import StoreS from "../screen/mainScreens/StoreS";
 import FavoriteS from "../screen/mainScreens/FavoriteS";
-import {deviceStorage} from "../utils/storage/storage";
 import UserProfileS from "../screen/mainScreens/UserProfileS";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import OrderStatusesS from "../screen/mainScreens/OrderStatusesS";
 import OrdersS from "../screen/mainScreens/OrdersS";
 import AddressS from "../screen/mainScreens/AddressS";

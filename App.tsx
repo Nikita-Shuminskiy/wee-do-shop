@@ -3,20 +3,6 @@ import RootNavigation from './src/navigation/RootNavigation'
 import { NativeBaseProvider } from 'native-base'
 import { LogBox } from "react-native"
 import {GestureHandlerRootView} from "react-native-gesture-handler";
-/*
-{
-  "build": {
-    "development": {
-      "developmentClient": true,
-      "distribution": "internal"
-    },
-    "preview": {
-      "distribution": "internal"
-    },
-    "production": {}
-  }
-}
-*/
 LogBox.ignoreLogs([
 	'In React 18, SSRProvider is not necessary and is a noop. You can remove it from your app.',
 ])

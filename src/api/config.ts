@@ -35,14 +35,24 @@ instance.interceptors.response.use(
     async function (error) {
         const originalRequest = error.config;
         const refreshToken = await AsyncStorage.getItem('refreshToken');
+
         if ((error.response.status === 401 && !originalRequest._retry) && refreshToken) {
             originalRequest._retry = true;
-            const {data} = await instance.post<DataLoginType>(`auth/refresh`, {refreshToken});
-            //	axios.defaults.headers.common['authorization'] = 'Bearer ' + data.accessToken;
-            await deviceStorage.saveItem('refreshToken', data.refreshToken)
-            await deviceStorage.saveItem('accessToken', data.accessToken)
+            try {
+                const {data} = await axios.post<DataLoginType>(`${url}auth/refresh`, {refreshToken: refreshToken});
+
+                originalRequest.headers['Authorization'] = 'Bearer' + data.accessToken;
+                await deviceStorage.saveItem('refreshToken', data.refreshToken)
+                await deviceStorage.saveItem('accessToken', data.accessToken)
+            } catch (e) {
+                console.log(e, 'error interceptors')
+            }
+
             return instance(originalRequest);
+
+
         }
+
         return Promise.reject(error);
     },
 );
