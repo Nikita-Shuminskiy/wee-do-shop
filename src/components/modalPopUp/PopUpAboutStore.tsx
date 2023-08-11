@@ -1,6 +1,6 @@
 import React from 'react';
 import {Box, Text} from "native-base";
-import {Linking, StyleSheet, View} from 'react-native';
+import {Linking, StyleSheet} from 'react-native';
 import ModalPopup from "../pop-up";
 import {colors} from "../../assets/colors/colors";
 import {StoreType} from "../../api/storesApi";

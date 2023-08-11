@@ -39,4 +39,9 @@ export type UserType = {
 	createdAt: string,
 	updatedAt: string
 }
-export type RoleType = 'customer' | 'admin' | 'store' | 'courier'
+export enum RoleType {
+	Customer = 'customer',
+	Admin = 'admin',
+	Store = 'store',
+	Courier = 'courier',
+}

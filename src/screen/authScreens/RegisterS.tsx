@@ -109,7 +109,6 @@ const RegisterS = observer(({navigation}: LoginSProps) => {
                 <Image w={123} h={158} alt={'logo'} source={logoImg} mt={5} mb={5}/>
             </Box>
             <Box w={'100%'} alignItems={'center'} justifyContent={'flex-start'} flex={1} paddingX={5}>
-
                 <Box w={'100%'} mb={5}>
                     <CustomInput onChangeText={handleChange('firstName')}
                                  placeholder={'First name*'}

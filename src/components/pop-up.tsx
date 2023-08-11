@@ -4,7 +4,7 @@ import {Modalize} from 'react-native-modalize';
 type ModalPopupProps = {
     visible: boolean
     onClose: () =>void
-    style: any
+    style?: any
     children: any
 }
 const ModalPopup = ({visible, onClose, children, style}: ModalPopupProps) => {

@@ -15,4 +15,9 @@ export const routerConstants = {
     PROFILE_USER: 'profile-user',
     HISTORY: 'history',
     CART: 'cart',
+
+    //courier
+    COURIER_REGISTER: 'courier-register',
+    COURIER_ORDERS: 'courier-orders',
+    COURIER_PICK_ORDER: 'courier-pick-order',
 }

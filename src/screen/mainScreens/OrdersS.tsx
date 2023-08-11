@@ -7,26 +7,16 @@ import ArrowBack from "../../components/ArrowBack";
 import arrowLeftBack from "../../assets/images/arrow-left.png";
 import {NavigationProp, ParamListBase} from "@react-navigation/native";
 import {colors} from "../../assets/colors/colors";
-import {FlatList, StyleSheet, RefreshControl} from "react-native";
-import EmptyList from "../../components/list-viewer/empty-list";
+import {FlatList, RefreshControl, StyleSheet} from "react-native";
 import {ApiOrderType} from "../../api/ordersApi";
 import OrderViewer from "../../components/list-viewer/OrderViewer";
 import {observer} from "mobx-react-lite";
 import PopUpOrderDetails from "../../components/modalPopUp/PopUpOrderDetails";
 import {routerConstants} from "../../constants/routerConstants";
 import cartStore from "../../store/CartStore/cart-store";
+import {renderEmptyContainer} from "../../components/list-viewer/empty-list";
 
-const renderEmptyContainer = (height, text) => {
-    const onPressLink = () => {
-    }
-    return (
-        <EmptyList
-            height={height}
-            text={text}
-            onPressLink={onPressLink}
-        />
-    )
-}
+
 type OrdersSProps = {
     navigation: NavigationProp<ParamListBase>
 }
@@ -89,7 +79,7 @@ const OrdersS = observer(({navigation}: OrdersSProps) => {
     return (
         <>
             <BaseWrapperComponent backgroundColor={colors.white} isKeyboardAwareScrollView={false}>
-                <Box flexDirection={'row'} mt={5} justifyContent={'space-between'} alignItems={'center'}>
+                <Box  flexDirection={'row'} mt={5} justifyContent={'space-between'} alignItems={'center'}>
                     <Box mb={5} position={'absolute'} left={5}>
                         <ArrowBack goBackPress={onPressGoBack} img={arrowLeftBack}/>
                     </Box>

@@ -13,15 +13,15 @@ type BaseWrapperComponentType = {
     backgroundColor?: string
     extraScrollHeight?: number
 }
-export const BaseWrapperComponent = forwardRef<any, any>(({
-                                                    children,
-                                                    onTouchEnd,
-                                                    onTouchStart,
-                                                    isKeyboardAwareScrollView = false,
-                                                    styleSafeArea,
-                                                    backgroundColor = 'transparent',
-                                                              extraScrollHeight
-                                                }: BaseWrapperComponentType, ref) => {
+export const BaseWrapperComponent = ({
+                                         children,
+                                         onTouchEnd,
+                                         onTouchStart,
+                                         isKeyboardAwareScrollView = false,
+                                         styleSafeArea,
+                                         backgroundColor = 'transparent',
+                                         extraScrollHeight
+                                     }: BaseWrapperComponentType) => {
 
     return (
         <SafeAreaView style={{
@@ -32,28 +32,28 @@ export const BaseWrapperComponent = forwardRef<any, any>(({
         }}>
             {isKeyboardAwareScrollView ? (
 
-                        <KeyboardAwareScrollView
-                            enableOnAndroid={true}
-                            extraScrollHeight={extraScrollHeight}
-                            keyboardShouldPersistTaps={'handled'}
-                            contentContainerStyle={{
-                                marginBottom: 10,
-                                flexGrow: 1,
-                                width: '100%',
-                            }}
-                            style={{
-                                flex: 1,
-                                width: '100%'
-                            }}
-                            onTouchStart={onTouchStart}
-                            onTouchEnd={onTouchEnd}
-                        >
-                            {children}
-                        </KeyboardAwareScrollView>
+                <KeyboardAwareScrollView
+                    enableOnAndroid={true}
+                    extraScrollHeight={extraScrollHeight}
+                    keyboardShouldPersistTaps={'handled'}
+                    contentContainerStyle={{
+                        marginBottom: 10,
+                        flexGrow: 1,
+                        width: '100%',
+                    }}
+                    style={{
+                        flex: 1,
+                        width: '100%'
+                    }}
+                    onTouchStart={onTouchStart}
+                    onTouchEnd={onTouchEnd}
+                >
+                    {children}
+                </KeyboardAwareScrollView>
 
             ) : (
                 children
             )}
         </SafeAreaView>
     )
-})
+}

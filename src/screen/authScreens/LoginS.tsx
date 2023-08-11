@@ -51,6 +51,9 @@ const LoginS = ({ navigation }: LoginSProps) => {
 	const onPressSignUpHandler = () => {
 		navigation.navigate(routerConstants.REGISTRATION)
 	}
+	const onPressCourierHandler = () => {
+		navigation.navigate(routerConstants.COURIER_REGISTER)
+	}
 	return (<BaseWrapperComponent isKeyboardAwareScrollView={true}>
 			<Box w={'100%'} alignItems={'center'} justifyContent={'space-evenly'} flex={1} paddingX={5}>
 				<Image w={247} h={318} alt={'logo'} source={logoImg} mt={5} />
@@ -89,6 +92,9 @@ const LoginS = ({ navigation }: LoginSProps) => {
 					} onPress={handleSubmit} title={'Sign in'} />
 					<Button styleContainer={styles.styleContainerBtnUp} backgroundColor={'white'} onPress={onPressSignUpHandler}
 									title={'Sign up'} />
+					{/*<Box mt={3}>
+						<Link onPress={onPressCourierHandler} styleText={styles.linkCourierText} text={'Become a courier'} />
+					</Box>*/}
 				</Box>
 				<PrivacyPolicy/>
 			</Box>
@@ -96,6 +102,12 @@ const LoginS = ({ navigation }: LoginSProps) => {
 	)
 }
 const styles = StyleSheet.create({
+	linkCourierText: {
+		fontSize: 18,
+		color: colors.gray,
+		borderBottomWidth: 1,
+		borderColor: colors.gray,
+	},
 	textBtn: {
 		color: colors.black
 	},

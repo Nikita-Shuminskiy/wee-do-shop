@@ -5,7 +5,7 @@ export const colors: { [key: string]: string } = {
 	orange: '#EBB52B',
 	green: '#699315',
 
-	grayLight: '#E8DADA',
+	grayLight: '#E7E7E7',
 	blueLight: 'rgba(0,31,91,0.08)',
 
 	grayDarkLight: 'rgba(232,232,232,0.46)',
