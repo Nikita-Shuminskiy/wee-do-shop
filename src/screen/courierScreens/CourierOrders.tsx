@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {BaseWrapperComponent} from "../../components/baseWrapperComponent";
 import {Box, Text} from "native-base";
 import {FlatList, RefreshControl, StyleSheet, TouchableOpacity} from "react-native";
@@ -6,8 +6,10 @@ import {renderEmptyContainer} from "../../components/list-viewer/empty-list";
 import {ApiOrderType} from "../../api/ordersApi";
 import OrderViewer from "../../components/list-viewer/OrderViewer";
 import OrderCourierViewer from "../../components/list-viewer/OrderCourierViewer";
+import AuthStore from "../../store/AuthStore/auth-store";
 
 const CourierOrders = () => {
+    const {logOut} = AuthStore
     const [refreshing, setRefreshing] = useState(false);
     const onPressHiddenOrders = () => {
 
@@ -28,6 +30,9 @@ const CourierOrders = () => {
             <OrderCourierViewer order={item}/>
         )
     }
+  /*  useEffect(() => {
+        logOut()
+    }, [])*/
     return (
         <BaseWrapperComponent isKeyboardAwareScrollView={true}>
             <Box>

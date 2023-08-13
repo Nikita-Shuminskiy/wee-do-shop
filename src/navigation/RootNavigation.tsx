@@ -38,19 +38,7 @@ const RootNavigation = observer(() => {
             <RootStack.Navigator>
                 {
                     isAuth ?
-
-                        user.role === RoleType.Courier ? <React.Fragment>
-                                <RootStack.Screen
-                                    options={{headerShown: false}}
-                                    name={routerConstants.COURIER_ORDERS}
-                                    component={CourierOrders}
-                                />
-                                <RootStack.Screen
-                                    options={{headerShown: false}}
-                                    name={routerConstants.COURIER_PICK_ORDER}
-                                    component={CourierPickOrder}
-                                />
-                            </React.Fragment> :
+                        user?.role === RoleType.Customer ?
                             <React.Fragment>
                                 <RootStack.Screen
                                     options={{headerShown: false}}
@@ -87,7 +75,20 @@ const RootNavigation = observer(() => {
                                     name={routerConstants.ADDRESS}
                                     component={AddressS}
                                 />
-                            </React.Fragment> : <React.Fragment>
+                            </React.Fragment> :
+                            <React.Fragment>
+                                <RootStack.Screen
+                                    options={{headerShown: false}}
+                                    name={routerConstants.COURIER_ORDERS}
+                                    component={CourierOrders}
+                                />
+                                <RootStack.Screen
+                                    options={{headerShown: false}}
+                                    name={routerConstants.COURIER_PICK_ORDER}
+                                    component={CourierPickOrder}
+                                />
+                            </React.Fragment>
+                        : <React.Fragment>
                             <RootStack.Screen
                                 options={{headerShown: false}}
                                 name={routerConstants.LOGIN}

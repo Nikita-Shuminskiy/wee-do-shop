@@ -60,15 +60,16 @@ const OrderStatusesS = observer(({navigation}: OrderStatusesSProps) => {
     return (
         <BaseWrapperComponent backgroundColor={colors.white} isKeyboardAwareScrollView={!isCanceled}>
             <Box paddingX={5} mt={5} justifyContent={'space-evenly'} flex={1}>
-                <Box flexDirection={'row'} alignItems={'center'} justifyContent={'center'}>
-                    <Box flex={9} justifyContent={'center'} alignItems={'center'}>
-                        <Text fontSize={18} fontWeight={'500'}>{order?.store.name}</Text>
-                    </Box>
-                    <Box flex={1}>
+                <Box flexDirection={'row'} alignItems={'center'} justifyContent={'space-between'}>
+                    <Box alignItems={'center'}>
                         <TouchableOpacity onPress={onPressClose}>
                             <Image alt={'close'} source={closeImg}/>
                         </TouchableOpacity>
                     </Box>
+                    <Box alignItems={'center'}>
+                        <Text fontSize={22} fontWeight={'500'}>{order?.store.name}</Text>
+                    </Box>
+
                 </Box>
                 {
                     isCanceled ? (

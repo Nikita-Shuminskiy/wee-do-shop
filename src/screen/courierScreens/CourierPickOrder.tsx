@@ -1,13 +1,12 @@
 import React, {useEffect, useState} from 'react';
 import {BaseWrapperComponent} from "../../components/baseWrapperComponent";
 import {Box, Text} from "native-base";
-import {StyleSheet, TouchableOpacity} from "react-native";
+import {StyleSheet} from "react-native";
 import MapView, {Marker, Polyline, PROVIDER_GOOGLE} from "react-native-maps";
 import Button from "../../components/Button";
 import {colors} from "../../assets/colors/colors";
 import axios from "axios";
-import {allowLocation, getInfoAddressForCoords} from "../../components/MapViews/utils";
-import {LoadingEnum} from "../../store/types/types";
+import {allowLocation} from "../../components/MapViews/utils";
 import * as Location from "expo-location";
 import Svg, {Path} from "react-native-svg";
 import {decodePolyline} from "../../utils/utilsMap";
@@ -76,8 +75,8 @@ const CourierPickOrder = () => {
                             borderRadius: 20,
                         }}
                         initialRegion={{
-                            latitude:  0,
-                            longitude:  0,
+                            latitude: 0,
+                            longitude: 0,
                             latitudeDelta: 0.0922,
                             longitudeDelta: 0.0421,
                         }}
@@ -123,7 +122,8 @@ const CourierPickOrder = () => {
                     <Button styleContainer={styles.styleBtnContainer} backgroundColor={colors.green}
                             onPress={onPressPickOrder} title={'Order picked up'}/>
                     <Button styleContainer={styles.styleBtnContainer} styleText={{color: colors.black}}
-                            backgroundColor={colors.grayLight} onPress={onPressCanselOrder} title={'Cancel this order'}/>
+                            backgroundColor={colors.grayLight} onPress={onPressCanselOrder}
+                            title={'Cancel this order'}/>
                 </Box>
             </Box>
         </BaseWrapperComponent>

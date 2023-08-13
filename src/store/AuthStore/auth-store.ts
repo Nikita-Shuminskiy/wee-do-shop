@@ -67,7 +67,6 @@ export class AuthStore {
 
     async updateUser(dataAddress: AddressType): Promise<UserType> {
         const {data} = await userApi.updateUser(this.user._id, dataAddress)
-        console.log(data)
         this.setUser(data)
         return data
     }

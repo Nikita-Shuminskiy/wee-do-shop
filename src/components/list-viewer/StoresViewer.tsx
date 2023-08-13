@@ -75,11 +75,12 @@ const StoresViewer = ({
                           fontSize={18}
                           fontWeight={'700'}
                           color={colors.balck}>{stores?.name}</Text>
-                    <Box ml={4} flexDirection={'row'} flexWrap={'wrap'} w={'90%'} alignItems={'center'}>
-                        {stores?.products?.map((product, key) => {
-                            const lastElem = stores?.products?.length - 1 === key
-                            return <Text key={`${product}-${key}`}
-                                         fontWeight={'500'}>{`${product} ${lastElem ? '' : ','}`}</Text>
+                    <Box ml={3} flexDirection={'row'} flexWrap={'wrap'} w={'90%'} alignItems={'center'}>
+                        {stores?.subCategories?.map((subCategory, key) => {
+                            const lastElem = stores?.subCategories?.length - 1 === key
+                            return <Text key={`${subCategory._id}-${key}`}
+                                         color={colors.gray}
+                                         fontWeight={'500'}>{`${subCategory.name}${lastElem ? '' :', '}`}</Text>
                         })}
                     </Box>
                 </Box>

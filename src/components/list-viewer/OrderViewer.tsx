@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
         },
         shadowOpacity: 0.25,
         shadowRadius: 10.00,
-        elevation: 24
+        elevation: 10
     }
 })
 export default OrderViewer;

@@ -10,6 +10,7 @@ import {MaterialIcons} from '@expo/vector-icons';
 import {MaterialCommunityIcons} from '@expo/vector-icons';
 import HistoryS from "../screen/mainScreens/HistoryS";
 import CartS from "../screen/mainScreens/CartS";
+import OrdersS from "../screen/mainScreens/OrdersS";
 
 const TabMainStack = createBottomTabNavigator();
 
@@ -69,7 +70,7 @@ const MainNavigation = ({navigation, route}) => {
             <TabMainStack.Screen
                 options={{tabBarLabel: 'History', headerShown: false, unmountOnBlur: true}}
                 name={routerConstants.HISTORY}
-                component={HistoryS}
+                component={OrdersS}
             />
             <TabMainStack.Screen
                 options={{tabBarLabel: 'Cart', headerShown: false, unmountOnBlur: true}}

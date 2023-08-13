@@ -11,13 +11,13 @@ export const storesApi = {
         return await instance.get<StoreType[]>(`users/${idUser}/favoritesStores`)
     },
     async getStores(id: number) {
-        return await instance.get<StoreType>(`stores${id}`)
+        return await instance.get<StoreType>(`stores/${id}`)
     },
     async updateStores(id: number, stores: StoreType) {
-        return await instance.patch<StoreType>(`stores${id}`, stores)
+        return await instance.patch<StoreType>(`stores/${id}`, stores)
     },
     async deleteStores(id: number) {
-        return await instance.delete<{ success: boolean }>(`stores${id}`)
+        return await instance.delete<{ success: boolean }>(`stores/${id}`)
     },
     async searchStores({categoryId, search}: dataSearchType) {
         const params: dataSearchType = {}

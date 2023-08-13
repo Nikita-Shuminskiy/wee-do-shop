@@ -3,7 +3,7 @@ import {observer} from "mobx-react-lite";
 import {BaseWrapperComponent} from "../../components/baseWrapperComponent";
 import {Box} from "native-base";
 import AuthStore from "../../store/AuthStore/auth-store";
-import {Dimensions, FlatList, StyleSheet, TouchableOpacityProps} from "react-native";
+import {FlatList, StyleSheet} from "react-native";
 import {colors} from "../../assets/colors/colors";
 import EmptyList from "../../components/list-viewer/empty-list";
 import SubCategoriesViewer from "../../components/list-viewer/CategoriesViewer";
@@ -15,6 +15,7 @@ import {NavigationProp, ParamListBase} from "@react-navigation/native";
 import SearchStores from "../../components/SearchStores";
 import {StoreType} from "../../api/storesApi";
 import HeaderUser from "../../components/headerUser";
+
 const renderEmptyContainer = (height, text) => {
     const onPressLink = () => {
 
@@ -102,7 +103,7 @@ const HomeS = observer(({navigation}: HomeSProps) => {
                         <FlatList
                             data={categories}
                             renderItem={categoriesViews}
-                            keyExtractor={(item, index) => item._id.toString()}
+                            keyExtractor={(item, index) => index.toString()}
                             style={{width: '100%'}}
                             contentContainerStyle={
                                 !categories?.length && styles.contentContainerStyle

@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useState} from 'react';
 import {BaseWrapperComponent} from "../../components/baseWrapperComponent";
 import cartStore, {ProductCartType} from "../../store/CartStore/cart-store";
 import {observer} from "mobx-react-lite";
@@ -19,6 +19,7 @@ import {SendDataOrderType} from "../../api/ordersApi";
 import authStore from "../../store/AuthStore/auth-store";
 import {NavigationProp, ParamListBase} from "@react-navigation/native";
 import {routerConstants} from "../../constants/routerConstants";
+
 type CartSProps = {
     navigation: NavigationProp<ParamListBase>
 }
