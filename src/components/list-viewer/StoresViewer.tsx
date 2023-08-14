@@ -24,6 +24,7 @@ const StoresViewer = ({
                           onPressSaveFavoriteStore,
                           onPressRemoveFavoriteStore,
                       }: StoresViewerType) => {
+
     return (
         <TouchableOpacity onPress={onPress} style={{alignItems: 'center', flex: 1}}>
             <Box backgroundColor={'rgba(203,203,203,0.27)'}
@@ -57,7 +58,8 @@ const StoresViewer = ({
                             <Image source={checkFavoriteStore ? likeActive : like} alt={'like'}/>
                         </TouchableOpacity>
                     </Box>
-                    <Image alt={'image-store'} borderRadius={16} source={test}/>
+                    <Image alt={'image-store'} borderRadius={16}
+                           source={test}/>
                     <Box position={'absolute'}
                          bottom={0}
                          right={0}
@@ -76,11 +78,11 @@ const StoresViewer = ({
                           fontWeight={'700'}
                           color={colors.balck}>{stores?.name}</Text>
                     <Box ml={3} flexDirection={'row'} flexWrap={'wrap'} w={'90%'} alignItems={'center'}>
-                        {stores?.subCategories?.map((subCategory, key) => {
-                            const lastElem = stores?.subCategories?.length - 1 === key
+                        {stores?.categories?.map((subCategory, key) => {
+                            const lastElem = stores?.categories?.length - 1 === key
                             return <Text key={`${subCategory._id}-${key}`}
                                          color={colors.gray}
-                                         fontWeight={'500'}>{`${subCategory.name}${lastElem ? '' :', '}`}</Text>
+                                         fontWeight={'500'}>{`${subCategory.name}${lastElem ? '' : ', '}`}</Text>
                         })}
                     </Box>
                 </Box>

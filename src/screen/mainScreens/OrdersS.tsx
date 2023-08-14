@@ -7,7 +7,7 @@ import ArrowBack from "../../components/ArrowBack";
 import arrowLeftBack from "../../assets/images/arrow-left.png";
 import {NavigationProp, ParamListBase} from "@react-navigation/native";
 import {colors} from "../../assets/colors/colors";
-import {FlatList, RefreshControl, StyleSheet} from "react-native";
+import {ActivityIndicator, FlatList, RefreshControl, StyleSheet} from "react-native";
 import {ApiOrderType, StatusType} from "../../api/ordersApi";
 import OrderViewer from "../../components/list-viewer/OrderViewer";
 import {observer} from "mobx-react-lite";
@@ -15,6 +15,8 @@ import PopUpOrderDetails from "../../components/modalPopUp/PopUpOrderDetails";
 import {routerConstants} from "../../constants/routerConstants";
 import cartStore from "../../store/CartStore/cart-store";
 import {renderEmptyContainer} from "../../components/list-viewer/empty-list";
+import NotificationStore from "../../store/NotificationStore/notification-store";
+import {LoadingEnum} from "../../store/types/types";
 
 
 type OrdersSProps = {
@@ -23,22 +25,39 @@ type OrdersSProps = {
 }
 const OrdersS = observer(({navigation, route}: OrdersSProps) => {
     const isRoutHistory = route.name === routerConstants.HISTORY
-    const {orders} = orderStore
-    const {OrderService} = rootStore
-    const getOrders = () => {
-        OrderService.getOrders(isRoutHistory ? StatusType.Completed : null)
-    }
     const {setToCartStore} = cartStore
+    const {orders, setClearOrders, totalOrders} = orderStore
+    const {OrderService} = rootStore
+    const [isShowPopupDetails, setIsShowPopupDetails] = useState<boolean>(false)
+    const [selectedOrder, setSelectedOrder] = useState<ApiOrderType>()
+    const [refreshing, setRefreshing] = useState(false);
+
+    const [page, setPage] = useState(1);
+    const [isLoadingData, setLoadingData] = useState(false);
+
+    const ordersLength = orders?.length
+    const requestAPI = () => {
+        setLoadingData(true)
+        const offset = (page - 1) * 10;
+        OrderService.getOrders({status: isRoutHistory ? StatusType.Completed : null, limit: 10, offset}).finally(() => {
+            setLoadingData(false)
+        })
+    }
+
     useEffect(() => {
-        getOrders()
+        requestAPI();
+    }, [page])
+    useEffect(() => {
+        return () => {
+            setPage(1)
+            setClearOrders()
+        }
     }, [])
+
 
     const onPressGoBack = () => {
         navigation.navigate(routerConstants.PROFILE_USER)
     }
-    const [isShowPopupDetails, setIsShowPopupDetails] = useState<boolean>(false)
-    const [selectedOrder, setSelectedOrder] = useState<ApiOrderType>()
-
     const onPressRepeat = (item: ApiOrderType) => {
         const getProductsForOrder = item.products.map((product) => {
             return {amount: product.amount, ...product.product}
@@ -54,7 +73,6 @@ const OrdersS = observer(({navigation, route}: OrdersSProps) => {
     const onClosePopUpAboutStore = () => {
         setIsShowPopupDetails(false)
     }
-
     const orderViews = ({item}: { item: ApiOrderType }) => {
         const onPressDetails = () => {
             setSelectedOrder(item)
@@ -70,14 +88,26 @@ const OrdersS = observer(({navigation, route}: OrdersSProps) => {
             />
         )
     }
-    const ordersLength = orders?.length
-    const [refreshing, setRefreshing] = useState(false);
-    const onRefresh = () => {
-        setRefreshing(true)
-        OrderService.getOrders().finally(() => {
-            setRefreshing(false)
-        })
-    };
+    const isLastOrders = !!(totalOrders && orders.length) && totalOrders <= orders.length
+    /* const onRefresh = () => {
+         setRefreshing(true)
+         const offset = 10;
+         OrderService.getOrders({status: isRoutHistory ? StatusType.Completed : null, limit: 10, offset}).finally(() => {
+             setRefreshing(false)
+         })
+     };*/
+    const renderFooter = () => (
+        <Box style={styles.footerText}>
+            {isLoadingData && <ActivityIndicator size={'large'} color={colors.green}/>}
+            {isLastOrders && orders.length >= 10 &&
+                <Text color={colors.gray} fontWeight={'500'} fontSize={15}>No more orders at the moment</Text>}
+        </Box>
+    )
+
+    const fetchMoreData = () => {
+        if (isLastOrders || isLoadingData) return
+        setPage(page + 1)
+    }
     return (
         <>
             <BaseWrapperComponent backgroundColor={colors.white} isKeyboardAwareScrollView={false}>
@@ -102,13 +132,16 @@ const OrdersS = observer(({navigation, route}: OrdersSProps) => {
                             !ordersLength &&
                             styles.contentContainerOrder
                         }
-                        refreshControl={
-                            <RefreshControl
-                                refreshing={refreshing}
-                                onRefresh={onRefresh}
-                            />
-                        }
+                        /*   refreshControl={
+                               <RefreshControl
+                                   refreshing={refreshing}
+                                   onRefresh={onRefresh}
+                               />
+                           }*/
                         ListEmptyComponent={() => renderEmptyContainer(0, 'You haven’t placed\n any orders yet.')}
+                        ListFooterComponent={renderFooter}
+                        onEndReached={fetchMoreData}
+                        onEndReachedThreshold={0.2}
                     />
                 </Box>
             </BaseWrapperComponent>
@@ -120,6 +153,12 @@ const OrdersS = observer(({navigation, route}: OrdersSProps) => {
     );
 })
 const styles = StyleSheet.create({
+    footerText: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginVertical: 2
+    },
     contentContainerOrder: {
         flex: 1,
         width: '100%',

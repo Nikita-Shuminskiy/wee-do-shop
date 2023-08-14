@@ -1,6 +1,7 @@
 import {instance} from "./config";
 import {SubCategoryType} from "./subCategoriesApi";
 import {ProductType} from "./productApi";
+import {CategoryType} from "./categoriesApi";
 
 
 export const storesApi = {
@@ -68,6 +69,7 @@ export type StoreType = {
     "deliveryTime": string
     "popularityCoefficient": number
     "workingHours": WorkingHoursType
+    categories: CategoryType[]
     "location": {
         "type": string,
         "coordinates": number[] //  [myLocation.longitude , myLocation.latitude]

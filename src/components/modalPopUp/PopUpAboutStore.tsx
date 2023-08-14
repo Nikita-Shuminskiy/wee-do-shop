@@ -96,7 +96,7 @@ const PopUpAboutStore = ({
                 </Box>
                 <Box flexDirection={'row'} alignItems={'center'}>
                     <Feather name="phone-call" size={24} color={'#BABABA'}/>
-                  <PhoneNumberComponent phoneNumber={currentStore?.phone}/>
+                    <PhoneNumberComponent phoneNumber={currentStore?.phone}/>
                 </Box>
                 <Box w={'100%'} mt={2} mb={2} flexGrow={1} h={300}>
                     <MapView
@@ -122,7 +122,7 @@ const PopUpAboutStore = ({
                         />
                     </MapView>
                 </Box>
-                <Link styleText={styles.styleTextLink} onPress={onPressLink} text={'Legal information'}/>
+                {/* <Link styleText={styles.styleTextLink} onPress={onPressLink} text={'Legal information'}/>*/}
             </Box>
         </ModalPopup>
     );
@@ -132,7 +132,5 @@ const styles = StyleSheet.create({
         color: colors.black
     }
 });
-/*{"address": {"formatted_address": "Minnesota, USA", "name": "Minnesota"}, "location": {"latitude": 46.729553, "longitude": -94.6858998}, "positionMarker": {"latitude": 46.7295
-53, "longitude": -94.6858998}}
-*/
+
 export default PopUpAboutStore;

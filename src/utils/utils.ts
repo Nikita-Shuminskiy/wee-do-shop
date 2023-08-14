@@ -50,7 +50,7 @@ export function isCurrentTimeInRange(workingHoursStores: WorkingHoursType, isInf
         currentHour < endHour
     ) {
         if (isInfo) {
-            return 'Open until ' + endTime;
+            return 'Will close in  ' + endTime;
         }
         return true; // Текущее время полностью совпадает с указанным диапазоном времени
     } else if (
@@ -58,7 +58,7 @@ export function isCurrentTimeInRange(workingHoursStores: WorkingHoursType, isInf
         currentMinute >= startMinute
     ) {
         if (isInfo) {
-            return 'Open until ' + endTime;
+            return 'Will close in ' + endTime;
         }
         return true; // Текущее время полностью совпадает с началом диапазона
     } else if (
@@ -66,12 +66,12 @@ export function isCurrentTimeInRange(workingHoursStores: WorkingHoursType, isInf
         currentMinute <= endMinute
     ) {
         if (isInfo) {
-            return 'Open until ' + endTime;
+            return 'Will close in ' + endTime;
         }
         return true; // Текущее время полностью совпадает с концом диапазона
     }
     if (isInfo) {
-        return 'Closed ' + endTime
+        return 'Will open in  ' + endTime
     }
     return false; // Текущее время НЕ совпадает с указанным диапазоном времени
 }
