@@ -9,23 +9,10 @@ import AuthStore from "../../store/AuthStore/auth-store";
 import {NavigationProp, ParamListBase} from "@react-navigation/native";
 import {StoreType} from "../../api/storesApi";
 import {routerConstants} from "../../constants/routerConstants";
-import EmptyList from "../../components/list-viewer/empty-list";
+import EmptyList, {renderEmptyContainer} from "../../components/list-viewer/empty-list";
 import rootStore from "../../store/RootStore/root-store";
 import ShopsViewer from "../../components/list-viewer/ShopsViewer";
 import {observer} from "mobx-react-lite";
-
-const renderEmptyContainer = (height, text) => {
-    const onPressLink = () => {
-
-    }
-    return (
-        <EmptyList
-            height={height}
-            text={text}
-            onPressLink={onPressLink}
-        />
-    )
-}
 
 export type ShopsSType = {
     navigation: NavigationProp<ParamListBase>

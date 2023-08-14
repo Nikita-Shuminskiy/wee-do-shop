@@ -67,6 +67,9 @@ const CartS = observer(({navigation}: CartSProps) => {
         }
 
         const onChangeValueNumber = (productValue: number) => {
+            if(!productValue) {
+                return removeProductToCart(item._id)
+            }
             updateProductToCart(item._id, productValue)
         }
 

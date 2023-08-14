@@ -141,7 +141,7 @@ const OrdersS = observer(({navigation, route}: OrdersSProps) => {
                         ListEmptyComponent={() => renderEmptyContainer(0, 'You haven’t placed\n any orders yet.')}
                         ListFooterComponent={renderFooter}
                         onEndReached={fetchMoreData}
-                        onEndReachedThreshold={0.2}
+                        onEndReachedThreshold={2}
                     />
                 </Box>
             </BaseWrapperComponent>
