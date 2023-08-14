@@ -28,7 +28,7 @@ export const storesApi = {
         if (search) {
             params.search = search
         }
-        return await instance.get<StoriesType>(`stores`, {params})
+        return await instance.get<StoriesType>(`stores/available`, {params})
     },
 }
 export type dataSearchType = {

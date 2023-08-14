@@ -54,7 +54,7 @@ const OrderStatusesS = observer(({navigation}: OrderStatusesSProps) => {
     }, []);
 
     const onPressClose = () => {
-        navigation.navigate(routerConstants.ORDERS)
+        navigation.navigate(routerConstants.ORDERS, {from: 'statuses'})
     }
     const isCanceled = statusOrder === StatusType.Canceled
     return (

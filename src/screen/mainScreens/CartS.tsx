@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {BaseWrapperComponent} from "../../components/baseWrapperComponent";
 import cartStore, {ProductCartType} from "../../store/CartStore/cart-store";
 import {observer} from "mobx-react-lite";
@@ -44,11 +44,15 @@ const CartS = observer(({navigation}: CartSProps) => {
         }
         OrderService.sendOrder(dataOrder).then((data) => {
             if (data) {
-                setToCartStore(null)
                 navigation.navigate(routerConstants.ORDER_STATUSES)
             }
         })
     }
+    useEffect(() => {
+        return () => {
+            setToCartStore(null)
+        }
+    }, [])
     const renderEmptyContainer = (height, text) => {
         const onPressLink = () => {
 
@@ -67,7 +71,7 @@ const CartS = observer(({navigation}: CartSProps) => {
         }
 
         const onChangeValueNumber = (productValue: number) => {
-            if(!productValue) {
+            if (!productValue) {
                 return removeProductToCart(item._id)
             }
             updateProductToCart(item._id, productValue)
@@ -131,7 +135,8 @@ const CartS = observer(({navigation}: CartSProps) => {
                             </Box>
                             <Box>
                                 <Text>Your Address</Text>
-                                <Text ml={3} fontSize={14} color={colors.gray} fontWeight={'500'}>{formatted_address}</Text>
+                                <Text ml={3} fontSize={14} color={colors.gray}
+                                      fontWeight={'500'}>{formatted_address}</Text>
                             </Box>
                             <Box>
                                 <TextInput onChangeText={onChangeTextCommentHandler} heightInput={40}

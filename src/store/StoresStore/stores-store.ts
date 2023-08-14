@@ -56,6 +56,7 @@ export class StoresStore {
 
     async searchStores(dataSearch: dataSearchType): Promise<void> {
         const {data} = await storesApi.searchStores(dataSearch)
+
         this.setStores(data.results)
 
     }

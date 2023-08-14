@@ -25,6 +25,7 @@ type OrdersSProps = {
 }
 const OrdersS = observer(({navigation, route}: OrdersSProps) => {
     const isRoutHistory = route.name === routerConstants.HISTORY
+    const isFromStatusesScreen = route.params.from === 'statuses'
     const {setToCartStore} = cartStore
     const {orders, setClearOrders, totalOrders} = orderStore
     const {OrderService} = rootStore
@@ -56,7 +57,7 @@ const OrdersS = observer(({navigation, route}: OrdersSProps) => {
 
 
     const onPressGoBack = () => {
-        navigation.navigate(routerConstants.PROFILE_USER)
+        navigation.navigate(isFromStatusesScreen ? routerConstants.HOME : routerConstants.PROFILE_USER)
     }
     const onPressRepeat = (item: ApiOrderType) => {
         const getProductsForOrder = item.products.map((product) => {
