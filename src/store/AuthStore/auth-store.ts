@@ -30,6 +30,7 @@ export class AuthStore {
 
     setUser(userData: UserType): void {
         this.user = userData
+        this.setAuth(true)
     }
 
     setAuth(auth: boolean): void {
@@ -40,7 +41,6 @@ export class AuthStore {
         const {data} = await authApi.login(userData.email, userData.password)
         await deviceStorage.saveItem('accessToken', data.accessToken)
         await deviceStorage.saveItem('refreshToken', data.refreshToken)
-        this.setAuth(true)
     }
 
     async checkAuth(): Promise<void> {

@@ -7,6 +7,8 @@ import {ApiOrderType} from "../../api/ordersApi";
 import OrderViewer from "../../components/list-viewer/OrderViewer";
 import OrderCourierViewer from "../../components/list-viewer/OrderCourierViewer";
 import AuthStore from "../../store/AuthStore/auth-store";
+import Button from "../../components/Button";
+import {colors} from "../../assets/colors/colors";
 
 const CourierOrders = () => {
     const {logOut} = AuthStore
@@ -30,13 +32,12 @@ const CourierOrders = () => {
             <OrderCourierViewer order={item}/>
         )
     }
-  /*  useEffect(() => {
-        logOut()
-    }, [])*/
+
     return (
         <BaseWrapperComponent isKeyboardAwareScrollView={true}>
             <Box>
-                <Box paddingX={5} w={'100%'} alignItems={'center'} flexDirection={'row'} justifyContent={'space-between'}>
+                <Box paddingX={5} w={'100%'} alignItems={'center'} flexDirection={'row'}
+                     justifyContent={'space-between'}>
                     <Box>
                         <Text fontSize={28} fontWeight={'700'}>Placed orders</Text>
                     </Box>
@@ -45,19 +46,22 @@ const CourierOrders = () => {
                             <Text fontSize={15} borderBottomWidth={1} fontWeight={'500'}>{`Hidden (${3})`}</Text>
                         </TouchableOpacity>
                     </Box>
-                </Box>
 
+                </Box>
+                <Box paddingX={5} w={100}>
+                    <Button backgroundColor={colors.green} onPress={logOut} title={' log out '}/>
+                </Box>
                 <Box mt={5} alignItems={'center'} flex={1} w={'100%'}>
                     <FlatList
-                        data={[1,2,3,4]}
+                        data={[1, 2, 3, 4]}
                         renderItem={orderViews}
                         scrollEnabled={false}
                         keyExtractor={(item, index) => item?.toString()}
                         style={{width: '100%'}}
-                      /*  contentContainerStyle={
-                            !ordersLength &&
-                            styles.contentContainerOrder
-                        }*/
+                        /*  contentContainerStyle={
+                              !ordersLength &&
+                              styles.contentContainerOrder
+                          }*/
                         refreshControl={
                             <RefreshControl
                                 refreshing={refreshing}
