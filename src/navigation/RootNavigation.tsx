@@ -22,6 +22,10 @@ import AddressS from "../screen/mainScreens/AddressS";
 import {RoleType} from "../api/authApi";
 import CourierOrders from "../screen/courierScreens/CourierOrders";
 import CourierPickOrder from "../screen/courierScreens/CourierPickOrder";
+import PrivacyPolicy from "../components/PrivacyPolicy";
+import PrivacyPolicyS from "../screen/commonScreens/PrivacyPolicyS";
+import TermServiceS from "../screen/commonScreens/TermServiceS";
+import LegalInformationS from "../screen/commonScreens/LegalInformationS";
 
 const RootStack = createNativeStackNavigator()
 const RootNavigation = observer(() => {
@@ -110,6 +114,22 @@ const RootNavigation = observer(() => {
                     options={{headerShown: false}}
                     name={routerConstants.AUTOCOMPLETE_MAP}
                     component={GoogleAutocompleteMapS}
+                />
+
+                <RootStack.Screen
+                    options={{headerShown: false}}
+                    name={routerConstants.PRIVACY_POLICE}
+                    component={PrivacyPolicyS}
+                />
+                <RootStack.Screen
+                    options={{headerShown: false}}
+                    name={routerConstants.LEGAL_INFORMATION}
+                    component={LegalInformationS}
+                />
+                <RootStack.Screen
+                    options={{headerShown: false}}
+                    name={routerConstants.TERM_SERVICE}
+                    component={TermServiceS}
                 />
             </RootStack.Navigator>
         </NavigationContainer>

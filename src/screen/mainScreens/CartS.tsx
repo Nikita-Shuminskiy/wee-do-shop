@@ -10,7 +10,7 @@ import {Dimensions, FlatList, StyleSheet, TouchableOpacity} from "react-native";
 import EmptyList from "../../components/list-viewer/empty-list";
 import ProductCartViewer from "../../components/list-viewer/ProductCartViewer";
 import {FontAwesome5} from '@expo/vector-icons';
-import {formatProductPrice} from "../../components/MapViews/utils";
+import {formatProductPrice, getFormattedAddress} from "../../components/MapViews/utils";
 import EmptyCart from "../../components/EmptyCart";
 import {createAlert} from "../../components/Alert";
 import rootStore from "../../store/RootStore/root-store";
@@ -24,7 +24,7 @@ type CartSProps = {
     navigation: NavigationProp<ParamListBase>
 }
 
-const CartS = observer(({navigation}:CartSProps) => {
+const CartS = observer(({navigation}: CartSProps) => {
     const {cart, removeCart, removeProductToCart, updateProductToCart, setToCartStore} = cartStore
     const {user} = authStore
     const {OrderService} = rootStore
@@ -42,12 +42,12 @@ const CartS = observer(({navigation}:CartSProps) => {
             products: getProductsForOrder,
             userId: user._id
         }
-       OrderService.sendOrder(dataOrder).then((data) => {
-           if(data) {
-               setToCartStore(null)
-               navigation.navigate(routerConstants.ORDER_STATUSES)
-           }
-       })
+        OrderService.sendOrder(dataOrder).then((data) => {
+            if (data) {
+                setToCartStore(null)
+                navigation.navigate(routerConstants.ORDER_STATUSES)
+            }
+        })
     }
     const renderEmptyContainer = (height, text) => {
         const onPressLink = () => {
@@ -87,10 +87,11 @@ const CartS = observer(({navigation}:CartSProps) => {
 
     }
     const productTotalPrice = formatProductPrice(cart?.totalSum ?? 0)
-
+    const formatted_address = getFormattedAddress(user.address)
     return (
         <>
-            <BaseWrapperComponent extraScrollHeight={50} backgroundColor={'white'} isKeyboardAwareScrollView={!!cartProducts}>
+            <BaseWrapperComponent extraScrollHeight={50} backgroundColor={'white'}
+                                  isKeyboardAwareScrollView={!!cartProducts}>
                 {
                     !cartProducts ? <EmptyCart/> : (
                         <Box paddingX={4} mt={2}>
@@ -126,11 +127,15 @@ const CartS = observer(({navigation}:CartSProps) => {
                                 <Text color={colors.gray}>0</Text>
                             </Box>
                             <Box>
+                                <Text>Your Address</Text>
+                                <Text ml={3} fontSize={14} color={colors.gray} fontWeight={'500'}>{formatted_address}</Text>
+                            </Box>
+                            <Box>
                                 <TextInput onChangeText={onChangeTextCommentHandler} heightInput={40}
-                                           /*onFocus={(event: Event) => {
-                                               // `bind` the function if you're using ES6 classes
-                                               inputRef.current(event.target)
-                                           }}*/
+                                    /*onFocus={(event: Event) => {
+                                        // `bind` the function if you're using ES6 classes
+                                        inputRef.current(event.target)
+                                    }}*/
                                            placeholder={'Add comment'} textAlignVertical={'top'}
                                            multiline={true} numberOfLines={4}/>
                             </Box>

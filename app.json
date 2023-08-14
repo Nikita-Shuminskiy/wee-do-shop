@@ -44,13 +44,7 @@
     },
     "owner": "nick_1995",
     "plugins": [
-      "expo-localization",
-      [
-        "expo-camera",
-        {
-          "cameraPermission": "Allow WeDo to access your camera."
-        }
-      ]
+      "expo-localization"
     ]
   }
 }

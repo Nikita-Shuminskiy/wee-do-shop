@@ -34,9 +34,8 @@ instance.interceptors.response.use(
     },
     async function (error) {
         const originalRequest = error.config;
-        const refreshToken = await AsyncStorage.getItem('refreshToken');
-
-        if ((error.response.status === 401 && !originalRequest._retry) && refreshToken) {
+        if (error.response.status === 401 && !originalRequest._retry) {
+            const refreshToken = await AsyncStorage.getItem('refreshToken');
             originalRequest._retry = true;
             try {
                 const {data} = await axios.post<DataLoginType>(`${url}auth/refresh`, {refreshToken: refreshToken});

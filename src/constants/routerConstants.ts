@@ -16,6 +16,10 @@ export const routerConstants = {
     HISTORY: 'history',
     CART: 'cart',
 
+    TERM_SERVICE: 'terms-service',
+    LEGAL_INFORMATION: 'legal information',
+    PRIVACY_POLICE: 'Privacy police',
+
     //courier
     COURIER_REGISTER: 'courier-register',
     COURIER_ORDERS: 'courier-orders',

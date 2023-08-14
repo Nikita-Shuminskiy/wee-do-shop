@@ -5,7 +5,7 @@ import {ProductType} from "./productApi";
 
 export const storesApi = {
     async getStories() {
-        return await instance.get<StoriesType>(`stores`)
+        return await instance.get<StoriesType>(`stores/available`)
     },
     async getFavoriteStores(idUser: string) {
         return await instance.get<StoreType[]>(`users/${idUser}/favoritesStores`)
