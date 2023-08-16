@@ -14,6 +14,7 @@ import CustomInput from "../../components/TextInput";
 import Button from "../../components/Button";
 import rootStore from "../../store/RootStore/root-store";
 import {observer} from "mobx-react-lite";
+import {routerConstants} from "../../constants/routerConstants";
 
 type AddressSProps = {
     navigation: NavigationProp<ParamListBase>
@@ -33,7 +34,11 @@ const AddressS = observer(({navigation}: AddressSProps) => {
         setShowLocationMap(true)
     }
     const onPressSaveNewAddress = () => {
-        AuthStoreService.updateUser(currentLocation)
+        AuthStoreService.updateUser(currentLocation).then((data) => {
+            if (data) {
+                navigation.navigate(routerConstants.HOME)
+            }
+        })
     }
     const onChangeText = (key: string, value: string) => {
         setLocation({...currentLocation, fullAddress: {...currentLocation?.fullAddress, [key]: value}})

@@ -19,6 +19,7 @@ import {SendDataOrderType} from "../../api/ordersApi";
 import authStore from "../../store/AuthStore/auth-store";
 import {NavigationProp, ParamListBase} from "@react-navigation/native";
 import {routerConstants} from "../../constants/routerConstants";
+import {deliveryPrice} from "../../utils/utils";
 
 type CartSProps = {
     navigation: NavigationProp<ParamListBase>
@@ -93,7 +94,9 @@ const CartS = observer(({navigation}: CartSProps) => {
         })
 
     }
-    const productTotalPrice = formatProductPrice(cart?.totalSum ?? 0)
+    const productTotalPrice = Number(formatProductPrice(cart?.totalSum ?? 0))
+    const isFreeDelivery = Number(formatProductPrice(cart?.totalSum ?? 0)) >= 1500
+    console.log(isFreeDelivery)
     const formatted_address = getFormattedAddress(user.address)
     return (
         <>
@@ -131,7 +134,11 @@ const CartS = observer(({navigation}: CartSProps) => {
                             <Box flexDirection={'row'} alignItems={'center'} justifyContent={'space-between'}
                                  borderBottomWidth={1} pb={2} borderColor={colors.grayDarkLight}>
                                 <Text>Delivery</Text>
-                                <Text color={colors.gray}>0</Text>
+                                <Text color={colors.gray}>{isFreeDelivery ? 'free' : `฿ ${deliveryPrice}`}</Text>
+
+                            </Box>
+                            <Box>
+                                <Text color={colors.gray}>Order ฿ 1500 and get free delivery</Text>
                             </Box>
                             <Box>
                                 <Text>Your Address</Text>
@@ -168,7 +175,8 @@ const CartS = observer(({navigation}: CartSProps) => {
                 backgroundColor={colors.white}
             >
                 <Box mr={2}>
-                    <Text fontSize={18} fontWeight={'500'}>฿{' '}{productTotalPrice}</Text>
+                    <Text fontSize={18}
+                          fontWeight={'500'}>฿{' '}{!isFreeDelivery ? productTotalPrice + deliveryPrice : productTotalPrice}</Text>
                     <Text fontSize={13} color={colors.gray}>30-40 min</Text>
                 </Box>
                 <Button styleContainer={styles.styleBtnContainer} styleText={styles.styleTextBtn}

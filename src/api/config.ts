@@ -39,7 +39,6 @@ instance.interceptors.response.use(
             originalRequest._retry = true;
             try {
                 const {data} = await axios.post<DataLoginType>(`${url}auth/refresh`, {refreshToken: refreshToken});
-
                 originalRequest.headers['Authorization'] = 'Bearer' + data.accessToken;
                 await deviceStorage.saveItem('refreshToken', data.refreshToken)
                 await deviceStorage.saveItem('accessToken', data.accessToken)
@@ -47,7 +46,7 @@ instance.interceptors.response.use(
                 console.log(e, 'error interceptors')
             }
 
-            return instance(originalRequest);
+            return axios.request(originalRequest)
 
 
         }

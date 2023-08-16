@@ -7,7 +7,7 @@ import ArrowBack from "../../components/ArrowBack";
 import arrowLeftBack from "../../assets/images/arrow-left.png";
 import {NavigationProp, ParamListBase} from "@react-navigation/native";
 import {colors} from "../../assets/colors/colors";
-import {ActivityIndicator, FlatList, RefreshControl, StyleSheet} from "react-native";
+import {ActivityIndicator, FlatList, StyleSheet} from "react-native";
 import {ApiOrderType, StatusType} from "../../api/ordersApi";
 import OrderViewer from "../../components/list-viewer/OrderViewer";
 import {observer} from "mobx-react-lite";
@@ -15,8 +15,6 @@ import PopUpOrderDetails from "../../components/modalPopUp/PopUpOrderDetails";
 import {routerConstants} from "../../constants/routerConstants";
 import cartStore from "../../store/CartStore/cart-store";
 import {renderEmptyContainer} from "../../components/list-viewer/empty-list";
-import NotificationStore from "../../store/NotificationStore/notification-store";
-import {LoadingEnum} from "../../store/types/types";
 
 
 type OrdersSProps = {
@@ -25,7 +23,7 @@ type OrdersSProps = {
 }
 const OrdersS = observer(({navigation, route}: OrdersSProps) => {
     const isRoutHistory = route.name === routerConstants.HISTORY
-    const isFromStatusesScreen = route.params.from === 'statuses'
+    const isFromStatusesScreen = route?.params?.from === 'statuses'
     const {setToCartStore} = cartStore
     const {orders, setClearOrders, totalOrders} = orderStore
     const {OrderService} = rootStore

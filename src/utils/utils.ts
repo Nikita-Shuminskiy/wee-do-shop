@@ -84,3 +84,4 @@ export const getFormatDateToString = (dateString: string) => {
 
     return formattedDate
 }
+export const deliveryPrice = 100
