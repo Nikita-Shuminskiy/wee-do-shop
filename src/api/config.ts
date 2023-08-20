@@ -2,6 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import axios from 'axios';
 import {DataLoginType} from './authApi'
 import {deviceStorage} from '../utils/storage/storage'
+import AuthStore from "../store/AuthStore/auth-store";
 
 export const BASE_URL = 'https://weedo-demo-production.up.railway.app/';
 
@@ -50,7 +51,7 @@ instance.interceptors.response.use(
                 // Повторно выполняем оригинальный запрос
                 return axios(originalRequest);
             } catch (e) {
-                console.log(e, 'error interceptors');
+                AuthStore.setAuth(false)
                 return Promise.reject(e); // Возвращаем ошибку, чтобы обработать ее дальше
             }
         }

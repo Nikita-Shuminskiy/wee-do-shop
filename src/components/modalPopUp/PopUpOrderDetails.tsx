@@ -5,22 +5,12 @@ import ModalPopup from "../pop-up";
 import {colors} from "../../assets/colors/colors";
 import {ApiOrderType, StatusType} from "../../api/ordersApi";
 import Button from "../Button";
-import EmptyList from "../list-viewer/empty-list";
+import EmptyList, {renderEmptyContainer} from "../list-viewer/empty-list";
 import testImg from '../../assets/images/test.png'
 import {ProductType} from "../../api/productApi";
-import {getFormatDateToString} from "../../utils/utils";
+import {deliveryPrice, getFormatDateToString} from "../../utils/utils";
 import {formatProductPrice} from "../MapViews/utils";
-const renderEmptyContainer = (height, text) => {
-    const onPressLink = () => {
-    }
-    return (
-        <EmptyList
-            height={height}
-            text={text}
-            onPressLink={onPressLink}
-        />
-    )
-}
+
 const orderViews = ({item}: { item: { amount: number; product: ProductType } }) => {
     return (
         <Box mb={2} pb={2} borderBottomWidth={1} flexDirection={'row'} alignItems={'center'}
@@ -55,7 +45,10 @@ const PopUpOrderDetails = ({
                                onPressRepeat,
                                order
                            }: PopUpOrderDetailsProps) => {
-
+    const getTotalPriceOrder =  order.products?.reduce((acc, product) => {
+        return acc + product.amount * product.product.price;
+    }, 0);
+    const isFreeDelivery = Number(formatProductPrice(getTotalPriceOrder ?? 0)) >= 1500
     return (
         <ModalPopup style={{padding: 0}} visible={show} onClose={onClose}>
             <Box alignItems={'center'} p={2}>
@@ -67,7 +60,7 @@ const PopUpOrderDetails = ({
                 <Box style={styles.container}>
                     <Box flexDirection={'row'} justifyContent={'space-between'}>
                         <Text fontWeight={'600'} fontSize={16}>Simply Crafted Store</Text>
-                        <Text fontWeight={'600'} fontSize={16}>฿{formatProductPrice(order?.totalPrice)}</Text>
+                        <Text fontWeight={'600'} fontSize={16}>฿{formatProductPrice(getTotalPriceOrder)}</Text>
                     </Box>
                     <Text fontWeight={'600'} color={colors.gray}
                           fontSize={12}>{getFormatDateToString(order?.createdAt)}</Text>
@@ -82,6 +75,7 @@ const PopUpOrderDetails = ({
                 </Box>
                 <Box style={styles.container} alignItems={'center'}>
                     <FlatList
+                        scrollEnabled={false}
                         data={order?.products ?? []}
                         renderItem={orderViews}
                         keyExtractor={(item, index) => index?.toString()}
@@ -99,7 +93,7 @@ const PopUpOrderDetails = ({
                     </Box>
                     <Box flexDirection={'row'} justifyContent={'space-between'}>
                         <Text fontWeight={'500'} fontSize={16}>Delivery</Text>
-                        <Text fontWeight={'500'} fontSize={16}>0</Text>
+                        <Text fontWeight={'500'} fontSize={16}>{isFreeDelivery ? 'free' : `฿ ${deliveryPrice}`}</Text>
                     </Box>
                 </Box>
                 <Box style={styles.container}>

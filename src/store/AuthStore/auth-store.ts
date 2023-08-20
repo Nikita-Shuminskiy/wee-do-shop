@@ -43,13 +43,6 @@ export class AuthStore {
         await deviceStorage.saveItem('refreshToken', data.refreshToken)
     }
 
-    async checkAuth(): Promise<void> {
-        const {data} = await authApi.refresh()
-        await deviceStorage.saveItem('accessToken', data.accessToken)
-        await deviceStorage.saveItem('refreshToken', data.refreshToken)
-        this.setAuth(true)
-    }
-
     async registration(dataUser: UserRegisterDataType) {
         const {data} = await authApi.register(dataUser)
     }

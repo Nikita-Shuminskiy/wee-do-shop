@@ -5,7 +5,7 @@ import {Box} from "native-base";
 import AuthStore from "../../store/AuthStore/auth-store";
 import {FlatList, StyleSheet} from "react-native";
 import {colors} from "../../assets/colors/colors";
-import EmptyList from "../../components/list-viewer/empty-list";
+import EmptyList, {renderEmptyContainer} from "../../components/list-viewer/empty-list";
 import SubCategoriesViewer from "../../components/list-viewer/CategoriesViewer";
 import StoresViewer from "../../components/list-viewer/StoresViewer";
 import rootStore from "../../store/RootStore/root-store";
@@ -16,18 +16,6 @@ import SearchStores from "../../components/SearchStores";
 import {StoreType} from "../../api/storesApi";
 import HeaderUser from "../../components/headerUser";
 
-const renderEmptyContainer = (height, text) => {
-    const onPressLink = () => {
-
-    }
-    return (
-        <EmptyList
-            height={height}
-            text={text}
-            onPressLink={onPressLink}
-        />
-    )
-}
 type HomeSProps = {
     navigation: NavigationProp<ParamListBase>
 }
@@ -86,7 +74,7 @@ const HomeS = observer(({navigation}: HomeSProps) => {
         StoresService.getStores()
         CategoriesService.getCategories()
         StoresService.getFavoriteStores()
-    }, [])
+    }, [user.address.fullAddress])
 
     return (
         <BaseWrapperComponent backgroundColor={colors.white} isKeyboardAwareScrollView={!!stores?.length}>

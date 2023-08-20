@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react'
+import React, {useEffect, useState} from 'react'
 
 import {observer} from 'mobx-react-lite'
 import NotificationStore from '../store/NotificationStore/notification-store'
@@ -29,18 +29,42 @@ import LegalInformationS from "../screen/commonScreens/LegalInformationS";
 import CourierInProgressS from "../screen/courierScreens/CourierInProgressS";
 import TakenCourierOrdersS from "../screen/courierScreens/TakenCourierOrdersS";
 
+import ModalReconnect from "../components/modal/modal-reconnect";
+import NetInfo from "@react-native-community/netinfo";
+
 const RootStack = createNativeStackNavigator()
 const RootNavigation = observer(() => {
-    const {isLoading} = NotificationStore
+    const {isLoading, setIsLoading} = NotificationStore
     const {AuthStoreService, AuthStore} = rootStore
+    const [isConnected, setIsConnected] = useState(true)
     const {isAuth, user} = AuthStore
+
+    const checkInternetConnection = async () => {
+        setIsLoading(LoadingEnum.fetching)
+        try {
+            const netInfoState = await NetInfo.fetch()
+            setIsConnected(netInfoState.isConnected)
+        } catch (e) {
+
+        } finally {
+            setIsLoading(LoadingEnum.success)
+        }
+    }
     useEffect(() => {
+        const unsubscribe = NetInfo.addEventListener(state => {
+           // setIsConnected(state.isConnected)
+        })
         AuthStoreService.getMe()
+        return () => {
+            unsubscribe()
+        }
+
     }, [])
 
     return (
         <NavigationContainer>
             <Loading visible={isLoading === LoadingEnum.fetching}/>
+            <ModalReconnect checkInternetConnection={checkInternetConnection} visible={!isConnected}/>
             <RootStack.Navigator>
                 {
                     isAuth ?

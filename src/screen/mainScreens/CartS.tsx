@@ -7,7 +7,7 @@ import {Box, Text} from "native-base";
 import {colors} from "../../assets/colors/colors";
 import Button from "../../components/Button";
 import {Dimensions, FlatList, StyleSheet, TouchableOpacity} from "react-native";
-import EmptyList from "../../components/list-viewer/empty-list";
+import EmptyList, {renderEmptyContainer} from "../../components/list-viewer/empty-list";
 import ProductCartViewer from "../../components/list-viewer/ProductCartViewer";
 import {FontAwesome5} from '@expo/vector-icons';
 import {formatProductPrice, getFormattedAddress} from "../../components/MapViews/utils";
@@ -54,18 +54,6 @@ const CartS = observer(({navigation}: CartSProps) => {
             setToCartStore(null)
         }
     }, [])
-    const renderEmptyContainer = (height, text) => {
-        const onPressLink = () => {
-
-        }
-        return (
-            <EmptyList
-                height={height}
-                text={text}
-                onPressLink={onPressLink}
-            />
-        )
-    }
     const productCartViews = ({item}: { item: ProductCartType }) => {
         const onPressRemoveProduct = () => {
             removeProductToCart(item._id)

@@ -35,9 +35,6 @@ const PopUpAboutStore = ({
     const onPressLink = () => {
 
     }
-    /*if (!myLocation) {
-        return <View style={styles.container}/>;
-    }*/
     const formatted_address = getFormattedAddress({
         fullAddress: currentStore?.address,
         location: currentStore?.location
@@ -95,7 +92,7 @@ const PopUpAboutStore = ({
                           text={currentStore?.website}/>
                 </Box>
                 <Box flexDirection={'row'} alignItems={'center'}>
-                    <Feather name="phone-call" size={24} color={'#BABABA'}/>
+                    <Feather name="phone-call" size={24} color={'#BABABA'}/>{' '}
                     <PhoneNumberComponent phoneNumber={currentStore?.phone}/>
                 </Box>
                 <Box w={'100%'} mt={2} mb={2} flexGrow={1} h={300}>
@@ -110,7 +107,6 @@ const PopUpAboutStore = ({
                             latitudeDelta: 0.0922,
                             longitudeDelta: 0.0421,
                         }}
-                        // key={'4139a6460624d97f'}
                         provider={PROVIDER_GOOGLE}
                     >
                         <Marker
