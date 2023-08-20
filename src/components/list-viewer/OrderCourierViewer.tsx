@@ -1,46 +1,52 @@
 import React from 'react';
-import {StyleSheet} from "react-native";
+import {Image, StyleSheet} from "react-native";
 import {Box, Text} from "native-base";
-import {formatProductPrice} from "../MapViews/utils";
+import {getFormattedAddress} from "../MapViews/utils";
 import {colors} from "../../assets/colors/colors";
-import {getFormatDateToString} from "../../utils/utils";
 import Button from "../Button";
-import {useNavigation} from "@react-navigation/native";
-import {routerConstants} from "../../constants/routerConstants";
+import {OrderCourierType} from "../../api/couierApi";
+import fromToImg from '../../assets/images/courierImages/fromTo.png'
 
 type OrderCourierProps = {
-    order: any
+    order: OrderCourierType
+    onPressTakeOrder: () => void
+    isMyOrder?: boolean
 }
-const OrderCourierViewer = ({order}: OrderCourierProps) => {
-    const navigation = useNavigation<any>()
-
-    const onPressHide = () => {
-
-    }
-    const onPressTakeOrder = () => {
-        navigation.navigate(routerConstants.COURIER_PICK_ORDER)
-    }
+const OrderCourierViewer = ({order, onPressTakeOrder, isMyOrder = false}: OrderCourierProps) => {
+    const formattedAddressStore = getFormattedAddress({
+        fullAddress: order.store?.address,
+        location: order.store?.location
+    })
+    const formattedAddressUser = getFormattedAddress(order?.user?.address)
 
     return (<Box style={styles.container}>
             <Box flexDirection={'row'} justifyContent={'space-between'}>
-                <Text fontWeight={'600'} maxW={300} fontSize={16}>89 Soi Lam Promtep 2, Rawai
-                    469, 3 Wiset Rd, Rawai</Text>
-                <Text fontWeight={'600'} fontSize={16}>฿8888</Text>
+                <Box maxW={250} flexDirection={'row'} alignItems={'flex-start'}>
+                    <Image style={styles.imageFromTo} source={fromToImg} alt={'img'}/>
+                    <Box ml={2}>
+                        <Text fontWeight={'600'} fontSize={14}>{formattedAddressStore}</Text>
+                        <Text fontWeight={'600'} fontSize={14}>{formattedAddressUser}</Text>
+                    </Box>
+                </Box>
+                <Text fontWeight={'600'} fontSize={16}>฿{' '}{order.totalPrice}</Text>
             </Box>
+
 
             <Box flexDirection={'row'} mt={2} justifyContent={'space-between'}>
                 <Button backgroundColor={colors.green} styleText={styles.textBtn}
                         styleContainer={styles.containerBtn}
-                        onPress={onPressTakeOrder} title={'Take order'}/>
-                <Button backgroundColor={colors.grayLight} styleText={{color: colors.black}}
-                        styleContainer={{width: 20}}
-                        onPress={onPressHide}
-                        title={'Hide'}/>
+                        onPress={onPressTakeOrder} title={isMyOrder ? 'Go to order' :'Take order'}/>
             </Box>
         </Box>
     );
 };
 const styles = StyleSheet.create({
+    imageFromTo: {
+        position: "relative",
+        top: 8,
+        width: 9,
+        height: 27.5
+    },
     textBtn: {
         color: colors.white
     },

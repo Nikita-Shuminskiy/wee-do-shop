@@ -96,7 +96,7 @@ const CartS = observer(({navigation}: CartSProps) => {
     }
     const productTotalPrice = Number(formatProductPrice(cart?.totalSum ?? 0))
     const isFreeDelivery = Number(formatProductPrice(cart?.totalSum ?? 0)) >= 1500
-    console.log(isFreeDelivery)
+
     const formatted_address = getFormattedAddress(user.address)
     return (
         <>

@@ -17,6 +17,8 @@ import OrderStatusBar from "../../components/OrderStatusBar";
 import Button from "../../components/Button";
 import {NavigationProp, ParamListBase} from "@react-navigation/native";
 import {routerConstants} from "../../constants/routerConstants";
+import {BASE_URL} from "../../api/config";
+import {transformString} from "../../utils/utils";
 
 
 const renderImgForStatuses = (status: StatusType) => {
@@ -44,7 +46,7 @@ type OrderStatusesSProps = {
 const OrderStatusesS = observer(({navigation}: OrderStatusesSProps) => {
     const {order, statusOrder, setStatus} = orderStore
     useEffect(() => {
-        const socket = io('https://weedo-demo-production.up.railway.app/');
+        const socket = io(BASE_URL);
         socket.on('connect', () => {
             console.log('Подключено к серверу Socket.IO');
         });
@@ -87,7 +89,7 @@ const OrderStatusesS = observer(({navigation}: OrderStatusesSProps) => {
                                 <OrderStatusBar status={statusOrder}/>
                             </Box>
                             <Box mt={5} alignItems={'center'}>
-                                <Text fontSize={24} fontWeight={'600'}>Order placed</Text>
+                                <Text fontSize={24} fontWeight={'600'}>{transformString(statusOrder)}</Text>
                                 <Text color={colors.gray}>
                                     Some text details about this delivery stage</Text>
                             </Box>

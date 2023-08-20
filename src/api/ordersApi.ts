@@ -20,9 +20,6 @@ export const ordersApi = {
     async getOrderUserId(idUser: string, status?: StatusType, limit?: number, offset?: number) {
         return await instance.get<OrdersResponseType>(`order/user/${idUser}`, {params: {status, limit, offset}})
     },
-    async updateOrder(id: string, status: StatusType) {
-        return await instance.patch<UserType>(`order/${id}/status`, {status})
-    },
 }
 export type OrdersResponseType = {
     results: ApiOrderType[],

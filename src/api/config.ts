@@ -3,17 +3,17 @@ import axios from 'axios';
 import {DataLoginType} from './authApi'
 import {deviceStorage} from '../utils/storage/storage'
 
-export const url = 'https://weedo-demo-production.up.railway.app/';
+export const BASE_URL = 'https://weedo-demo-production.up.railway.app/';
 
 export const instance = axios.create({
-    baseURL: url,
+    baseURL: BASE_URL,
 });
 
 // Request interceptor for API calls
 instance.interceptors.request.use(
     async (config) => {
         const accessToken = await AsyncStorage.getItem('accessToken');
-        //await OrderStore.checkInternet()
+        //await CourierOrderStore.checkInternet()
         if (accessToken) {
             //@ts-ignore
             config.headers = {
@@ -36,9 +36,10 @@ instance.interceptors.response.use(
         const originalRequest = error.config;
         if (error.response.status === 401 && !originalRequest._retry) {
             const refreshToken = await AsyncStorage.getItem('refreshToken');
+            console.log(refreshToken)
             originalRequest._retry = true;
             try {
-                const {data} = await axios.post<DataLoginType>(`${url}auth/refresh`, {refreshToken: refreshToken});
+                const {data} = await axios.post<DataLoginType>(`${BASE_URL}auth/refresh`, {refreshToken: refreshToken});
                 originalRequest.headers['Authorization'] = 'Bearer' + data.accessToken;
                 await deviceStorage.saveItem('refreshToken', data.refreshToken)
                 await deviceStorage.saveItem('accessToken', data.accessToken)

@@ -26,6 +26,8 @@ import PrivacyPolicy from "../components/PrivacyPolicy";
 import PrivacyPolicyS from "../screen/commonScreens/PrivacyPolicyS";
 import TermServiceS from "../screen/commonScreens/TermServiceS";
 import LegalInformationS from "../screen/commonScreens/LegalInformationS";
+import CourierInProgressS from "../screen/courierScreens/CourierInProgressS";
+import TakenCourierOrdersS from "../screen/courierScreens/TakenCourierOrdersS";
 
 const RootStack = createNativeStackNavigator()
 const RootNavigation = observer(() => {
@@ -88,8 +90,18 @@ const RootNavigation = observer(() => {
                                 />
                                 <RootStack.Screen
                                     options={{headerShown: false}}
+                                    name={routerConstants.COURIER_TAKEN_ORDERS}
+                                    component={TakenCourierOrdersS}
+                                />
+                                <RootStack.Screen
+                                    options={{headerShown: false}}
                                     name={routerConstants.COURIER_PICK_ORDER}
                                     component={CourierPickOrder}
+                                />
+                                <RootStack.Screen
+                                    options={{headerShown: false}}
+                                    name={routerConstants.COURIER_IN_PROGRESS}
+                                    component={CourierInProgressS}
                                 />
                             </React.Fragment>
                         : <React.Fragment>

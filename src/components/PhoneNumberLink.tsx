@@ -1,6 +1,7 @@
 import {Linking, TouchableOpacity} from "react-native";
 import {Text} from "native-base";
 import React from "react";
+import {colors} from "../assets/colors/colors";
 
 export const PhoneNumberComponent = ({ phoneNumber }) => {
     const handlePhonePress = async () => {
@@ -16,7 +17,7 @@ export const PhoneNumberComponent = ({ phoneNumber }) => {
 
     return (
         <TouchableOpacity onPress={handlePhonePress}>
-            <Text ml={2} mb={2}>{phoneNumber}</Text>
+            <Text fontSize={15} color={colors.blueLightMedium}>{phoneNumber}</Text>
         </TouchableOpacity>
     );
 };

@@ -91,7 +91,7 @@ const OrdersS = observer(({navigation, route}: OrdersSProps) => {
     /* const onRefresh = () => {
          setRefreshing(true)
          const offset = 10;
-         OrderService.getOrders({status: isRoutHistory ? StatusType.Completed : null, limit: 10, offset}).finally(() => {
+         CourierOrderService.getOrders({status: isRoutHistory ? StatusType.Completed : null, limit: 10, offset}).finally(() => {
              setRefreshing(false)
          })
      };*/

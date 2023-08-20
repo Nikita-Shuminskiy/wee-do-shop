@@ -77,7 +77,7 @@ export function isCurrentTimeInRange(workingHoursStores: WorkingHoursType, isInf
 }
 
 export const getFormatDateToString = (dateString: string) => {
-    if(!dateString) return ''
+    if (!dateString) return ''
     const date = parseISO(dateString);
 
     const formattedDate = format(date, "d MMMM HH:mm");
@@ -85,3 +85,20 @@ export const getFormatDateToString = (dateString: string) => {
     return formattedDate
 }
 export const deliveryPrice = 100
+export const transformString = (str) => {
+    const words = str?.match(/[A-Z][a-z]+/g);
+
+    if (!words) {
+        return "";
+    }
+
+    const transformedWords = words.map((word, index) => {
+        if (index === 0) {
+            return word;
+        } else {
+            return word.toLowerCase();
+        }
+    });
+
+    return transformedWords.join(" ");
+}

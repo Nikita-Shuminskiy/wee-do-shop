@@ -5,7 +5,6 @@ import {AddressType} from "../../store/AuthStore/auth-store";
 
 export const allowLocation = async () => {
     const {Notification} = rootStore
-    Notification.setIsLoading(LoadingEnum.fetching)
     try {
         let {status} = await Location.requestForegroundPermissionsAsync();
         if (status !== 'granted') {
@@ -16,7 +15,6 @@ export const allowLocation = async () => {
     } catch (e) {
         console.log('error', e)
     } finally {
-        Notification.setIsLoading(LoadingEnum.success)
     }
 }
 export const getInfoAddressForCoords = async ({latitude, longitude}) => {

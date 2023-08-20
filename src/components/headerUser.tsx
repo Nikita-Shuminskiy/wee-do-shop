@@ -19,14 +19,19 @@ export const HeaderUser = ({navigation, address}:HeaderUserType) => {
     const onPressUserHandler = () => {
         navigation.navigate(routerConstants.PROFILE_USER)
     }
+    const onPressUserAddressHandler = () => {
+        navigation.navigate(routerConstants.ADDRESS)
+    }
     return (
         <Box paddingX={5} mt={6} mb={2} w={'100%'} flexDirection={'row'}
              justifyContent={'space-between'}>
             <TouchableOpacity onPress={onPressUserHandler}>
                 <Image source={userImg} alt={'user'}/>
             </TouchableOpacity>
-            <Text fontSize={14} w={'60%'} textAlign={'center'}
-                  fontWeight={'600'}>{formatted_address}</Text>
+            <TouchableOpacity style={{ alignItems: 'center', width: '70%' }} onPress={onPressUserAddressHandler}>
+                <Text fontSize={14} w={'60%'} textAlign={'center'}
+                      fontWeight={'600'}>{formatted_address}</Text>
+            </TouchableOpacity>
             <TouchableOpacity onPress={onPressFavoriteHandler}>
                 <Image source={likeImg} alt={'like'}/>
             </TouchableOpacity>
