@@ -20,6 +20,24 @@ import ArrowBack from "../../components/ArrowBack";
 import {observer} from "mobx-react-lite";
 import AuthStore, {AddressType} from "../../store/AuthStore/auth-store";
 import {getFormattedAddress} from "../../components/MapViews/utils";
+type CountryData = {
+    callingCode: string[];
+    cca2: string;
+    currency: string[];
+    flag: string;
+    name: string;
+    region: string;
+    subregion: string;
+};
+const countryDataDefault = {
+    callingCode: ['66'],
+    cca2: "TH",
+    currency: ["THB"],
+    flag: "flag-th",
+    name: "Thailand",
+    region: "Asia",
+    subregion: "South-Eastern Asia",
+}
 
 type LoginSProps = {
     navigation: NavigationProp<ParamListBase>
@@ -39,10 +57,13 @@ const RegisterS = observer(({navigation}: LoginSProps) => {
     const {AuthStoreService} = rootStore
     const {currentLocation, setLocation} = AuthStore
     const [isValidPhone, setIsValidPhone] = useState(false)
+    const [countryCode, setCountryCode] = useState<CountryData>(countryDataDefault)
 
     const onSubmit = (values: UserRegisterDataType) => {
+        const formattedPhoneNumber = `+${countryCode.callingCode[0]}${values.phone}`
         AuthStoreService.registration({
             ...values,
+            phone: formattedPhoneNumber,
             address: currentLocation
         })
         setSubmitting(false)
@@ -100,7 +121,9 @@ const RegisterS = observer(({navigation}: LoginSProps) => {
 
 
     const formatted_address = getFormattedAddress(currentLocation)
-
+    const onChangeCountry = (country) => {
+        setCountryCode(country)
+    }
     return (<BaseWrapperComponent isKeyboardAwareScrollView={true}>
             <Box alignItems={'center'}>
                 <Box mt={5} mb={5} position={'absolute'} left={5}>
@@ -145,6 +168,7 @@ const RegisterS = observer(({navigation}: LoginSProps) => {
                                                                   color={colors.gray}/>}/>
                     <Box mt={2}>
                         <PhoneNumberField onValidNumber={onValidNumberHandler}
+                                          onChangeCountry={onChangeCountry}
                                           errorMessage={'Incorrect phone number'}
                                           isInvalid={!!(!isValidPhone && touched.phone)}
                                           isRequired={true}

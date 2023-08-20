@@ -8,8 +8,8 @@ export const courierApi = {
     async getCourierOrders() {
         return await instance.get<ResponseOrdersTypes>(`courier/orders/available`)
     },
-    async getTakenCourierOrders(idCourier: string) {
-        return await instance.get<ResponseOrdersTypes>(`courier/${idCourier}/orders`)
+    async getTakenCourierOrders(idCourier: string, payload?: {status?: StatusType}) {
+        return await instance.get<ResponseOrdersTypes>(`courier/${idCourier}/orders`, {params: payload})
     },
     async assignCourierOrder(idOrder: string, courierId: string) {
         return await instance.patch<AssignCourierOrderType>(`order/${idOrder}/assignCourier`, {courierId})

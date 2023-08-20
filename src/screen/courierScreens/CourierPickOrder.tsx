@@ -57,8 +57,8 @@ const CourierPickOrder = observer(() => {
                     <Box alignItems={'center'} w={'100%'} flexDirection={'row'} mt={2} justifyContent={'space-between'}>
                         <Box alignItems={'flex-start'}>
                             <Text fontSize={28}
-                                  fontWeight={'700'}> {isStatusOnTheWay ? 'Deliver order here' : 'Pick up order here'}:</Text>
-                            <Text fontSize={18} textAlign={'center'}
+                                  fontWeight={'700'}>{isStatusOnTheWay ? 'Deliver order here' : 'Pick up order here'}:</Text>
+                            <Text fontSize={18} maxW={300} 
                                   fontWeight={'500'}>{isStatusOnTheWay ? formattedAddressUser : formattedAddressStore}</Text>
                             <Text color={colors.gray}>Current order status:{' '}<Text
                                 color={colors.black}>{transformString(selectedOrderStatus ?? selectedOrder.status)}</Text></Text>

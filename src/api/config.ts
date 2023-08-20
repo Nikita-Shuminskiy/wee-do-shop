@@ -35,23 +35,27 @@ instance.interceptors.response.use(
     async function (error) {
         const originalRequest = error.config;
         if (error.response.status === 401 && !originalRequest._retry) {
-            const refreshToken = await AsyncStorage.getItem('refreshToken');
-            console.log(refreshToken)
             originalRequest._retry = true;
             try {
-                const {data} = await axios.post<DataLoginType>(`${BASE_URL}auth/refresh`, {refreshToken: refreshToken});
-                originalRequest.headers['Authorization'] = 'Bearer' + data.accessToken;
-                await deviceStorage.saveItem('refreshToken', data.refreshToken)
-                await deviceStorage.saveItem('accessToken', data.accessToken)
+                const refreshToken = await AsyncStorage.getItem('refreshToken');
+                const { data } = await axios.post<DataLoginType>(`${BASE_URL}auth/refresh`, { refreshToken: refreshToken });
+
+                // Обновляем токены в хранилище
+                await AsyncStorage.setItem('refreshToken', data.refreshToken);
+                await AsyncStorage.setItem('accessToken', data.accessToken);
+
+                // Обновляем заголовок запроса с новым accessToken
+                originalRequest.headers['Authorization'] = 'Bearer ' + data.accessToken;
+
+                // Повторно выполняем оригинальный запрос
+                return axios(originalRequest);
             } catch (e) {
-                console.log(e, 'error interceptors')
+                console.log(e, 'error interceptors');
+                return Promise.reject(e); // Возвращаем ошибку, чтобы обработать ее дальше
             }
-
-            return axios.request(originalRequest)
-
-
         }
 
+        // Если это не ошибка авторизации, просто возвращаем ошибку
         return Promise.reject(error);
     },
 );

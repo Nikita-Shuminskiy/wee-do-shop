@@ -48,7 +48,6 @@ const OrderStatusesS = observer(({navigation}: OrderStatusesSProps) => {
     useEffect(() => {
         const socket = io(BASE_URL);
         socket.on('connect', () => {
-            console.log('Подключено к серверу Socket.IO');
         });
         socket.on(`orderStatusUpdated:${order._id}`, (data: { orderId: string, status: StatusType }) => {
             setStatus(data.status)
