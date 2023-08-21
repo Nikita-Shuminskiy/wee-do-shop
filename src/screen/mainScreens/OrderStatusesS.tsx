@@ -18,7 +18,7 @@ import Button from "../../components/Button";
 import {NavigationProp, ParamListBase} from "@react-navigation/native";
 import {routerConstants} from "../../constants/routerConstants";
 import {BASE_URL} from "../../api/config";
-import {transformString} from "../../utils/utils";
+import {splittingWord} from "../../utils/utils";
 
 
 const renderImgForStatuses = (status: StatusType) => {
@@ -39,12 +39,55 @@ const renderImgForStatuses = (status: StatusType) => {
             return placedImg
     }
 }
+const renderDescriptionForStatuses = (status: StatusType) => {
+    switch (status) {
+        case StatusType.Placed:
+            return <>
+                <Text fontSize={24} fontWeight={'600'}>Order{' '}{splittingWord(status)}</Text>
+                <Text color={colors.gray}>
+                    The Store received the order, confirmation confirmation</Text>
+            </>
+        case StatusType.Confirmed:
+            return <>
+                <Text fontSize={24} fontWeight={'600'}>Order{' '}{splittingWord(status)}</Text>
+                <Text color={colors.gray}>
+                    The store approved the order</Text>
+            </>
+        case StatusType.WaitingForPickUp:
+            return <>
+                <Text fontSize={24} fontWeight={'600'}>Order{' '}{splittingWord(status)}</Text>
+                <Text color={colors.gray}>
+                    The courier picks up your order</Text>
+            </>
+        case StatusType.OnTheWay:
+            return <>
+                <Text fontSize={24} fontWeight={'600'}>Order{' '}{splittingWord(status)}</Text>
+                <Text color={colors.gray}>
+                    Courier on the way</Text>
+            </>
+        case StatusType.Completed:
+            return <>
+                <Text fontSize={24} fontWeight={'600'}>Order{' '}{splittingWord(status)}</Text>
+                <Text color={colors.gray}>
+                    Order delivered</Text>
+            </>
+        case StatusType.Canceled:
+            return <>
+                <Text fontSize={24} fontWeight={'600'}>{splittingWord(status)}</Text>
+                <Text color={colors.gray}>
+                    Order canceled, wait for a call from the store</Text>
+            </>
+        default:
+            return placedImg
+    }
+}
 
 type OrderStatusesSProps = {
     navigation: NavigationProp<ParamListBase>
 }
 const OrderStatusesS = observer(({navigation}: OrderStatusesSProps) => {
     const {order, statusOrder, setStatus} = orderStore
+    console.log(order._id)
     useEffect(() => {
         const socket = io(BASE_URL);
         socket.on('connect', () => {
@@ -68,15 +111,18 @@ const OrderStatusesS = observer(({navigation}: OrderStatusesSProps) => {
                         </TouchableOpacity>
                     </Box>
                     <Box alignItems={'center'}>
-                        <Text fontSize={22} fontWeight={'500'}>{order?.store.name}</Text>
+                        <Text fontSize={22} fontWeight={'500'}>{order?.store?.name}</Text>
                     </Box>
 
                 </Box>
                 {
                     isCanceled ? (
                         <Box flex={2} justifyContent={'center'} alignItems={'center'}>
-                            <Text mb={5} fontSize={23} fontWeight={'700'}>The store canceled the order</Text>
-                            <Button styleContainer={styles.styleContainerBtn} onPress={onPressClose} title={'Go to orders '}  />
+                            <Text fontSize={24} fontWeight={'600'}>{splittingWord(statusOrder)}</Text>
+                            <Text color={colors.gray}>
+                                Order canceled, wait for a call from the store</Text>
+                            <Button styleContainer={styles.styleContainerBtn} onPress={onPressClose}
+                                    title={'Go to orders '}/>
                         </Box>
                     ) : (
                         <>
@@ -88,9 +134,7 @@ const OrderStatusesS = observer(({navigation}: OrderStatusesSProps) => {
                                 <OrderStatusBar status={statusOrder}/>
                             </Box>
                             <Box mt={5} alignItems={'center'}>
-                                <Text fontSize={24} fontWeight={'600'}>{transformString(statusOrder)}</Text>
-                                <Text color={colors.gray}>
-                                    Some text details about this delivery stage</Text>
+                                {renderDescriptionForStatuses(statusOrder)}
                             </Box>
                         </>
                     )

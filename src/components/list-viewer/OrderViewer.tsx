@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {memo} from 'react';
 import {StyleSheet} from "react-native";
 import {ApiOrderType, StatusType} from "../../api/ordersApi";
 import {colors} from "../../assets/colors/colors";
@@ -15,7 +15,7 @@ type OrderViewerProps = {
     onPressDetails: () => void
     onPressRepeat: () => void
 }
-const OrderViewer = ({order, onPressDetails, onPressRepeat}: OrderViewerProps) => {
+const OrderViewer = memo(({order, onPressDetails, onPressRepeat}: OrderViewerProps) => {
     const {setOrderData, setStatus} = orderStore
 
     const navigation = useNavigation<any>()
@@ -56,7 +56,7 @@ const OrderViewer = ({order, onPressDetails, onPressRepeat}: OrderViewerProps) =
         </Box>
 
     );
-};
+});
 const styles = StyleSheet.create({
     textBtn: {
         color: colors.black

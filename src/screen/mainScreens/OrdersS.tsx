@@ -37,8 +37,8 @@ const OrdersS = observer(({navigation, route}: OrdersSProps) => {
     const ordersLength = orders?.length
     const requestAPI = () => {
         setLoadingData(true)
-        const offset = (page - 1) * 10;
-        OrderService.getOrders({status: isRoutHistory ? StatusType.Completed : null, limit: 10, offset}).finally(() => {
+        const offset = (page - 1) * 40;
+        OrderService.getOrders({status: isRoutHistory ? StatusType.Completed : null, limit: 40, offset}).finally(() => {
             setLoadingData(false)
         })
     }
@@ -140,7 +140,7 @@ const OrdersS = observer(({navigation, route}: OrdersSProps) => {
                         ListEmptyComponent={() => renderEmptyContainer(0, 'You haven’t placed\n any orders yet.')}
                         ListFooterComponent={renderFooter}
                         onEndReached={fetchMoreData}
-                        onEndReachedThreshold={2}
+                        onEndReachedThreshold={4}
                     />
                 </Box>
             </BaseWrapperComponent>

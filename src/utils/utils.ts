@@ -85,7 +85,7 @@ export const getFormatDateToString = (dateString: string) => {
     return formattedDate
 }
 export const deliveryPrice = 100
-export const transformString = (str) => {
+export const splittingWord = (str) => {
     const words = str?.match(/[A-Z][a-z]+/g);
 
     if (!words) {

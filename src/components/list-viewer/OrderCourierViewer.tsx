@@ -6,7 +6,7 @@ import {colors} from "../../assets/colors/colors";
 import Button from "../Button";
 import {OrderCourierType} from "../../api/couierApi";
 import fromToImg from '../../assets/images/courierImages/fromTo.png'
-import {deliveryPrice, transformString} from "../../utils/utils";
+import {deliveryPrice, splittingWord} from "../../utils/utils";
 
 type OrderCourierProps = {
     order: OrderCourierType
@@ -37,7 +37,7 @@ const OrderCourierViewer = ({
                 </Box>
                 <Box justifyContent={'space-between'} alignItems={'flex-end'}>
                     <Text fontWeight={'600'} fontSize={16}>฿{' '}{productTotalPrice}</Text>
-                    <Text fontWeight={'600'} color={colors.green} fontSize={12}>{transformString(order.status)}</Text>
+                    <Text fontWeight={'600'} color={colors.green} fontSize={12}>{splittingWord(order.status)}</Text>
                 </Box>
             </Box>
 

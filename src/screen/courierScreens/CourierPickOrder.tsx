@@ -12,7 +12,7 @@ import CourierOrderStore from "../../store/CourierOrderStore/courier-order-store
 import rootStore from "../../store/RootStore/root-store";
 import {StatusType} from "../../api/ordersApi";
 import {routerConstants} from "../../constants/routerConstants";
-import {transformString} from "../../utils/utils";
+import {splittingWord} from "../../utils/utils";
 import {AntDesign} from "@expo/vector-icons";
 import OrderUserInfo from "../../components/OrderUserInfo";
 
@@ -58,10 +58,10 @@ const CourierPickOrder = observer(() => {
                         <Box alignItems={'flex-start'}>
                             <Text fontSize={28}
                                   fontWeight={'700'}>{isStatusOnTheWay ? 'Deliver order here' : 'Pick up order here'}:</Text>
-                            <Text fontSize={18} maxW={300} 
+                            <Text fontSize={18} maxW={300}
                                   fontWeight={'500'}>{isStatusOnTheWay ? formattedAddressUser : formattedAddressStore}</Text>
                             <Text color={colors.gray}>Current order status:{' '}<Text
-                                color={colors.black}>{transformString(selectedOrderStatus ?? selectedOrder.status)}</Text></Text>
+                                color={colors.black}>{splittingWord(selectedOrderStatus ?? selectedOrder.status)}</Text></Text>
                         </Box>
                         <TouchableOpacity onPress={onShowUserInfoModal}>
                             <Box justifyContent={'center'} alignItems={'center'}>

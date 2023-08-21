@@ -45,7 +45,7 @@ const PopUpOrderDetails = ({
                                onPressRepeat,
                                order
                            }: PopUpOrderDetailsProps) => {
-    const getTotalPriceOrder =  order.products?.reduce((acc, product) => {
+    const getTotalPriceOrder =  order?.products?.reduce((acc, product) => {
         return acc + product.amount * product.product.price;
     }, 0);
     const isFreeDelivery = Number(formatProductPrice(getTotalPriceOrder ?? 0)) >= 1500
