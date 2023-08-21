@@ -66,6 +66,7 @@ const RegisterS = observer(({navigation}: LoginSProps) => {
             phone: formattedPhoneNumber,
             address: currentLocation
         })
+        setIsValidPhone(true)
         setSubmitting(false)
     }
     const {handleChange, handleBlur, touched, handleSubmit, values, errors, isSubmitting, setSubmitting, setValues} =
@@ -122,8 +123,10 @@ const RegisterS = observer(({navigation}: LoginSProps) => {
 
     const formatted_address = getFormattedAddress(currentLocation)
     const onChangeCountry = (country) => {
+        setIsValidPhone(true)
         setCountryCode(country)
     }
+
     return (<BaseWrapperComponent isKeyboardAwareScrollView={true}>
             <Box alignItems={'center'}>
                 <Box mt={5} mb={5} position={'absolute'} left={5}>

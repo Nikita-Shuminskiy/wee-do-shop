@@ -9,10 +9,15 @@ type PhoneNumberFieldProps = PhoneInputProps & {
 	isRequired: boolean
 	isInvalid: boolean
 	errorMessage?: string
+	onChangeText?: any
 	onValidNumber?: (isValid: boolean) => void
 }
-const PhoneNumberField: React.FC<PhoneNumberFieldProps> = ({ isRequired, isInvalid, onValidNumber, errorMessage, ...rest }) => {
+const PhoneNumberField: React.FC<PhoneNumberFieldProps> = ({ isRequired, isInvalid,onChangeText, onValidNumber, errorMessage, ...rest }) => {
 	const phoneInput = useRef<PhoneInput>(null)
+	const onChangeTextHandler = (text) => {
+		onChangeText(text)
+		onValidNumber(phoneInput.current?.isValidNumber(text))
+	}
 	return (
 		<Box w={'100%'}>
 			<FormControl isInvalid={isInvalid} isRequired={isRequired}>
@@ -31,14 +36,12 @@ const PhoneNumberField: React.FC<PhoneNumberFieldProps> = ({ isRequired, isInval
 						alignItems: 'center',
 					}}
 					textContainerStyle={{ borderRadius: 16, backgroundColor: 'transparent', height: 50 }}
-					codeTextStyle={{ color: colors.gray, height: 23 }}
-					textInputStyle={{ color: colors.gray, fontSize: 14 }}
+					codeTextStyle={{ color: colors.gray, height: 23, fontSize: 16 }}
+					textInputStyle={{ color: colors.gray, fontSize: 16 }}
 					defaultCode={'TH'}
 					placeholder={'Phone*'}
 					layout='first'
-					onChangeFormattedText={(text) => {
-						onValidNumber(phoneInput.current?.isValidNumber(text))
-					}}
+					onChangeText={onChangeTextHandler}
 					{...rest}
 				/>
 				<FormControl.ErrorMessage leftIcon={<WarningOutlineIcon size='xs' />}>

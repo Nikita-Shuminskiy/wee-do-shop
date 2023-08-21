@@ -6,7 +6,7 @@ import {colors} from "../../assets/colors/colors";
 import Button from "../Button";
 import {OrderCourierType} from "../../api/couierApi";
 import fromToImg from '../../assets/images/courierImages/fromTo.png'
-import {deliveryPrice, splittingWord} from "../../utils/utils";
+import {splittingWord} from "../../utils/utils";
 
 type OrderCourierProps = {
     order: OrderCourierType
@@ -25,7 +25,7 @@ const OrderCourierViewer = ({
         location: order.store?.location
     })
     const formattedAddressUser = getFormattedAddress(order?.user?.address)
-    const productTotalPrice = +formatProductPrice(order.totalPrice) + +deliveryPrice
+    const productTotalPrice = formatProductPrice(order.totalPrice)
     return (<Box style={styles.container}>
             <Box flexDirection={'row'} justifyContent={'space-between'}>
                 <Box maxW={250} flexDirection={'row'} alignItems={'flex-start'}>

@@ -2,7 +2,6 @@ import React from 'react';
 import ModalPopup from "./pop-up";
 import {Box, Image, Text} from "native-base";
 import {OrderCourierType} from "../api/couierApi";
-import {deliveryPrice} from "../utils/utils";
 import {formatProductPrice} from "./MapViews/utils";
 import productImg from "../assets/images/productTest.png";
 import {colors} from "../assets/colors/colors";
@@ -18,7 +17,7 @@ const OrderUserInfo = ({
                            onClose,
                            order,
                        }: OrderUserInfoProps) => {
-    const productTotalPrice = +formatProductPrice(order.totalPrice) + +deliveryPrice
+    const productTotalPrice = formatProductPrice(order.totalPrice)
 
     return (
         <ModalPopup visible={show} onClose={onClose}>

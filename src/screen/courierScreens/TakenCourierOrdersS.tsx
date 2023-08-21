@@ -24,7 +24,7 @@ const TakenCourierOrdersS = observer(({navigation}: TakenCourierOrdersProps) => 
 
     const onRefresh = () => {
         setRefreshing(true)
-        CourierOrderService.getTakenCourierOrders().finally(() => {
+        CourierOrderService.getTakenCourierOrders({status: StatusType.OnTheWay}).finally(() => {
             setRefreshing(false)
         })
     };
@@ -52,7 +52,6 @@ const TakenCourierOrdersS = observer(({navigation}: TakenCourierOrdersProps) => 
                     <FlatList
                         data={takenCourierOrders ?? []}
                         renderItem={orderViews}
-                        scrollEnabled={false}
                         keyExtractor={(item, index) => index?.toString()}
                         style={{width: '100%'}}
                         contentContainerStyle={

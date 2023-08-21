@@ -51,8 +51,8 @@ export const getInfoAddressForCoords = async ({latitude, longitude}) => {
     }
 }
 export const getFormattedAddress = (currentLocation: AddressType) => {
-    const fullAddress = currentLocation?.fullAddress // подьезд этаж
-    return `${fullAddress?.country ?? ''} ${fullAddress?.city ?? ""} ${fullAddress?.street ?? ''} ${fullAddress?.house ?? ''} ${fullAddress?.apartment ?? ''}`;
+    const fullAddress = currentLocation?.fullAddress
+    return `${fullAddress?.city ?? ""} ${fullAddress?.street ?? ''} ${fullAddress?.house ?? ''} ${fullAddress?.apartment ?? ''}`;
 }
 export const formatProductPrice = (price) => {
     const priceInDollars = price / 100;

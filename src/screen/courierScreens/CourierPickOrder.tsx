@@ -17,12 +17,18 @@ import {AntDesign} from "@expo/vector-icons";
 import OrderUserInfo from "../../components/OrderUserInfo";
 
 const CourierPickOrder = observer(() => {
-    const {selectedOrder, deliverOrderInProgressInfo, selectedOrderStatus, connectToSocketOrder} = CourierOrderStore
+    const {selectedOrder, connectToSocketOrder} = CourierOrderStore
     const {CourierOrderService} = rootStore
     const navigation = useNavigation<any>()
     const [showUserInfoModal, setShowUserInfoModal] = useState(false)
+    const [coords, setCoords] = useState({
+        latitude: selectedOrder.user.address?.location.coordinates[1],
+        longitude: selectedOrder.user.address?.location.coordinates[0],
+        latitudeDelta: 0.0922,
+        longitudeDelta: 0.0421,
+    });
 
-    const isStatusOnTheWay = deliverOrderInProgressInfo?.status === StatusType.OnTheWay
+    const isStatusOnTheWay = selectedOrder?.status === StatusType.OnTheWay
 
     const onPressPickOrder = (status: StatusType) => {
         CourierOrderService.updateOrderStatus(status)
@@ -31,13 +37,22 @@ const CourierPickOrder = observer(() => {
         }
     };
 
-    const onPressCanselOrder = () => {
-        navigation.goBack()
-    }
+    useEffect(() => {
+        if (isStatusOnTheWay) {
+            setCoords({
+                ...coords,
+                latitude: selectedOrder.user.address?.location.coordinates[1],
+                longitude: selectedOrder.user.address?.location.coordinates[0]
+            })
+        } else {
+            setCoords({
+                ...coords,
+                latitude: selectedOrder.store?.location.coordinates[1],
+                longitude: selectedOrder.store?.location.coordinates[0]
+            })
+        }
+    }, [isStatusOnTheWay])
 
-
-    const latitude = isStatusOnTheWay ? selectedOrder.user.address?.location.coordinates[1] : selectedOrder.store?.location.coordinates[1]
-    const longitude = isStatusOnTheWay ? selectedOrder.user.address?.location.coordinates[0] : selectedOrder.store?.location.coordinates[0]
 
     const formattedAddressStore = getFormattedAddress({
         fullAddress: selectedOrder.store?.address,
@@ -50,6 +65,7 @@ const CourierPickOrder = observer(() => {
     const onShowUserInfoModal = () => {
         setShowUserInfoModal(true)
     }
+
     return (
         <>
             <BaseWrapperComponent isKeyboardAwareScrollView={true}>
@@ -61,7 +77,7 @@ const CourierPickOrder = observer(() => {
                             <Text fontSize={18} maxW={300}
                                   fontWeight={'500'}>{isStatusOnTheWay ? formattedAddressUser : formattedAddressStore}</Text>
                             <Text color={colors.gray}>Current order status:{' '}<Text
-                                color={colors.black}>{splittingWord(selectedOrderStatus ?? selectedOrder.status)}</Text></Text>
+                                color={colors.black}>{splittingWord(selectedOrder.status)}</Text></Text>
                         </Box>
                         <TouchableOpacity onPress={onShowUserInfoModal}>
                             <Box justifyContent={'center'} alignItems={'center'}>
@@ -77,33 +93,19 @@ const CourierPickOrder = observer(() => {
                                 height: '100%',
                                 borderRadius: 20,
                             }}
-                            initialRegion={{
-                                latitude: latitude,
-                                longitude: longitude,
-                                latitudeDelta: 0.0922,
-                                longitudeDelta: 0.0421,
-                            }}
+                            focusable={true}
+                            region={coords} // Изменено на region
                             provider={PROVIDER_GOOGLE}
                         >
 
                             <Marker
                                 coordinate={{
-                                    latitude: latitude,
-                                    longitude: longitude,
+                                    latitude: coords.latitude,
+                                    longitude: coords.longitude,
                                 }}
                                 focusable={true}
-                                title={selectedOrder.store?.name}
+                                title={isStatusOnTheWay ? formattedAddressUser : selectedOrder.store?.name}
                             />
-                            {
-                                isStatusOnTheWay && <Marker
-                                    coordinate={{
-                                        latitude: latitude,
-                                        longitude: longitude,
-                                    }}
-                                    focusable={true}
-                                    title={selectedOrder.store?.name}
-                                />
-                            }
                         </MapView>
                     </Box>
                     <Box w={'100%'}>

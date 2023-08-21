@@ -44,7 +44,7 @@ export class AuthStore {
     }
 
     async registration(dataUser: UserRegisterDataType) {
-        const {data} = await authApi.register(dataUser)
+        return  await authApi.register(dataUser)
     }
 
     async getMe(): Promise<void> {
