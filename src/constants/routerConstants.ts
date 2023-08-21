@@ -22,8 +22,11 @@ export const routerConstants = {
 
     //courier
     COURIER_REGISTER: 'courier-register',
+    MAIN_COURIER: 'MAIN-COURIER',
     COURIER_ORDERS: 'courier-orders',
     COURIER_PICK_ORDER: 'courier-pick-order',
     COURIER_IN_PROGRESS: 'courier-in-progress',
     COURIER_TAKEN_ORDERS: 'courier-taken-orders',
+    COURIER_COMPLETED_ORDERS: 'courier-completed-orders',
+    COURIER_PROFILE: 'courier-profile',
 }

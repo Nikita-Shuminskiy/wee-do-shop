@@ -11,6 +11,7 @@ import {routerConstants} from "../../constants/routerConstants";
 import {NavigationProp, ParamListBase} from "@react-navigation/native";
 import ArrowBack from "../../components/ArrowBack";
 import arrowLeft from "../../assets/images/arrow-left.png";
+import {StatusType} from "../../api/ordersApi";
 
 type TakenCourierOrdersProps = {
     navigation: NavigationProp<ParamListBase>
@@ -20,9 +21,7 @@ const TakenCourierOrdersS = observer(({navigation}: TakenCourierOrdersProps) => 
     const {CourierOrderService, CourierOrderStore} = rootStore
     const {takenCourierOrders, setSelectedOrder} = CourierOrderStore
     const [refreshing, setRefreshing] = useState(false);
-    const onPressGoBack = () => {
-        navigation.goBack()
-    }
+
     const onRefresh = () => {
         setRefreshing(true)
         CourierOrderService.getTakenCourierOrders().finally(() => {
@@ -40,17 +39,13 @@ const TakenCourierOrdersS = observer(({navigation}: TakenCourierOrdersProps) => 
         )
     }
     useEffect(() => {
-        CourierOrderService.getTakenCourierOrders()
+        CourierOrderService.getTakenCourierOrders({status: StatusType.OnTheWay})
     }, [])
 
     return (
-        <BaseWrapperComponent isKeyboardAwareScrollView={true}>
-            <Box>
-
-                <Box alignItems={'center'} mt={2} flexDirection={'row'}>
-                    <Box ml={3} mt={2} mr={5}>
-                        <ArrowBack goBackPress={onPressGoBack} img={arrowLeft}/>
-                    </Box>
+        <BaseWrapperComponent>
+            <Box w={'100%'} flex={1}>
+                <Box alignItems={'center'} mt={2}>
                     <Text fontSize={28} fontWeight={'700'}>My Orders</Text>
                 </Box>
                 <Box mt={5} alignItems={'center'} flex={1} w={'100%'}>

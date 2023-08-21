@@ -31,6 +31,7 @@ import TakenCourierOrdersS from "../screen/courierScreens/TakenCourierOrdersS";
 
 import ModalReconnect from "../components/modal/modal-reconnect";
 import NetInfo from "@react-native-community/netinfo";
+import MainCourierNavigation from "./MainCourierNavigation";
 
 const RootStack = createNativeStackNavigator()
 const RootNavigation = observer(() => {
@@ -109,14 +110,10 @@ const RootNavigation = observer(() => {
                             <React.Fragment>
                                 <RootStack.Screen
                                     options={{headerShown: false}}
-                                    name={routerConstants.COURIER_ORDERS}
-                                    component={CourierOrders}
+                                    name={routerConstants.MAIN_COURIER}
+                                    component={MainCourierNavigation}
                                 />
-                                <RootStack.Screen
-                                    options={{headerShown: false}}
-                                    name={routerConstants.COURIER_TAKEN_ORDERS}
-                                    component={TakenCourierOrdersS}
-                                />
+
                                 <RootStack.Screen
                                     options={{headerShown: false}}
                                     name={routerConstants.COURIER_PICK_ORDER}

@@ -1,31 +1,28 @@
 import React, {useEffect, useState} from 'react';
-import {BaseWrapperComponent} from "../../components/baseWrapperComponent";
-import {Box, Text} from "native-base";
-import {FlatList, RefreshControl, StyleSheet, TouchableOpacity} from "react-native";
-import {renderEmptyContainer} from "../../components/list-viewer/empty-list";
-import {ApiOrderType} from "../../api/ordersApi";
-import OrderViewer from "../../components/list-viewer/OrderViewer";
-import OrderCourierViewer from "../../components/list-viewer/OrderCourierViewer";
-import AuthStore from "../../store/AuthStore/auth-store";
-import Button from "../../components/Button";
-import {colors} from "../../assets/colors/colors";
 import rootStore from "../../store/RootStore/root-store";
 import {OrderCourierType} from "../../api/couierApi";
-import {observer} from "mobx-react-lite";
 import {routerConstants} from "../../constants/routerConstants";
+import OrderCourierViewer from "../../components/list-viewer/OrderCourierViewer";
 import {NavigationProp, ParamListBase} from "@react-navigation/native";
+import {observer} from "mobx-react-lite";
+import {BaseWrapperComponent} from "../../components/baseWrapperComponent";
+import {Box, Text} from "native-base";
+import ArrowBack from "../../components/ArrowBack";
+import arrowLeft from "../../assets/images/arrow-left.png";
+import {FlatList, RefreshControl, StyleSheet} from "react-native";
+import {renderEmptyContainer} from "../../components/list-viewer/empty-list";
+import {StatusType} from "../../api/ordersApi";
 
-type CourierOrdersProps = {
+type TakenCourierOrdersProps = {
     navigation: NavigationProp<ParamListBase>
 }
-
-const CourierOrders = observer(({navigation}: CourierOrdersProps) => {
+const CompletedOrdersS = observer(({navigation}: TakenCourierOrdersProps) => {
     const {CourierOrderService, CourierOrderStore} = rootStore
-    const {courierOrders, setSelectedOrder} = CourierOrderStore
+    const {takenCourierOrders, setSelectedOrder} = CourierOrderStore
     const [refreshing, setRefreshing] = useState(false);
     const onRefresh = () => {
         setRefreshing(true)
-        CourierOrderService.getCourierOrders().finally(() => {
+        CourierOrderService.getTakenCourierOrders({status: StatusType.Completed}).finally(() => {
             setRefreshing(false)
         })
     };
@@ -33,31 +30,30 @@ const CourierOrders = observer(({navigation}: CourierOrdersProps) => {
     const orderViews = ({item}: { item: OrderCourierType }) => {
         const onPressTakeOrder = () => {
             setSelectedOrder(item)
-            CourierOrderService.assignCourierOrder()
             navigation.navigate(routerConstants.COURIER_PICK_ORDER)
         }
         return (
-            <OrderCourierViewer onPressTakeOrder={onPressTakeOrder} order={item}/>
+            <OrderCourierViewer isCompletedOrder={true} isMyOrder={true} onPressTakeOrder={onPressTakeOrder} order={item}/>
         )
     }
     useEffect(() => {
-        CourierOrderService.getCourierOrders()
+        CourierOrderService.getTakenCourierOrders({status: StatusType.Completed})
     }, [])
-
     return (
         <BaseWrapperComponent>
             <Box w={'100%'} flex={1}>
-                <Box paddingX={5} w={'100%'} alignItems={'center'}>
-                    <Text fontSize={28} fontWeight={'700'}>Placed orders</Text>
+                <Box alignItems={'center'} mt={2}>
+                    <Text fontSize={28} fontWeight={'700'}>Completed order</Text>
                 </Box>
                 <Box mt={5} alignItems={'center'} flex={1} w={'100%'}>
                     <FlatList
-                        data={courierOrders ?? []}
+                        data={takenCourierOrders ?? []}
                         renderItem={orderViews}
+                        scrollEnabled={true}
                         keyExtractor={(item, index) => index?.toString()}
                         style={{width: '100%'}}
                         contentContainerStyle={
-                            !courierOrders.length &&
+                            !takenCourierOrders.length &&
                             styles.contentContainerOrder
                         }
                         refreshControl={
@@ -72,7 +68,7 @@ const CourierOrders = observer(({navigation}: CourierOrdersProps) => {
             </Box>
         </BaseWrapperComponent>
     );
-});
+})
 const styles = StyleSheet.create({
     contentContainerOrder: {
         flex: 1,
@@ -82,4 +78,4 @@ const styles = StyleSheet.create({
     }
 
 })
-export default CourierOrders;
+export default CompletedOrdersS;

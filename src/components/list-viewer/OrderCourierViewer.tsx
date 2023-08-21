@@ -1,24 +1,31 @@
 import React from 'react';
 import {Image, StyleSheet} from "react-native";
 import {Box, Text} from "native-base";
-import {getFormattedAddress} from "../MapViews/utils";
+import {formatProductPrice, getFormattedAddress} from "../MapViews/utils";
 import {colors} from "../../assets/colors/colors";
 import Button from "../Button";
 import {OrderCourierType} from "../../api/couierApi";
 import fromToImg from '../../assets/images/courierImages/fromTo.png'
+import {deliveryPrice, transformString} from "../../utils/utils";
 
 type OrderCourierProps = {
     order: OrderCourierType
     onPressTakeOrder: () => void
     isMyOrder?: boolean
+    isCompletedOrder?: boolean
 }
-const OrderCourierViewer = ({order, onPressTakeOrder, isMyOrder = false}: OrderCourierProps) => {
+const OrderCourierViewer = ({
+                                order,
+                                onPressTakeOrder,
+                                isMyOrder = false,
+                                isCompletedOrder = false
+                            }: OrderCourierProps) => {
     const formattedAddressStore = getFormattedAddress({
         fullAddress: order.store?.address,
         location: order.store?.location
     })
     const formattedAddressUser = getFormattedAddress(order?.user?.address)
-
+    const productTotalPrice = +formatProductPrice(order.totalPrice) + +deliveryPrice
     return (<Box style={styles.container}>
             <Box flexDirection={'row'} justifyContent={'space-between'}>
                 <Box maxW={250} flexDirection={'row'} alignItems={'flex-start'}>
@@ -28,15 +35,20 @@ const OrderCourierViewer = ({order, onPressTakeOrder, isMyOrder = false}: OrderC
                         <Text fontWeight={'600'} fontSize={14}>{formattedAddressUser}</Text>
                     </Box>
                 </Box>
-                <Text fontWeight={'600'} fontSize={16}>฿{' '}{order.totalPrice}</Text>
+                <Box justifyContent={'space-between'} alignItems={'flex-end'}>
+                    <Text fontWeight={'600'} fontSize={16}>฿{' '}{productTotalPrice}</Text>
+                    <Text fontWeight={'600'} color={colors.green} fontSize={12}>{transformString(order.status)}</Text>
+                </Box>
             </Box>
 
+            {
+                !isCompletedOrder && <Box flexDirection={'row'} mt={2} justifyContent={'space-between'}>
+                    <Button backgroundColor={colors.green} styleText={styles.textBtn}
+                            styleContainer={styles.containerBtn}
+                            onPress={onPressTakeOrder} title={isMyOrder ? 'Go to order' : 'Take order'}/>
+                </Box>
+            }
 
-            <Box flexDirection={'row'} mt={2} justifyContent={'space-between'}>
-                <Button backgroundColor={colors.green} styleText={styles.textBtn}
-                        styleContainer={styles.containerBtn}
-                        onPress={onPressTakeOrder} title={isMyOrder ? 'Go to order' :'Take order'}/>
-            </Box>
         </Box>
     );
 };
