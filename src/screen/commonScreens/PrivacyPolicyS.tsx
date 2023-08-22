@@ -26,15 +26,13 @@ const PrivacyPolicyS = ({navigation}: PrivacyPolicySProps) => {
                 </Box>
                 <Image w={123} h={158} alt={'logo'} source={logoImg} mt={5} mb={5}/>
             </Box>
-            <Box paddingX={5} mb={2} alignItems={'center'}>
-                <Text fontSize={22} fontWeight={'600'}> Privacy Policy for weDoo Store
-
-                    Effective Date: August 14, 2023</Text>
+            <Box paddingX={5} mb={2} alignItems={'flex-start'}>
+                <Text fontSize={22} fontWeight={'600'}> Privacy Policy for weeDo Store</Text>
 
                 <Text fontSize={22} fontWeight={'600'}> 1. Introduction</Text>
 
                 <Text>
-                    This Privacy Policy describes how the weDoo Store (referred to as "store", "we", "our") collects,
+                    This Privacy Policy describes how the weeDo Store (referred to as "store", "we", "our") collects,
                     uses,
                     and protects your personal data when you use our store. We uphold high standards of privacy and
                     strive
@@ -56,11 +54,11 @@ const PrivacyPolicyS = ({navigation}: PrivacyPolicySProps) => {
                 <Text fontSize={22} fontWeight={'600'}> 3. Data Usage</Text>
 
                 <Text>
-                    We use your personal data solely for purposes related to the functioning of the weDoo Store:
+                    We use your personal data solely for purposes related to the functioning of the weeDo Store:
                 </Text>
 
                 <Text>
-                    Processing and fulfilling your orders and payments.
+                    Processing and fulfilling your orders.
                     Arranging the delivery of ordered products.
                     Providing quality customer service.
                     Sharing information about order status and promotions.
@@ -113,7 +111,7 @@ const PrivacyPolicyS = ({navigation}: PrivacyPolicySProps) => {
 
                 <Text>
                     We value your trust and are committed to protecting your personal data. Thank you for choosing the
-                    weDoo
+                    weeDo
                     Store!
                 </Text>
 

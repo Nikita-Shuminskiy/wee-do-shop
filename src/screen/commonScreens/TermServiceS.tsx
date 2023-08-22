@@ -26,7 +26,7 @@ const TermServiceS = ({navigation}: TermServiceSProps) => {
                 </Box>
                 <Image w={123} h={158} alt={'logo'} source={logoImg} mt={5} mb={5}/>
             </Box>
-            <Box paddingX={5} mb={2} alignItems={'center'}>
+            <Box paddingX={5} mb={2} alignItems={'flex-start'}>
                 <Text fontSize={16} fontWeight={'600'}>Terms of Service for Food, Beverage, and Non-Alcoholic Product Delivery App for Thailand, without
                     In-App Payment</Text>
 
@@ -100,9 +100,10 @@ const TermServiceS = ({navigation}: TermServiceSProps) => {
                 <Text fontSize={22} fontWeight={'600'}>9.Contact</Text>
 
                 <Text>
-                    If you have questions or concerns regarding our Terms of Service, you can contact us at <Link onPress={handleEmailLinkPress} styleLink={{borderBottomWidth: 1 }} text={'weedoshop420@gmail.com '}/>
-                    {' '}Thank you for choosing our food, beverage, and non-alcoholic product delivery app for Thailand!
+                    If you have questions or concerns regarding our Terms of Service, you can contact us at <Link onPress={handleEmailLinkPress} styleLink={{borderBottomWidth: 1 }} text={'weedoshop420@gmail.com '}/>{'\n'}
+                    Thank you for choosing our food, beverage, and non-alcoholic product delivery app for Thailand!
                 </Text>
+                <Text fontSize={18} fontWeight={'600'}>Effective Date: August 14, 2023</Text>
             </Box>
         </BaseWrapperComponent>
     );
