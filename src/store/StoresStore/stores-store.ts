@@ -84,6 +84,7 @@ export class StoresStore {
             saveFavoriteStore: action,
             searchStores: action,
             setStores: action,
+            getAndSetAllProduct: action,
         })
         this.setFavoriteStore = this.setFavoriteStore.bind(this)
         this.getAndSetAllProduct = this.getAndSetAllProduct.bind(this)

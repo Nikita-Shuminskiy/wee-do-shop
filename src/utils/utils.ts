@@ -1,6 +1,7 @@
 import regex from './helpers/regex'
 import {WorkingHoursType} from "../api/storesApi";
 import {format, parseISO} from 'date-fns'
+import {ProductType} from "../api/productApi";
 
 export const validateEmail = (email: string) => {
     return regex.email.test(email.trim())
@@ -23,6 +24,7 @@ export const getCurrentUntilTimeStoreTo = (workingHoursStores: WorkingHoursType)
 
     const currentDay = getCurrentDayName()
     const currentHourWorkStores = workingHoursStores[currentDay];
+    if (currentHourWorkStores === 'Closed') return 'Closed today'
     const utilTimeStore = currentHourWorkStores?.slice(-5); // get time work(to)
     return utilTimeStore
 }
@@ -37,7 +39,7 @@ export function isCurrentTimeInRange(workingHoursStores: WorkingHoursType, isInf
     }
 
     if (currentHourWorkStores === 'Closed') {
-        return 'Closed'
+        return isInfo ? 'Closed' : false
     }
     const [startTime, endTime] = currentHourWorkStores?.split(' - ');
     const currentHour = date.getHours()
@@ -101,4 +103,12 @@ export const splittingWord = (str) => {
     });
 
     return transformedWords.join(" ");
+}
+export const getTotalPriceOrder = (products: {
+    amount: number,
+    product: ProductType
+}[]) => {
+    return products?.reduce((acc, product) => {
+        return acc + product.amount * product.product.price
+    }, 0)
 }

@@ -29,7 +29,6 @@ const OrdersS = observer(({navigation, route}: OrdersSProps) => {
     const {OrderService} = rootStore
     const [isShowPopupDetails, setIsShowPopupDetails] = useState<boolean>(false)
     const [selectedOrder, setSelectedOrder] = useState<ApiOrderType>()
-    const [refreshing, setRefreshing] = useState(false);
 
     const [page, setPage] = useState(1);
     const [isLoadingData, setLoadingData] = useState(false);
@@ -81,20 +80,13 @@ const OrdersS = observer(({navigation, route}: OrdersSProps) => {
         return (
             <OrderViewer
                 onPressRepeat={() => onPressRepeat(item)}
-                // selectedSubCategoryId={selectedSubCategoryId}
                 onPressDetails={onPressDetails}
                 order={item}
             />
         )
     }
     const isLastOrders = !!(totalOrders && orders.length) && totalOrders <= orders.length
-    /* const onRefresh = () => {
-         setRefreshing(true)
-         const offset = 10;
-         CourierOrderService.getOrders({status: isRoutHistory ? StatusType.Completed : null, limit: 10, offset}).finally(() => {
-             setRefreshing(false)
-         })
-     };*/
+
     const renderFooter = () => (
         <Box style={styles.footerText}>
             {isLoadingData && <ActivityIndicator size={'large'} color={colors.green}/>}
@@ -131,12 +123,6 @@ const OrdersS = observer(({navigation, route}: OrdersSProps) => {
                             !ordersLength &&
                             styles.contentContainerOrder
                         }
-                        /*   refreshControl={
-                               <RefreshControl
-                                   refreshing={refreshing}
-                                   onRefresh={onRefresh}
-                               />
-                           }*/
                         ListEmptyComponent={() => renderEmptyContainer(0, 'You haven’t placed\n any orders yet.')}
                         ListFooterComponent={renderFooter}
                         onEndReached={fetchMoreData}
