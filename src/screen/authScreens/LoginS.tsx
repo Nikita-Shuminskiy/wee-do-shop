@@ -51,9 +51,6 @@ const LoginS = ({navigation}: LoginSProps) => {
     const onPressSignUpHandler = () => {
         navigation.navigate(routerConstants.REGISTRATION)
     }
-    const onPressCourierHandler = () => {
-        navigation.navigate(routerConstants.COURIER_REGISTER)
-    }
     return (<BaseWrapperComponent isKeyboardAwareScrollView={true}>
             <Box w={'100%'} alignItems={'center'} justifyContent={'space-evenly'} flex={1} paddingX={5}>
                 <Image w={247} h={318} alt={'logo'} source={logoImg} mt={5}/>

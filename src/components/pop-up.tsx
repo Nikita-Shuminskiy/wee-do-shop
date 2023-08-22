@@ -15,17 +15,21 @@ const ModalPopup = ({ visible, onClose, children, style }: ModalPopupProps) => {
 		if (visible) {
 			modalizeRef.current?.open()
 		} else {
-			modalizeRef.current?.close()
 		}
 	}, [visible])
 
 	return (
 		<Modalize
-			modalHeight={Dimensions.get('window').height - 100}
+			modalHeight={Math.round(Dimensions.get('window').height * 0.8)}
 			avoidKeyboardLikeIOS={true}
 			childrenStyle={{ ...styles.modalContent, ...style }}
 			ref={modalizeRef}
-			onClosed={onClose}
+			onClosed={() => {
+				if(visible) {
+					modalizeRef.current?.close()
+				}
+				onClose()
+			}}
 		>
 			{children}
 		</Modalize>

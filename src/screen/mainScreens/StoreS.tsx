@@ -9,7 +9,7 @@ import {colors} from "../../assets/colors/colors";
 import Button from "../../components/Button";
 import {Dimensions, FlatList, ImageBackground, StyleSheet} from "react-native";
 import SubCategoriesViewer from "../../components/list-viewer/CategoriesViewer";
-import EmptyList from "../../components/list-viewer/empty-list";
+import EmptyList, {renderEmptyContainer} from "../../components/list-viewer/empty-list";
 import {observer} from "mobx-react-lite";
 import rootStore from "../../store/RootStore/root-store";
 import ProductViewer from "../../components/list-viewer/ProductViewer";
@@ -22,18 +22,6 @@ import {formatProductPrice} from "../../components/MapViews/utils";
 import {routerConstants} from "../../constants/routerConstants";
 import {getTotalSumProductsCart, updateValueCartProducts} from "../../utils/utilsCart";
 
-const renderEmptyContainer = (height, text) => {
-    const onPressLink = () => {
-
-    }
-    return (
-        <EmptyList
-            height={height}
-            text={text}
-            onPressLink={onPressLink}
-        />
-    )
-}
 const updateProduct = (currentCartStore, item, productValue, setCurrentCartStore) => {
     const updatedProducts = updateValueCartProducts(currentCartStore.products, productValue, item._id)
     const totalSum = getTotalSumProductsCart(updatedProducts)
@@ -127,6 +115,7 @@ const StoreS = observer(({navigation}: StoreSProps) => {
             }
             addProductToCart(currentCartStore, item, productValue, setCurrentCartStore)
         }
+
         return (
             <ProductViewer
                 currentCartStore={currentCartStore}
@@ -156,6 +145,7 @@ const StoreS = observer(({navigation}: StoreSProps) => {
             />
         )
     }
+
     return (
         <>
             <BaseWrapperComponent backgroundColor={'white'} isKeyboardAwareScrollView={true}>
@@ -200,7 +190,7 @@ const StoreS = observer(({navigation}: StoreSProps) => {
                             <Text fontSize={24} fontWeight={'700'}>{selectedSubCategory?.name ?? 'All products'}</Text>
                         </Box>
 
-                        <Box mb={20}>
+                        <Box mb={10}>
                             <FlatList
                                 scrollEnabled={false}
                                 data={selectedSubCategory?.products ?? allProductStore}
@@ -212,7 +202,7 @@ const StoreS = observer(({navigation}: StoreSProps) => {
                                 numColumns={2}
                                 columnWrapperStyle={{justifyContent: 'space-between'}}
                                 contentContainerStyle={
-                                    !selectedSubCategory?.products &&
+                                    !selectedSubCategory?.products.length && !allProductStore.length &&
                                     styles.contentContainerStyleProducts
                                 }
                             />

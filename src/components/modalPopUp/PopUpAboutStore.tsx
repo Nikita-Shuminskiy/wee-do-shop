@@ -33,9 +33,14 @@ const PopUpAboutStore = ({ show, onClose, currentStore }: PopUpAboutStoreProps) 
 		location: currentStore?.location,
 	})
 	const openWebsiteLink = (url: string) => {
-		Linking.openURL(url).catch((err) => console.error('An error occurred: ', err))
+		Linking.openURL(url)
 	}
-
+	const initRegion = {
+		latitude: currentStore?.location?.coordinates[1],
+		longitude: currentStore?.location?.coordinates[0],
+		latitudeDelta: 0.0922,
+		longitudeDelta: 0.0421,
+	}
 	return (
 		<ModalPopup visible={show} onClose={onClose}>
 			<Box flex={1} w={'100%'} alignItems={'flex-start'} justifyContent={'space-between'}>
@@ -88,11 +93,7 @@ const PopUpAboutStore = ({ show, onClose, currentStore }: PopUpAboutStoreProps) 
 				<Box flexDirection={'row'} mb={5} alignItems={'center'}>
 					<Fontisto name="world-o" size={24} color={'#BABABA'} />
 					<Link
-						styleLink={{
-							marginLeft: 10,
-							borderBottomWidth: 1,
-							borderBottomColor: colors.grayDarkLight,
-						}}
+						styleLink={styles.linkWebSite}
 						onPress={() => openWebsiteLink(currentStore?.website)}
 						text={currentStore?.website}
 					/>
@@ -102,23 +103,11 @@ const PopUpAboutStore = ({ show, onClose, currentStore }: PopUpAboutStoreProps) 
 					<PhoneNumberComponent phoneNumber={currentStore?.phone} />
 				</Box>
 				<Box w={'100%'} mt={2} mb={2} flexGrow={1} h={300}>
-					<MapView
-						style={{
-							width: '100%',
-							height: '100%',
-						}}
-						initialRegion={{
-							latitude: currentStore?.location?.coordinates[1],
-							longitude: currentStore?.location?.coordinates[0],
-							latitudeDelta: 0.0922,
-							longitudeDelta: 0.0421,
-						}}
-						provider={PROVIDER_GOOGLE}
-					>
+					<MapView style={styles.mapView} initialRegion={initRegion} provider={PROVIDER_GOOGLE}>
 						<Marker
 							coordinate={{
-								latitude: currentStore?.location?.coordinates[1],
-								longitude: currentStore?.location?.coordinates[0],
+								latitude: initRegion?.latitude,
+								longitude: initRegion?.longitude,
 							}}
 							title={formatted_address ?? ''}
 						/>
@@ -130,6 +119,15 @@ const PopUpAboutStore = ({ show, onClose, currentStore }: PopUpAboutStoreProps) 
 	)
 }
 const styles = StyleSheet.create({
+	mapView: {
+		width: '100%',
+		height: '100%',
+	},
+	linkWebSite: {
+		marginLeft: 10,
+		borderBottomWidth: 1,
+		borderBottomColor: colors.grayDarkLight,
+	},
 	styleTextLink: {
 		color: colors.black,
 	},

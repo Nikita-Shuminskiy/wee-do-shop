@@ -32,7 +32,8 @@ import TakenCourierOrdersS from "../screen/courierScreens/TakenCourierOrdersS";
 import ModalReconnect from "../components/modal/modal-reconnect";
 import NetInfo from "@react-native-community/netinfo";
 import MainCourierNavigation from "./MainCourierNavigation";
-
+import * as Updates from 'expo-updates';
+import {createAlert} from "../components/Alert";
 const RootStack = createNativeStackNavigator()
 const RootNavigation = observer(() => {
     const {isLoading, setIsLoading} = NotificationStore
@@ -51,10 +52,25 @@ const RootNavigation = observer(() => {
             setIsLoading(LoadingEnum.success)
         }
     }
+    const checkNewVersionApp = async () => {
+        const update = await Updates.checkForUpdateAsync();
+        const onPresUpdate = async () => {
+            await Updates.fetchUpdateAsync();
+            await Updates.reloadAsync();
+        }
+        if (update.isAvailable) {
+            createAlert({
+                title: 'Message',
+                message: 'A new version is available, update the app',
+                buttons: [{text: 'Update ', style: "default", onPress: onPresUpdate}, {text: 'Later ', style: "cancel"}]
+            })
+        }
+    };
     useEffect(() => {
         const unsubscribe = NetInfo.addEventListener(state => {
             setIsConnected(state.isConnected)
         })
+        checkNewVersionApp();
         AuthStoreService.getMe()
         return () => {
             unsubscribe()

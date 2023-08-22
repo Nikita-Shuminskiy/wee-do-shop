@@ -1,10 +1,9 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import axios from 'axios';
-import {DataLoginType} from './authApi'
-import {deviceStorage} from '../utils/storage/storage'
-import AuthStore from "../store/AuthStore/auth-store";
+import axios from 'axios'
+import { DataLoginType } from './authApi'
+import AuthStore from '../store/AuthStore/auth-store'
 
-export const BASE_URL = 'https://weedo-demo-production.up.railway.app/';
+export const BASE_URL = 'https://weedo-demo-production.up.railway.app/'
 
 export const instance = axios.create({
     baseURL: BASE_URL,

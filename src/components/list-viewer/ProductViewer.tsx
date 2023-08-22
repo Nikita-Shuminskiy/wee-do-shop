@@ -28,6 +28,7 @@ const ProductViewer = ({product, onPressProduct, saveProductToCart, currentCartS
         saveProductToCart(valueProduct)
     }
 
+
     return (
         <Pressable style={{alignItems: 'center', paddingHorizontal: 5, minWidth: productWidth, maxWidth: productWidth}}
                    onPress={onPressProduct}>
