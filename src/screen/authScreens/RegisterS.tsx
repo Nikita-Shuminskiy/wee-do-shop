@@ -63,6 +63,7 @@ const RegisterS = observer(({navigation}: LoginSProps) => {
         const formattedPhoneNumber = `+${countryCode.callingCode[0]}${values.phone}`
         AuthStoreService.registration({
             ...values,
+            email: values.email.trim(),
             phone: formattedPhoneNumber,
             address: currentLocation
         })

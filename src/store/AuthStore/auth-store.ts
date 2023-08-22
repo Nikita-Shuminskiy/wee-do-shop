@@ -37,10 +37,11 @@ export class AuthStore {
         this.isAuth = auth
     }
 
-    async login(userData: { email: string, password: string }): Promise<void> {
+    async login(userData: { email: string, password: string }) {
         const {data} = await authApi.login(userData.email, userData.password)
         await deviceStorage.saveItem('accessToken', data.accessToken)
         await deviceStorage.saveItem('refreshToken', data.refreshToken)
+        return data
     }
 
     async registration(dataUser: UserRegisterDataType) {

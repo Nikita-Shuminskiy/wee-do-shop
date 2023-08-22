@@ -50,7 +50,6 @@ instance.interceptors.response.use(
                 // Повторно выполняем оригинальный запрос
                 return axios(originalRequest);
             } catch (e) {
-                AuthStore.setAuth(false)
                 return Promise.reject(e); // Возвращаем ошибку, чтобы обработать ее дальше
             }
         }
