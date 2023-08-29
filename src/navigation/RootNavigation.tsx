@@ -29,8 +29,8 @@ import CourierInProgressS from '../screen/courierScreens/CourierInProgressS'
 import ModalReconnect from '../components/modal/modal-reconnect'
 import NetInfo from '@react-native-community/netinfo'
 import MainCourierNavigation from './MainCourierNavigation'
-import * as Updates from 'expo-updates'
-import { createAlert } from '../components/Alert'
+/*import * as Updates from 'expo-updates'
+import { createAlert } from '../components/Alert'*/
 
 const RootStack = createNativeStackNavigator()
 const RootNavigation = observer(() => {
@@ -50,7 +50,7 @@ const RootNavigation = observer(() => {
             setIsLoading(LoadingEnum.success)
         }
     }
-    const checkNewVersionApp = async () => {
+  /*  const checkNewVersionApp = async () => {
         try {
             const update = await Updates.checkForUpdateAsync();
             const onPresUpdate = async () => {
@@ -67,12 +67,12 @@ const RootNavigation = observer(() => {
         } catch (e) {
             console.log('error', e)
         }
-    };
+    };*/
     useEffect(() => {
         const unsubscribe = NetInfo.addEventListener(state => {
             setIsConnected(state.isConnected)
         })
-        checkNewVersionApp();
+        //checkNewVersionApp();
         AuthStoreService.getMe()
         return () => {
             unsubscribe()

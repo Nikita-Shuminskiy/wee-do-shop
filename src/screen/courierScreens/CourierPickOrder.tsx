@@ -17,7 +17,7 @@ import {AntDesign} from "@expo/vector-icons";
 import OrderUserInfo from "../../components/OrderUserInfo";
 
 const CourierPickOrder = observer(() => {
-    const {selectedOrder, connectToSocketOrder, deliverOrderInProgressInfo} = CourierOrderStore
+    const {selectedOrder, connectToSocketOrder} = CourierOrderStore
     const {CourierOrderService} = rootStore
     const navigation = useNavigation<any>()
     const [showUserInfoModal, setShowUserInfoModal] = useState(false)
@@ -27,7 +27,6 @@ const CourierPickOrder = observer(() => {
         latitudeDelta: 0.0922,
         longitudeDelta: 0.0421,
     });
-
     const isStatusOnTheWay = selectedOrder?.status === StatusType.OnTheWay
 
     const onPressPickOrder = (status: StatusType) => {
@@ -94,7 +93,7 @@ const CourierPickOrder = observer(() => {
                                 borderRadius: 20,
                             }}
                             focusable={true}
-                            region={coords} // Изменено на region
+                            region={coords}
                             provider={PROVIDER_GOOGLE}
                         >
 

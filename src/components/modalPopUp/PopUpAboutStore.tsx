@@ -1,6 +1,6 @@
 import React from 'react'
 import { Box, Text } from 'native-base'
-import { Linking, StyleSheet } from 'react-native'
+import {Linking, StyleSheet, View} from 'react-native'
 import ModalPopup from '../pop-up'
 import { colors } from '../../assets/colors/colors'
 import { StoreType } from '../../api/storesApi'
@@ -40,6 +40,9 @@ const PopUpAboutStore = ({ show, onClose, currentStore }: PopUpAboutStoreProps) 
 		longitude: currentStore?.location?.coordinates[0],
 		latitudeDelta: 0.0922,
 		longitudeDelta: 0.0421,
+	}
+	if (!currentStore?.location) {
+		return <View style={styles.container} />
 	}
 	return (
 		<ModalPopup visible={show} onClose={onClose}>
@@ -119,6 +122,9 @@ const PopUpAboutStore = ({ show, onClose, currentStore }: PopUpAboutStoreProps) 
 	)
 }
 const styles = StyleSheet.create({
+	container: {
+		flex: 1,
+	},
 	mapView: {
 		width: '100%',
 		height: '100%',

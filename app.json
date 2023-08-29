@@ -17,6 +17,9 @@
     "ios": {
       "userInterfaceStyle": "light",
       "supportsTablet": true,
+      "config": {
+        "googleMapsApiKey": "AIzaSyD-3PKe63YHjDDaxjVahTekuyvvOFfwKp4"
+      },
       "runtimeVersion": {
         "policy": "appVersion"
       }
@@ -28,6 +31,11 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyCDu3dMvEFIDgw_uqJWabVuauq0JVsu3NI"
+        }
+      },
       "runtimeVersion": "1.0.0"
     },
     "web": {
@@ -35,7 +43,7 @@
     },
     "extra": {
       "eas": {
-        "projectId": "b16839b6-8413-4570-89a0-ace5f4e1e45a"
+        "projectId": "775a8aa3-3d6d-4d39-8db8-6b4525b88c21"
       }
     },
     "owner": "nick_wee-do",

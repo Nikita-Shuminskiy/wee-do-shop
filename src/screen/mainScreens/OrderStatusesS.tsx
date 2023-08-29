@@ -92,11 +92,13 @@ type OrderStatusesSProps = {
 const OrderStatusesS = observer(({navigation}: OrderStatusesSProps) => {
     const {order, statusOrder, setStatus} = orderStore
     console.log(order._id)
+    console.log(statusOrder, 'statusOrder')
     useEffect(() => {
         const socket = io(BASE_URL);
         socket.on('connect', () => {
         });
         socket.on(`orderStatusUpdated:${order._id}`, (data: { orderId: string, status: StatusType }) => {
+            console.log(data.status, 'data status')
             setStatus(data.status)
         })
     }, []);

@@ -63,7 +63,7 @@ const ProductViewer = ({product, onPressProduct, saveProductToCart, currentCartS
                                    aspectRatio: 200 / 171,
                                    borderRadius: 16,
                                }}
-                               resizeMode="cover"
+                               resizeMode="center"
                         />
                     </Box>
                 </Box>

@@ -28,11 +28,11 @@ const OrderCourierViewer = ({
     const productTotalPrice = formatProductPrice(order.totalPrice)
     return (<Box style={styles.container}>
             <Box flexDirection={'row'} justifyContent={'space-between'}>
-                <Box maxW={250} flexDirection={'row'} alignItems={'flex-start'}>
+                <Box flexDirection={'row'} alignItems={'flex-start'}>
                     <Image style={styles.imageFromTo} source={fromToImg} alt={'img'}/>
                     <Box ml={2}>
-                        <Text fontWeight={'600'} fontSize={14}>{formattedAddressStore}</Text>
-                        <Text fontWeight={'600'} fontSize={14}>{formattedAddressUser}</Text>
+                        <Text maxWidth={200} fontWeight={'600'} fontSize={14}>{formattedAddressStore}</Text>
+                        <Text maxWidth={200} fontWeight={'600'} fontSize={14}>{formattedAddressUser}</Text>
                     </Box>
                 </Box>
                 <Box justifyContent={'space-between'} alignItems={'flex-end'}>

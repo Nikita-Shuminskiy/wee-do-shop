@@ -15,34 +15,10 @@ export const courierApi = {
         return await instance.patch<AssignCourierOrderType>(`order/${idOrder}/assignCourier`, {courierId})
     },
     async updateOrderStatus(idOrder: string, status: StatusType) {
-        return await instance.patch<UpdateStatusOrderType>(`order/${idOrder}/status`, {status})
+        return await instance.patch<OrderCourierType>(`order/${idOrder}/status`, {status})
     },
 }
-export type UpdateStatusOrderType = {
-    "_id": string
-    "number": number
-    "user": UserType
-    "courier": UserType
-    "store": StoreType
-    "products": [
-        {
-            "amount": 0,
-            "serviceCommission": number
-            "storeProfit": number
-            "totalPrice": number
-            "product": string
-        }
-    ],
-    "price": {
-        "serviceCommission": number
-        "storeProfit": number
-        "deliveryPrice": number
-    },
-    "totalPrice": number,
-    "status": string,
-    "comment": string,
-    "rejectReason": string
-}
+
 export type AssignCourierOrderType = {
     "__v": number,
     "_id": string,

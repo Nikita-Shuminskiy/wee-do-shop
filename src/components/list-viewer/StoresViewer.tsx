@@ -65,7 +65,7 @@ const StoresViewer = ({
                                aspectRatio: 351 / 171,
                                borderRadius: 16,
                            }}
-                           resizeMode="cover"
+                           resizeMode="center"
                     />
                     <Box position={'absolute'}
                          bottom={0}

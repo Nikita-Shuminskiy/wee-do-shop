@@ -26,7 +26,7 @@ const ProductCartViewer = ({product, onChangeValueNumber, onPressRemoveProduct}:
                            aspectRatio: 70 / 70,
                            borderRadius: 16,
                        }}
-                       resizeMode="cover"/>
+                       resizeMode="center"/>
                 <Box alignItems={'flex-start'} ml={4}>
                     <Text fontSize={16} fontWeight={'400'}>{product.name}</Text>
                     <Box w={120}>
