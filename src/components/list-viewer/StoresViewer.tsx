@@ -33,7 +33,7 @@ const StoresViewer = ({
                  borderColor={colors.green}>
                 <Box>
                     <Box position={'absolute'}
-                         p={1}
+                         p={1.5}
                          top={2}
                          left={2}
                          borderWidth={1}
@@ -43,9 +43,9 @@ const StoresViewer = ({
                          borderRadius={16}
                          alignItems={'center'}
                          justifyContent={'center'}
-                         backgroundColor={'transparent'}>
+                         backgroundColor={colors.black}>
                         <Image source={motorcycle} style={{width: 26, height: 17}} alt={'moto'}/>
-                        <Text ml={2} color={colors.white} fontSize={16}
+                        <Text ml={2} color={colors.white} fontSize={13}
                               fontWeight={'500'}>{stores?.deliveryTime} min</Text>
                     </Box>
                     <Box position={'absolute'}
@@ -59,7 +59,14 @@ const StoresViewer = ({
                         </TouchableOpacity>
                     </Box>
                     <Image alt={'image-store'} borderRadius={16}
-                           source={test}/>
+                           source={{uri: stores.image}}
+                           style={{
+                               width: '100%',
+                               aspectRatio: 351 / 171,
+                               borderRadius: 16,
+                           }}
+                           resizeMode="cover"
+                    />
                     <Box position={'absolute'}
                          bottom={0}
                          right={0}

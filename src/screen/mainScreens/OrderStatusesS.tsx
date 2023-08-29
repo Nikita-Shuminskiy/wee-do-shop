@@ -78,7 +78,11 @@ const renderDescriptionForStatuses = (status: StatusType) => {
                     Order canceled, wait for a call from the store</Text>
             </>
         default:
-            return placedImg
+            return  <>
+                <Text fontSize={24} fontWeight={'600'}>{splittingWord(status)}</Text>
+                <Text color={colors.gray}>
+                    Order loading, wait for a call from the store</Text>
+            </>
     }
 }
 

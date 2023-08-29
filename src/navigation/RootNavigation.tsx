@@ -1,39 +1,37 @@
-import React, {useEffect, useState} from 'react'
+import React, { useEffect, useState } from 'react'
 
-import {observer} from 'mobx-react-lite'
+import { observer } from 'mobx-react-lite'
 import NotificationStore from '../store/NotificationStore/notification-store'
-import {NavigationContainer} from '@react-navigation/native'
-import {LoadingEnum} from '../store/types/types'
+import { NavigationContainer } from '@react-navigation/native'
+import { LoadingEnum } from '../store/types/types'
 import Loading from '../components/Loading'
-import {routerConstants} from '../constants/routerConstants'
+import { routerConstants } from '../constants/routerConstants'
 import LoginS from '../screen/authScreens/LoginS'
-import {createNativeStackNavigator} from '@react-navigation/native-stack'
+import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import RegisterS from '../screen/authScreens/RegisterS'
 import rootStore from '../store/RootStore'
-import AllowLocationS from "../screen/authScreens/AllowLocationS";
-import GoogleAutocompleteMapS from "../screen/authScreens/GoogleAutocompleteMapS";
-import MainNavigation from "./MainNavigation";
-import StoreS from "../screen/mainScreens/StoreS";
-import FavoriteS from "../screen/mainScreens/FavoriteS";
-import UserProfileS from "../screen/mainScreens/UserProfileS";
-import OrderStatusesS from "../screen/mainScreens/OrderStatusesS";
-import OrdersS from "../screen/mainScreens/OrdersS";
-import AddressS from "../screen/mainScreens/AddressS";
-import {RoleType} from "../api/authApi";
-import CourierOrders from "../screen/courierScreens/CourierOrders";
-import CourierPickOrder from "../screen/courierScreens/CourierPickOrder";
-import PrivacyPolicy from "../components/PrivacyPolicy";
-import PrivacyPolicyS from "../screen/commonScreens/PrivacyPolicyS";
-import TermServiceS from "../screen/commonScreens/TermServiceS";
-import LegalInformationS from "../screen/commonScreens/LegalInformationS";
-import CourierInProgressS from "../screen/courierScreens/CourierInProgressS";
-import TakenCourierOrdersS from "../screen/courierScreens/TakenCourierOrdersS";
+import AllowLocationS from '../screen/authScreens/AllowLocationS'
+import GoogleAutocompleteMapS from '../screen/authScreens/GoogleAutocompleteMapS'
+import MainNavigation from './MainNavigation'
+import StoreS from '../screen/mainScreens/StoreS'
+import FavoriteS from '../screen/mainScreens/FavoriteS'
+import UserProfileS from '../screen/mainScreens/UserProfileS'
+import OrderStatusesS from '../screen/mainScreens/OrderStatusesS'
+import OrdersS from '../screen/mainScreens/OrdersS'
+import AddressS from '../screen/mainScreens/AddressS'
+import { RoleType } from '../api/authApi'
+import CourierPickOrder from '../screen/courierScreens/CourierPickOrder'
+import PrivacyPolicyS from '../screen/commonScreens/PrivacyPolicyS'
+import TermServiceS from '../screen/commonScreens/TermServiceS'
+import LegalInformationS from '../screen/commonScreens/LegalInformationS'
+import CourierInProgressS from '../screen/courierScreens/CourierInProgressS'
 
-import ModalReconnect from "../components/modal/modal-reconnect";
-import NetInfo from "@react-native-community/netinfo";
-import MainCourierNavigation from "./MainCourierNavigation";
-import * as Updates from 'expo-updates';
-import {createAlert} from "../components/Alert";
+import ModalReconnect from '../components/modal/modal-reconnect'
+import NetInfo from '@react-native-community/netinfo'
+import MainCourierNavigation from './MainCourierNavigation'
+import * as Updates from 'expo-updates'
+import { createAlert } from '../components/Alert'
+
 const RootStack = createNativeStackNavigator()
 const RootNavigation = observer(() => {
     const {isLoading, setIsLoading} = NotificationStore
@@ -53,17 +51,21 @@ const RootNavigation = observer(() => {
         }
     }
     const checkNewVersionApp = async () => {
-        const update = await Updates.checkForUpdateAsync();
-        const onPresUpdate = async () => {
-            await Updates.fetchUpdateAsync();
-            await Updates.reloadAsync();
-        }
-        if (update.isAvailable) {
-            createAlert({
-                title: 'Message',
-                message: 'A new version is available, update the app',
-                buttons: [{text: 'Update ', style: "default", onPress: onPresUpdate}, {text: 'Later ', style: "cancel"}]
-            })
+        try {
+            const update = await Updates.checkForUpdateAsync();
+            const onPresUpdate = async () => {
+                await Updates.fetchUpdateAsync();
+                await Updates.reloadAsync();
+            }
+            if (update.isAvailable) {
+                createAlert({
+                    title: 'Message',
+                    message: 'A new version is available, update the app',
+                    buttons: [{text: 'Update ', style: "default", onPress: onPresUpdate}, {text: 'Later ', style: "cancel"}]
+                })
+            }
+        } catch (e) {
+            console.log('error', e)
         }
     };
     useEffect(() => {

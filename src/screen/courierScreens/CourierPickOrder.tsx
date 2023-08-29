@@ -17,7 +17,7 @@ import {AntDesign} from "@expo/vector-icons";
 import OrderUserInfo from "../../components/OrderUserInfo";
 
 const CourierPickOrder = observer(() => {
-    const {selectedOrder, connectToSocketOrder} = CourierOrderStore
+    const {selectedOrder, connectToSocketOrder, deliverOrderInProgressInfo} = CourierOrderStore
     const {CourierOrderService} = rootStore
     const navigation = useNavigation<any>()
     const [showUserInfoModal, setShowUserInfoModal] = useState(false)

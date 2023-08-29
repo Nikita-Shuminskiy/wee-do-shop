@@ -11,11 +11,12 @@
     "build_apk": "eas build -p android --profile preview",
     "build_all": "eas build --platform all",
     "build_dev_android": "eas build --profile development --platform android",
-    "build_android": "eas build --platform android"
+    "build_android_aab": "eas build --platform android"
   },
   "dependencies": {
     "@expo/webpack-config": "^18.0.1",
     "@react-native-async-storage/async-storage": "1.18.2",
+    "@react-native-community/cameraroll": "^4.1.2",
     "@react-native-community/netinfo": "9.3.10",
     "@react-native-community/slider": "^4.4.2",
     "@react-native-picker/picker": "2.4.10",
@@ -33,6 +34,7 @@
     "expo-splash-screen": "~0.20.4",
     "expo-status-bar": "~1.6.0",
     "expo-system-ui": "~2.4.0",
+    "expo-updates": "~0.18.11",
     "formik": "^2.4.2",
     "mobx": "^6.6.1",
     "mobx-react-lite": "^3.4.0",
@@ -51,8 +53,7 @@
     "react-native-screens": "~3.22.0",
     "react-native-svg": "13.9.0",
     "react-native-vector-icons": "^9.2.0",
-    "socket.io-client": "^4.7.2",
-    "expo-updates": "~0.18.11"
+    "socket.io-client": "^4.7.2"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

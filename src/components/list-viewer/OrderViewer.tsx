@@ -4,7 +4,7 @@ import {ApiOrderType, StatusType} from "../../api/ordersApi";
 import {colors} from "../../assets/colors/colors";
 import {Box, Text} from "native-base";
 import Button from "../Button";
-import {getFormatDateToString} from "../../utils/utils";
+import {getFormatDateToString, splittingWord} from "../../utils/utils";
 import {formatProductPrice} from "../MapViews/utils";
 import {useNavigation} from "@react-navigation/native";
 import {routerConstants} from "../../constants/routerConstants";
@@ -34,7 +34,7 @@ const OrderViewer = memo(({order, onPressDetails, onPressRepeat}: OrderViewerPro
             <Box flexDirection={'row'} mt={1} justifyContent={'space-between'}>
                 <Text fontWeight={'600'} color={colors.gray}
                       fontSize={12}>{getFormatDateToString(order?.createdAt)}</Text>
-                <Text fontWeight={'600'} fontSize={14} color={colors.green}>{order.status}</Text>
+                <Text fontWeight={'600'} fontSize={14} color={colors.green}>{splittingWord(order.status)}</Text>
             </Box>
             <Box flexDirection={'row'} mt={2} justifyContent={'space-between'}>
                 <Button backgroundColor={'#E7E7E7'} styleText={styles.textBtn}

@@ -18,8 +18,15 @@ const ProductCartViewer = ({product, onChangeValueNumber, onPressRemoveProduct}:
     return (
         <Box flexDirection={'row'} paddingY={2} justifyContent={'space-between'} >
             <Box flexDirection={'row'} alignItems={'center'}>
-                <Image alt={'image-store'} width={70} h={70} borderRadius={16}
-                       source={productImg}/>
+                <Image alt={'image-store'}  borderRadius={16}
+                       source={{uri: product.image}}
+                       style={{
+                           width: 70,
+                           height: 70,
+                           aspectRatio: 70 / 70,
+                           borderRadius: 16,
+                       }}
+                       resizeMode="cover"/>
                 <Box alignItems={'flex-start'} ml={4}>
                     <Text fontSize={16} fontWeight={'400'}>{product.name}</Text>
                     <Box w={120}>

@@ -17,40 +17,40 @@
     "ios": {
       "userInterfaceStyle": "light",
       "supportsTablet": true,
-      "config": {
-        "googleMapsApiKey": "AIzaSyByfj-wyu2Pvn1u2SV20OIgp1B7bAEiW6U"
+      "runtimeVersion": {
+        "policy": "appVersion"
       }
     },
     "android": {
-      "package": "com.nick_1995.WeDoo",
+      "package": "com.wee_do_account.WeeDo",
       "userInterfaceStyle": "light",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "config": {
-        "googleMaps": {
-          "apiKey": "AIzaSyCDu3dMvEFIDgw_uqJWabVuauq0JVsu3NI"
-        }
-      }
+      "runtimeVersion": "1.0.0"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "extra": {
       "eas": {
-        "projectId": "22b5fc0c-3fc0-4b74-a455-292d245526d6"
+        "projectId": "b16839b6-8413-4570-89a0-ace5f4e1e45a"
       }
     },
-    "owner": "nick_1995",
+    "owner": "nick_wee-do",
     "plugins": [
       "expo-localization",
       [
         "expo-updates",
         {
-          "username": "nick_1995"
+          "username": "nick_wee-do"
         }
       ]
-    ]
+    ],
+    "updates": {
+      "fallbackToCacheTimeout": 0,
+      "url": "https://u.expo.dev/fcacb970-04e5-4bea-b121-8e7bf764faff"
+    }
   }
 }

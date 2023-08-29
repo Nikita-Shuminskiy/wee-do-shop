@@ -19,7 +19,7 @@ export const BaseWrapperComponent = ({
                                          onTouchStart,
                                          isKeyboardAwareScrollView = false,
                                          styleSafeArea,
-                                         backgroundColor = 'transparent',
+                                         backgroundColor = 'white',
                                          extraScrollHeight
                                      }: BaseWrapperComponentType) => {
 

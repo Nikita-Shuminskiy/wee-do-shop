@@ -8,7 +8,7 @@ import Button from '../Button'
 import { renderEmptyContainer } from '../list-viewer/empty-list'
 import testImg from '../../assets/images/test.png'
 import { ProductType } from '../../api/productApi'
-import {deliveryPrice, getFormatDateToString, getTotalPriceOrder} from '../../utils/utils'
+import { deliveryPrice, getFormatDateToString, getTotalPriceOrder } from '../../utils/utils'
 import { formatProductPrice } from '../MapViews/utils'
 
 const orderViews = ({ item }: { item: { amount: number; product: ProductType } }) => {
@@ -23,7 +23,17 @@ const orderViews = ({ item }: { item: { amount: number; product: ProductType } }
 			borderColor={colors.grayLight}
 		>
 			<Box flexDirection={'row'}>
-				<Image w={47} h={47} borderRadius={16} source={testImg} alt={'img-product'} />
+				<Image
+					resizeMode="cover"
+					borderRadius={16}
+					style={{
+						width: 47,
+						height: 47,
+						aspectRatio: 47 / 47,
+					}}
+					source={{ uri: item.product.image }}
+					alt={'img-product'}
+				/>
 				<Box ml={2}>
 					<Text fontSize={12} fontWeight={'500'}>
 						{item.product.name}

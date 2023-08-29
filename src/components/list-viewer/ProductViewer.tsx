@@ -49,14 +49,22 @@ const ProductViewer = ({product, onPressProduct, saveProductToCart, currentCartS
                               color={colors.white}
                               borderColor={colors.white}
                               borderRadius={16}
+                              fontSize={11}
                               textAlign={'center'}
                               borderWidth={1}>
                             {product.effect}
                         </Text>
                     </Box>
                     <Box w={'100%'}>
-                        <Image alt={'image-store'} width={200} borderTopRightRadius={16} borderTopLeftRadius={16}
-                               source={productImg}/>
+                        <Image alt={'image-store'} borderTopRightRadius={16} borderTopLeftRadius={16}
+                               source={{uri: product.image}}
+                               style={{
+                                   width: '100%',
+                                   aspectRatio: 200 / 171,
+                                   borderRadius: 16,
+                               }}
+                               resizeMode="cover"
+                        />
                     </Box>
                 </Box>
                 <Box paddingY={1}

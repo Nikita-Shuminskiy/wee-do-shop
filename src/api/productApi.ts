@@ -46,7 +46,7 @@ export type ProductType = {
     "store": string
     "price": number,
     "effect": string,
-    "image": ImageSourcePropType,
+    "image": string,
     "createdAt": string,
     "updatedAt": string
 }

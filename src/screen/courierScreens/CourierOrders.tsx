@@ -1,19 +1,14 @@
-import React, {useEffect, useState} from 'react';
-import {BaseWrapperComponent} from "../../components/baseWrapperComponent";
-import {Box, Text} from "native-base";
-import {FlatList, RefreshControl, StyleSheet, TouchableOpacity} from "react-native";
-import {renderEmptyContainer} from "../../components/list-viewer/empty-list";
-import {ApiOrderType} from "../../api/ordersApi";
-import OrderViewer from "../../components/list-viewer/OrderViewer";
-import OrderCourierViewer from "../../components/list-viewer/OrderCourierViewer";
-import AuthStore from "../../store/AuthStore/auth-store";
-import Button from "../../components/Button";
-import {colors} from "../../assets/colors/colors";
-import rootStore from "../../store/RootStore/root-store";
-import {OrderCourierType} from "../../api/couierApi";
-import {observer} from "mobx-react-lite";
-import {routerConstants} from "../../constants/routerConstants";
-import {NavigationProp, ParamListBase} from "@react-navigation/native";
+import React, { useEffect, useState } from 'react'
+import { BaseWrapperComponent } from '../../components/baseWrapperComponent'
+import { Box, Text } from 'native-base'
+import { FlatList, RefreshControl, StyleSheet } from 'react-native'
+import { renderEmptyContainer } from '../../components/list-viewer/empty-list'
+import OrderCourierViewer from '../../components/list-viewer/OrderCourierViewer'
+import rootStore from '../../store/RootStore/root-store'
+import { OrderCourierType } from '../../api/couierApi'
+import { observer } from 'mobx-react-lite'
+import { routerConstants } from '../../constants/routerConstants'
+import { NavigationProp, ParamListBase } from '@react-navigation/native'
 
 type CourierOrdersProps = {
     navigation: NavigationProp<ParamListBase>
