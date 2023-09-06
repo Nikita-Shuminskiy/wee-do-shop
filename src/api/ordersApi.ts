@@ -15,10 +15,10 @@ export const ordersApi = {
         return await instance.get<UserType>(`order`)
     },
     async getOrder(id: string) {
-        return await instance.get<UserType>(`order/${id}`)
+        return await instance.get<ApiOrderType>(`order/${id}`)
     },
-    async getOrderUserId(idUser: string, status?: StatusType, limit?: number, offset?: number) {
-        return await instance.get<OrdersResponseType>(`order/user/${idUser}`, {params: {status, limit, offset}})
+    async getOrderUserId(payload: {idUser: string, status?: StatusType, limit?: number, offset?: number}) {
+        return await instance.get<OrdersResponseType>(`order/user/${payload.idUser}`, {params:payload })
     },
 }
 export type OrdersResponseType = {

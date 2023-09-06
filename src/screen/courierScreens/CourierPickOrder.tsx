@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {BaseWrapperComponent} from "../../components/baseWrapperComponent";
 import {Box, Text} from "native-base";
-import {StyleSheet, TouchableOpacity} from "react-native";
+import {StyleSheet, TouchableOpacity, View} from "react-native";
 import MapView, {Marker, PROVIDER_GOOGLE} from "react-native-maps";
 import Button from "../../components/Button";
 import {colors} from "../../assets/colors/colors";
@@ -16,10 +16,14 @@ import {splittingWord} from "../../utils/utils";
 import {AntDesign} from "@expo/vector-icons";
 import OrderUserInfo from "../../components/OrderUserInfo";
 
-const CourierPickOrder = observer(() => {
+type CourierPickOrderProps = {
+    route: any
+    navigation: any
+}
+const CourierPickOrder = observer(({route, navigation}: CourierPickOrderProps) => {
+    const isCheckOrderIfo = route.params?.checkInfo
     const {selectedOrder, connectToSocketOrder} = CourierOrderStore
     const {CourierOrderService} = rootStore
-    const navigation = useNavigation<any>()
     const [showUserInfoModal, setShowUserInfoModal] = useState(false)
     const [coords, setCoords] = useState({
         latitude: selectedOrder.user.address?.location.coordinates[1],
@@ -32,7 +36,7 @@ const CourierPickOrder = observer(() => {
     const onPressPickOrder = (status: StatusType) => {
         CourierOrderService.updateOrderStatus(status)
         if (status === StatusType.Completed) {
-            navigation.navigate(routerConstants.COURIER_ORDERS)
+            navigation.navigate(routerConstants.COURIER_COMPLETED_ORDERS)
         }
     };
 
@@ -64,7 +68,9 @@ const CourierPickOrder = observer(() => {
     const onShowUserInfoModal = () => {
         setShowUserInfoModal(true)
     }
-
+    if (!coords?.latitude) {
+        return <View style={styles.container}/>;
+    }
     return (
         <>
             <BaseWrapperComponent isKeyboardAwareScrollView={true}>
@@ -108,10 +114,17 @@ const CourierPickOrder = observer(() => {
                         </MapView>
                     </Box>
                     <Box w={'100%'}>
-                        <Button styleContainer={styles.styleBtnContainer} backgroundColor={colors.green}
-                                onPress={() => {
-                                    onPressPickOrder(isStatusOnTheWay ? StatusType.Completed : StatusType.OnTheWay)
-                                }} title={isStatusOnTheWay ? 'Order delivered' : 'Order picked up'}/>
+                        {
+                            isCheckOrderIfo ?
+                                <Button styleContainer={styles.styleBtnContainer} backgroundColor={colors.green}
+                                        onPress={() => {
+                                            navigation.goBack()
+                                        }} title={'Exit'}/> :
+                                <Button styleContainer={styles.styleBtnContainer} backgroundColor={colors.green}
+                                        onPress={() => {
+                                            onPressPickOrder(isStatusOnTheWay ? StatusType.Completed : StatusType.OnTheWay)
+                                        }} title={isStatusOnTheWay ? 'Order delivered' : 'Order picked up'}/>
+                        }
                     </Box>
                 </Box>
             </BaseWrapperComponent>
@@ -121,6 +134,9 @@ const CourierPickOrder = observer(() => {
     );
 });
 const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+    },
     styleBtnContainer: {
         marginVertical: 10
     }

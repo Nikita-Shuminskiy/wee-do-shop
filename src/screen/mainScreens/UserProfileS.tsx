@@ -34,32 +34,34 @@ const UserProfileS = ({navigation}: UserProfileSProps) => {
     }
     return (
         <BaseWrapperComponent isKeyboardAwareScrollView={true}>
-            <Box paddingX={2} mt={2}>
-                <Box top={5} zIndex={10} position={'absolute'} left={5}>
-                    <ArrowBack goBackPress={onPressGoBack} img={arrowLeftBack}/>
-                </Box>
-                <Box flexDirection={'row'} mt={5} mb={10} justifyContent={'center'} alignItems={'center'}>
-                    <Text fontSize={18} fontWeight={'bold'}>{user.firstName} {user.lastName}</Text>
-                </Box>
-                <Box flexDirection={'row'} alignItems={'center'} pb={4} mt={4} borderBottomWidth={1}
-                     borderColor={colors.grayLight}>
-                    <FontAwesome5 name="clipboard-list" size={18} color="black"/>
-                    <Box ml={1}>
-                        <Link styleText={styles.text} onPress={onPressOrderHandler}
-                              text={'Orders'}/>
-                    </Box>
-                </Box>
-                <Box flexDirection={'row'} alignItems={'center'} pb={4} mt={4} borderBottomWidth={1}
-                     borderColor={colors.grayLight}>
-                    <Ionicons  name="md-location" size={18} color="black"/>
-                    <Link styleText={styles.text} onPress={onPressGoAddress}
-                          text={'Address'}/>
-                </Box>
-                <Box flexDirection={'row'} mt={4} alignItems={'center'}>
-                    <Entypo name="log-out" size={18} color="black"/>
-                    <Link styleText={styles.text} onPress={onPressLogOut}
-                          text={'Logout'}/>
-                </Box>
+            <Box paddingX={2} mt={2} flex={1} justifyContent={'space-between'}>
+               <Box>
+                   <Box top={5} zIndex={10} position={'absolute'} left={5}>
+                       <ArrowBack goBackPress={onPressGoBack} img={arrowLeftBack}/>
+                   </Box>
+                   <Box flexDirection={'row'} mt={5} mb={10} justifyContent={'center'} alignItems={'center'}>
+                       <Text fontSize={18} fontWeight={'bold'}>{user.firstName} {user.lastName}</Text>
+                   </Box>
+                   <Box flexDirection={'row'} alignItems={'center'} pb={4} mt={4} borderBottomWidth={1}
+                        borderColor={colors.grayLight}>
+                       <FontAwesome5 name="clipboard-list" size={18} color="black"/>
+                       <Box ml={1}>
+                           <Link styleText={styles.text} onPress={onPressOrderHandler}
+                                 text={'Orders'}/>
+                       </Box>
+                   </Box>
+                   <Box flexDirection={'row'} alignItems={'center'} pb={4} mt={4} borderBottomWidth={1}
+                        borderColor={colors.grayLight}>
+                       <Ionicons  name="md-location" size={18} color="black"/>
+                       <Link styleText={styles.text} onPress={onPressGoAddress}
+                             text={'Address'}/>
+                   </Box>
+                   <Box flexDirection={'row'} mt={4} alignItems={'center'}>
+                       <Entypo name="log-out" size={18} color="black"/>
+                       <Link styleText={styles.text} onPress={onPressLogOut}
+                             text={'Logout'}/>
+                   </Box>
+               </Box>
                 <PrivacyPolicy/>
             </Box>
         </BaseWrapperComponent>

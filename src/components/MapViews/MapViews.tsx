@@ -64,7 +64,6 @@ export const MapViews = ({visible, close, currentDataMap, from}: MapViewsProps) 
     const getCurrentPositionHandler = async (event) => {
         event.stopPropagation();
         setMapInteractionEnabled(false); // Отключаем взаимодействие с картой
-        setIsLoading(LoadingEnum.fetching)
         try {
             const status = await allowLocation()
             if (status) {
@@ -83,11 +82,10 @@ export const MapViews = ({visible, close, currentDataMap, from}: MapViewsProps) 
                     });
                 }
             }
-            setMapInteractionEnabled(true)
         } catch (e) {
             console.log('err', e)
         } finally {
-            setIsLoading(LoadingEnum.success)
+            setMapInteractionEnabled(true)
         }
     }
     const handleMapPress = async (event) => {

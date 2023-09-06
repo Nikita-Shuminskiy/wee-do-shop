@@ -43,16 +43,16 @@
     },
     "extra": {
       "eas": {
-        "projectId": "775a8aa3-3d6d-4d39-8db8-6b4525b88c21"
+        "projectId": "c3806f75-d02e-400f-8063-b1a79bb2034e"
       }
     },
-    "owner": "nick_wee-do",
+    "owner": "nick_11112",
     "plugins": [
       "expo-localization",
       [
         "expo-updates",
         {
-          "username": "nick_wee-do"
+          "username": "nick_11112"
         }
       ]
     ],

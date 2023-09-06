@@ -35,6 +35,7 @@ const InputCustom = forwardRef(({
                                     ...rest
                                 }: InputCustomProps, ref) => {
     const [showPassword, setShowPassword] = useState(false)
+
     return (
         <Box pt={2} width={'100%'}>
             <FormControl isInvalid={isInvalid} isRequired={isRequired}>

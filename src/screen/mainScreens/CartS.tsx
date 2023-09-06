@@ -60,6 +60,7 @@ const CartS = observer(({navigation}: CartSProps) => {
         }
 
         const onChangeValueNumber = (productValue: number) => {
+            if(productValue > 100) return
             if (!productValue) {
                 return removeProductToCart(item._id)
             }

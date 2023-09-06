@@ -28,15 +28,27 @@ const CourierOrders = observer(({navigation}: CourierOrdersProps) => {
     const orderViews = ({item}: { item: OrderCourierType }) => {
         const onPressTakeOrder = () => {
             setSelectedOrder(item)
-            CourierOrderService.assignCourierOrder()
-            navigation.navigate(routerConstants.COURIER_PICK_ORDER)
+            CourierOrderService.assignCourierOrder().then((data) => {
+                if(!!data) {
+                    navigation.navigate(routerConstants.COURIER_PICK_ORDER)
+                }
+            })
+        }
+        const onPressInfoOrder = () => {
+            navigation.navigate(routerConstants.COURIER_PICK_ORDER, {checkInfo: true})
         }
         return (
-            <OrderCourierViewer onPressTakeOrder={onPressTakeOrder} order={item}/>
+            <OrderCourierViewer onPressInfoOrder={onPressInfoOrder} onPressTakeOrder={onPressTakeOrder} order={item}/>
         )
     }
     useEffect(() => {
         CourierOrderService.getCourierOrders()
+       const id = +setInterval(() => {
+            CourierOrderService.getCourierOrders()
+        }, 5000)
+        return () => {
+            clearInterval(id)
+        }
     }, [])
 
     return (

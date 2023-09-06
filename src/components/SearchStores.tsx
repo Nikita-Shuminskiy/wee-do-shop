@@ -24,15 +24,15 @@ const SearchStores = ({selectedSubCategoryId}: SearchStoresType) => {
         <Box w={'100%'} paddingX={5}>
             <TextInput
                 iconLeft={<Image ml={2} source={searchImg} alt={'search'}/>}
-                iconRight={
+               /* iconRight={
                     <Box flexDirection={'row'} mr={2}>
                         <Box borderRightWidth={1} borderColor={colors.gray} mr={4}/>
                         <Image source={settingImg} alt={'setting'}/>
                     </Box>
-                }
+                }*/
                 returnKeyType={"search"}
                 h={50}
-                placeholder={'Name, strain or shop'}
+                placeholder={'Store search'}
                 borderRadius={16}
                 backgroundColor={'transparent'}
                 borderColor={colors.grayLight}

@@ -10,6 +10,7 @@ import { useNavigation } from '@react-navigation/native'
 import { routerConstants } from '../../constants/routerConstants'
 import orderStore from '../../store/OrderStore/order-store'
 import { useOrderDataStatus } from '../../utils/hook/useOrderDataStatus'
+import rootStore from "../../store/RootStore/root-store";
 
 type OrderViewerProps = {
 	order: ApiOrderType
@@ -18,16 +19,19 @@ type OrderViewerProps = {
 }
 const OrderViewer = memo(({ order, onPressDetails, onPressRepeat }: OrderViewerProps) => {
 	const { setOrderData, setStatus } = orderStore
+	const { OrderService } = rootStore
 
-	const {status} = useOrderDataStatus({orderId: order._id})
+	const { status } = useOrderDataStatus({ orderId: order._id })
 	const navigation = useNavigation<any>()
 
 	const onPressCheckStatus = () => {
-		setOrderData(order)
+		OrderService.getOrder(order._id)
 		setStatus(status ?? order.status)
 		navigation.navigate(routerConstants.ORDER_STATUSES)
 	}
-	const isCompletedStatuses = status ? status  === StatusType.Completed :  order.status  === StatusType.Completed
+	const isCompletedStatuses = status
+		? status === StatusType.Completed
+		: order.status === StatusType.Completed
 
 	return (
 		<Box style={styles.container}>

@@ -28,14 +28,15 @@ const TakenCourierOrdersS = observer(({ navigation }: TakenCourierOrdersProps) =
 	}
 
 	const orderViews = ({ item }: { item: OrderCourierType }) => {
+		if (item.status === StatusType.Completed) return
 		const onPressTakeOrder = () => {
 			setSelectedOrder(item)
 			navigation.navigate(routerConstants.COURIER_PICK_ORDER)
 		}
-		return <OrderCourierViewer isMyOrder={true} onPressTakeOrder={onPressTakeOrder} order={item} />
+		return <OrderCourierViewer  isMyOrder={true} onPressTakeOrder={onPressTakeOrder} order={item} />
 	}
 	useEffect(() => {
-		CourierOrderService.getTakenCourierOrders({ status: StatusType.OnTheWay })
+		CourierOrderService.getTakenCourierOrders()
 	}, [])
 
 	return (
