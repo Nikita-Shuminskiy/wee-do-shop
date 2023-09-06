@@ -108,6 +108,7 @@ const StoreS = observer(({ navigation }: StoreSProps) => {
 		}
 
 		const saveProductToCard = (productValue: number) => {
+			if(productValue > 100) return
 			const findProduct = currentCartStore.products.find((product) => product._id === item._id)
 			if (findProduct) {
 				updateProduct(currentCartStore, item, productValue, setCurrentCartStore)
@@ -184,12 +185,12 @@ const StoreS = observer(({ navigation }: StoreSProps) => {
 					<Box
 						w={'100%'}
 						position={'relative'}
-						top={-13}
+						top={-30}
 						backgroundColor={colors.white}
 						borderTopLeftRadius={16}
 						borderTopRightRadius={16}
 					>
-						<Box mt={5}>
+						<Box  paddingX={2}>
 							<FlatList
 								extraData={selectedSubCategoryId}
 								data={store.subCategories}

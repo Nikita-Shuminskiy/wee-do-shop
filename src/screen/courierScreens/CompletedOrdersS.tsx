@@ -40,9 +40,8 @@ const CompletedOrdersS = observer(({ navigation }: TakenCourierOrdersProps) => {
 	const [refreshing, setRefreshing] = useState(false)
 	const onRefresh = () => {
 		setRefreshing(true)
-		CourierOrderService.getTakenCourierOrders({ status: StatusType.Completed }).finally(() => {
-			setRefreshing(false)
-		})
+		onPressShowHistory(PeriodEnum.DAY_1)
+		setRefreshing(false)
 	}
 
 	const orderViews = ({ item }: { item: OrderCourierType }) => {

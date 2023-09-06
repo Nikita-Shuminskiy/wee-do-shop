@@ -25,6 +25,7 @@ const InputNumber = ({onChangeValue, values, styleBtn}: InputNumberProps) => {
         onChangeValue(values - 1)
     };
     const onChangeText = (value: string) => {
+        if(Number(value) > 100) return
         if (checkValidNumber(value)) return onChangeValue(1)
         onChangeValue(parseInt(value))
     }

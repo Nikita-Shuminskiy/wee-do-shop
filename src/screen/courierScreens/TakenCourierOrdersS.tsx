@@ -26,9 +26,7 @@ const TakenCourierOrdersS = observer(({ navigation }: TakenCourierOrdersProps) =
 			setRefreshing(false)
 		})
 	}
-
 	const orderViews = ({ item }: { item: OrderCourierType }) => {
-		console.log(item.status)
 		if (item.status === StatusType.Completed) return
 		const onPressTakeOrder = () => {
 			setSelectedOrder(item)
@@ -50,9 +48,9 @@ const TakenCourierOrdersS = observer(({ navigation }: TakenCourierOrdersProps) =
 				</Box>
 				<Box mt={5} alignItems={'center'} flex={1} w={'100%'}>
 					<FlatList
-						data={takenCourierOrders}
+						data={takenCourierOrders.filter(el => el.status !== StatusType.Completed)}
 						renderItem={orderViews}
-						keyExtractor={(item, index) => index?.toString()}
+						keyExtractor={(item, index) => item._id?.toString()}
 						style={{ width: '100%' }}
 						contentContainerStyle={!takenCourierOrders.length && styles.contentContainerOrder}
 						refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}

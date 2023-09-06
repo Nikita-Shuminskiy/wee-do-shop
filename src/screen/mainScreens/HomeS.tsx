@@ -87,7 +87,7 @@ const HomeS = observer(({navigation}: HomeSProps) => {
                      borderTopRightRadius={16}>
                     <SearchStores selectedSubCategoryId={selectedSubCategoryId}/>
 
-                    <Box mt={5} marginX={2}w={'100%'} flex={1}>
+                    <Box mt={5} marginX={2} maxHeight={20} w={'100%'} flex={1}>
                         <FlatList
                             data={categories}
                             renderItem={categoriesViews}
