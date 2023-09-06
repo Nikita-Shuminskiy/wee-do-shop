@@ -22,18 +22,19 @@ const TakenCourierOrdersS = observer(({ navigation }: TakenCourierOrdersProps) =
 
 	const onRefresh = () => {
 		setRefreshing(true)
-		CourierOrderService.getTakenCourierOrders({ status: StatusType.OnTheWay }).finally(() => {
+		CourierOrderService.getTakenCourierOrders().finally(() => {
 			setRefreshing(false)
 		})
 	}
 
 	const orderViews = ({ item }: { item: OrderCourierType }) => {
+		console.log(item.status)
 		if (item.status === StatusType.Completed) return
 		const onPressTakeOrder = () => {
 			setSelectedOrder(item)
 			navigation.navigate(routerConstants.COURIER_PICK_ORDER)
 		}
-		return <OrderCourierViewer  isMyOrder={true} onPressTakeOrder={onPressTakeOrder} order={item} />
+		return <OrderCourierViewer isMyOrder={true} onPressTakeOrder={onPressTakeOrder} order={item} />
 	}
 	useEffect(() => {
 		CourierOrderService.getTakenCourierOrders()
@@ -49,7 +50,7 @@ const TakenCourierOrdersS = observer(({ navigation }: TakenCourierOrdersProps) =
 				</Box>
 				<Box mt={5} alignItems={'center'} flex={1} w={'100%'}>
 					<FlatList
-						data={takenCourierOrders ?? []}
+						data={takenCourierOrders}
 						renderItem={orderViews}
 						keyExtractor={(item, index) => index?.toString()}
 						style={{ width: '100%' }}

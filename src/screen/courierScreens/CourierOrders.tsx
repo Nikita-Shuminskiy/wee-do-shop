@@ -35,6 +35,7 @@ const CourierOrders = observer(({navigation}: CourierOrdersProps) => {
             })
         }
         const onPressInfoOrder = () => {
+            setSelectedOrder(item)
             navigation.navigate(routerConstants.COURIER_PICK_ORDER, {checkInfo: true})
         }
         return (

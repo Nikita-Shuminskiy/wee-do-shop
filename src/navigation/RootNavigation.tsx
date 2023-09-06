@@ -82,7 +82,7 @@ const RootNavigation = observer(() => {
 
     return (
         <NavigationContainer>
-            <Loading visible={isLoading === LoadingEnum.fetching}/>
+			{isLoading === LoadingEnum.fetching && <Loading visible={isLoading === LoadingEnum.fetching}/>}
             <ModalReconnect checkInternetConnection={checkInternetConnection} visible={!isConnected}/>
             <RootStack.Navigator>
                 {
