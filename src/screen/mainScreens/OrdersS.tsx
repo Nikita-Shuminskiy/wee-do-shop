@@ -125,7 +125,7 @@ const OrdersS = observer(({ navigation, route }: OrdersSProps) => {
 				</Box>
 				<Box mt={5} alignItems={'center'} flex={1} w={'100%'}>
 					<FlatList
-						data={orders ?? []}
+						data={orders}
 						renderItem={orderViews}
 						keyExtractor={(item, index) => item._id?.toString()}
 						style={{ width: '100%' }}
@@ -135,7 +135,7 @@ const OrdersS = observer(({ navigation, route }: OrdersSProps) => {
 						}
 						ListFooterComponent={renderFooter}
 						onEndReached={fetchMoreData}
-						onEndReachedThreshold={4}
+						onEndReachedThreshold={0.5}
 					/>
 				</Box>
 			</BaseWrapperComponent>

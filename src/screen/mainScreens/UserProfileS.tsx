@@ -36,7 +36,7 @@ const UserProfileS = ({navigation}: UserProfileSProps) => {
         <BaseWrapperComponent isKeyboardAwareScrollView={true}>
             <Box paddingX={2} mt={2} flex={1} justifyContent={'space-between'}>
                <Box>
-                   <Box top={5} zIndex={10} position={'absolute'} left={5}>
+                   <Box top={5} zIndex={10} position={'absolute'} left={0}>
                        <ArrowBack goBackPress={onPressGoBack} img={arrowLeftBack}/>
                    </Box>
                    <Box flexDirection={'row'} mt={5} mb={10} justifyContent={'center'} alignItems={'center'}>

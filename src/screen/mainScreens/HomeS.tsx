@@ -69,7 +69,6 @@ const HomeS = observer(({navigation}: HomeSProps) => {
         )
     }
 
-
     useEffect(() => {
         StoresService.getStores()
         CategoriesService.getCategories()
@@ -78,7 +77,7 @@ const HomeS = observer(({navigation}: HomeSProps) => {
 
     return (
         <BaseWrapperComponent backgroundColor={colors.white} isKeyboardAwareScrollView={!!stores?.length}>
-            <Box w={'100%'} flex={1} >
+            <Box paddingX={4} w={'100%'} flex={1} >
                 <HeaderUser
                     address={user?.address}
                     navigation={navigation}
@@ -87,7 +86,7 @@ const HomeS = observer(({navigation}: HomeSProps) => {
                      borderTopRightRadius={16}>
                     <SearchStores selectedSubCategoryId={selectedSubCategoryId}/>
 
-                    <Box mt={5} marginX={2} maxHeight={20} w={'100%'} flex={1}>
+                    <Box mt={3} mb={3} maxHeight={20} w={'100%'} flex={1}>
                         <FlatList
                             data={categories}
                             renderItem={categoriesViews}

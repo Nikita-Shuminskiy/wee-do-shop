@@ -29,7 +29,7 @@ const StoresViewer = ({
         <TouchableOpacity onPress={onPress} style={{alignItems: 'center', flex: 1}}>
             <Box backgroundColor={'rgba(203,203,203,0.27)'}
                  borderRadius={16}
-                 alignItems={'flex-start'} justifyContent={'space-between'} m={1}
+                 alignItems={'flex-start'} justifyContent={'space-between'} mb={3}
                  borderColor={colors.green}>
                 <Box>
                     <Box position={'absolute'}

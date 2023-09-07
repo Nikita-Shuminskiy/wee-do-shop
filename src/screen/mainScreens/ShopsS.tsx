@@ -39,7 +39,7 @@ const ShopsS = observer(({navigation}: ShopsSType) => {
     }, [])
     return (
         <BaseWrapperComponent backgroundColor={colors.white} isKeyboardAwareScrollView={true}>
-            <Box>
+            <Box paddingX={4} >
                 <HeaderUser
                     address={user?.address}
                     navigation={navigation}
@@ -47,7 +47,7 @@ const ShopsS = observer(({navigation}: ShopsSType) => {
                 <Box mt={2} w={'100%'} backgroundColor={colors.white} borderTopLeftRadius={16}
                      borderTopRightRadius={16}>
                     <SearchStores/>
-                    <Text ml={4} mt={2} mb={2} fontSize={24} fontWeight={'500'}>Shops near you</Text>
+                    <Text mt={2} mb={2} fontSize={24} fontWeight={'500'}>Shops near you</Text>
                     <Box mb={20}>
                         <FlatList
                             scrollEnabled={false}

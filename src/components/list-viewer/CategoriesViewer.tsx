@@ -17,7 +17,7 @@ const SubCategoriesViewer = <T extends { name: string; image?: string }>({
 	//@ts-ignore
 	const isChosenSubCategory = selectedSubCategoryId === subCategory?._id
 	return (
-		<TouchableOpacity style={styles.shadow} onPress={onPress}>
+		<TouchableOpacity onPress={onPress}>
 			{/*<BlurView intensity={10} tint="light" style={StyleSheet.absoluteFillObject}/>*/}
 			<Box alignItems={'center'} mr={1} justifyContent={'center'}>
 				<Image
@@ -37,18 +37,6 @@ const SubCategoriesViewer = <T extends { name: string; image?: string }>({
 	)
 }
 const styles = StyleSheet.create({
-	shadow: {
-		backgroundColor: colors.white,
-		shadowColor: '#000',
-		shadowOffset: {
-			width: 0,
-			height: 6,
-		},
-		shadowOpacity: 0.37,
-		shadowRadius: 7.49,
-
-		elevation: 7,
-	},
 	subCategoryBlock: {},
 	activeSubCategory: {},
 })

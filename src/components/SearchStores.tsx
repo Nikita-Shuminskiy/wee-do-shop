@@ -21,7 +21,7 @@ const SearchStores = ({selectedSubCategoryId}: SearchStoresType) => {
     }
 
     return (
-        <Box w={'100%'} paddingX={5}>
+        <Box w={'100%'}>
             <TextInput
                 iconLeft={<Image ml={2} source={searchImg} alt={'search'}/>}
                /* iconRight={

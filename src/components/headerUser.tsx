@@ -23,7 +23,7 @@ export const HeaderUser = ({navigation, address}:HeaderUserType) => {
         navigation.navigate(routerConstants.ADDRESS)
     }
     return (
-        <Box paddingX={5} mt={6} mb={2} w={'100%'} flexDirection={'row'}
+        <Box mt={6} mb={2} w={'100%'} flexDirection={'row'}
              justifyContent={'space-between'}>
             <TouchableOpacity onPress={onPressUserHandler}>
                 <Image source={userImg} alt={'user'}/>

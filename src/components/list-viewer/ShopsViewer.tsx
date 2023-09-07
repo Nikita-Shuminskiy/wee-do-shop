@@ -18,7 +18,7 @@ const ShopsViewer = ({ stores, onPress }: ShopsViewerType) => {
 	return (
 		<TouchableOpacity
 			onPress={onPress}
-			style={{ paddingHorizontal: 8, minWidth: productWidth, maxWidth: productWidth, margin: 5 }}
+			style={{ minWidth: productWidth, maxWidth: productWidth }}
 		>
 			<ImageBackground
 				borderRadius={16}
