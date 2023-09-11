@@ -15,10 +15,11 @@ export const routerConstants = {
     PROFILE_USER: 'profile-user',
     HISTORY: 'history',
     CART: 'cart',
+    USER_UPDATE: 'user-update',
 
     TERM_SERVICE: 'terms-service',
-    LEGAL_INFORMATION: 'legal information',
-    PRIVACY_POLICE: 'Privacy police',
+    LEGAL_INFORMATION: 'legal-information',
+    PRIVACY_POLICE: 'Privacy-police',
 
     //courier
     COURIER_REGISTER: 'courier-register',

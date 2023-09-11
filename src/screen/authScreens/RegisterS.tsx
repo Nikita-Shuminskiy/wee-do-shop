@@ -21,7 +21,7 @@ import { observer } from 'mobx-react-lite'
 import AuthStore, { AddressType } from '../../store/AuthStore/auth-store'
 import { allowLocation, getFormattedAddress } from '../../components/MapViews/utils'
 
-type CountryData = {
+export type CountryData = {
 	callingCode: string[]
 	cca2: string
 	currency: string[]
@@ -30,7 +30,7 @@ type CountryData = {
 	region: string
 	subregion: string
 }
-const countryDataDefault = {
+export const countryDataDefault = {
 	callingCode: ['66'],
 	cca2: 'TH',
 	currency: ['THB'],
@@ -122,9 +122,9 @@ const RegisterS = observer(({ navigation }: LoginSProps) => {
 	}
 	const disabledBtnSignUp =
 		!!(errors.email && !validateEmail(values.email.trim())) ||
-		!!(errors.password && values.password.length <= 3) ||
 		!!(errors.phone && !values.phone) ||
 		!!(errors.firstName && !values.firstName.trim()) ||
+		!!(errors.password && values.password.length <= 5) ||
 		!!(errors.confirmPassword && !values.confirmPassword) ||
 		isSubmitting ||
 		!!(!isValidPhone && touched.phone)
@@ -180,7 +180,7 @@ const RegisterS = observer(({ navigation }: LoginSProps) => {
 
 					<CustomInput
 						onChangeText={handleChange('email')}
-						placeholder={'Email*'}
+
 						value={values.email}
 						onBlur={handleBlur('email')}
 						errorMessage={
@@ -190,6 +190,7 @@ const RegisterS = observer(({ navigation }: LoginSProps) => {
 						}
 						isInvalid={!!(errors.email && !validateEmail(values.email.trim()))}
 						isRequired={true}
+						placeholder={'Email*'}
 						borderRadius={16}
 						type={'text'}
 						iconRight={

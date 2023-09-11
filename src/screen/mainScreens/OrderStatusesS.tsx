@@ -1,26 +1,25 @@
-import React, { useEffect } from 'react'
-import { Box, Text } from 'native-base'
-import { observer } from 'mobx-react-lite'
+import React, {useEffect} from 'react'
+import {Box, Text} from 'native-base'
+import {observer} from 'mobx-react-lite'
 import orderStore from '../../store/OrderStore/order-store'
-import { BaseWrapperComponent } from '../../components/baseWrapperComponent'
+import {BaseWrapperComponent} from '../../components/baseWrapperComponent'
 import closeImg from '../../assets/images/close.png'
 import placedImg from '../../assets/images/orderImg/placed.png'
 import preparedImg from '../../assets/images/orderImg/prepared.png'
 import waitingForPickImg from '../../assets/images/orderImg/waitingForPick.png'
 import courierImg from '../../assets/images/orderImg/courier.png'
 import arrivedImg from '../../assets/images/orderImg/arrived.png'
-import { Image, Linking, StyleSheet, TouchableOpacity } from 'react-native'
-import { colors } from '../../assets/colors/colors'
+import {Image, Linking, StyleSheet, TouchableOpacity} from 'react-native'
+import {colors} from '../../assets/colors/colors'
 import {CourierType, StatusType} from '../../api/ordersApi'
 import io from 'socket.io-client'
 import OrderStatusBar from '../../components/OrderStatusBar'
 import Button from '../../components/Button'
-import { NavigationProp, ParamListBase } from '@react-navigation/native'
-import { routerConstants } from '../../constants/routerConstants'
-import { BASE_URL } from '../../api/config'
-import { splittingWord } from '../../utils/utils'
-import { UserType } from '../../api/authApi'
-import { Feather } from '@expo/vector-icons'
+import {NavigationProp, ParamListBase} from '@react-navigation/native'
+import {routerConstants} from '../../constants/routerConstants'
+import {BASE_URL} from '../../api/config'
+import {splittingWord} from '../../utils/utils'
+import {Feather} from "@expo/vector-icons";
 
 const renderImgForStatuses = (status: StatusType) => {
 	switch (status) {
@@ -133,6 +132,7 @@ const OrderStatusesS = observer(({ navigation }: OrderStatusesSProps) => {
 		navigation.navigate(routerConstants.ORDERS, { from: 'statuses' })
 	}
 	const isCanceled = statusOrder === StatusType.Canceled
+
 	const handlePhonePress = async () => {
 		const url = `tel:${order.courier.phone}`
 		const supported = await Linking.canOpenURL(url)
@@ -142,6 +142,9 @@ const OrderStatusesS = observer(({ navigation }: OrderStatusesSProps) => {
 		} else {
 			console.error('Невозможно открыть телефонную книгу')
 		}
+	}
+	const onPressGoToStores = () => {
+		navigation.navigate(routerConstants.HOME)
 	}
 	return (
 		<BaseWrapperComponent backgroundColor={colors.white} isKeyboardAwareScrollView={!isCanceled}>
@@ -182,7 +185,7 @@ const OrderStatusesS = observer(({ navigation }: OrderStatusesSProps) => {
 							{renderDescriptionForStatuses(statusOrder)}
 						</Box>
 						{
-							order.courier && <Box>
+							isCanceled && order.courier ? <Box>
 								<Text fontSize={18} color={colors.black} fontWeight={'600'}>
 									Your courier
 								</Text>
@@ -195,6 +198,8 @@ const OrderStatusesS = observer(({ navigation }: OrderStatusesSProps) => {
 										<Feather name="phone" size={24} color={colors.blueLightMedium} />
 									</TouchableOpacity>
 								</Box>
+							</Box> : <Box>
+								<Button backgroundColor={colors.green} onPress={onPressGoToStores} title={'Go to stores'} />
 							</Box>
 						}
 					</>

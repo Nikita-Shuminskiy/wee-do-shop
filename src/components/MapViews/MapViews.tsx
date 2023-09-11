@@ -40,7 +40,7 @@ export const MapViews = ({visible, close, currentDataMap, from}: MapViewsProps) 
     const getCurrentInfo = async () => {
         const status = await allowLocation()
         if (status) {
-            const {latitude, longitude} = currentDataMap.location
+            const {latitude, longitude} = currentDataMap?.location
             const {formatted_address, ...rest} = await getInfoAddressForCoords({latitude, longitude})
             return {
                 formatted_address,
@@ -49,8 +49,8 @@ export const MapViews = ({visible, close, currentDataMap, from}: MapViewsProps) 
         }
     }
     useEffect(() => {
-        setMyLocation(currentDataMap.location)
-        setAddress(currentDataMap.address)
+        setMyLocation(currentDataMap?.location)
+        setAddress(currentDataMap?.address)
         getCurrentInfo().then((data) => {
             const {formatted_address, ...rest} = data
             setFullInfo({...rest})

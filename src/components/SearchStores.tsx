@@ -7,10 +7,11 @@ import settingImg from "../assets/images/setting.png";
 import rootStore from "../store/RootStore/root-store";
 type SearchStoresType = {
     selectedSubCategoryId?: string
+    search: string
+    setSearch: (text: string) => void
 }
-const SearchStores = ({selectedSubCategoryId}: SearchStoresType) => {
+const SearchStores = ({selectedSubCategoryId, search, setSearch}: SearchStoresType) => {
     const {StoresService} = rootStore
-    const [search, setSearch] = useState('')
 
     const handleTextChange = (newText) => {
         setSearch(newText);

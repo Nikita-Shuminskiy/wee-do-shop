@@ -29,6 +29,7 @@ import CourierInProgressS from '../screen/courierScreens/CourierInProgressS'
 import ModalReconnect from '../components/modal/modal-reconnect'
 import NetInfo from '@react-native-community/netinfo'
 import MainCourierNavigation from './MainCourierNavigation'
+import UpdateUserS from "../screen/mainScreens/UpdateUserS";
 /*import * as Updates from 'expo-updates'
 import { createAlert } from '../components/Alert'*/
 
@@ -118,6 +119,11 @@ const RootNavigation = observer(() => {
                                     options={{headerShown: false}}
                                     name={routerConstants.PROFILE_USER}
                                     component={UserProfileS}
+                                />
+                                <RootStack.Screen
+                                    options={{headerShown: false}}
+                                    name={routerConstants.USER_UPDATE}
+                                    component={UpdateUserS}
                                 />
                                 <RootStack.Screen
                                     options={{headerShown: false}}

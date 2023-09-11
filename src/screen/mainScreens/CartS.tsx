@@ -143,7 +143,6 @@ const CartS = observer(({navigation}: CartSProps) => {
                                            placeholder={'Add comment'} textAlignVertical={'top'}
                                            multiline={true} numberOfLines={4}/>
                             </Box>
-                            <PrivacyPolicy/>
                             {/*   <Box mt={5}>
                         <Text fontSize={24} fontWeight={'700'}>Anything else?</Text>
                     </Box>*/}

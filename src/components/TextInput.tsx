@@ -1,5 +1,5 @@
 import React, {forwardRef, useState} from 'react'
-import {Box, FormControl, Input, WarningOutlineIcon} from 'native-base'
+import {Box, FormControl, Input, Text, WarningOutlineIcon} from 'native-base'
 import {StyleProp, TextStyle, TouchableOpacity} from 'react-native'
 import {Feather} from '@expo/vector-icons'
 import {InterfaceInputProps} from 'native-base/lib/typescript/components/primitives/Input/types'
@@ -39,7 +39,7 @@ const InputCustom = forwardRef(({
     return (
         <Box pt={2} width={'100%'}>
             <FormControl isInvalid={isInvalid} isRequired={isRequired}>
-                {label && <FormControl.Label>{label}</FormControl.Label>}
+                {label && <Text fontWeight={'500'} color={colors.gray}>{label}</Text>}
                 <Input
                     ref={ref}
                     value={value}

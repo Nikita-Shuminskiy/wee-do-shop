@@ -55,7 +55,7 @@ const StoresViewer = ({
                          right={2}>
                         <TouchableOpacity
                             onPress={checkFavoriteStore ? onPressRemoveFavoriteStore : onPressSaveFavoriteStore}>
-                            <Image source={checkFavoriteStore ? likeActive : like} alt={'like'}/>
+                            <Image style={{width: 34, height: 34}} source={checkFavoriteStore ? likeActive : like} alt={'like'}/>
                         </TouchableOpacity>
                     </Box>
                     <Image alt={'image-store'} borderRadius={16}

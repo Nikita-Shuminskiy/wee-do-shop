@@ -22,7 +22,7 @@ type HomeSProps = {
 const HomeS = observer(({navigation}: HomeSProps) => {
     const {user} = AuthStore
     const {StoresService, StoresStore, CategoriesService, CategoriesStore} = rootStore
-    const {stores, setStore, favoriteStores} = StoresStore
+    const {stores, setStore, favoriteStores, search, setSearch} = StoresStore
     const {categories} = CategoriesStore
     const [selectedSubCategoryId, setSelectedSubCategoryId] = useState<string>('');
 
@@ -73,10 +73,10 @@ const HomeS = observer(({navigation}: HomeSProps) => {
         StoresService.getStores()
         CategoriesService.getCategories()
         StoresService.getFavoriteStores()
-    }, [user.address.fullAddress])
+    }, [user.address?.fullAddress])
 
     return (
-        <BaseWrapperComponent backgroundColor={colors.white} isKeyboardAwareScrollView={!!stores?.length}>
+        <BaseWrapperComponent backgroundColor={colors.white} isKeyboardAwareScrollView={true}>
             <Box paddingX={4} w={'100%'} flex={1} >
                 <HeaderUser
                     address={user?.address}
@@ -84,7 +84,7 @@ const HomeS = observer(({navigation}: HomeSProps) => {
                 />
                 <Box mt={2} w={'100%'} flex={1}  borderTopLeftRadius={16}
                      borderTopRightRadius={16}>
-                    <SearchStores selectedSubCategoryId={selectedSubCategoryId}/>
+                    <SearchStores setSearch={setSearch} search={search}  selectedSubCategoryId={selectedSubCategoryId}/>
 
                     <Box mt={3} mb={3} maxHeight={20} w={'100%'} flex={1}>
                         <FlatList
