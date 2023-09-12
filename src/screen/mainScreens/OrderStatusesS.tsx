@@ -118,7 +118,6 @@ const OrderStatusesS = observer(({ navigation }: OrderStatusesSProps) => {
 		socket.on(
 			`orderStatusUpdated:${order._id}`,
 			(data: { orderId: string; status: StatusType; courier: CourierType }) => {
-				console.log(data.courier, 'data.courier')
 				if(data.courier) {
 					setCourierToOrder(data.courier)
 				}

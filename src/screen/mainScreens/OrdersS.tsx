@@ -130,10 +130,10 @@ const OrdersS = observer(({ navigation, route }: OrdersSProps) => {
 						keyExtractor={(item, index) => item._id?.toString()}
 						style={{ width: '100%' }}
 						contentContainerStyle={!ordersLength && styles.contentContainerOrder}
+						ListFooterComponent={orders.length ? renderFooter : null}
 						ListEmptyComponent={() =>
 							renderEmptyContainer(0, 'You haven’t placed\n any orders yet.')
 						}
-						ListFooterComponent={renderFooter}
 						onEndReached={fetchMoreData}
 						onEndReachedThreshold={0.5}
 					/>

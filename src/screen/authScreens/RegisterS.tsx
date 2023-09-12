@@ -14,12 +14,13 @@ import PhoneNumberField from '../../components/PhoneField'
 import location from '../../assets/images/location-register.png'
 import arrowLeft from '../../assets/images/arrow-left.png'
 import rootStore from '../../store/RootStore'
-import { RoleType } from 'api/authApi'
+import { RoleType } from '../../api/authApi'
 import { routerConstants } from '../../constants/routerConstants'
 import ArrowBack from '../../components/ArrowBack'
 import { observer } from 'mobx-react-lite'
 import AuthStore, { AddressType } from '../../store/AuthStore/auth-store'
 import { allowLocation, getFormattedAddress } from '../../components/MapViews/utils'
+import { createAlert } from '../../components/Alert'
 
 export type CountryData = {
 	callingCode: string[]
@@ -61,9 +62,20 @@ const RegisterS = observer(({ navigation }: LoginSProps) => {
 	const [countryCode, setCountryCode] = useState<CountryData>(countryDataDefault)
 
 	const onSubmit = (values: UserRegisterDataType) => {
+		if (!currentLocation?.location?.coordinates[0]) {
+			createAlert({
+				title: 'Message',
+				message: 'Enter a location',
+				buttons: [{ text: 'Ok', style: 'cancel' }],
+			})
+			setSubmitting(false)
+			return
+
+		}
 		const formattedPhoneNumber = `+${countryCode.callingCode[0]}${values.phone}`
 		AuthStoreService.registration({
 			...values,
+			role: RoleType.Customer,
 			email: values.email.trim(),
 			phone: formattedPhoneNumber,
 			address: currentLocation,
@@ -90,7 +102,7 @@ const RegisterS = observer(({ navigation }: LoginSProps) => {
 			lastName: '',
 			address: {} as AddressType,
 			phone: '',
-			role: 'customer',
+			role: RoleType.Customer,
 		},
 		onSubmit: onSubmit,
 		validateOnChange: false,
@@ -180,7 +192,6 @@ const RegisterS = observer(({ navigation }: LoginSProps) => {
 
 					<CustomInput
 						onChangeText={handleChange('email')}
-
 						value={values.email}
 						onBlur={handleBlur('email')}
 						errorMessage={
@@ -223,9 +234,6 @@ const RegisterS = observer(({ navigation }: LoginSProps) => {
 						type={'password'}
 						borderRadius={16}
 					/>
-					{!!errors.password && values.password.length <= 5 && (
-						<Text fontSize={13} fontWeight={'400'} color={colors.red}>The password must be at least 6 characters long</Text>
-					)}
 
 					<CustomInput
 						onChangeText={handleChange('confirmPassword')}
