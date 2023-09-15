@@ -13,6 +13,7 @@ import { useFormik } from 'formik'
 import { CountryData, countryDataDefault, UserRegisterDataType } from '../authScreens/RegisterS'
 import PhoneNumberField from '../../components/PhoneField'
 import rootStore from '../../store/RootStore/root-store'
+import { OptionalUserType } from '../../api/userApi'
 
 type UpdateUserSProps = {
 	navigation: NavigationProp<ParamListBase>
@@ -32,26 +33,29 @@ const UpdateUserS = ({ navigation }: UpdateUserSProps) => {
 	const [countryCode, setCountryCode] = useState<CountryData>(countryDataDefault)
 
 	const onSubmit = (values: DataType) => {
-		if(!isValidPhone && values.phone) return
+		if (!isValidPhone && values.phone) return
 		const formattedPhoneNumber = `+${countryCode.callingCode[0]}${values.phone}`
-		AuthStoreService.updateUser({
-			email: values.email,
-			password: values.password,
-			phone: formattedPhoneNumber,
-			firstName: values.firstName,
-			lastName: values.lastName
-		}).then((data) => {
-			if(data) {
+		const dataToSend: OptionalUserType = {}
+		if (values.firstName && values.firstName !== '') {
+			dataToSend.firstName = values.firstName
+		}
+		if (values.email && values.email !== '') {
+			dataToSend.email = values.email
+		}
+		if (values.lastName && values.lastName !== '') {
+			dataToSend.lastName = values.lastName
+		}
+		if (values.phone && values.phone !== '') {
+			dataToSend.phone = formattedPhoneNumber
+		}
+		if (values.password && values.password !== '') {
+			dataToSend.password = values.password
+		}
+		AuthStoreService.updateUser(user._id, dataToSend).then((data) => {
+			if (data) {
 				navigation.goBack()
 			}
 		})
-		/*console.log({
-			email: values.email,
-			password: values.password,
-			phone: values.phone.length ? formattedPhoneNumber : '',
-			firstName: values.firstName,
-			lastName: values.lastName,
-		})*/
 	}
 	const onPressGoBack = () => {
 		navigation.goBack()

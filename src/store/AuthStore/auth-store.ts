@@ -2,7 +2,7 @@ import {action, makeObservable, observable} from "mobx";
 import {deviceStorage} from '../../utils/storage/storage'
 import {authApi, UserType} from '../../api/authApi'
 import {UserRegisterDataType} from "screen/authScreens/RegisterS";
-import {userApi} from "../../api/userApi";
+import {OptionalUserType, userApi} from "../../api/userApi";
 
 export type fullAddressType = {
     country: string
@@ -59,10 +59,11 @@ export class AuthStore {
         return data
     }
 
-    async updateUser(dataAddress: AddressType): Promise<UserType> {
-        const {data} = await userApi.updateUser(this.user._id, dataAddress)
-        console.log(data)
-        this.setUser(data)
+    async updateUser(payload: OptionalUserType): Promise<UserType> {
+        console.log('что я отправляю', payload)
+        const {data} = await userApi.updateUser(this.user._id, payload)
+        console.log('что пришло', data)
+       // this.setUser(data)
         return data
     }
 

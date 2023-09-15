@@ -16,7 +16,9 @@ export const userApi = {
 	async getUser(idUser: string) {
 		return await instance.get<UserType>(`users/${idUser}`)
 	},
-	async updateUser(idUser: string, dataAddress: AddressType) {
-		return await instance.patch<UserType>(`users/${idUser}`, {address: dataAddress})
+	async updateUser(idUser: string, data: OptionalUserType) {
+		return await instance.patch(`users/${idUser}`, {data})
 	},
 }
+export type OptionalUserType = Partial<UserType> & { password?: string };
+

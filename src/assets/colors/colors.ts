@@ -9,11 +9,12 @@ export const colors: { [key: string]: string } = {
 	blueLight: 'rgba(0,31,91,0.08)',
 
 	grayDarkLight: 'rgba(232,232,232,0.46)',
-	red: '#FF0000',
+	red: '#F25656',
 	yellowUK: '#FFD800',
 	grayWhite: '#E6E7E9',
+	grayLightWhite: '#F7F7F7',
 
-	gray: '#8F8F8F',
+	gray: '#B2B3B7',
 	white: '#FFFFFF',
 
 	blueLightMedium: '#7FA8DA',

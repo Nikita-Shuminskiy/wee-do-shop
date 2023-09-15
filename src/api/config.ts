@@ -50,7 +50,7 @@ instance.interceptors.response.use(
             } catch (e) {
                 createAlert({
                     title: 'Message',
-                    message: e?.response?.data?.messages,
+                    message: `${e?.response?.data?.messages} error interseptor`,
                     buttons: [{text: 'Continue', style: "cancel"}]
                 })
                // return Promise.reject(e);
