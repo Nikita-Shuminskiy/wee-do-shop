@@ -39,7 +39,7 @@ const PhoneNumberField: React.FC<PhoneNumberFieldProps> = ({ isRequired, isInval
 					codeTextStyle={{ color: colors.gray, height: 23, fontSize: 16 }}
 					textInputStyle={{ color: colors.gray, fontSize: 16 }}
 					defaultCode={'TH'}
-					placeholder={'Phone*'}
+					placeholder={'Phone'}
 					layout='first'
 					onChangeText={onChangeTextHandler}
 					{...rest}

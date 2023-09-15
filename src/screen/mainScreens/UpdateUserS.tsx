@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { BaseWrapperComponent } from '../../components/baseWrapperComponent'
 import { NavigationProp, ParamListBase } from '@react-navigation/native'
 import ArrowBack from '../../components/ArrowBack'
@@ -31,9 +31,12 @@ const UpdateUserS = ({ navigation }: UpdateUserSProps) => {
 	const { AuthStoreService } = rootStore
 	const [isValidPhone, setIsValidPhone] = useState(true)
 	const [countryCode, setCountryCode] = useState<CountryData>(countryDataDefault)
+	const [touchedPassword, setTouchedPassword] = useState<boolean>(false)
 
 	const onSubmit = (values: DataType) => {
+		console.log('1111111111111111111111111111')
 		if (!isValidPhone && values.phone) return
+
 		const formattedPhoneNumber = `+${countryCode.callingCode[0]}${values.phone}`
 		const dataToSend: OptionalUserType = {}
 		if (values.firstName && values.firstName !== '') {
@@ -60,6 +63,7 @@ const UpdateUserS = ({ navigation }: UpdateUserSProps) => {
 	const onPressGoBack = () => {
 		navigation.goBack()
 	}
+
 	const { handleChange, handleBlur, touched, handleSubmit, values, errors, setTouched } = useFormik(
 		{
 			initialValues: {
@@ -71,33 +75,26 @@ const UpdateUserS = ({ navigation }: UpdateUserSProps) => {
 				phone: '',
 			},
 			onSubmit: onSubmit,
-			validateOnChange: false,
+			validateOnChange: true,
 			validateOnMount: false,
 			validateOnBlur: false,
 			validate: (values) => {
 				const errors = {}
+
 				if (values.phone === '') {
-					console.log('false')
 					setTouched({ phone: false })
 				}
 				if (!!(user.email !== values.email && !validateEmail(values.email))) {
-					if (touched.email) {
-						errors['email'] = true
-					}
+					errors['email'] = true
 				}
-				if (!!(values.password.length && values.password.length <= 5) && touched.password) {
+				if (values.password.length <= 5 && touchedPassword) {
 					errors['password'] = true
-				}
-				if (
-					!!(values.password.length && values.password !== values.confirmPassword) &&
-					touched.confirmPassword
-				) {
-					errors['confirmPassword'] = true
 				}
 				return errors
 			},
 		}
 	)
+
 	const onValidNumberHandler = (isValidNumber: boolean) => {
 		setIsValidPhone(isValidNumber)
 	}
@@ -106,10 +103,17 @@ const UpdateUserS = ({ navigation }: UpdateUserSProps) => {
 		setCountryCode(country)
 	}
 
+	useEffect(() => {
+		if (values.password) {
+			setTouchedPassword(true)
+		}
+		if(!values.password) setTouchedPassword(false)
+
+	}, [values.password])
+
 	const disabledBtnSignUp =
 		!!(errors.email && !validateEmail(values.email.trim())) ||
-		!!(errors.password && values.password.length <= 5) ||
-		!!(errors.confirmPassword && !values.confirmPassword) ||
+		!!(values.password?.length <= 5 && touchedPassword) ||
 		!!(touched.phone && !isValidPhone && values.phone !== '')
 	return (
 		<BaseWrapperComponent isKeyboardAwareScrollView={true}>
@@ -143,7 +147,7 @@ const UpdateUserS = ({ navigation }: UpdateUserSProps) => {
 							onChangeCountry={onChangeCountry}
 							errorMessage={'Incorrect phone number'}
 							isInvalid={touched.phone && !isValidPhone && values.phone !== ''}
-							isRequired={true}
+							isRequired={false}
 							defaultValue={values.phone}
 							onChangeText={handleChange('phone')}
 						/>
@@ -163,38 +167,17 @@ const UpdateUserS = ({ navigation }: UpdateUserSProps) => {
 					/>
 					<TextInput
 						onChangeText={handleChange('password')}
-						placeholder={'Password*'}
+						placeholder={'Password'}
 						onBlur={handleBlur('password')}
-						isInvalid={!!(errors.password && values.password.length <= 5)}
+						isInvalid={!!(errors.password && values.password.length <= 5) && touchedPassword}
 						errorMessage={
-							!!errors.password &&
-							values.password.length <= 5 &&
 							'The password must be at least 6 characters long'
+
 						}
 						value={values.password}
-						isRequired={true}
 						type={'password'}
 						borderRadius={16}
 						label={'Password'}
-					/>
-					<TextInput
-						onChangeText={handleChange('confirmPassword')}
-						onBlur={handleBlur('confirmPassword')}
-						value={values.confirmPassword}
-						errorMessage={
-							(touched.confirmPassword && errors.confirmPassword && !values.confirmPassword) ||
-							(values.confirmPassword !== values.password && touched.confirmPassword)
-								? 'The passwords dont match'
-								: ''
-						}
-						isRequired={true}
-						isInvalid={
-							!!(touched.confirmPassword && errors.confirmPassword && !values.confirmPassword) ||
-							!!(values.confirmPassword !== values.password && touched.confirmPassword)
-						}
-						type={'password'}
-						borderRadius={16}
-						label={'Confirm Password'}
 					/>
 				</Box>
 				<Box mt={5}>

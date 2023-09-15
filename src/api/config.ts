@@ -48,11 +48,7 @@ instance.interceptors.response.use(
 
                 return axios(originalRequest);
             } catch (e) {
-                createAlert({
-                    title: 'Message',
-                    message: `${e?.response?.data?.messages} error interseptor`,
-                    buttons: [{text: 'Continue', style: "cancel"}]
-                })
+                console.log('interceptors response catch')
                // return Promise.reject(e);
             }
         }

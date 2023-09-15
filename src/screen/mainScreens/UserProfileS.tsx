@@ -12,11 +12,12 @@ import arrowLeftBack from '../../assets/images/arrow-left.png'
 import PrivacyPolicy from '../../components/PrivacyPolicy'
 import { routerConstants } from '../../constants/routerConstants'
 import userImg from '../../assets/images/User.png'
+import {observer} from "mobx-react-lite";
 
 type UserProfileSProps = {
 	navigation: NavigationProp<ParamListBase>
 }
-const UserProfileS = ({ navigation }: UserProfileSProps) => {
+const UserProfileS = observer(({ navigation }: UserProfileSProps) => {
 	const { user, logOut } = AuthStore
 
 	const onPressGoBack = () => {
@@ -95,7 +96,7 @@ const UserProfileS = ({ navigation }: UserProfileSProps) => {
 			</Box>
 		</BaseWrapperComponent>
 	)
-}
+})
 const styles = StyleSheet.create({
 	text: {
 		fontSize: 17,

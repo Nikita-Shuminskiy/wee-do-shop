@@ -55,15 +55,13 @@ export class AuthStore {
 
     async getUser(idUser: string): Promise<UserType> {
         const {data} = await userApi.getUser(idUser)
+        console.log(data)
         this.setUser(data)
         return data
     }
 
     async updateUser(payload: OptionalUserType): Promise<UserType> {
-        console.log('что я отправляю', payload)
         const {data} = await userApi.updateUser(this.user._id, payload)
-        console.log('что пришло', data)
-       // this.setUser(data)
         return data
     }
 
