@@ -10,6 +10,7 @@ export type CartType = {
     storeName: string
     products: ProductCartType[],
     totalSum: number
+    deliviryTime: string
 }
 
 export class CartStore {

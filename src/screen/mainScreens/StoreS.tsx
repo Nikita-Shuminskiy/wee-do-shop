@@ -54,6 +54,7 @@ const StoreS = observer(({ navigation }: StoreSProps) => {
 		const newCart: CartType = {
 			idStore: store._id,
 			storeName: store.name,
+			deliviryTime: store.deliveryTime,
 			totalSum: 0,
 			products: [],
 		}

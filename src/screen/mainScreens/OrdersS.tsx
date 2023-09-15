@@ -68,6 +68,7 @@ const OrdersS = observer(({ navigation, route }: OrdersSProps) => {
 			products: getProductsForOrder,
 			storeName: item.store.name,
 			totalSum: item.totalPrice,
+			deliviryTime: item.store.deliveryTime,
 		})
 		navigation.navigate(routerConstants.CART)
 	}

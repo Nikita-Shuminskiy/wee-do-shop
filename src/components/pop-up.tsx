@@ -1,14 +1,21 @@
 import React, { useEffect, useRef } from 'react'
-import {Dimensions, StyleSheet} from 'react-native'
+import { Dimensions, StyleSheet } from 'react-native'
 import { Modalize } from 'react-native-modalize'
 
 type ModalPopupProps = {
 	visible: boolean
 	onClose: () => void
 	style?: any
+	modalHeight?: number
 	children: JSX.Element
 }
-const ModalPopup = ({ visible, onClose, children, style }: ModalPopupProps) => {
+const ModalPopup = ({
+	visible,
+	onClose,
+	children,
+	modalHeight = Math.round(Dimensions.get('window').height * 0.8),
+	style,
+}: ModalPopupProps) => {
 	const modalizeRef = useRef(null)
 
 	useEffect(() => {
@@ -20,12 +27,12 @@ const ModalPopup = ({ visible, onClose, children, style }: ModalPopupProps) => {
 
 	return (
 		<Modalize
-			modalHeight={Math.round(Dimensions.get('window').height * 0.8)}
+			modalHeight={modalHeight}
 			avoidKeyboardLikeIOS={true}
 			childrenStyle={{ ...styles.modalContent, ...style }}
 			ref={modalizeRef}
 			onClosed={() => {
-				if(visible) {
+				if (visible) {
 					modalizeRef.current?.close()
 				}
 				onClose()

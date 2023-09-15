@@ -15,6 +15,7 @@ import {NavigationProp, ParamListBase} from "@react-navigation/native";
 import SearchStores from "../../components/SearchStores";
 import {StoreType} from "../../api/storesApi";
 import HeaderUser from "../../components/headerUser";
+import PromoCodePopUp from "../../components/modalPopUp/PromoCodePopUp";
 
 type HomeSProps = {
     navigation: NavigationProp<ParamListBase>
@@ -25,7 +26,6 @@ const HomeS = observer(({navigation}: HomeSProps) => {
     const {stores, setStore, favoriteStores, search, setSearch} = StoresStore
     const {categories} = CategoriesStore
     const [selectedSubCategoryId, setSelectedSubCategoryId] = useState<string>('');
-
 
     const categoriesViews = ({item}: { item: CategoryType }) => {
         const onPressCategory = () => {

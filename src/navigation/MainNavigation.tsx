@@ -9,7 +9,7 @@ import ShopsS from "../screen/mainScreens/ShopsS";
 import {MaterialIcons} from '@expo/vector-icons';
 import {MaterialCommunityIcons} from '@expo/vector-icons';
 import HistoryS from "../screen/mainScreens/HistoryS";
-import CartS from "../screen/mainScreens/CartS";
+import CartS from "../screen/mainScreens/Cart/CartS";
 import OrdersS from "../screen/mainScreens/OrdersS";
 
 const TabMainStack = createBottomTabNavigator();
