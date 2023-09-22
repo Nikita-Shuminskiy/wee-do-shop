@@ -2,7 +2,7 @@ import { instance } from './config'
 
 export const categoriesApi = {
 	async getCategories() {
-		return await instance.get<CategoryType[]>(`category/available`)
+		return await instance.get<{results: CategoryType[], total: number}>(`category/available`)
 	},
 	async getCategory(id: number) {
 		return await instance.get<CategoryType>(`category${id}`)

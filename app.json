@@ -2,7 +2,7 @@
   "expo": {
     "name": "weedo",
     "slug": "weedo",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -20,9 +20,6 @@
       "config": {
         "googleMapsApiKey": "AIzaSyD-3PKe63YHjDDaxjVahTekuyvvOFfwKp4"
       },
-      "runtimeVersion": {
-        "policy": "appVersion"
-      }
     },
     "android": {
       "package": "com.wee_do_account.WeeDo",
@@ -43,10 +40,10 @@
     },
     "extra": {
       "eas": {
-        "projectId": "c3806f75-d02e-400f-8063-b1a79bb2034e"
+        "projectId": "26235dae-1d8e-4546-a327-4e663badbe45"
       }
     },
-    "owner": "nick_11112",
+    "owner": "nick_111122",
     "plugins": [
       "expo-localization",
       [

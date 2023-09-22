@@ -1,103 +1,115 @@
-import {action, makeObservable, observable} from "mobx";
-import {deviceStorage} from '../../utils/storage/storage'
-import {authApi, UserType} from '../../api/authApi'
-import {UserRegisterDataType} from "screen/authScreens/RegisterS";
-import {OptionalUserType, userApi} from "../../api/userApi";
+import { action, makeObservable, observable } from 'mobx'
+import { deviceStorage } from '../../utils/storage/storage'
+import { authApi, UserType } from '../../api/authApi'
+import { UserRegisterDataType } from 'screen/authScreens/RegisterS'
+import { BannersType, OptionalUserType, userApi } from '../../api/userApi'
 
 export type fullAddressType = {
-    country: string
-    city: string
-    street: string
-    house: string
-    apartment?: string
-    postalCode: string
+	country: string
+	city: string
+	street: string
+	house: string
+	apartment?: string
+	postalCode: string
 }
 export type AddressType = {
-    fullAddress: fullAddressType,
-    location: {
-        type: string
-        coordinates: number[]
-    }
+	fullAddress: fullAddressType
+	location: {
+		type: string
+		coordinates: number[]
+	}
 }
 
 export class AuthStore {
-    user: UserType = {
-        favoritesStores: []
-    } as UserType
-    isAuth: boolean = false
-    currentLocation: AddressType = {} as AddressType
+	user: UserType = {
+		favoritesStores: [],
+	} as UserType
+	isAuth: boolean = false
+	currentLocation: AddressType = {} as AddressType
+	banners: BannersType[] = [] as BannersType[]
 
+	setUser(userData: UserType): void {
+		this.user = userData
+		this.setAuth(true)
+	}
 
-    setUser(userData: UserType): void {
-        this.user = userData
-        this.setAuth(true)
-    }
+	setAuth(auth: boolean): void {
+		this.isAuth = auth
+	}
 
-    setAuth(auth: boolean): void {
-        this.isAuth = auth
-    }
+	async login(userData: { email: string; password: string }) {
+		const { data } = await authApi.login(userData.email, userData.password)
+		await deviceStorage.saveItem('accessToken', data.accessToken)
+		await deviceStorage.saveItem('refreshToken', data.refreshToken)
+		return data
+	}
 
-    async login(userData: { email: string, password: string }) {
-        const {data} = await authApi.login(userData.email, userData.password)
-        await deviceStorage.saveItem('accessToken', data.accessToken)
-        await deviceStorage.saveItem('refreshToken', data.refreshToken)
-        return data
-    }
+	async registration(dataUser: UserRegisterDataType) {
+		return await authApi.register(dataUser)
+	}
 
-    async registration(dataUser: UserRegisterDataType) {
-        return  await authApi.register(dataUser)
-    }
+	async getMe(): Promise<void> {
+		const { data } = await authApi.getMe()
+		this.setUser(data)
+	}
 
-    async getMe(): Promise<void> {
-        const {data} = await authApi.getMe()
-        this.setUser(data)
-    }
+	async getUser(idUser: string): Promise<UserType> {
+		const { data } = await userApi.getUser(idUser)
+		this.setUser(data)
+		return data
+	}
 
-    async getUser(idUser: string): Promise<UserType> {
-        const {data} = await userApi.getUser(idUser)
-        console.log(data)
-        this.setUser(data)
-        return data
-    }
+	async updateUser(payload: OptionalUserType): Promise<UserType> {
+		const { data } = await userApi.updateUser(this.user._id, payload)
+		return data
+	}
 
-    async updateUser(payload: OptionalUserType): Promise<UserType> {
-        const {data} = await userApi.updateUser(this.user._id, payload)
-        return data
-    }
+	async getBanners(): Promise<any> {
+		const { data } = await userApi.getBanners()
+		this.setBanners(data.results)
+	}
 
-    async logOut() {
-        this.user = null
-        this.isAuth = false
-        await deviceStorage.removeItem('refreshToken')
-        await deviceStorage.removeItem('accessToken')
-    }
+	setBanners(banners: BannersType[]) {
+		this.banners = banners
+	}
 
-    setLocation(data: AddressType) {
-        this.currentLocation = data
-    }
+	async logOut() {
+		this.user = null
+		this.isAuth = false
+		await deviceStorage.removeItem('refreshToken')
+		await deviceStorage.removeItem('accessToken')
+	}
 
-    constructor() {
-        makeObservable(this, {
-            user: observable,
-            isAuth: observable,
-            currentLocation: observable,
-            setUser: action,
-            getUser: action,
-            setLocation: action,
-            logOut: action,
-            setAuth: action,
-            getMe: action,
-            login: action,
-            updateUser: action
-        })
-        this.setAuth = this.setAuth.bind(this)
-        this.updateUser = this.updateUser.bind(this)
-        this.getMe = this.getMe.bind(this)
-        this.getUser = this.getUser.bind(this)
-        this.logOut = this.logOut.bind(this)
+	setLocation(data: AddressType) {
+		this.currentLocation = data
+	}
 
-        this.setLocation = this.setLocation.bind(this)
-    }
+	constructor() {
+		makeObservable(this, {
+			user: observable,
+			banners: observable,
+			isAuth: observable,
+			currentLocation: observable,
+			setUser: action,
+			getUser: action,
+			setBanners: action,
+			setLocation: action,
+			logOut: action,
+			setAuth: action,
+			getMe: action,
+			login: action,
+			updateUser: action,
+			getBanners: action,
+		})
+		this.setAuth = this.setAuth.bind(this)
+		this.setBanners = this.setBanners.bind(this)
+		this.updateUser = this.updateUser.bind(this)
+		this.getMe = this.getMe.bind(this)
+		this.getUser = this.getUser.bind(this)
+		this.logOut = this.logOut.bind(this)
+
+		this.setLocation = this.setLocation.bind(this)
+	}
 }
 
 export default new AuthStore()

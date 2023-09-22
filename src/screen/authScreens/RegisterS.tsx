@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { StyleSheet, TouchableOpacity, TextInput } from 'react-native'
 import { NavigationProp, ParamListBase } from '@react-navigation/native'
 import { BaseWrapperComponent } from '../../components/baseWrapperComponent'
@@ -21,6 +21,7 @@ import { observer } from 'mobx-react-lite'
 import AuthStore, { AddressType } from '../../store/AuthStore/auth-store'
 import { allowLocation, getFormattedAddress } from '../../components/MapViews/utils'
 import { createAlert } from '../../components/Alert'
+import { usePermissionsPushGeo } from '../../utils/hook/usePermissionsPushGeo'
 
 export type CountryData = {
 	callingCode: string[]
@@ -60,7 +61,7 @@ const RegisterS = observer(({ navigation }: LoginSProps) => {
 	const { currentLocation, setLocation } = AuthStore
 	const [isValidPhone, setIsValidPhone] = useState(false)
 	const [countryCode, setCountryCode] = useState<CountryData>(countryDataDefault)
-
+	const { askLocationPermissionHandler } = usePermissionsPushGeo()
 	const onSubmit = (values: UserRegisterDataType) => {
 		if (!currentLocation?.location?.coordinates[0]) {
 			createAlert({
@@ -70,7 +71,6 @@ const RegisterS = observer(({ navigation }: LoginSProps) => {
 			})
 			setSubmitting(false)
 			return
-
 		}
 		const formattedPhoneNumber = `+${countryCode.callingCode[0]}${values.phone}`
 		AuthStoreService.registration({
@@ -140,8 +140,9 @@ const RegisterS = observer(({ navigation }: LoginSProps) => {
 		!!(errors.confirmPassword && !values.confirmPassword) ||
 		isSubmitting ||
 		!!(!isValidPhone && touched.phone)
+
 	const onPressNavigateToLocation = async () => {
-		await allowLocation().then((data) => {
+		await askLocationPermissionHandler().then((data) => {
 			if (data === 'granted') {
 				navigation.navigate(routerConstants.AUTOCOMPLETE_MAP)
 			}
