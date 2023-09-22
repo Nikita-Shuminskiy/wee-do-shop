@@ -58,12 +58,12 @@ const MainNavigation = ({navigation, route}) => {
             })}
         >
             <TabMainStack.Screen
-                options={{tabBarLabel: 'Home', headerShown: false, unmountOnBlur: true}}
+                options={{tabBarLabel: 'Home', headerShown: false}}
                 name={routerConstants.HOME}
                 component={HomeS}
             />
             <TabMainStack.Screen
-                options={{tabBarLabel: 'Shops', headerShown: false, unmountOnBlur: true}}
+                options={{tabBarLabel: 'Shops', headerShown: false}}
                 name={routerConstants.SHOPS}
                 component={ShopsS}
             />

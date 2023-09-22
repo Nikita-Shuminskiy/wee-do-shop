@@ -2,7 +2,8 @@ import { action, makeObservable, observable } from 'mobx'
 import { deviceStorage } from '../../utils/storage/storage'
 import { authApi, UserType } from '../../api/authApi'
 import { UserRegisterDataType } from 'screen/authScreens/RegisterS'
-import { BannersType, OptionalUserType, userApi } from '../../api/userApi'
+import { BannersType, DiscountCodeType, OptionalUserType, userApi } from '../../api/userApi'
+import { ErrorResponse } from '../../api/commonTypes'
 
 export type fullAddressType = {
 	country: string
@@ -87,13 +88,16 @@ export class AuthStore {
 	constructor() {
 		makeObservable(this, {
 			user: observable,
+
 			banners: observable,
 			isAuth: observable,
+
 			currentLocation: observable,
 			setUser: action,
 			getUser: action,
 			setBanners: action,
 			setLocation: action,
+
 			logOut: action,
 			setAuth: action,
 			getMe: action,
@@ -107,7 +111,6 @@ export class AuthStore {
 		this.getMe = this.getMe.bind(this)
 		this.getUser = this.getUser.bind(this)
 		this.logOut = this.logOut.bind(this)
-
 		this.setLocation = this.setLocation.bind(this)
 	}
 }

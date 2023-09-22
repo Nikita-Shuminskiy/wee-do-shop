@@ -19,16 +19,14 @@ import authStore from '../../../store/AuthStore/auth-store'
 import { NavigationProp, ParamListBase } from '@react-navigation/native'
 import { routerConstants } from '../../../constants/routerConstants'
 import { deliveryPrice } from '../../../utils/utils'
-import PromoCode from './PromoCode'
-import PromoCodePopUp from "../../../components/modalPopUp/PromoCodePopUp";
+import { Accordions } from './PromoCode'
 
 type CartSProps = {
 	navigation: NavigationProp<ParamListBase>
 }
 
 const CartS = observer(({ navigation }: CartSProps) => {
-	const { cart, removeCart, removeProductToCart, updateProductToCart, setToCartStore } = cartStore
-	const [isShowPromoModal, setIsShowPromoModal] = useState(false)
+	const { cart, removeCart, removeProductToCart, updateProductToCart, setToCartStore, promoCode, setPromoCode } = cartStore
 	const { user } = authStore
 
 	const { OrderService } = rootStore
@@ -87,15 +85,13 @@ const CartS = observer(({ navigation }: CartSProps) => {
 			],
 		})
 	}
-	const onPressPromoCode = () => {
-		setIsShowPromoModal(true)
-	}
 	const productTotalPrice = Number(formatProductPrice(cart?.totalSum ?? 0))
-	const isFreeDelivery = Number(formatProductPrice(cart?.totalSum ?? 0)) >= 1500
+	const isFreeDelivery = Number(formatProductPrice(cart?.totalSum ?? 0)) >= 1500 || promoCode?.discountType === 'Delivery'
 
 	const formatted_address = getFormattedAddress(user.address)
 	useEffect(() => {
 		return () => {
+			setPromoCode(null)
 			setToCartStore(null)
 		}
 	}, [])
@@ -149,7 +145,7 @@ const CartS = observer(({ navigation }: CartSProps) => {
 							borderColor={colors.grayDarkLight}
 						>
 							<Text>Delivery</Text>
-							<Text color={colors.gray}>{isFreeDelivery ? 'free' : `฿ ${deliveryPrice}`}</Text>
+							<Text>{isFreeDelivery ? '0 ฿' : `฿ ${deliveryPrice}`}</Text>
 						</Box>
 						<Box>
 							<Text color={colors.gray}>Order ฿ 1500 and get free delivery</Text>
@@ -160,13 +156,14 @@ const CartS = observer(({ navigation }: CartSProps) => {
 								{formatted_address}
 							</Text>
 						</Box>
-						<Box>
-							<PromoCode onPress={onPressPromoCode} />
+						<Box mt={2} mb={2}>
+							<Accordions userId={user._id}/>
 						</Box>
 						<Box>
 							<TextInput
 								onChangeText={onChangeTextCommentHandler}
 								heightInput={40}
+								borderRadius={16}
 								/*onFocus={(event: Event) => {
                                         // `bind` the function if you're using ES6 classes
                                         inputRef.current(event.target)
@@ -212,11 +209,6 @@ const CartS = observer(({ navigation }: CartSProps) => {
 					/>
 				</Box>
 			)}
-			{
-				isShowPromoModal &&
-				<PromoCodePopUp  	visible={isShowPromoModal}
-									onClose={() => setIsShowPromoModal(false)} />
-			}
 		</>
 	)
 })

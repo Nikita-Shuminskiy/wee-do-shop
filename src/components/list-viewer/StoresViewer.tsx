@@ -8,6 +8,7 @@ import {Image, TouchableOpacity} from "react-native";
 import motorcycle from '../../assets/images/moto.png'
 import {StoreType} from "../../api/storesApi";
 import {isCurrentTimeInRange} from "../../utils/utils";
+import ImageDisplay from "../ImageDisplay";
 
 type StoresViewerType = {
     stores: StoreType
@@ -58,14 +59,14 @@ const StoresViewer = ({
                             <Image style={{width: 34, height: 34}} source={checkFavoriteStore ? likeActive : like} alt={'like'}/>
                         </TouchableOpacity>
                     </Box>
-                    <Image alt={'image-store'} borderRadius={16}
+                    <ImageDisplay alt={'image-store'} borderRadius={16}
                            source={{uri: stores.image}}
                            style={{
                                width: '100%',
                                aspectRatio: 351 / 171,
                                borderRadius: 16,
                            }}
-                           resizeMode="center"
+                           resizeMode="container"
                     />
                     <Box position={'absolute'}
                          bottom={0}

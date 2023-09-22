@@ -10,6 +10,7 @@ import InputNumber from '../InputNumber'
 import { ProductType } from '../../api/productApi'
 import CartStore, { CartType, ProductCartType } from '../../store/CartStore/cart-store'
 import { formatProductPrice } from '../MapViews/utils'
+import ImageDisplay from "../ImageDisplay";
 
 type PopUpProductProps = {
 	show: boolean
@@ -41,7 +42,7 @@ const PopUpProduct = ({
 		<>
 			<ModalPopup style={{}} visible={show} onClose={onClose}>
 				<Box flex={1} w={'100%'} justifyContent={'space-between'}>
-					<Image
+					<ImageDisplay
 						source={{ uri: product?.image }}
 						style={{
 							width: '100%',

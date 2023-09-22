@@ -34,7 +34,7 @@ const AddressS = observer(({navigation}: AddressSProps) => {
         setShowLocationMap(true)
     }
     const onPressSaveNewAddress = () => {
-        AuthStoreService.updateUser(currentLocation).then((data) => {
+        AuthStoreService.updateUser(user._id, {address: currentLocation}).then((data) => {
             if (data) {
                 navigation.navigate(routerConstants.HOME)
             }

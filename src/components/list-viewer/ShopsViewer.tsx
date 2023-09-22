@@ -28,7 +28,7 @@ const ShopsViewer = ({ stores, onPress }: ShopsViewerType) => {
 					height: 103,
 					aspectRatio: 170 / 103,
 				}}
-				resizeMode="cover"
+				resizeMode="contain"
 			>
 				<Box
 					position={'absolute'}

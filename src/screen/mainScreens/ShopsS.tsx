@@ -21,7 +21,8 @@ const ShopsS = observer(({navigation}: ShopsSType) => {
     const {StoresService } = rootStore
     const {user} = AuthStore
     const {StoresStore} = rootStore
-    const {stores, setStore} = StoresStore
+    const { stores, setStore, favoriteStores, search, setSearch } = StoresStore
+
     const storesViews = ({item}: { item: StoreType }) => {
         const onPress = () => {
             setStore(item)
@@ -46,7 +47,8 @@ const ShopsS = observer(({navigation}: ShopsSType) => {
                 />
                 <Box mt={2} w={'100%'} backgroundColor={colors.white} borderTopLeftRadius={16}
                      borderTopRightRadius={16}>
-                    <SearchStores/>
+                    <SearchStores setSearch={setSearch}
+                                  search={search}/>
                     <Text mt={2} mb={2} fontSize={24} fontWeight={'500'}>Shops near you</Text>
                     <Box mb={20}>
                         <FlatList

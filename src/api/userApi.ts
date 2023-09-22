@@ -22,7 +22,7 @@ export const userApi = {
 		return await instance.get<ResponseBannersType>(`banners`)
 	},
 	async sendDiscountCode(key: string, userId: string) {
-		return await instance.post<DiscountCodeType>(`/discount-code${key}/check`, {userId})
+		return await instance.post<DiscountCodeType>(`/discount-code/${key}/check`, {userId})
 	},
 }
 export type OptionalUserType = Partial<UserType> & { password?: string }

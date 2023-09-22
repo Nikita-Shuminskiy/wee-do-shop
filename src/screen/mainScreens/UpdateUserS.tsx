@@ -20,7 +20,6 @@ type UpdateUserSProps = {
 }
 type DataType = {
 	email: string
-	password: string
 	firstName: string
 	lastName: string
 	phone: string
@@ -34,7 +33,6 @@ const UpdateUserS = ({ navigation }: UpdateUserSProps) => {
 	const [touchedPassword, setTouchedPassword] = useState<boolean>(false)
 
 	const onSubmit = (values: DataType) => {
-		console.log('1111111111111111111111111111')
 		if (!isValidPhone && values.phone) return
 
 		const formattedPhoneNumber = `+${countryCode.callingCode[0]}${values.phone}`
@@ -51,9 +49,6 @@ const UpdateUserS = ({ navigation }: UpdateUserSProps) => {
 		if (values.phone && values.phone !== '') {
 			dataToSend.phone = formattedPhoneNumber
 		}
-		if (values.password && values.password !== '') {
-			dataToSend.password = values.password
-		}
 		AuthStoreService.updateUser(user._id, dataToSend).then((data) => {
 			if (data) {
 				navigation.goBack()
@@ -68,7 +63,6 @@ const UpdateUserS = ({ navigation }: UpdateUserSProps) => {
 		{
 			initialValues: {
 				email: user.email,
-				password: '',
 				confirmPassword: '',
 				firstName: user.firstName,
 				lastName: user.lastName,
@@ -87,9 +81,6 @@ const UpdateUserS = ({ navigation }: UpdateUserSProps) => {
 				if (!!(user.email !== values.email && !validateEmail(values.email))) {
 					errors['email'] = true
 				}
-				if (values.password.length <= 5 && touchedPassword) {
-					errors['password'] = true
-				}
 				return errors
 			},
 		}
@@ -103,17 +94,8 @@ const UpdateUserS = ({ navigation }: UpdateUserSProps) => {
 		setCountryCode(country)
 	}
 
-	useEffect(() => {
-		if (values.password) {
-			setTouchedPassword(true)
-		}
-		if(!values.password) setTouchedPassword(false)
-
-	}, [values.password])
-
 	const disabledBtnSignUp =
 		!!(errors.email && !validateEmail(values.email.trim())) ||
-		!!(values.password?.length <= 5 && touchedPassword) ||
 		!!(touched.phone && !isValidPhone && values.phone !== '')
 	return (
 		<BaseWrapperComponent isKeyboardAwareScrollView={true}>
@@ -164,20 +146,6 @@ const UpdateUserS = ({ navigation }: UpdateUserSProps) => {
 						borderRadius={16}
 						isInvalid={!!(errors.email && !validateEmail(values.email.trim()))}
 						label={'E-mail'}
-					/>
-					<TextInput
-						onChangeText={handleChange('password')}
-						placeholder={'Password'}
-						onBlur={handleBlur('password')}
-						isInvalid={!!(errors.password && values.password.length <= 5) && touchedPassword}
-						errorMessage={
-							'The password must be at least 6 characters long'
-
-						}
-						value={values.password}
-						type={'password'}
-						borderRadius={16}
-						label={'Password'}
 					/>
 				</Box>
 				<Box mt={5}>

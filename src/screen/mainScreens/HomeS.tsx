@@ -1,9 +1,9 @@
-import React, {useEffect, useRef, useState} from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import { BaseWrapperComponent } from '../../components/baseWrapperComponent'
 import { Box, Text } from 'native-base'
 import AuthStore from '../../store/AuthStore/auth-store'
-import {Dimensions, FlatList, Image, StyleSheet, View} from 'react-native'
+import { Dimensions, FlatList, Image, StyleSheet, View } from 'react-native'
 import { colors } from '../../assets/colors/colors'
 import { renderEmptyContainer } from '../../components/list-viewer/empty-list'
 import SubCategoriesViewer from '../../components/list-viewer/CategoriesViewer'
@@ -17,6 +17,7 @@ import { StoreType } from '../../api/storesApi'
 import HeaderUser from '../../components/headerUser'
 import Carousel from 'react-native-snap-carousel'
 import { BannersType } from '../../api/userApi'
+import ImageDisplay from '../../components/ImageDisplay'
 
 type HomeSProps = {
 	navigation: NavigationProp<ParamListBase>
@@ -76,15 +77,15 @@ const HomeS = observer(({ navigation }: HomeSProps) => {
 		StoresService.getFavoriteStores()
 	}, [user.address?.fullAddress])
 
-	const [activeIndexBanner, setActiveIndexBanners] = useState<number>(0)
-	const bannersView = ({ item, index }: { item: BannersType; index: number }) => {
+	//const [activeIndexBanner, setActiveIndexBanners] = useState<number>(0)
+	const bannersView = ({ item }: { item: BannersType }) => {
 		return (
-			<Box mr={1}>
-				<Image alt={'img'} style={{ width: 353, height: 74 }} source={{ uri: item.image }} />
+			<Box mr={1} w={353} h={74}>
+				<ImageDisplay style={{ width: 353, height: 74 }} source={{ uri: item.image }} />
 			</Box>
 		)
 	}
-	const carouselRef = useRef<any>(null);
+	const carouselRef = useRef<any>(null)
 
 	return (
 		<BaseWrapperComponent backgroundColor={colors.white} isKeyboardAwareScrollView={true}>
@@ -100,15 +101,15 @@ const HomeS = observer(({ navigation }: HomeSProps) => {
 						<Carousel
 							ref={carouselRef}
 							layout={'default'}
-							layoutCardOffset={`9`}
 							data={banners}
 							sliderWidth={Dimensions.get('window').width}
 							itemWidth={353}
 							autoplayInterval={5000}
+							autoplayDelay={5000}
+							shouldOptimizeUpdates={true}
 							autoplay={true}
 							loop={true}
 							renderItem={bannersView}
-							onSnapToItem={(index) => setActiveIndexBanners(index)}
 						/>
 					</Box>
 					<Box mt={3} mb={3} maxHeight={20} w={'100%'} flex={1}>

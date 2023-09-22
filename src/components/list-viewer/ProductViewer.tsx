@@ -8,6 +8,7 @@ import InputNumber from "../InputNumber";
 import {ProductType} from "../../api/productApi";
 import {CartType} from "../../store/CartStore/cart-store";
 import {formatProductPrice} from "../MapViews/utils";
+import ImageDisplay from "../ImageDisplay";
 
 type StoreViewerProps = {
     product: ProductType
@@ -56,14 +57,14 @@ const ProductViewer = ({product, onPressProduct, saveProductToCart, currentCartS
                         </Text>
                     </Box>
                     <Box w={'100%'}>
-                        <Image alt={'image-store'} borderTopRightRadius={16} borderTopLeftRadius={16}
+                        <ImageDisplay alt={'image-store'} borderTopRightRadius={16} borderTopLeftRadius={16}
                                source={{uri: product.image}}
                                style={{
                                    width: '100%',
                                    aspectRatio: 200 / 171,
                                    borderRadius: 16,
                                }}
-                               resizeMode="center"
+                               resizeMode="container"
                         />
                     </Box>
                 </Box>
