@@ -55,16 +55,17 @@ const ProductViewer = ({
 						top={2}
 						left={0}
 						zIndex={10}
-						backgroundColor={'transparent'}
+						borderRadius={16}
+						borderWidth={1}
+						borderColor={colors.white}
+						backgroundColor={colors.black}
 					>
 						<Text
-							backgroundColor={'transparent'}
 							color={colors.white}
-							borderColor={colors.white}
+							backgroundColor={colors.black}
 							borderRadius={16}
 							fontSize={11}
 							textAlign={'center'}
-							borderWidth={1}
 						>
 							{product.effect}
 						</Text>

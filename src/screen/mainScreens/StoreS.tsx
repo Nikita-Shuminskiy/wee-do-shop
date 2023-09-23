@@ -204,7 +204,7 @@ const StoreS = observer(({ navigation }: StoreSProps) => {
 						borderTopLeftRadius={16}
 						borderTopRightRadius={16}
 					>
-						<Box paddingX={2}>
+						<Box paddingX={2} mb={3}>
 							<FlatList
 								extraData={selectedSubCategoryId}
 								data={store.subCategories}

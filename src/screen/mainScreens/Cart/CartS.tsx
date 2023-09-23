@@ -26,7 +26,15 @@ type CartSProps = {
 }
 
 const CartS = observer(({ navigation }: CartSProps) => {
-	const { cart, removeCart, removeProductToCart, updateProductToCart, setToCartStore, promoCode, setPromoCode } = cartStore
+	const {
+		cart,
+		removeCart,
+		removeProductToCart,
+		updateProductToCart,
+		setToCartStore,
+		promoCode,
+		setPromoCode,
+	} = cartStore
 	const { user } = authStore
 
 	const { OrderService } = rootStore
@@ -44,6 +52,7 @@ const CartS = observer(({ navigation }: CartSProps) => {
 			comment: textComment,
 			products: getProductsForOrder,
 			userId: user._id,
+			discountCode: promoCode?.key,
 		}
 		OrderService.sendOrder(dataOrder).then((data) => {
 			if (data) {
@@ -86,7 +95,9 @@ const CartS = observer(({ navigation }: CartSProps) => {
 		})
 	}
 	const productTotalPrice = Number(formatProductPrice(cart?.totalSum ?? 0))
-	const isFreeDelivery = Number(formatProductPrice(cart?.totalSum ?? 0)) >= 1500 || promoCode?.discountType === 'Delivery'
+	const isFreeDelivery =
+		Number(formatProductPrice(cart?.totalSum ?? 0)) >= 1500 ||
+		promoCode?.discountType === 'Delivery'
 
 	const formatted_address = getFormattedAddress(user.address)
 	useEffect(() => {
@@ -148,7 +159,7 @@ const CartS = observer(({ navigation }: CartSProps) => {
 							<Text>{isFreeDelivery ? '0 ฿' : `฿ ${deliveryPrice}`}</Text>
 						</Box>
 						<Box>
-							<Text color={colors.gray}>Order ฿ 1500 and get free delivery</Text>
+							<Text color={colors.gray}>{`Order ฿ ${deliveryPrice} and get free delivery`}</Text>
 						</Box>
 						<Box>
 							<Text>Your Address</Text>
@@ -157,7 +168,7 @@ const CartS = observer(({ navigation }: CartSProps) => {
 							</Text>
 						</Box>
 						<Box mt={2} mb={2}>
-							<Accordions userId={user._id}/>
+							<Accordions userId={user._id} />
 						</Box>
 						<Box>
 							<TextInput
@@ -242,4 +253,4 @@ const styles = StyleSheet.create({
 		fontWeight: '500',
 	},
 })
-export default CartS;
+export default CartS

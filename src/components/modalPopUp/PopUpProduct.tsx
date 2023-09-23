@@ -10,7 +10,7 @@ import InputNumber from '../InputNumber'
 import { ProductType } from '../../api/productApi'
 import CartStore, { CartType, ProductCartType } from '../../store/CartStore/cart-store'
 import { formatProductPrice } from '../MapViews/utils'
-import ImageDisplay from "../ImageDisplay";
+import ImageDisplay from '../ImageDisplay'
 
 type PopUpProductProps = {
 	show: boolean
@@ -68,7 +68,7 @@ const PopUpProduct = ({
                     </Box>*/}
 					<Box mt={2} w={'100%'} flex={1}>
 						<Box mb={4} flexDirection={'row'} flex={1} w={'100%'} justifyContent={'space-between'}>
-							<Text>Price: 1g</Text>
+							<Text>Price: 1x</Text>
 							<Text>฿ {formatProductPrice(product?.price)}</Text>
 						</Box>
 						<SliderComponent
@@ -136,4 +136,4 @@ const styles = StyleSheet.create({
 		elevation: 24,
 	},
 })
-export default PopUpProduct;
+export default PopUpProduct

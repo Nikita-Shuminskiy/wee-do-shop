@@ -49,6 +49,7 @@ const OrdersS = observer(({ navigation, route }: OrdersSProps) => {
 	useEffect(() => {
 		requestAPI()
 	}, [page])
+
 	useEffect(() => {
 		return () => {
 			setPage(1)
@@ -163,4 +164,4 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 	},
 })
-export default OrdersS;
+export default OrdersS

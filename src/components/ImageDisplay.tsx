@@ -1,24 +1,25 @@
 import React, { useState } from 'react'
 import { Image } from 'expo-image'
-import { Box } from 'native-base'
 import * as Animatable from 'react-native-animatable'
 import { colors } from '../assets/colors/colors'
+import testImg from '../assets/images/testShops.png'
 
 const ImageDisplay = ({ source, style, ...restProps }: any) => {
-	const [isLoaded, setIsLoaded] = useState(false) // Состояние для отслеживания загрузки изображения
+	const [isLoaded, setIsLoaded] = useState(false)
+	const [errorLoaded, setErrorLoaded] = useState(false)
 
 	const handleImageLoad = () => {
-		setIsLoaded(true) // Установите состояние isLoaded в true, когда изображение загружено
+		setIsLoaded(true)
 	}
 	const onError = () => {
-		console.log('error load img')
+		setErrorLoaded(true)
 	}
 	return (
 		<>
 			{!isLoaded && (
 				<Animatable.View
-					animation="pulse" // Выберите желаемую анимацию (например, "pulse")
-					iterationCount="infinite" // Бесконечное мигание
+					animation="pulse"
+					iterationCount="infinite"
 					style={{
 						position: 'absolute',
 						zIndex: 100,
@@ -31,10 +32,10 @@ const ImageDisplay = ({ source, style, ...restProps }: any) => {
 			)}
 
 			<Image
-				cachePolicy={'memory'}
+				cachePolicy={'disk'}
 				onLoad={handleImageLoad}
 				onError={onError}
-				source={source}
+				source={errorLoaded ? testImg : source}
 				style={style}
 				{...restProps}
 			/>
