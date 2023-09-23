@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Dimensions, Image, ImageBackground, TouchableOpacity } from 'react-native'
 import { Box, Text } from 'native-base'
 import { colors } from '../../assets/colors/colors'
@@ -6,6 +6,7 @@ import motorcycle from '../../assets/images/moto.png'
 import test from '../../assets/images/testShops.png'
 import { isCurrentTimeInRange } from '../../utils/utils'
 import { StoreType } from '../../api/storesApi'
+import * as Animatable from 'react-native-animatable'
 
 type ShopsViewerType = {
 	stores: StoreType
@@ -13,13 +14,28 @@ type ShopsViewerType = {
 }
 
 const ShopsViewer = ({ stores, onPress }: ShopsViewerType) => {
+	const [isLoaded, setIsLoaded] = useState(false)
+
 	const { width } = Dimensions.get('window')
 	const productWidth = (width - 15) / 2
 	return (
-		<TouchableOpacity
-			onPress={onPress}
-			style={{ minWidth: productWidth, maxWidth: productWidth }}
-		>
+		<TouchableOpacity onPress={onPress} style={{ minWidth: productWidth, maxWidth: productWidth }}>
+			{!isLoaded && (
+				<Animatable.View
+					animation="pulse"
+					iterationCount="infinite"
+					style={{
+						position: 'absolute',
+						zIndex: 100,
+						width: 170,
+						height: 103,
+						aspectRatio: 170 / 103,
+						borderRadius: 16,
+						backgroundColor: colors.grayWhite,
+					}}
+				/>
+			)}
+
 			<ImageBackground
 				borderRadius={16}
 				source={{ uri: stores.image }}
@@ -28,7 +44,7 @@ const ShopsViewer = ({ stores, onPress }: ShopsViewerType) => {
 					height: 103,
 					aspectRatio: 170 / 103,
 				}}
-				resizeMode="contain"
+				onLoad={() => setIsLoaded(true)}
 			>
 				<Box
 					position={'absolute'}
@@ -75,4 +91,4 @@ const ShopsViewer = ({ stores, onPress }: ShopsViewerType) => {
 	)
 }
 
-export default ShopsViewer;
+export default ShopsViewer

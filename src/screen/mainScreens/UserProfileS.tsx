@@ -1,31 +1,38 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { BaseWrapperComponent } from '../../components/baseWrapperComponent'
 import { NavigationProp, ParamListBase } from '@react-navigation/native'
-import { Box, Text } from 'native-base'
+import { Box, Image, Text } from 'native-base'
 import AuthStore from '../../store/AuthStore/auth-store'
-import Link from '../../components/Link'
-import { Image, StyleSheet, TouchableOpacity } from 'react-native'
+import { StyleSheet, TouchableOpacity } from 'react-native'
 import { colors } from '../../assets/colors/colors'
-import { Entypo, FontAwesome5, Ionicons } from '@expo/vector-icons'
 import ArrowBack from '../../components/ArrowBack'
 import arrowLeftBack from '../../assets/images/arrow-left.png'
-import PrivacyPolicy from '../../components/PrivacyPolicy'
 import { routerConstants } from '../../constants/routerConstants'
-import userImg from '../../assets/images/User.png'
-import {observer} from "mobx-react-lite";
+import userImg from '../../assets/images/userMockAvatar.png'
+import { observer } from 'mobx-react-lite'
+import settingImg from '../../assets/images/setting.png'
+import privacyImg from '../../assets/images/courierImages/privacy.png'
+import termsImg from '../../assets/images/courierImages/terms.png'
+import logoutImg from '../../assets/images/courierImages/Log-out.png'
+import myOrdersImg from '../../assets/images/courierImages/my-orders.png'
+import arrowRightImg from '../../assets/images/courierImages/arrow-right.png'
+import locationImg from '../../assets/images/location.png'
+import { StatusType } from '../../api/ordersApi'
+import rootStore from '../../store/RootStore/root-store'
+import OrderStore from '../../store/OrderStore/order-store'
 
 type UserProfileSProps = {
 	navigation: NavigationProp<ParamListBase>
 }
 const UserProfileS = observer(({ navigation }: UserProfileSProps) => {
 	const { user, logOut } = AuthStore
-
+	const { completedOrdersNum } = OrderStore
+	const { OrderService } = rootStore
+	const formattedAddress = `${user.address?.fullAddress?.country}, ${user.address?.fullAddress?.city}`
 	const onPressGoBack = () => {
 		navigation.navigate(routerConstants.HOME)
 	}
-	const onPressLogOut = () => {
-		logOut()
-	}
+
 	const onPressOrderHandler = () => {
 		navigation.navigate(routerConstants.ORDERS)
 	}
@@ -35,64 +42,183 @@ const UserProfileS = observer(({ navigation }: UserProfileSProps) => {
 	const onPressEditProfile = () => {
 		navigation.navigate(routerConstants.USER_UPDATE)
 	}
+	const onPressPrivacy = () => {
+		navigation.navigate(routerConstants.PRIVACY_POLICE)
+	}
+	const onPressTermOfUse = () => {
+		navigation.navigate(routerConstants.TERM_SERVICE)
+	}
+	useEffect(() => {
+		OrderService.getOrders({
+			status: StatusType.Completed,
+			isCompletedOrderNum: true,
+		})
+	}, [])
 	return (
 		<BaseWrapperComponent isKeyboardAwareScrollView={true}>
-			<Box paddingX={4} mt={2} flex={1} justifyContent={'space-between'}>
+			<Box paddingX={5} mt={12} justifyContent={'space-between'} w={'100%'} flex={1}>
 				<Box>
-					<Box>
-						<ArrowBack goBackPress={onPressGoBack} img={arrowLeftBack} />
-					</Box>
+					<ArrowBack goBackPress={onPressGoBack} img={arrowLeftBack} />
+				</Box>
+				<Box alignItems={'center'}>
+					<Image mb={2} w={109} h={109} alt={'logo-we-do'} source={userImg} />
 
-					<Box mb={10} mt={5} alignItems={'flex-start'}>
-						<Box flexDirection={'row'} justifyContent={'flex-end'} alignItems={'center'}>
-							<Box mr={2}>
-								<Image style={{ width: 64, height: 64 }} source={userImg} />
-							</Box>
-							<Box flex={1}>
-								<Text fontSize={18} fontWeight={'bold'}>
-									{user.firstName} {user.lastName}
-								</Text>
-
-								<Box>
-									<TouchableOpacity onPress={onPressEditProfile}>
-										<Text color={colors.gray} fontSize={14} fontWeight={'600'}>
-											Edit profile
+					<Text fontSize={24} mt={2} fontWeight={'500'}>
+						{user.firstName} {user.lastName}
+					</Text>
+					{user.address?.fullAddress?.country && (
+						<Text fontSize={15} color={colors.gray} fontWeight={'500'}>
+							{formattedAddress}
+						</Text>
+					)}
+					<Box
+						mt={5}
+						flexDirection={'row'}
+						alignItems={'center'}
+						backgroundColor={colors.grayLightWhite}
+						p={4}
+						borderRadius={16}
+						w={'100%'}
+					>
+						<Image w={8} h={8} alt={'img-order'} source={myOrdersImg} />
+						<Box ml={2} flex={1}>
+							<TouchableOpacity onPress={onPressOrderHandler}>
+								<Box
+									style={{
+										justifyContent: 'space-between',
+										flexDirection: 'row',
+										alignItems: 'center',
+									}}
+								>
+									<Box>
+										<Text color={colors.black} fontWeight={'700'} fontSize={12}>
+											My orders
 										</Text>
-									</TouchableOpacity>
+										<Text color={colors.gray} fontWeight={'500'} fontSize={12}>
+											Completed: {completedOrdersNum ?? 0}
+										</Text>
+									</Box>
+									<Image
+										source={arrowRightImg}
+										alt={'img-arrow'}
+										style={{ width: 24, height: 24 }}
+									/>
 								</Box>
-							</Box>
+							</TouchableOpacity>
 						</Box>
-					</Box>
-					<Box
-						flexDirection={'row'}
-						alignItems={'center'}
-						pb={4}
-						mt={4}
-						borderBottomWidth={1}
-						borderColor={colors.grayLight}
-					>
-						<FontAwesome5 name="clipboard-list" size={18} color="black" />
-						<Box ml={1}>
-							<Link styleText={styles.text} onPress={onPressOrderHandler} text={'Orders'} />
-						</Box>
-					</Box>
-					<Box
-						flexDirection={'row'}
-						alignItems={'center'}
-						pb={4}
-						mt={4}
-						borderBottomWidth={1}
-						borderColor={colors.grayLight}
-					>
-						<Ionicons name="md-location" size={18} color="black" />
-						<Link styleText={styles.text} onPress={onPressGoAddress} text={'Address'} />
-					</Box>
-					<Box flexDirection={'row'} mt={4} alignItems={'center'}>
-						<Entypo name="log-out" size={18} color="black" />
-						<Link styleText={styles.text} onPress={onPressLogOut} text={'Logout'} />
 					</Box>
 				</Box>
-				<PrivacyPolicy />
+				<Box flex={1} mt={7} justifyContent={'flex-start'}>
+					<TouchableOpacity onPress={onPressEditProfile}>
+						<Box
+							flexDirection={'row'}
+							alignItems={'flex-start'}
+							pb={4}
+							mt={4}
+							borderBottomWidth={1}
+							borderColor={colors.grayLight}
+						>
+							<Image w={5} h={5} alt={'img'} source={settingImg} />
+							<Box
+								flexDirection={'row'}
+								flex={1}
+								justifyContent={'space-between'}
+								w={'100%'}
+								ml={1}
+							>
+								<Text style={styles.text}>Edit profile</Text>
+								<Image source={arrowRightImg} alt={'img-arrow'} style={{ width: 24, height: 24 }} />
+							</Box>
+						</Box>
+					</TouchableOpacity>
+					<TouchableOpacity onPress={onPressGoAddress}>
+						<Box
+							flexDirection={'row'}
+							alignItems={'flex-start'}
+							pb={4}
+							mt={4}
+							borderBottomWidth={1}
+							borderColor={colors.grayLight}
+						>
+							<Image w={5} h={5} alt={'img'} source={locationImg} />
+							<Box
+								flexDirection={'row'}
+								flex={1}
+								justifyContent={'space-between'}
+								w={'100%'}
+								ml={1}
+							>
+								<Text style={styles.text}>Address</Text>
+								<Image source={arrowRightImg} alt={'img-arrow'} style={{ width: 24, height: 24 }} />
+							</Box>
+						</Box>
+					</TouchableOpacity>
+					<TouchableOpacity onPress={onPressPrivacy}>
+						<Box
+							flexDirection={'row'}
+							alignItems={'flex-start'}
+							pb={4}
+							mt={4}
+							borderBottomWidth={1}
+							borderColor={colors.grayLight}
+						>
+							<Image w={5} h={5} alt={'img'} source={privacyImg} />
+							<Box
+								flexDirection={'row'}
+								flex={1}
+								justifyContent={'space-between'}
+								w={'100%'}
+								ml={1}
+							>
+								<Text style={styles.text}>Privacy police</Text>
+								<Image source={arrowRightImg} alt={'img-arrow'} style={{ width: 24, height: 24 }} />
+							</Box>
+						</Box>
+					</TouchableOpacity>
+					<TouchableOpacity onPress={onPressTermOfUse}>
+						<Box
+							flexDirection={'row'}
+							alignItems={'flex-start'}
+							pb={4}
+							mt={4}
+							borderBottomWidth={1}
+							borderColor={colors.grayLight}
+						>
+							<Image w={5} h={5} alt={'img'} source={termsImg} />
+							<Box
+								flexDirection={'row'}
+								flex={1}
+								justifyContent={'space-between'}
+								w={'100%'}
+								ml={1}
+							>
+								<Text style={styles.text}>Terms of service</Text>
+								<Image source={arrowRightImg} alt={'img-arrow'} style={{ width: 24, height: 24 }} />
+							</Box>
+						</Box>
+					</TouchableOpacity>
+					<TouchableOpacity onPress={logOut}>
+						<Box
+							flexDirection={'row'}
+							alignItems={'center'}
+							pb={4}
+							mt={4}
+							borderColor={colors.grayLight}
+						>
+							<Image w={5} h={5} alt={'img'} source={logoutImg} />
+							<Box
+								flexDirection={'row'}
+								flex={1}
+								justifyContent={'space-between'}
+								w={'100%'}
+								ml={1}
+							>
+								<Text style={{ ...styles.text, color: colors.red }}>Log out</Text>
+								<Image source={arrowRightImg} alt={'img-arrow'} style={{ width: 24, height: 24 }} />
+							</Box>
+						</Box>
+					</TouchableOpacity>
+				</Box>
 			</Box>
 		</BaseWrapperComponent>
 	)
@@ -104,4 +230,4 @@ const styles = StyleSheet.create({
 		fontWeight: '500',
 	},
 })
-export default UserProfileS;
+export default UserProfileS

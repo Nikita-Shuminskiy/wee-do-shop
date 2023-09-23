@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import { BaseWrapperComponent } from '../../components/baseWrapperComponent'
-import { Box, Text } from 'native-base'
+import { Box, Skeleton, Text } from 'native-base'
 import AuthStore from '../../store/AuthStore/auth-store'
 import { Dimensions, FlatList, Image, StyleSheet, View } from 'react-native'
 import { colors } from '../../assets/colors/colors'
@@ -77,7 +77,6 @@ const HomeS = observer(({ navigation }: HomeSProps) => {
 		StoresService.getFavoriteStores()
 	}, [user.address?.fullAddress])
 
-	//const [activeIndexBanner, setActiveIndexBanners] = useState<number>(0)
 	const bannersView = ({ item }: { item: BannersType }) => {
 		return (
 			<Box mr={1} w={353} h={74}>
@@ -150,4 +149,4 @@ const styles = StyleSheet.create({
 	},
 })
 
-export default HomeS;
+export default HomeS

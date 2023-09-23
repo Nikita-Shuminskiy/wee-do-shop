@@ -44,7 +44,7 @@ const ProfileCourierS = observer(({ navigation }: any) => {
 		<BaseWrapperComponent isKeyboardAwareScrollView={true}>
 			<Box paddingX={5} mt={12} justifyContent={'space-between'} w={'100%'} flex={1}>
 				<Box alignItems={'center'}>
-					<Image mb={5} w={109} h={109} alt={'logo-we-do'} source={userProfile} />
+					<Image mb={2} w={109} h={109} alt={'logo-we-do'} source={userProfile} />
 
 					<Text fontSize={24} mt={2} fontWeight={'500'}>
 						{user.firstName} {user.lastName}
@@ -99,7 +99,7 @@ const ProfileCourierS = observer(({ navigation }: any) => {
 					<TouchableOpacity onPress={handleEmailLinkPress}>
 						<Box
 							flexDirection={'row'}
-							alignItems={'center'}
+							alignItems={'flex-start'}
 							pb={4}
 							mt={4}
 							borderBottomWidth={1}
@@ -121,7 +121,7 @@ const ProfileCourierS = observer(({ navigation }: any) => {
 					<TouchableOpacity onPress={onPressPrivacy}>
 						<Box
 							flexDirection={'row'}
-							alignItems={'center'}
+							alignItems={'flex-start'}
 							pb={4}
 							mt={4}
 							borderBottomWidth={1}
@@ -143,7 +143,7 @@ const ProfileCourierS = observer(({ navigation }: any) => {
 					<TouchableOpacity onPress={onPressTermOfUse}>
 						<Box
 							flexDirection={'row'}
-							alignItems={'center'}
+							alignItems={'flex-start'}
 							pb={4}
 							mt={4}
 							borderBottomWidth={1}
@@ -165,7 +165,7 @@ const ProfileCourierS = observer(({ navigation }: any) => {
 					<TouchableOpacity onPress={logOut}>
 						<Box
 							flexDirection={'row'}
-							alignItems={'center'}
+							alignItems={'flex-start'}
 							pb={4}
 							mt={4}
 							borderColor={colors.grayLight}
@@ -189,10 +189,10 @@ const ProfileCourierS = observer(({ navigation }: any) => {
 	)
 })
 const styles = StyleSheet.create({
-    text: {
-        fontSize: 16,
-        marginLeft: 2,
-        fontWeight: '600',
-    },
+	text: {
+		fontSize: 16,
+		marginLeft: 2,
+		fontWeight: '600',
+	},
 })
-export default ProfileCourierS;
+export default ProfileCourierS

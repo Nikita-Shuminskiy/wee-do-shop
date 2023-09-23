@@ -1,117 +1,137 @@
-import React from 'react';
-import {Box, Image, Pressable, Text} from "native-base";
+import React from 'react'
+import { Box, Image, Pressable, Text } from 'native-base'
 import productImg from '../../assets/images/productTest.png'
-import {Dimensions, StyleSheet} from "react-native";
-import {colors} from "../../assets/colors/colors";
-import Button from "../Button";
-import InputNumber from "../InputNumber";
-import {ProductType} from "../../api/productApi";
-import {CartType} from "../../store/CartStore/cart-store";
-import {formatProductPrice} from "../MapViews/utils";
-import ImageDisplay from "../ImageDisplay";
+import { Dimensions, StyleSheet } from 'react-native'
+import { colors } from '../../assets/colors/colors'
+import Button from '../Button'
+import InputNumber from '../InputNumber'
+import { ProductType } from '../../api/productApi'
+import { CartType } from '../../store/CartStore/cart-store'
+import { formatProductPrice } from '../MapViews/utils'
+import ImageDisplay from '../ImageDisplay'
 
 type StoreViewerProps = {
-    product: ProductType
-    onPressProduct: () => void
-    saveProductToCart: (valueProduct: number) => void
-    currentCartStore: CartType
+	product: ProductType
+	onPressProduct: () => void
+	saveProductToCart: (valueProduct: number) => void
+	currentCartStore: CartType
 }
-const ProductViewer = ({product, onPressProduct, saveProductToCart, currentCartStore}: StoreViewerProps) => {
-    const {width} = Dimensions.get('window');
-    const productWidth = (width - 10) / 2;
-    const currentValueToCartProduct = currentCartStore?.products.find(cart => cart._id === product?._id)
-    const productTotalPrice = formatProductPrice(product.price)
+const ProductViewer = ({
+	product,
+	onPressProduct,
+	saveProductToCart,
+	currentCartStore,
+}: StoreViewerProps) => {
+	const { width } = Dimensions.get('window')
+	const productWidth = (width - 10) / 2
+	const currentValueToCartProduct = currentCartStore?.products.find(
+		(cart) => cart._id === product?._id
+	)
+	const productTotalPrice = formatProductPrice(product.price)
 
-    const onPressProductHandler = () => {
-        saveProductToCart(1)
-    }
-    const onChangeValueNumber = (valueProduct: number) => {
-        saveProductToCart(valueProduct)
-    }
+	const onPressProductHandler = () => {
+		saveProductToCart(1)
+	}
+	const onChangeValueNumber = (valueProduct: number) => {
+		saveProductToCart(valueProduct)
+	}
 
-
-    return (
-        <Pressable style={{alignItems: 'center', paddingHorizontal: 5, minWidth: productWidth, maxWidth: productWidth}}
-                   onPress={onPressProduct}>
-            <Box style={styles.shadow}
-                 borderRadius={16}
-                 alignItems={'center'}
-                 w={'100%'}
-                 mb={5}>
-                <Box>
-                    <Box w={20}
-                         position={'absolute'}
-                         p={1}
-                         top={2}
-                         left={0}
-                         zIndex={10}
-                         backgroundColor={'transparent'}>
-                        <Text backgroundColor={'transparent'}
-                              color={colors.white}
-                              borderColor={colors.white}
-                              borderRadius={16}
-                              fontSize={11}
-                              textAlign={'center'}
-                              borderWidth={1}>
-                            {product.effect}
-                        </Text>
-                    </Box>
-                    <Box w={'100%'}>
-                        <ImageDisplay alt={'image-store'} borderTopRightRadius={16} borderTopLeftRadius={16}
-                               source={{uri: product.image}}
-                               style={{
-                                   width: '100%',
-                                   aspectRatio: 200 / 171,
-                                   borderRadius: 16,
-                               }}
-                               resizeMode="container"
-                        />
-                    </Box>
-                </Box>
-                <Box paddingY={1}
-                     paddingX={2}
-                     w={'100%'}
-                     minWidth={'100%'}
-                     justifyContent={'space-evenly'}
-                     borderBottomRightRadius={16}
-                     borderBottomLeftRadius={16}>
-                    <Text
-                        fontSize={14}
-                        fontWeight={'700'}
-                        color={colors.balck}>{product?.name}</Text>
-                    <Box mt={5} height={50}>
-                        {
-                            !currentValueToCartProduct?.amount ? <Button styleText={styles.styleTextBtn}
-                                                                         backgroundColor={colors.grayDarkLight}
-                                                                         onPress={onPressProductHandler}
-                                                                         title={`฿ ${productTotalPrice}`}/> :
-                                <InputNumber values={currentValueToCartProduct?.amount}
-                                             onChangeValue={onChangeValueNumber}/>
-                        }
-
-                    </Box>
-                </Box>
-            </Box>
-        </Pressable>
-    );
-};
+	return (
+		<Pressable
+			style={{
+				alignItems: 'center',
+				paddingHorizontal: 5,
+				minWidth: productWidth,
+				maxWidth: productWidth,
+			}}
+			onPress={onPressProduct}
+		>
+			<Box style={styles.shadow} borderRadius={16} alignItems={'center'} w={'100%'} mb={5}>
+				<Box>
+					<Box
+						w={20}
+						position={'absolute'}
+						p={1}
+						top={2}
+						left={0}
+						zIndex={10}
+						backgroundColor={'transparent'}
+					>
+						<Text
+							backgroundColor={'transparent'}
+							color={colors.white}
+							borderColor={colors.white}
+							borderRadius={16}
+							fontSize={11}
+							textAlign={'center'}
+							borderWidth={1}
+						>
+							{product.effect}
+						</Text>
+					</Box>
+					<Box w={'100%'}>
+						<ImageDisplay
+							alt={'image-store'}
+							borderTopRightRadius={16}
+							borderTopLeftRadius={16}
+							source={{ uri: product.image }}
+							style={{
+								width: 180,
+								height: 171,
+								borderRadius: 16,
+							}}
+						/>
+					</Box>
+				</Box>
+				<Box
+					paddingY={1}
+					paddingX={2}
+					w={'100%'}
+					minWidth={'100%'}
+					justifyContent={'space-evenly'}
+					borderBottomRightRadius={16}
+					borderBottomLeftRadius={16}
+				>
+					<Text fontSize={14} fontWeight={'700'} color={colors.balck}>
+						{product?.name}
+					</Text>
+					<Box mt={5} height={50}>
+						{!currentValueToCartProduct?.amount ? (
+							<Button
+								styleText={styles.styleTextBtn}
+								backgroundColor={colors.grayDarkLight}
+								onPress={onPressProductHandler}
+								title={`฿ ${productTotalPrice}`}
+							/>
+						) : (
+							<InputNumber
+								values={currentValueToCartProduct?.amount}
+								onChangeValue={onChangeValueNumber}
+							/>
+						)}
+					</Box>
+				</Box>
+			</Box>
+		</Pressable>
+	)
+}
 const styles = StyleSheet.create({
-    styleTextBtn: {
-        fontWeight: '600',
-        fontSize: 16,
-        color: colors.black
-    },
-    shadow: {
-        backgroundColor: colors.white,
-        shadowColor: "#000",
-        shadowOffset: {
-            width: 0,
-            height: 6,
-        },
-        shadowOpacity: 0.37,
-        shadowRadius: 7.49,
+	styleTextBtn: {
+		fontWeight: '600',
+		fontSize: 16,
+		color: colors.black,
+	},
+	shadow: {
+		backgroundColor: colors.white,
+		shadowColor: '#000',
+		shadowOffset: {
+			width: 0,
+			height: 6,
+		},
+		shadowOpacity: 0.37,
+		shadowRadius: 7.49,
 
-        elevation: 7,
-    },
-});
-export default ProductViewer;
+		elevation: 7,
+	},
+})
+export default ProductViewer

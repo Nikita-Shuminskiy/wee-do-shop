@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { BaseWrapperComponent } from '../../components/baseWrapperComponent'
 import arrowLeftBack from '../../assets/images/arrow-left-back.png'
-import testBackground from '../../assets/images/testBackground.png'
 import { Box, Text } from 'native-base'
 import ArrowBack from '../../components/ArrowBack'
 import { NavigationProp, ParamListBase, useNavigation } from '@react-navigation/native'
@@ -21,6 +20,7 @@ import PopUpAboutStore from '../../components/modalPopUp/PopUpAboutStore'
 import { formatProductPrice } from '../../components/MapViews/utils'
 import { routerConstants } from '../../constants/routerConstants'
 import { getTotalSumProductsCart, updateValueCartProducts } from '../../utils/utilsCart'
+import * as Animatable from 'react-native-animatable'
 
 const updateProduct = (currentCartStore, item, productValue, setCurrentCartStore) => {
 	const updatedProducts = updateValueCartProducts(currentCartStore.products, productValue, item._id)
@@ -109,7 +109,7 @@ const StoreS = observer(({ navigation }: StoreSProps) => {
 		}
 
 		const saveProductToCard = (productValue: number) => {
-			if(productValue > 100) return
+			if (productValue > 100) return
 			const findProduct = currentCartStore.products.find((product) => product._id === item._id)
 			if (findProduct) {
 				updateProduct(currentCartStore, item, productValue, setCurrentCartStore)
@@ -147,21 +147,34 @@ const StoreS = observer(({ navigation }: StoreSProps) => {
 			/>
 		)
 	}
-
+	const [isLoaded, setIsLoaded] = useState(false)
 	return (
 		<>
 			<BaseWrapperComponent backgroundColor={'white'} isKeyboardAwareScrollView={true}>
 				<Box>
 					<Box w={'100%'} height={239} flex={1}>
+						{!isLoaded && (
+							<Animatable.View
+								animation="pulse"
+								iterationCount="infinite"
+								style={{
+									position: 'absolute',
+									zIndex: 100,
+									width: '100%',
+									aspectRatio: 351 / 171,
+									backgroundColor: colors.grayWhite,
+								}}
+							/>
+						)}
 						<ImageBackground
+							onLoad={() => setIsLoaded(true)}
 							alt={'shop-image'}
-							source={{uri: store.image}}
+							source={{ uri: store.image }}
 							style={{
 								width: '100%',
 								aspectRatio: 351 / 171,
 								borderRadius: 16,
 							}}
-							resizeMode="cover"
 						>
 							<Box mt={5} mb={5} position={'absolute'} left={5}>
 								<ArrowBack goBackPress={onPressGoBack} img={arrowLeftBack} />
@@ -191,7 +204,7 @@ const StoreS = observer(({ navigation }: StoreSProps) => {
 						borderTopLeftRadius={16}
 						borderTopRightRadius={16}
 					>
-						<Box  paddingX={2}>
+						<Box paddingX={2}>
 							<FlatList
 								extraData={selectedSubCategoryId}
 								data={store.subCategories}
@@ -321,4 +334,4 @@ const styles = StyleSheet.create({
 	},
 })
 
-export default StoreS;
+export default StoreS
