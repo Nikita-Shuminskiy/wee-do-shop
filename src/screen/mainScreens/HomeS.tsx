@@ -76,6 +76,9 @@ const HomeS = observer(({ navigation }: HomeSProps) => {
 		StoresService.getStores()
 		CategoriesService.getCategories()
 		StoresService.getFavoriteStores()
+		return () => {
+			setSearch('')
+		}
 	}, [user.address?.fullAddress])
 
 	const bannersView = ({ item }: { item: BannersType }) => {

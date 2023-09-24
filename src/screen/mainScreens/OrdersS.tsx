@@ -110,7 +110,7 @@ const OrdersS = observer(({ navigation, route }: OrdersSProps) => {
 	}
 	return (
 		<>
-			<BaseWrapperComponent backgroundColor={colors.white} isKeyboardAwareScrollView={false}>
+			<BaseWrapperComponent backgroundColor={colors.white} isKeyboardAwareScrollView={true}>
 				<Box flexDirection={'row'} mt={5} justifyContent={'space-between'} alignItems={'center'}>
 					{!isRoutHistory && (
 						<Box mb={5} position={'absolute'} left={5}>
@@ -127,6 +127,7 @@ const OrdersS = observer(({ navigation, route }: OrdersSProps) => {
 				</Box>
 				<Box mt={5} alignItems={'center'} flex={1} w={'100%'}>
 					<FlatList
+						scrollEnabled={false}
 						data={orders}
 						renderItem={orderViews}
 						keyExtractor={(item, index) => item._id?.toString()}

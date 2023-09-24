@@ -1,7 +1,6 @@
 import React from 'react'
 import { Box, Pressable, Text } from 'native-base'
-import productImg from '../../assets/images/productTest.png'
-import { Dimensions, StyleSheet, Image } from 'react-native'
+import { Dimensions, StyleSheet } from 'react-native'
 import { colors } from '../../assets/colors/colors'
 import Button from '../Button'
 import InputNumber from '../InputNumber'

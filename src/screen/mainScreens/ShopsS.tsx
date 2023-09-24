@@ -32,6 +32,9 @@ const ShopsS = observer(({ navigation }: ShopsSType) => {
 	}
 	useEffect(() => {
 		StoresService.getStores()
+		return () => {
+			setSearch('')
+		}
 	}, [])
 	return (
 		<BaseWrapperComponent backgroundColor={colors.white} isKeyboardAwareScrollView={true}>
