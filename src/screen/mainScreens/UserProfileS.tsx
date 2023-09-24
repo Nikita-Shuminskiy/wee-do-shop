@@ -32,7 +32,6 @@ const UserProfileS = observer(({ navigation }: UserProfileSProps) => {
 	const onPressGoBack = () => {
 		navigation.navigate(routerConstants.HOME)
 	}
-
 	const onPressOrderHandler = () => {
 		navigation.navigate(routerConstants.ORDERS)
 	}
@@ -50,8 +49,7 @@ const UserProfileS = observer(({ navigation }: UserProfileSProps) => {
 	}
 	useEffect(() => {
 		OrderService.getOrders({
-			status: StatusType.Completed,
-			isCompletedOrderNum: true,
+			inProgressOrdersNum: true,
 		})
 	}, [])
 	return (
@@ -92,10 +90,10 @@ const UserProfileS = observer(({ navigation }: UserProfileSProps) => {
 								>
 									<Box>
 										<Text color={colors.black} fontWeight={'700'} fontSize={12}>
-											My orders
+											History
 										</Text>
 										<Text color={colors.gray} fontWeight={'500'} fontSize={12}>
-											Completed: {completedOrdersNum ?? 0}
+											In progress: {completedOrdersNum ?? 0}
 										</Text>
 									</Box>
 									<Image

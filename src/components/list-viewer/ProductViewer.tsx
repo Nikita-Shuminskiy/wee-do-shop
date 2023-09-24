@@ -1,7 +1,7 @@
 import React from 'react'
-import { Box, Image, Pressable, Text } from 'native-base'
+import { Box, Pressable, Text } from 'native-base'
 import productImg from '../../assets/images/productTest.png'
-import { Dimensions, StyleSheet } from 'react-native'
+import { Dimensions, StyleSheet, Image } from 'react-native'
 import { colors } from '../../assets/colors/colors'
 import Button from '../Button'
 import InputNumber from '../InputNumber'
@@ -9,6 +9,7 @@ import { ProductType } from '../../api/productApi'
 import { CartType } from '../../store/CartStore/cart-store'
 import { formatProductPrice } from '../MapViews/utils'
 import ImageDisplay from '../ImageDisplay'
+import { LinearGradient } from 'expo-linear-gradient'
 
 type StoreViewerProps = {
 	product: ProductType
@@ -35,7 +36,7 @@ const ProductViewer = ({
 	const onChangeValueNumber = (valueProduct: number) => {
 		saveProductToCart(valueProduct)
 	}
-
+	const formattedEffectName = product.effect.charAt(0).toUpperCase() + product.effect.slice(1)
 	return (
 		<Pressable
 			style={{
@@ -48,37 +49,40 @@ const ProductViewer = ({
 		>
 			<Box style={styles.shadow} borderRadius={16} alignItems={'center'} w={'100%'} mb={5}>
 				<Box>
-					<Box
-						w={20}
-						position={'absolute'}
-						p={1}
-						top={2}
-						left={0}
-						zIndex={10}
-						borderRadius={16}
-						borderWidth={1}
-						borderColor={colors.white}
-						backgroundColor={colors.black}
-					>
-						<Text
-							color={colors.white}
-							backgroundColor={colors.black}
-							borderRadius={16}
-							fontSize={11}
-							textAlign={'center'}
+					<Box w={20} position={'absolute'} p={1} top={2} left={0} zIndex={10}>
+						<LinearGradient
+							colors={['#5AB0FF', '#BF38FF']}
+							start={[0, 0.5]}
+							end={[1, 0.5]}
+							style={{
+								flex: 1,
+								borderRadius: 10,
+								paddingVertical: 2,
+								paddingHorizontal: 10,
+								alignItems: 'center',
+								justifyContent: 'center',
+							}}
 						>
-							{product.effect}
-						</Text>
+							<Text
+								color={colors.white}
+								/*style={styles.textWithShadow}
+								borderRadius={16}*/
+								fontSize={10}
+								fontWeight={'600'}
+								textAlign={'center'}
+							>
+								{formattedEffectName}
+							</Text>
+						</LinearGradient>
 					</Box>
-					<Box w={'100%'}>
+
+					<Box width={productWidth - 10} h={170}>
 						<ImageDisplay
 							alt={'image-store'}
-							borderTopRightRadius={16}
-							borderTopLeftRadius={16}
 							source={{ uri: product.image }}
 							style={{
-								width: 180,
-								height: 171,
+								width: '100%',
+								height: '100%',
 								borderRadius: 16,
 							}}
 						/>
@@ -117,6 +121,12 @@ const ProductViewer = ({
 	)
 }
 const styles = StyleSheet.create({
+	textWithShadow: {
+		fontWeight: 'bold',
+		textShadowColor: 'black', // Цвет тени
+		textShadowOffset: { width: 2, height: 2 },
+		textShadowRadius: 2,
+	},
 	styleTextBtn: {
 		fontWeight: '600',
 		fontSize: 16,

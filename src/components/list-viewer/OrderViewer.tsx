@@ -10,7 +10,7 @@ import { useNavigation } from '@react-navigation/native'
 import { routerConstants } from '../../constants/routerConstants'
 import orderStore from '../../store/OrderStore/order-store'
 import { useOrderDataStatus } from '../../utils/hook/useOrderDataStatus'
-import rootStore from "../../store/RootStore/root-store";
+import rootStore from '../../store/RootStore/root-store'
 
 type OrderViewerProps = {
 	order: ApiOrderType
@@ -20,18 +20,17 @@ type OrderViewerProps = {
 const OrderViewer = memo(({ order, onPressDetails, onPressRepeat }: OrderViewerProps) => {
 	const { setOrderData, setStatus } = orderStore
 	const { OrderService } = rootStore
+	const isStatusCanceled = order.status === StatusType.Canceled
 
-	const { status } = useOrderDataStatus({ orderId: order._id })
+	//const { status } = useOrderDataStatus({ orderId: order._id })
 	const navigation = useNavigation<any>()
 
 	const onPressCheckStatus = () => {
 		OrderService.getOrder(order._id)
-		setStatus(status ?? order.status)
+		setStatus(order.status)
 		navigation.navigate(routerConstants.ORDER_STATUSES)
 	}
-	const isCompletedStatuses = status
-		? status === StatusType.Completed
-		: order.status === StatusType.Completed
+	const isCompletedStatuses = order.status === StatusType.Completed
 
 	return (
 		<Box style={styles.container}>
@@ -47,19 +46,26 @@ const OrderViewer = memo(({ order, onPressDetails, onPressRepeat }: OrderViewerP
 				<Text fontWeight={'600'} color={colors.gray} fontSize={12}>
 					{getFormatDateToString(order?.createdAt)}
 				</Text>
-				<Text fontWeight={'600'} fontSize={14} color={colors.green}>
-					{splittingWord(status ?? order.status)}
+				<Text
+					fontWeight={'600'}
+					fontSize={14}
+					color={order.status === StatusType.Canceled ? colors.red : colors.green}
+				>
+					{splittingWord(order.status)}
 				</Text>
 			</Box>
 			<Box flexDirection={'row'} mt={2} justifyContent={'space-between'}>
 				<Button
 					backgroundColor={'#E7E7E7'}
 					styleText={styles.textBtn}
-					styleContainer={!isCompletedStatuses && styles.containerBtn}
+					styleContainer={{
+						maxWidth: !isStatusCanceled && 130,
+						width: '100%',
+					}}
 					onPress={onPressDetails}
 					title={`Order details (${order.products?.length}+)`}
 				/>
-				{isCompletedStatuses && (
+				{isCompletedStatuses && !isStatusCanceled && (
 					<Button
 						backgroundColor={colors.green}
 						styleContainer={styles.containerBtn}
@@ -67,7 +73,7 @@ const OrderViewer = memo(({ order, onPressDetails, onPressRepeat }: OrderViewerP
 						title={'Repeat order'}
 					/>
 				)}
-				{!isCompletedStatuses && (
+				{!isCompletedStatuses && !isStatusCanceled && (
 					<Button
 						backgroundColor={colors.green}
 						styleContainer={styles.containerBtn}
@@ -103,4 +109,4 @@ const styles = StyleSheet.create({
 		elevation: 10,
 	},
 })
-export default OrderViewer;
+export default OrderViewer

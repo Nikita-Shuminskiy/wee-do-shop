@@ -35,27 +35,27 @@ const OrdersS = observer(({ navigation, route }: OrdersSProps) => {
 
 	const ordersLength = orders?.length
 	const requestAPI = () => {
-		setLoadingData(true)
+		/*setLoadingData(true)
 		const offset = (page - 1) * 40
 		OrderService.getOrders({
-			status: isRoutHistory ? StatusType.Completed : null,
 			limit: 40,
 			offset,
 		}).finally(() => {
 			setLoadingData(false)
-		})
+		})*/
+		OrderService.getOrders({})
 	}
 
 	useEffect(() => {
 		requestAPI()
-	}, [page])
+	}, [])
 
-	useEffect(() => {
+	/*	useEffect(() => {
 		return () => {
 			setPage(1)
 			setClearOrders()
 		}
-	}, [])
+	}, [])*/
 
 	const onPressGoBack = () => {
 		navigation.navigate(isFromStatusesScreen ? routerConstants.HOME : routerConstants.PROFILE_USER)
@@ -77,7 +77,7 @@ const OrdersS = observer(({ navigation, route }: OrdersSProps) => {
 		setIsShowPopupDetails(false)
 	}
 	const orderViews = ({ item }: { item: ApiOrderType }) => {
-		if (item.status === StatusType.Completed && !isRoutHistory) return
+		if (isRoutHistory && item.status === StatusType.Canceled) return
 		const onPressDetails = () => {
 			setSelectedOrder(item)
 			setIsShowPopupDetails(true)
@@ -121,7 +121,7 @@ const OrdersS = observer(({ navigation, route }: OrdersSProps) => {
 					<Box w={'100%'} alignItems={'center'}>
 						<Text fontSize={28} fontWeight={'700'}>
 							{' '}
-							{isRoutHistory ? 'History' : 'Orders'}
+							{!isRoutHistory ? 'History' : 'Orders'}
 						</Text>
 					</Box>
 				</Box>
@@ -132,12 +132,12 @@ const OrdersS = observer(({ navigation, route }: OrdersSProps) => {
 						keyExtractor={(item, index) => item._id?.toString()}
 						style={{ width: '100%' }}
 						contentContainerStyle={!ordersLength && styles.contentContainerOrder}
-						ListFooterComponent={orders.length ? renderFooter : null}
+						/*		ListFooterComponent={orders.length ? renderFooter : null}*/
 						ListEmptyComponent={() =>
 							renderEmptyContainer(0, 'You haven’t placed\n any orders yet.')
 						}
-						onEndReached={fetchMoreData}
-						onEndReachedThreshold={0.5}
+						/*onEndReached={fetchMoreData}
+						onEndReachedThreshold={0.5}*/
 					/>
 				</Box>
 			</BaseWrapperComponent>

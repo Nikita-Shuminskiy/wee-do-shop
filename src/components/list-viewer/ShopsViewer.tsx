@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Dimensions, Image, ImageBackground, TouchableOpacity } from 'react-native'
+import { Dimensions, Image, ImageBackground, StyleSheet, TouchableOpacity } from 'react-native'
 import { Box, Text } from 'native-base'
 import { colors } from '../../assets/colors/colors'
 import motorcycle from '../../assets/images/moto.png'
@@ -7,6 +7,7 @@ import test from '../../assets/images/testShops.png'
 import { isCurrentTimeInRange } from '../../utils/utils'
 import { StoreType } from '../../api/storesApi'
 import * as Animatable from 'react-native-animatable'
+import DeliveryTime from '../DeliveryTime'
 
 type ShopsViewerType = {
 	stores: StoreType
@@ -17,9 +18,12 @@ const ShopsViewer = ({ stores, onPress }: ShopsViewerType) => {
 	const [isLoaded, setIsLoaded] = useState(false)
 
 	const { width } = Dimensions.get('window')
-	const productWidth = (width - 15) / 2
+	const productWidth = (width - 15) / 2 - 15
 	return (
-		<TouchableOpacity onPress={onPress} style={{ minWidth: productWidth, maxWidth: productWidth }}>
+		<TouchableOpacity
+			onPress={onPress}
+			style={{ minWidth: productWidth, maxWidth: productWidth, marginRight: 5 }}
+		>
 			{!isLoaded && (
 				<Animatable.View
 					animation="pulse"
@@ -27,9 +31,9 @@ const ShopsViewer = ({ stores, onPress }: ShopsViewerType) => {
 					style={{
 						position: 'absolute',
 						zIndex: 100,
-						width: 170,
+						width: productWidth,
 						height: 103,
-						aspectRatio: 170 / 103,
+						aspectRatio: productWidth / 103,
 						borderRadius: 16,
 						backgroundColor: colors.grayWhite,
 					}}
@@ -40,35 +44,22 @@ const ShopsViewer = ({ stores, onPress }: ShopsViewerType) => {
 				borderRadius={16}
 				source={{ uri: stores.image }}
 				style={{
-					width: 170,
+					width: productWidth,
 					height: 103,
-					aspectRatio: 170 / 103,
+					aspectRatio: productWidth / 103,
 				}}
 				onLoad={() => setIsLoaded(true)}
 			>
-				<Box
-					position={'absolute'}
-					p={1}
-					top={2}
-					left={2}
-					borderWidth={1}
-					zIndex={10}
-					w={66}
-					h={19}
-					borderColor={colors.green}
-					flexDirection={'row'}
-					borderRadius={16}
-					alignItems={'flex-start'}
-					justifyContent={'center'}
-					backgroundColor={'black'}
-				>
-					<Image source={motorcycle} style={{ width: 14, height: 9 }} alt={'moto'} />
-					<Text ml={2} textAlign={'center'} color={colors.white} fontSize={7} fontWeight={'500'}>
-						{stores?.deliveryTime} min
-					</Text>
+				<Box position={'absolute'} top={2} left={2} zIndex={10} w={66} h={19}>
+					<DeliveryTime
+						styleGradient={{ paddingVertical: 1, paddingHorizontal: 2 }}
+						styleImg={{ width: 14, height: 9 }}
+						fontSizeText={8}
+						time={stores?.deliveryTime}
+					/>
 				</Box>
 				<Box flex={1} alignItems={'center'} justifyContent={'center'}>
-					<Text fontSize={19} fontWeight={'700'} color={colors.white}>
+					<Text fontSize={19} fontWeight={'700'} style={styles.textWithShadow} color={colors.white}>
 						{stores.name}
 					</Text>
 				</Box>
@@ -90,5 +81,12 @@ const ShopsViewer = ({ stores, onPress }: ShopsViewerType) => {
 		</TouchableOpacity>
 	)
 }
-
+const styles = StyleSheet.create({
+	textWithShadow: {
+		fontWeight: 'bold',
+		textShadowColor: 'black', // Цвет тени
+		textShadowOffset: { width: 2, height: 2 },
+		textShadowRadius: 2,
+	},
+})
 export default ShopsViewer

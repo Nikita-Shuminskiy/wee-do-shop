@@ -9,6 +9,7 @@ import preparedImg from '../../assets/images/orderImg/prepared.png'
 import waitingForPickImg from '../../assets/images/orderImg/waitingForPick.png'
 import courierImg from '../../assets/images/orderImg/courier.png'
 import arrivedImg from '../../assets/images/orderImg/arrived.png'
+import confirmed from '../../assets/images/orderImg/confirmed.png'
 import { Image, Linking, StyleSheet, TouchableOpacity } from 'react-native'
 import { colors } from '../../assets/colors/colors'
 import { CourierType, StatusType } from '../../api/ordersApi'
@@ -39,7 +40,7 @@ const renderImgForStatuses = (status: StatusType) => {
 		case StatusType.Completed:
 			return arrivedImg
 		case StatusType.Canceled:
-			return placedImg
+			return confirmed
 		default:
 			return placedImg
 	}
@@ -92,12 +93,19 @@ const renderHeaderDescriptionForStatuses = (status: StatusType) => {
 				</>
 			)
 		case StatusType.Canceled:
-			return null
+			return (
+				<>
+					<Image source={stormImg} style={{ width: 20, height: 20 }} />
+					<Text ml={1} fontSize={13} fontWeight={500}>
+						Order canceled, wait for a call from the store
+					</Text>
+				</>
+			)
 		default:
 			return null
 	}
 }
-const renderDescriptionForStatuses = (status: StatusType) => {
+const renderDescriptionForStatuses = (status: StatusType, textReason?: string) => {
 	switch (status) {
 		case StatusType.Placed:
 			return (
@@ -147,10 +155,10 @@ const renderDescriptionForStatuses = (status: StatusType) => {
 		case StatusType.Canceled:
 			return (
 				<>
-					<Text fontSize={24} fontWeight={'600'}>
+					<Text fontSize={24} color={colors.red} fontWeight={'600'}>
 						{splittingWord(status)}
 					</Text>
-					<Text color={colors.gray}>Order canceled, wait for a call from the store</Text>
+					<Text color={colors.gray}>Store comment: {textReason}</Text>
 				</>
 			)
 		default:
@@ -169,14 +177,23 @@ type OrderStatusesSProps = {
 	navigation: NavigationProp<ParamListBase>
 }
 const OrderStatusesS = observer(({ navigation }: OrderStatusesSProps) => {
-	const { order, statusOrder, setStatus, setCourierToOrder } = orderStore
+	const { order, statusOrder, setStatus, setCourierToOrder, setRejectReason, rejectReason } =
+		orderStore
 	useEffect(() => {
 		const socket = io(BASE_URL)
 		socket.on('connect', () => {})
 		socket.on(
 			`orderStatusUpdated:${order._id}`,
-			(data: { orderId: string; status: StatusType; courier: CourierType }) => {
-				if (data.courier) {
+			(data: {
+				orderId: string
+				status: StatusType
+				courier: CourierType
+				rejectReason: string
+			}) => {
+				if (data?.rejectReason) {
+					setRejectReason(data.rejectReason)
+				}
+				if (data?.courier) {
 					setCourierToOrder(data.courier)
 				}
 
@@ -204,7 +221,7 @@ const OrderStatusesS = observer(({ navigation }: OrderStatusesSProps) => {
 		navigation.navigate(routerConstants.HOME)
 	}
 	return (
-		<BaseWrapperComponent backgroundColor={colors.white} isKeyboardAwareScrollView={!isCanceled}>
+		<BaseWrapperComponent backgroundColor={colors.white} isKeyboardAwareScrollView={true}>
 			<Box paddingX={5} mt={5} justifyContent={'space-evenly'} flex={1}>
 				<Box flexDirection={'row'} alignItems={'center'} justifyContent={'space-between'}>
 					<Box alignItems={'center'}>
@@ -219,64 +236,53 @@ const OrderStatusesS = observer(({ navigation }: OrderStatusesSProps) => {
 						</TouchableOpacity>
 					</Box>
 				</Box>
-				<Box
-					mt={5}
-					p={4}
-					backgroundColor={`rgba(237, 248, 216, 1)`}
-					borderRadius={16}
-					flexDirection={'row'}
-					alignItems={'flex-start'}
-					justifyContent={'flex-start'}
-				>
-					{renderHeaderDescriptionForStatuses(statusOrder)}
-				</Box>
-				{isCanceled ? (
-					<Box flex={2} justifyContent={'center'} alignItems={'center'}>
-						<Text fontSize={24} fontWeight={'600'}>
-							{splittingWord(statusOrder)}
-						</Text>
-						<Text color={colors.gray}>Order canceled, wait for a call from the store</Text>
-						<Button
-							styleContainer={styles.styleContainerBtn}
-							onPress={onPressClose}
-							title={'Go to orders '}
-						/>
+				{!isCanceled && (
+					<Box
+						mt={5}
+						p={4}
+						backgroundColor={`rgba(237, 248, 216, 1)`}
+						borderRadius={16}
+						flexDirection={'row'}
+						alignItems={'flex-start'}
+						justifyContent={'flex-start'}
+					>
+						{renderHeaderDescriptionForStatuses(statusOrder)}
 					</Box>
-				) : (
-					<>
-						<Box mt={5} alignItems={'center'}>
-							{renderDescriptionForStatuses(statusOrder)}
-						</Box>
-						<Box mt={5} alignItems={'center'} justifyContent={'center'}>
-							<Image alt={'img'} source={renderImgForStatuses(statusOrder)} />
-						</Box>
-						<Box flexDirection={'row'} alignItems={'center'} justifyContent={'space-evenly'} mt={5}>
-							<OrderStatusBar status={statusOrder} />
-						</Box>
-						{!isCanceled && order.courier && (
-							<Box mt={2}>
-								<Text fontSize={18} color={colors.black} fontWeight={'600'}>
-									Your courier
-								</Text>
+				)}
+				<Box mt={5} alignItems={'center'}>
+					{renderDescriptionForStatuses(statusOrder, rejectReason)}
+				</Box>
+				<Box mt={5} alignItems={'center'} justifyContent={'center'}>
+					<Image alt={'img'} source={renderImgForStatuses(statusOrder)} />
+				</Box>
+				{!isCanceled && (
+					<Box flexDirection={'row'} alignItems={'center'} justifyContent={'space-evenly'} mt={5}>
+						<OrderStatusBar status={statusOrder} />
+					</Box>
+				)}
 
-								<Box flexDirection={'row'} alignItems={'center'} justifyContent={'space-between'}>
-									<Box>
-										<Text fontSize={15} color={colors.gray}>
-											{order.courier.firstName} {order.courier.lastName}
-										</Text>
-										<TouchableOpacity onPress={handlePhonePress}>
-											<Text fontSize={15} color={colors.blueLightMedium}>
-												{order.courier.phone}
-											</Text>
-										</TouchableOpacity>
-									</Box>
-									<TouchableOpacity onPress={handlePhonePress}>
-										<Feather name="phone" size={26} color={colors.blueLightMedium} />
-									</TouchableOpacity>
-								</Box>
+				{!isCanceled && order.courier && (
+					<Box mt={2}>
+						<Text fontSize={18} color={colors.black} fontWeight={'600'}>
+							Your courier
+						</Text>
+
+						<Box flexDirection={'row'} alignItems={'center'} justifyContent={'space-between'}>
+							<Box>
+								<Text fontSize={15} color={colors.gray}>
+									{order.courier.firstName} {order.courier.lastName}
+								</Text>
+								<TouchableOpacity onPress={handlePhonePress}>
+									<Text fontSize={15} color={colors.blueLightMedium}>
+										{order.courier.phone}
+									</Text>
+								</TouchableOpacity>
 							</Box>
-						)}
-					</>
+							<TouchableOpacity onPress={handlePhonePress}>
+								<Feather name="phone" size={26} color={colors.blueLightMedium} />
+							</TouchableOpacity>
+						</Box>
+					</Box>
 				)}
 			</Box>
 			<Box

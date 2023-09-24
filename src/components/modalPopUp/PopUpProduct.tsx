@@ -11,6 +11,7 @@ import { ProductType } from '../../api/productApi'
 import CartStore, { CartType, ProductCartType } from '../../store/CartStore/cart-store'
 import { formatProductPrice } from '../MapViews/utils'
 import ImageDisplay from '../ImageDisplay'
+import { BaseWrapperComponent } from '../baseWrapperComponent'
 
 type PopUpProductProps = {
 	show: boolean
@@ -41,42 +42,50 @@ const PopUpProduct = ({
 	return (
 		<>
 			<ModalPopup style={{}} visible={show} onClose={onClose}>
-				<Box flex={1} w={'100%'} justifyContent={'space-between'}>
-					<ImageDisplay
-						source={{ uri: product?.image }}
-						style={{
-							width: '100%',
-							aspectRatio: 200 / 171,
-						}}
-						resizeMode="cover"
-						alt={'photoProduct'}
-					/>
-					<Text mb={2} mt={2} fontSize={16} fontWeight={'600'}>
-						{product?.name}
-					</Text>
-					<Text mb={2}>{product?.description}</Text>
-					<Box>
-						{/* <Text fontWeight={'500'}>-THC 15%</Text>
+				<BaseWrapperComponent isKeyboardAwareScrollView={true}>
+					<Box flex={1} mb={120} w={'100%'} justifyContent={'space-between'}>
+						<ImageDisplay
+							source={{ uri: product?.image }}
+							style={{
+								width: '100%',
+								aspectRatio: 200 / 171,
+							}}
+							resizeMode="cover"
+							alt={'photoProduct'}
+						/>
+						<Text mb={2} mt={2} fontSize={16} fontWeight={'600'}>
+							{product?.name}
+						</Text>
+						<Text mb={2}>{product?.description}</Text>
+						<Box>
+							{/* <Text fontWeight={'500'}>-THC 15%</Text>
                         <Text fontWeight={'500'}>-CBD 12%</Text>
                         <Text fontWeight={'500'}>-Energizing</Text>
                         <Text fontWeight={'500'}>-Uplifting</Text>*/}
-						<Text fontWeight={'500'}>{product?.effect}</Text>
-					</Box>
-					{/*  <Box flex={1} w={'25%'}>
+							{/*	<Text fontWeight={'500'}>{product?.effect}</Text>*/}
+						</Box>
+						{/*  <Box flex={1} w={'25%'}>
                         <Link styleLink={{backgroundColor: colors.grayDarkLight, borderRadius: 16}}
                               onPress={onPressShowMore} text={'Show more'}/>
                     </Box>*/}
-					<Box mt={2} w={'100%'} flex={1}>
-						<Box mb={4} flexDirection={'row'} flex={1} w={'100%'} justifyContent={'space-between'}>
-							<Text>Price: 1x</Text>
-							<Text>฿ {formatProductPrice(product?.price)}</Text>
+						<Box mt={2} w={'100%'} flex={1}>
+							<Box
+								mb={4}
+								flexDirection={'row'}
+								flex={1}
+								w={'100%'}
+								justifyContent={'space-between'}
+							>
+								<Text>Price: 1x</Text>
+								<Text>฿ {formatProductPrice(product?.price)}</Text>
+							</Box>
+							<SliderComponent
+								valueSlider={currentValueToCartProduct?.amount ?? 0}
+								onChangeValue={saveSliderValue}
+							/>
 						</Box>
-						<SliderComponent
-							valueSlider={currentValueToCartProduct?.amount ?? 0}
-							onChangeValue={saveSliderValue}
-						/>
 					</Box>
-				</Box>
+				</BaseWrapperComponent>
 			</ModalPopup>
 			{show && (
 				<Box

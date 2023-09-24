@@ -22,6 +22,7 @@ import AuthStore, { AddressType } from '../../store/AuthStore/auth-store'
 import { allowLocation, getFormattedAddress } from '../../components/MapViews/utils'
 import { createAlert } from '../../components/Alert'
 import { usePermissionsPushGeo } from '../../utils/hook/usePermissionsPushGeo'
+import { Linking } from 'react-native'
 
 export type CountryData = {
 	callingCode: string[]
@@ -142,6 +143,7 @@ const RegisterS = observer(({ navigation }: LoginSProps) => {
 		!!(!isValidPhone && touched.phone)
 
 	const onPressNavigateToLocation = async () => {
+		//	await Linking.openSettings()
 		await askLocationPermissionHandler().then((data) => {
 			if (data === 'granted') {
 				navigation.navigate(routerConstants.AUTOCOMPLETE_MAP)
@@ -319,6 +321,5 @@ const styles = StyleSheet.create({
 		backgroundColor: colors.green,
 	},
 })
-
 
 export default RegisterS

@@ -69,9 +69,18 @@ const PopUpOrderDetails = ({ show, onClose, onPressRepeat, order }: PopUpOrderDe
 		<ModalPopup visible={show} onClose={onClose}>
 			<Box alignItems={'center'}>
 				<Box mb={2} alignItems={'center'}>
-					<Text fontWeight={'700'} fontSize={28}>
+					<Text
+						fontWeight={'700'}
+						color={order?.rejectReason ? colors.red : colors.black}
+						fontSize={28}
+					>
 						{order?.status}
 					</Text>
+					{order?.rejectReason && (
+						<Text fontWeight={'500'} fontSize={13}>
+							Reason: {order.rejectReason}
+						</Text>
+					)}
 				</Box>
 				<Box style={styles.container}>
 					<Box flexDirection={'row'} justifyContent={'space-between'}>
@@ -163,4 +172,4 @@ const styles = StyleSheet.create({
 		elevation: 5,
 	},
 })
-export default PopUpOrderDetails;
+export default PopUpOrderDetails

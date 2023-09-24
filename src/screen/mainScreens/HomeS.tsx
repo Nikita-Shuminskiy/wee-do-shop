@@ -89,7 +89,7 @@ const HomeS = observer(({ navigation }: HomeSProps) => {
 
 	return (
 		<BaseWrapperComponent backgroundColor={colors.white} isKeyboardAwareScrollView={true}>
-			<Box paddingX={4} w={'100%'} flex={1}>
+			<Box paddingX={2} w={'100%'} flex={1}>
 				<HeaderUser address={user?.address} navigation={navigation} />
 				<Box mt={2} w={'100%'} flex={1} borderTopLeftRadius={16} borderTopRightRadius={16}>
 					<SearchStores

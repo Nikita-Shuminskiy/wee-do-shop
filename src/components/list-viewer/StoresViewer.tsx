@@ -4,11 +4,13 @@ import { colors } from '../../assets/colors/colors'
 import test from '../../assets/images/test.png'
 import like from '../../assets/images/like.png'
 import likeActive from '../../assets/images/likeActive.png'
-import { Image, TouchableOpacity } from 'react-native'
+import { Dimensions, Image, TouchableOpacity } from 'react-native'
 import motorcycle from '../../assets/images/moto.png'
 import { StoreType } from '../../api/storesApi'
 import { isCurrentTimeInRange } from '../../utils/utils'
 import ImageDisplay from '../ImageDisplay'
+import { LinearGradient } from 'expo-linear-gradient'
+import DeliveryTime from '../DeliveryTime'
 
 type StoresViewerType = {
 	stores: StoreType
@@ -25,8 +27,20 @@ const StoresViewer = ({
 	onPressSaveFavoriteStore,
 	onPressRemoveFavoriteStore,
 }: StoresViewerType) => {
+	const { width } = Dimensions.get('window')
+	const productWidth = width - 20
 	return (
-		<TouchableOpacity onPress={onPress} style={{ alignItems: 'center', flex: 1 }}>
+		<TouchableOpacity
+			onPress={onPress}
+			style={{
+				flex: 1,
+				borderRadius: 16,
+				height: 223,
+				minWidth: productWidth,
+				maxWidth: productWidth,
+				marginBottom: 20,
+			}}
+		>
 			<Box
 				backgroundColor={'rgba(203,203,203,0.27)'}
 				borderRadius={16}
@@ -36,24 +50,8 @@ const StoresViewer = ({
 				borderColor={colors.green}
 			>
 				<Box>
-					<Box
-						position={'absolute'}
-						p={1.5}
-						top={2}
-						left={2}
-						borderWidth={1}
-						zIndex={10}
-						borderColor={colors.green}
-						flexDirection={'row'}
-						borderRadius={16}
-						alignItems={'center'}
-						justifyContent={'center'}
-						backgroundColor={colors.black}
-					>
-						<Image source={motorcycle} style={{ width: 26, height: 17 }} alt={'moto'} />
-						<Text ml={2} color={colors.white} fontSize={13} fontWeight={'500'}>
-							{stores?.deliveryTime} min
-						</Text>
+					<Box position={'absolute'} top={2} left={2} zIndex={10}>
+						<DeliveryTime time={stores.deliveryTime} fontSizeText={13} />
 					</Box>
 					<Box position={'absolute'} p={1} zIndex={10} top={2} right={2}>
 						<TouchableOpacity
@@ -66,16 +64,19 @@ const StoresViewer = ({
 							/>
 						</TouchableOpacity>
 					</Box>
-					<ImageDisplay
-						alt={'image-store'}
-						borderRadius={16}
-						source={{ uri: stores.image }}
-						style={{
-							width: 351,
-							height: 200,
-							borderRadius: 16,
-						}}
-					/>
+					<Box width={productWidth} h={170}>
+						<ImageDisplay
+							alt={'image-store'}
+							borderRadius={16}
+							source={{ uri: stores.image }}
+							style={{
+								flex: 1,
+								width: '100%',
+								height: '100%',
+								borderRadius: 16,
+							}}
+						/>
+					</Box>
 					<Box
 						position={'absolute'}
 						bottom={0}

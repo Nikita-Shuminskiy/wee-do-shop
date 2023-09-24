@@ -159,13 +159,16 @@ const StoreS = observer(({ navigation }: StoreSProps) => {
 								iterationCount="infinite"
 								style={{
 									position: 'absolute',
-									zIndex: 100,
+									zIndex: 2,
 									width: '100%',
 									aspectRatio: 351 / 171,
 									backgroundColor: colors.grayWhite,
 								}}
 							/>
 						)}
+						<Box mt={5} mb={5} zIndex={3} position={'absolute'} left={5}>
+							<ArrowBack goBackPress={onPressGoBack} img={arrowLeftBack} />
+						</Box>
 						<ImageBackground
 							onLoad={() => setIsLoaded(true)}
 							alt={'shop-image'}
@@ -176,19 +179,21 @@ const StoreS = observer(({ navigation }: StoreSProps) => {
 								borderRadius: 16,
 							}}
 						>
-							<Box mt={5} mb={5} position={'absolute'} left={5}>
-								<ArrowBack goBackPress={onPressGoBack} img={arrowLeftBack} />
-							</Box>
 							<Box flex={1} w={'100%'} alignItems={'flex-start'} justifyContent={'center'}>
 								<Box ml={4} mt={5} justifyContent={'flex-start'}>
-									<Text color={colors.white} fontWeight={'700'} fontSize={32}>
+									<Text
+										color={colors.grayLightWhite}
+										style={styles.textWithShadow}
+										fontWeight={'700'}
+										fontSize={32}
+									>
 										{store?.name}
 									</Text>
 								</Box>
-								<Box position={'absolute'} bottom={7} right={2}>
+								<Box position={'absolute'} bottom={2} right={2}>
 									<Button
-										backgroundColor={'transparent'}
-										styleContainer={{ borderWidth: 1, borderColor: colors.white }}
+										backgroundColor={colors.grayDarkLight}
+										styleText={{ color: colors.white, ...styles.textWithShadow }}
 										onPress={onPressAboutStore}
 										title={'About store'}
 									/>
@@ -214,6 +219,7 @@ const StoreS = observer(({ navigation }: StoreSProps) => {
 								contentContainerStyle={!store.subCategories?.length && styles.contentContainerOrder}
 								ListEmptyComponent={() => renderEmptyContainer(0, '')}
 								horizontal={true}
+								showsHorizontalScrollIndicator={false}
 								showsVerticalScrollIndicator={false}
 							/>
 						</Box>
@@ -301,6 +307,12 @@ const StoreS = observer(({ navigation }: StoreSProps) => {
 	)
 })
 const styles = StyleSheet.create({
+	textWithShadow: {
+		fontWeight: 'bold',
+		textShadowColor: 'black', // Цвет тени
+		textShadowOffset: { width: 2, height: 2 },
+		textShadowRadius: 5,
+	},
 	contentContainerOrder: {
 		flex: 1,
 		width: '100%',
