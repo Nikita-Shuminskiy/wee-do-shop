@@ -168,7 +168,7 @@ const CartS = observer(({ navigation }: CartSProps) => {
 							</Text>
 						</Box>
 						<Box mt={2} mb={2}>
-							<Accordions userId={user._id} />
+							<Accordions addedPromoCode={promoCode} userId={user._id} />
 						</Box>
 						<Box>
 							<TextInput

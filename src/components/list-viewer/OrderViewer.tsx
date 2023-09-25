@@ -26,8 +26,8 @@ const OrderViewer = memo(({ order, onPressDetails, onPressRepeat }: OrderViewerP
 	const navigation = useNavigation<any>()
 
 	const onPressCheckStatus = () => {
-		OrderService.getOrder(order._id)
-		setStatus(order.status)
+		/*OrderService.getOrder(order._id)
+		setStatus(order.status)*/
 		navigation.navigate(routerConstants.ORDER_STATUSES)
 	}
 	const isCompletedStatuses = order.status === StatusType.Completed

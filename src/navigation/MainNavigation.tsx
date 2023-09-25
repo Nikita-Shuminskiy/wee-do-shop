@@ -11,6 +11,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons'
 import HistoryS from '../screen/mainScreens/HistoryS'
 import CartS from '../screen/mainScreens/Cart/CartS'
 import OrdersS from '../screen/mainScreens/OrdersS'
+import { Platform } from 'react-native'
 
 const TabMainStack = createBottomTabNavigator()
 
@@ -25,7 +26,7 @@ const MainNavigation = ({ navigation, route }) => {
 					width: '100%',
 					borderWidth: 0,
 					elevation: 0,
-					height: 65,
+					height: Platform.OS === 'ios' ? '10%' : '8%',
 					backgroundColor: colors.white,
 					display: keyboardStatus ? 'none' : 'flex',
 				},

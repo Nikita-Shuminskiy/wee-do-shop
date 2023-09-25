@@ -11,6 +11,7 @@ import { isCurrentTimeInRange } from '../../utils/utils'
 import ImageDisplay from '../ImageDisplay'
 import { LinearGradient } from 'expo-linear-gradient'
 import DeliveryTime from '../DeliveryTime'
+import { getInfoAboutStoreWorkTime } from './utils'
 
 type StoresViewerType = {
 	stores: StoreType
@@ -29,6 +30,8 @@ const StoresViewer = ({
 }: StoresViewerType) => {
 	const { width } = Dimensions.get('window')
 	const productWidth = width - 20
+
+	const { isWilOpen, currentTimeInRangeText } = getInfoAboutStoreWorkTime(stores?.workingHours)
 	return (
 		<TouchableOpacity
 			onPress={onPress}
@@ -81,14 +84,14 @@ const StoresViewer = ({
 						position={'absolute'}
 						bottom={0}
 						right={0}
-						backgroundColor={colors.green}
+						backgroundColor={isWilOpen ? colors.red : colors.green}
 						borderRadius={16}
 						borderRightRadius={0}
 						paddingY={1}
 						paddingX={3}
 					>
 						<Text color={colors.white} fontWeight={'600'} fontSize={14}>
-							{isCurrentTimeInRange(stores?.workingHours, true)}
+							{currentTimeInRangeText}
 						</Text>
 					</Box>
 				</Box>

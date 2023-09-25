@@ -8,8 +8,8 @@ import Collapsible from 'react-native-collapsible'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import TextInput from '../../../components/TextInput'
 import { Feather } from '@expo/vector-icons'
-import AuthStore from "../../../store/AuthStore/auth-store";
-import CartStore from "../../../store/CartStore/cart-store";
+import AuthStore from '../../../store/AuthStore/auth-store'
+import CartStore from '../../../store/CartStore/cart-store'
 
 const PromoCode = ({ onPress, namePromoCode }) => {
 	return (
@@ -40,8 +40,8 @@ const PromoCode = ({ onPress, namePromoCode }) => {
 	)
 }
 
-export const Accordions = ({userId}) => {
-	const {sendPromoCode} = CartStore
+export const Accordions = ({ userId, addedPromoCode }) => {
+	const { sendPromoCode, setPromoCode: setAddedPromo } = CartStore
 	const [isCollapsed, setIsCollapsed] = useState(true)
 	const [loading, setLoading] = useState(false)
 	const [promoCode, setPromoCode] = useState('')
@@ -53,22 +53,29 @@ export const Accordions = ({userId}) => {
 	}
 
 	const handlePromoCodeChange = (text) => {
+		if (addedPromoCode?.key) {
+			setAddedPromo(null)
+			setPromoFromServer('')
+		}
 		setErrorText('')
 		setPromoCode(text)
 	}
 
 	const savePromoCode = () => {
-		if(!promoCode.trim()) return
+		if (!promoCode.trim()) return
 		setErrorText('')
 		setLoading(true)
-		sendPromoCode(promoCode.trim(), userId).then(data => {
-			setPromoFromServer(data.key)
-			toggleAccordion()
-		}).catch((error) => {
-			setErrorText(error?.response?.data.message)
-		}).finally(()=> {
-			setLoading(false)
-		})
+		sendPromoCode(promoCode.trim(), userId)
+			.then((data) => {
+				setPromoFromServer(data.key)
+				toggleAccordion()
+			})
+			.catch((error) => {
+				setErrorText(error?.response?.data.message)
+			})
+			.finally(() => {
+				setLoading(false)
+			})
 	}
 
 	return (

@@ -7,7 +7,7 @@ import CourierOrders from '../screen/courierScreens/CourierOrders'
 import TakenCourierOrdersS from '../screen/courierScreens/TakenCourierOrdersS'
 import CompletedOrdersS from '../screen/courierScreens/CompletedOrdersS'
 import ProfileCourierS from '../screen/courierScreens/ProfileCourierS'
-import { Image } from 'react-native'
+import { Image, Platform } from 'react-native'
 import userImg from '../assets/images/courierImages/bottomImg/user.png'
 import userActiveImg from '../assets/images/courierImages/bottomImg/user-active.png'
 
@@ -33,7 +33,7 @@ const MainCourierNavigation = ({ navigation, route }) => {
 					width: '100%',
 					borderWidth: 0,
 					elevation: 0,
-					height: 55,
+					height: Platform.OS === 'ios' ? '10%' : '8%',
 					backgroundColor: colors.white,
 					display: keyboardStatus ? 'none' : 'flex',
 				},

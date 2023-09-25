@@ -36,6 +36,7 @@ const ProductViewer = ({
 		saveProductToCart(valueProduct)
 	}
 	const formattedEffectName = product.effect.charAt(0).toUpperCase() + product.effect.slice(1)
+	console.log(!!product.effect)
 	return (
 		<Pressable
 			style={{
@@ -48,33 +49,34 @@ const ProductViewer = ({
 		>
 			<Box style={styles.shadow} borderRadius={16} alignItems={'center'} w={'100%'} mb={5}>
 				<Box>
-					<Box w={20} position={'absolute'} p={1} top={2} left={0} zIndex={10}>
-						<LinearGradient
-							colors={['#5AB0FF', '#BF38FF']}
-							start={[0, 0.5]}
-							end={[1, 0.5]}
-							style={{
-								flex: 1,
-								borderRadius: 10,
-								paddingVertical: 2,
-								paddingHorizontal: 10,
-								alignItems: 'center',
-								justifyContent: 'center',
-							}}
-						>
-							<Text
-								color={colors.white}
-								/*style={styles.textWithShadow}
-								borderRadius={16}*/
-								fontSize={10}
-								fontWeight={'600'}
-								textAlign={'center'}
+					{!!product.effect && (
+						<Box w={20} position={'absolute'} p={1} top={2} left={0} zIndex={10}>
+							<LinearGradient
+								colors={['#5AB0FF', '#BF38FF']}
+								start={[0, 0.5]}
+								end={[1, 0.5]}
+								style={{
+									flex: 1,
+									borderRadius: 10,
+									paddingVertical: 2,
+									paddingHorizontal: 10,
+									alignItems: 'center',
+									justifyContent: 'center',
+								}}
 							>
-								{formattedEffectName}
-							</Text>
-						</LinearGradient>
-					</Box>
-
+								<Text
+									color={colors.white}
+									/*style={styles.textWithShadow}
+                  borderRadius={16}*/
+									fontSize={10}
+									fontWeight={'600'}
+									textAlign={'center'}
+								>
+									{formattedEffectName}
+								</Text>
+							</LinearGradient>
+						</Box>
+					)}
 					<Box width={productWidth - 10} h={170}>
 						<ImageDisplay
 							alt={'image-store'}

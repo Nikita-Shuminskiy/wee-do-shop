@@ -28,7 +28,7 @@ export const getCurrentUntilTimeStoreTo = (workingHoursStores: WorkingHoursType)
 	return utilTimeStore
 }
 
-export function isCurrentTimeInRange(workingHoursStores: WorkingHoursType, isInfo = false) {
+export function isCurrentTimeInRange(workingHoursStores: WorkingHoursType, isInfo = false): any {
 	if (!workingHoursStores) return ''
 	const date = new Date()
 	const currentDayName = getCurrentDayName()
@@ -45,8 +45,8 @@ export function isCurrentTimeInRange(workingHoursStores: WorkingHoursType, isInf
 
 	// Находим индекс текущего дня недели
 	const currentDayIndex = daysOfWeek.indexOf(currentDayName as keyof WorkingHoursType)
-	const nextDayIndex = (currentDayIndex + 1) % 7; // Вычисляем индекс следующего дня, учитывая, что неделя состоит из 7 дней
-	const nextDayName = daysOfWeek[nextDayIndex];
+	const nextDayIndex = (currentDayIndex + 1) % 7 // Вычисляем индекс следующего дня, учитывая, что неделя состоит из 7 дней
+	const nextDayName = daysOfWeek[nextDayIndex]
 
 	const currentHourWorkStores = workingHoursStores[currentDayName]
 	if (!currentHourWorkStores) {

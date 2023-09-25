@@ -1,148 +1,174 @@
-import React, {useEffect, useState} from 'react';
-import {BaseWrapperComponent} from "../../components/baseWrapperComponent";
-import {Box, Text} from "native-base";
-import {StyleSheet, TouchableOpacity, View} from "react-native";
-import MapView, {Marker, PROVIDER_GOOGLE} from "react-native-maps";
-import Button from "../../components/Button";
-import {colors} from "../../assets/colors/colors";
-import {getFormattedAddress} from "../../components/MapViews/utils";
-import {useNavigation} from "@react-navigation/native";
-import {observer} from "mobx-react-lite";
-import CourierOrderStore from "../../store/CourierOrderStore/courier-order-store";
-import rootStore from "../../store/RootStore/root-store";
-import {StatusType} from "../../api/ordersApi";
-import {routerConstants} from "../../constants/routerConstants";
-import {splittingWord} from "../../utils/utils";
-import {AntDesign} from "@expo/vector-icons";
-import OrderUserInfo from "../../components/OrderUserInfo";
+import React, { useEffect, useState } from 'react'
+import { BaseWrapperComponent } from '../../components/baseWrapperComponent'
+import { Box, Text } from 'native-base'
+import { StyleSheet, TouchableOpacity, View } from 'react-native'
+import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps'
+import Button from '../../components/Button'
+import { colors } from '../../assets/colors/colors'
+import { getFormattedAddress } from '../../components/MapViews/utils'
+import { useNavigation } from '@react-navigation/native'
+import { observer } from 'mobx-react-lite'
+import CourierOrderStore from '../../store/CourierOrderStore/courier-order-store'
+import rootStore from '../../store/RootStore/root-store'
+import { StatusType } from '../../api/ordersApi'
+import { routerConstants } from '../../constants/routerConstants'
+import { splittingWord } from '../../utils/utils'
+import { AntDesign } from '@expo/vector-icons'
+import OrderUserInfo from '../../components/OrderUserInfo'
 
 type CourierPickOrderProps = {
-    route: any
-    navigation: any
+	route: any
+	navigation: any
 }
-const CourierPickOrder = observer(({route, navigation}: CourierPickOrderProps) => {
-    const isCheckOrderIfo = route.params?.checkInfo
-    const {selectedOrder, connectToSocketOrder} = CourierOrderStore
-    const {CourierOrderService} = rootStore
-    const [showUserInfoModal, setShowUserInfoModal] = useState(false)
-    const [coords, setCoords] = useState({
-        latitude: selectedOrder.user.address?.location.coordinates[1],
-        longitude: selectedOrder.user.address?.location.coordinates[0],
-        latitudeDelta: 0.0922,
-        longitudeDelta: 0.0421,
-    });
-    const isStatusOnTheWay = selectedOrder?.status === StatusType.OnTheWay
+const CourierPickOrder = observer(({ route, navigation }: CourierPickOrderProps) => {
+	const isCheckOrderIfo = route.params?.checkInfo
+	const { selectedOrder, connectToSocketOrder } = CourierOrderStore
+	const { CourierOrderService } = rootStore
+	const [showUserInfoModal, setShowUserInfoModal] = useState(false)
+	const [coords, setCoords] = useState({
+		latitude: selectedOrder.user.address?.location.coordinates[1],
+		longitude: selectedOrder.user.address?.location.coordinates[0],
+		latitudeDelta: 0.0922,
+		longitudeDelta: 0.0421,
+	})
+	const isStatusOnTheWay = selectedOrder?.status === StatusType.OnTheWay
 
-    const onPressPickOrder = (status: StatusType) => {
-        CourierOrderService.updateOrderStatus(status)
-        if (status === StatusType.Completed) {
-            navigation.navigate(routerConstants.COURIER_COMPLETED_ORDERS)
-        }
-    };
+	const onPressPickOrder = (status: StatusType) => {
+		CourierOrderService.updateOrderStatus(status)
+		if (status === StatusType.Completed) {
+			navigation.navigate(routerConstants.COURIER_COMPLETED_ORDERS)
+		}
+	}
 
-    useEffect(() => {
-        if (isStatusOnTheWay) {
-            setCoords({
-                ...coords,
-                latitude: selectedOrder.user.address?.location.coordinates[1],
-                longitude: selectedOrder.user.address?.location.coordinates[0]
-            })
-        } else {
-            setCoords({
-                ...coords,
-                latitude: selectedOrder.store?.location.coordinates[1],
-                longitude: selectedOrder.store?.location.coordinates[0]
-            })
-        }
-    }, [isStatusOnTheWay])
+	useEffect(() => {
+		if (isStatusOnTheWay) {
+			setCoords({
+				...coords,
+				latitude: selectedOrder.user.address?.location.coordinates[1],
+				longitude: selectedOrder.user.address?.location.coordinates[0],
+			})
+		} else {
+			setCoords({
+				...coords,
+				latitude: selectedOrder.store?.location.coordinates[1],
+				longitude: selectedOrder.store?.location.coordinates[0],
+			})
+		}
+	}, [isStatusOnTheWay])
 
-
-    const formattedAddressStore = getFormattedAddress({
-        fullAddress: selectedOrder.store?.address,
-        location: selectedOrder.store?.location
-    })
-    const formattedAddressUser = getFormattedAddress(selectedOrder?.user?.address)
-    useEffect(() => {
-        connectToSocketOrder()
-    }, [])
-    const onShowUserInfoModal = () => {
-        setShowUserInfoModal(true)
-    }
-    if (!coords?.latitude) {
-        return <View style={styles.container}/>;
-    }
-    return (
-        <>
-            <BaseWrapperComponent isKeyboardAwareScrollView={true}>
-                <Box paddingX={5} w={'100%'} alignItems={'flex-start'} flex={1} justifyContent={'space-between'}>
-                    <Box alignItems={'center'} w={'100%'} flexDirection={'row'} mt={2} justifyContent={'space-between'}>
-                        <Box alignItems={'flex-start'}>
-                            <Text fontSize={28}
-                                  fontWeight={'700'}>{isStatusOnTheWay ? 'Deliver order here' : 'Pick up order here'}:</Text>
-                            <Text fontSize={18} maxW={300}
-                                  fontWeight={'500'}>{isStatusOnTheWay ? formattedAddressUser : formattedAddressStore}</Text>
-                            <Text color={colors.gray}>Current order status:{' '}<Text
-                                color={colors.black}>{splittingWord(selectedOrder.status)}</Text></Text>
-                        </Box>
-                        <TouchableOpacity onPress={onShowUserInfoModal}>
-                            <Box justifyContent={'center'} alignItems={'center'}>
-                                <AntDesign name="infocirlceo" size={24} color={colors.gray}/>
-                                <Text color={colors.gray}>Order info</Text>
-                            </Box>
-                        </TouchableOpacity>
-                    </Box>
-                    <Box w={'100%'} borderRadius={16} mt={2} mb={2} flexGrow={1} h={300}>
-                        <MapView
-                            style={{
-                                width: '100%',
-                                height: '100%',
-                                borderRadius: 20,
-                            }}
-                            focusable={true}
-                            region={coords}
-                            provider={PROVIDER_GOOGLE}
-                        >
-
-                            <Marker
-                                coordinate={{
-                                    latitude: coords.latitude,
-                                    longitude: coords.longitude,
-                                }}
-                                focusable={true}
-                                title={isStatusOnTheWay ? formattedAddressUser : selectedOrder.store?.name}
-                            />
-                        </MapView>
-                    </Box>
-                    <Box w={'100%'}>
-                        {
-                            isCheckOrderIfo ?
-                                <Button styleContainer={styles.styleBtnContainer} backgroundColor={colors.green}
-                                        onPress={() => {
-                                            navigation.goBack()
-                                        }} title={'Exit'}/> :
-                                <Button styleContainer={styles.styleBtnContainer} backgroundColor={colors.green}
-                                        onPress={() => {
-                                            onPressPickOrder(isStatusOnTheWay ? StatusType.Completed : StatusType.OnTheWay)
-                                        }} title={isStatusOnTheWay ? 'Order delivered' : 'Order picked up'}/>
-                        }
-                    </Box>
-                </Box>
-            </BaseWrapperComponent>
-            {showUserInfoModal && <OrderUserInfo show={showUserInfoModal} onClose={() => setShowUserInfoModal(false)}
-                                                 order={selectedOrder}/>}
-        </>
-    );
-});
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-    },
-    styleBtnContainer: {
-        marginVertical: 10
-    }
-
+	const formattedAddressStore = getFormattedAddress({
+		fullAddress: selectedOrder.store?.address,
+		location: selectedOrder.store?.location,
+	})
+	const formattedAddressUser = getFormattedAddress(selectedOrder?.user?.address)
+	useEffect(() => {
+		connectToSocketOrder()
+	}, [])
+	const onShowUserInfoModal = () => {
+		setShowUserInfoModal(true)
+	}
+	if (!coords?.latitude) {
+		return <View style={styles.container} />
+	}
+	return (
+		<>
+			<BaseWrapperComponent isKeyboardAwareScrollView={true}>
+				<Box
+					paddingX={5}
+					w={'100%'}
+					alignItems={'flex-start'}
+					flex={1}
+					justifyContent={'space-between'}
+				>
+					<Box
+						alignItems={'center'}
+						w={'100%'}
+						flexDirection={'row'}
+						mt={2}
+						justifyContent={'space-between'}
+					>
+						<Box alignItems={'flex-start'}>
+							<Text fontSize={28} fontWeight={'700'}>
+								{isStatusOnTheWay ? 'Deliver order here' : 'Pick up order here'}:
+							</Text>
+							<Text fontSize={18} maxW={250} fontWeight={'500'}>
+								{isStatusOnTheWay ? formattedAddressUser : formattedAddressStore}
+							</Text>
+							<Text color={colors.gray}>
+								Current order status:{' '}
+								<Text color={colors.black}>{splittingWord(selectedOrder.status)}</Text>
+							</Text>
+						</Box>
+						<TouchableOpacity onPress={onShowUserInfoModal}>
+							<Box justifyContent={'center'} alignItems={'center'}>
+								<AntDesign name="infocirlceo" size={24} color={colors.gray} />
+								<Text color={colors.gray}>Order info</Text>
+							</Box>
+						</TouchableOpacity>
+					</Box>
+					<Box w={'100%'} borderRadius={16} mt={2} mb={2} flexGrow={1} h={300}>
+						<MapView
+							style={{
+								width: '100%',
+								height: '100%',
+								borderRadius: 20,
+							}}
+							focusable={true}
+							region={coords}
+							provider={PROVIDER_GOOGLE}
+						>
+							<Marker
+								coordinate={{
+									latitude: coords.latitude,
+									longitude: coords.longitude,
+								}}
+								focusable={true}
+								title={isStatusOnTheWay ? formattedAddressUser : selectedOrder.store?.name}
+							/>
+						</MapView>
+					</Box>
+					<Box w={'100%'}>
+						{isCheckOrderIfo ? (
+							<Button
+								styleContainer={styles.styleBtnContainer}
+								backgroundColor={colors.green}
+								onPress={() => {
+									navigation.goBack()
+								}}
+								title={'Exit'}
+							/>
+						) : (
+							<Button
+								styleContainer={styles.styleBtnContainer}
+								backgroundColor={colors.green}
+								onPress={() => {
+									onPressPickOrder(isStatusOnTheWay ? StatusType.Completed : StatusType.OnTheWay)
+								}}
+								title={isStatusOnTheWay ? 'Order delivered' : 'Order picked up'}
+							/>
+						)}
+					</Box>
+				</Box>
+			</BaseWrapperComponent>
+			{showUserInfoModal && (
+				<OrderUserInfo
+					show={showUserInfoModal}
+					onClose={() => setShowUserInfoModal(false)}
+					order={selectedOrder}
+				/>
+			)}
+		</>
+	)
 })
-export default CourierPickOrder;
+const styles = StyleSheet.create({
+	container: {
+		flex: 1,
+	},
+	styleBtnContainer: {
+		marginVertical: 10,
+	},
+})
+export default CourierPickOrder
 /*<Marker
     coordinate={{
         latitude: 27.525117,

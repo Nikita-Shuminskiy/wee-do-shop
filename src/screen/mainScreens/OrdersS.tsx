@@ -15,6 +15,7 @@ import PopUpOrderDetails from '../../components/modalPopUp/PopUpOrderDetails'
 import { routerConstants } from '../../constants/routerConstants'
 import cartStore from '../../store/CartStore/cart-store'
 import { renderEmptyContainer } from '../../components/list-viewer/empty-list'
+import { getTotalSumProductsCart } from '../../utils/utilsCart'
 
 type OrdersSProps = {
 	navigation: NavigationProp<ParamListBase>
@@ -64,11 +65,12 @@ const OrdersS = observer(({ navigation, route }: OrdersSProps) => {
 		const getProductsForOrder = item.products.map((product) => {
 			return { amount: product.amount, ...product.product }
 		})
+		const gettotalSum = getTotalSumProductsCart(getProductsForOrder)
 		setToCartStore({
 			idStore: item.store._id,
 			products: getProductsForOrder,
 			storeName: item.store.name,
-			totalSum: item.totalPrice,
+			totalSum: gettotalSum,
 			deliviryTime: item.store.deliveryTime,
 		})
 		navigation.navigate(routerConstants.CART)

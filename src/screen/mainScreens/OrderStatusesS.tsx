@@ -196,7 +196,7 @@ const OrderStatusesS = observer(({ navigation }: OrderStatusesSProps) => {
 				if (data?.courier) {
 					setCourierToOrder(data.courier)
 				}
-
+				console.log(data.status, 'socket')
 				setStatus(data.status)
 			}
 		)
