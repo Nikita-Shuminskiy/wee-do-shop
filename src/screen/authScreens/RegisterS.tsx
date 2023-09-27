@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { StyleSheet, TextInput, TouchableOpacity } from 'react-native'
 import { NavigationProp, ParamListBase } from '@react-navigation/native'
 import { BaseWrapperComponent } from '../../components/baseWrapperComponent'
-import { Box, Image, Text } from 'native-base'
+import { Box, Checkbox, Image, Text } from 'native-base'
 import CustomInput from '../../components/TextInput'
 import { AntDesign, MaterialCommunityIcons } from '@expo/vector-icons'
 import logoImg from '../../assets/images/logoWeeDo.png'
@@ -22,6 +22,7 @@ import AuthStore, { AddressType } from '../../store/AuthStore/auth-store'
 import { getFormattedAddress } from '../../components/MapViews/utils'
 import { createAlert } from '../../components/Alert'
 import { usePermissionsPushGeo } from '../../utils/hook/usePermissionsPushGeo'
+import { color } from 'native-base/lib/typescript/theme/styled-system'
 
 export type CountryData = {
 	callingCode: string[]
@@ -53,6 +54,7 @@ export type UserRegisterDataType = {
 	firstName: string
 	lastName: string
 	phone: string
+	privacyPolicyIsVerified: boolean
 	address: AddressType
 	role: RoleType
 }
@@ -60,9 +62,16 @@ const RegisterS = observer(({ navigation }: LoginSProps) => {
 	const { AuthStoreService } = rootStore
 	const { currentLocation, setLocation } = AuthStore
 	const [isValidPhone, setIsValidPhone] = useState(false)
+	const [checkAge, setAgeCheck] = useState(false)
+	const [isErrorCheckAge, setCheckError] = useState(false)
 	const [countryCode, setCountryCode] = useState<CountryData>(countryDataDefault)
 	const { askLocationPermissionHandler } = usePermissionsPushGeo()
 	const onSubmit = (values: UserRegisterDataType) => {
+		if (!checkAge) {
+			setCheckError(true)
+			setSubmitting(false)
+			return
+		}
 		if (!currentLocation?.location?.coordinates[0]) {
 			createAlert({
 				title: 'Message',
@@ -103,6 +112,7 @@ const RegisterS = observer(({ navigation }: LoginSProps) => {
 			address: {} as AddressType,
 			phone: '',
 			role: RoleType.Customer,
+			privacyPolicyIsVerified: true,
 		},
 		onSubmit: onSubmit,
 		validateOnChange: false,
@@ -155,7 +165,6 @@ const RegisterS = observer(({ navigation }: LoginSProps) => {
 		setIsValidPhone(true)
 		setCountryCode(country)
 	}
-
 	return (
 		<BaseWrapperComponent isKeyboardAwareScrollView={true}>
 			<Box alignItems={'center'}>
@@ -287,6 +296,29 @@ const RegisterS = observer(({ navigation }: LoginSProps) => {
 							})
 						}}
 					/>
+				</Box>
+				<Box mt={5} w={'100%'} alignItems={'flex-start'}>
+					<TouchableOpacity>
+						<Box flexDirection={'row'} alignItems={'center'}>
+							<Checkbox
+								accessibilityLabel={'111'}
+								value="info"
+								onChange={(e) => {
+									setCheckError(!e)
+									setAgeCheck(e)
+								}}
+								colorScheme="info"
+							/>
+							<Text fontSize={14} fontWeight={'500'} ml={1}>
+								I'm over 20 years old.
+							</Text>
+						</Box>
+					</TouchableOpacity>
+					{isErrorCheckAge && (
+						<Text fontSize={14} color={colors.red} fontWeight={'500'} ml={1}>
+							You must be at least 20 years old
+						</Text>
+					)}
 				</Box>
 				<Box w={'100%'} mt={5} mb={5}>
 					<Button
