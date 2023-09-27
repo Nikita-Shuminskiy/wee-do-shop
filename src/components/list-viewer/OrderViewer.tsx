@@ -9,7 +9,6 @@ import { formatProductPrice } from '../MapViews/utils'
 import { useNavigation } from '@react-navigation/native'
 import { routerConstants } from '../../constants/routerConstants'
 import orderStore from '../../store/OrderStore/order-store'
-import { useOrderDataStatus } from '../../utils/hook/useOrderDataStatus'
 import rootStore from '../../store/RootStore/root-store'
 
 type OrderViewerProps = {
@@ -49,7 +48,13 @@ const OrderViewer = memo(({ order, onPressDetails, onPressRepeat }: OrderViewerP
 				<Text
 					fontWeight={'600'}
 					fontSize={14}
-					color={order.status === StatusType.Canceled ? colors.red : colors.green}
+					color={
+						order.status === StatusType.Canceled
+							? colors.red
+							: order.status === StatusType.Completed
+							? colors.green
+							: '#556c60'
+					}
 				>
 					{splittingWord(order.status)}
 				</Text>

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { memo } from 'react'
 import { Box, Text } from 'native-base'
 import { colors } from '../../assets/colors/colors'
 import { Image, StyleSheet, TouchableOpacity } from 'react-native'
@@ -26,7 +26,7 @@ const SubCategoriesViewer = <T extends { name: string; image?: string }>({
 					<>
 						<Image
 							resizeMode={'center'}
-							style={{ width: 50, height: 50 }}
+							style={{ width: 65, height: 65 }}
 							source={{ uri: subCategory.image }}
 						/>
 						<Text

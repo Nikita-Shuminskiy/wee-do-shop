@@ -113,7 +113,7 @@ const renderDescriptionForStatuses = (status: StatusType, textReason?: string) =
 					<Text fontSize={24} fontWeight={'600'}>
 						Order {splittingWord(status)}
 					</Text>
-					<Text color={colors.gray}>The Store received the order, confirmation confirmation</Text>
+					<Text color={colors.gray}>The Store received the order, confirmation</Text>
 				</>
 			)
 		case StatusType.Confirmed:
@@ -232,7 +232,9 @@ const OrderStatusesS = observer(({ navigation }: OrderStatusesSProps) => {
 
 					<Box alignItems={'center'}>
 						<TouchableOpacity onPress={onPressClose}>
-							<Image alt={'close'} source={closeImg} />
+							<Text fontSize={16} borderBottomWidth={1} fontWeight={'500'}>
+								Go to history
+							</Text>
 						</TouchableOpacity>
 					</Box>
 				</Box>
@@ -249,14 +251,19 @@ const OrderStatusesS = observer(({ navigation }: OrderStatusesSProps) => {
 						{renderHeaderDescriptionForStatuses(statusOrder)}
 					</Box>
 				)}
-				<Box mt={5} alignItems={'center'}>
+				<Box mt={3} alignItems={'center'}>
 					{renderDescriptionForStatuses(statusOrder, rejectReason)}
 				</Box>
-				<Box mt={5} alignItems={'center'} justifyContent={'center'}>
-					<Image alt={'img'} source={renderImgForStatuses(statusOrder)} />
+				<Box mt={2} alignItems={'center'} justifyContent={'center'}>
+					<Image
+						alt={'img'}
+						resizeMode={'contain'}
+						style={{ width: 200, height: 300 }}
+						source={renderImgForStatuses(statusOrder)}
+					/>
 				</Box>
 				{!isCanceled && (
-					<Box flexDirection={'row'} alignItems={'center'} justifyContent={'space-evenly'} mt={5}>
+					<Box flexDirection={'row'} alignItems={'center'} justifyContent={'space-evenly'} mt={2}>
 						<OrderStatusBar status={statusOrder} />
 					</Box>
 				)}

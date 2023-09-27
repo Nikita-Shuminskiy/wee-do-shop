@@ -115,7 +115,7 @@ const HomeS = observer(({ navigation }: HomeSProps) => {
 							renderItem={bannersView}
 						/>
 					</Box>
-					<Box mt={3} mb={3} maxHeight={20} w={'100%'} flex={1}>
+					<Box mt={3} mb={3} w={'100%'} flex={1}>
 						<FlatList
 							data={categories}
 							renderItem={categoriesViews}

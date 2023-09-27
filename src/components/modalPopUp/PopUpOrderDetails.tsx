@@ -56,7 +56,7 @@ const orderViews = ({ item }: { item: { amount: number; product: ProductType } }
 }
 type PopUpOrderDetailsProps = {
 	show: boolean
-	isFromCourier: boolean
+	isFromCourier?: boolean
 	order: ApiOrderType
 	onClose: () => void
 	onPressRepeat?: (order: ApiOrderType) => void
