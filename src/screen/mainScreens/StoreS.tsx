@@ -29,9 +29,9 @@ type StoreSProps = {
 const StoreS = observer(({ navigation }: StoreSProps) => {
 	const { StoresStore, CartStore } = rootStore
 	const { cart, setToCartStore, setPromoCode, addProductToCart, updateProduct } = CartStore
-	const { store, allProductStore, getAndSetAllProduct } = StoresStore
+	const { store, allProductStore, getAndSetAllProduct, chosenSubCategory, setChosenSubCategory } =
+		StoresStore
 	const navigate = useNavigation()
-	//const [currentCartStore, setCurrentCartStore] = useState<CartType>()
 
 	useEffect(() => {
 		const newCart: CartType = {
@@ -47,6 +47,7 @@ const StoreS = observer(({ navigation }: StoreSProps) => {
 		getAndSetAllProduct(store.subCategories)
 		return () => {
 			getAndSetAllProduct([])
+			setChosenSubCategory(null)
 		}
 	}, [])
 
@@ -56,6 +57,13 @@ const StoreS = observer(({ navigation }: StoreSProps) => {
 	const [selectedSubCategory, setSelectedSubCategory] = useState<SubCategoryType | null>()
 	const [selectedProduct, setSelectedProduct] = useState<ProductType>()
 	const [selectedSubCategoryId, setSelectedSubCategoryId] = useState<string>('')
+	useEffect(() => {
+		if (chosenSubCategory) {
+			setSelectedSubCategory(chosenSubCategory)
+			// @ts-ignore
+			setSelectedSubCategoryId(chosenSubCategory?._id)
+		}
+	}, [chosenSubCategory])
 	const currentValueToCartProduct = cart?.products?.find(
 		(product) => product?._id === selectedProduct?._id
 	)
@@ -70,7 +78,6 @@ const StoreS = observer(({ navigation }: StoreSProps) => {
 		setIsShowModalAboutStore(false)
 	}
 	const onPressConfirmButton = () => {
-		//CartStore.setToCartStore(currentCartStore)
 		navigation.navigate(routerConstants.CART)
 	}
 	const onClosePopUpProduct = () => {
@@ -94,7 +101,6 @@ const StoreS = observer(({ navigation }: StoreSProps) => {
 				totalSum: 0,
 				products: [],
 			}
-
 			setToCartStore(newCart)
 			saveProductToCarts(productValue, product)
 		}
@@ -111,8 +117,6 @@ const StoreS = observer(({ navigation }: StoreSProps) => {
 		})
 	}
 	const saveProductValueToCart = (productValue: number) => {
-		console.log(cart?.storeName, 'saveProductValueToCart')
-		console.log(store.name)
 		const checkCartStore = cart?.idStore && cart?.idStore !== store._id
 		if (checkCartStore) {
 			shoppingCartMatching(productValue, selectedProduct)

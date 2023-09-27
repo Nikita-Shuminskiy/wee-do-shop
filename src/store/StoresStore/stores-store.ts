@@ -11,8 +11,18 @@ export class StoresStore {
 	favoriteStores: StoreType[] = [] as StoreType[]
 	allProductStore: ProductType[] = [] as ProductType[]
 	search: string = ''
+	selectedSubCategoryId: string = ''
+	chosenSubCategory: SubCategoryType | null = null
 
 	getAndSetAllProduct(subCategories: SubCategoryType[]) {
+		// @ts-ignore el.category === string
+		const chosenSubCategories = subCategories?.filter(
+			(el) => el.category === this.selectedSubCategoryId
+		)
+		if (chosenSubCategories[0]?.products?.length) {
+			this.setChosenSubCategory(chosenSubCategories[0])
+			return (this.allProductStore = chosenSubCategories[0]?.products)
+		}
 		if (!subCategories?.length) {
 			return (this.allProductStore = [])
 		}
@@ -21,6 +31,10 @@ export class StoresStore {
 				this.allProductStore.push(product)
 			})
 		})
+	}
+
+	setChosenSubCategory(subCategory: SubCategoryType) {
+		this.chosenSubCategory = subCategory
 	}
 
 	async saveFavoriteStore(idUser, idStore: string): Promise<UserType> {
@@ -70,26 +84,35 @@ export class StoresStore {
 		this.search = text
 	}
 
+	setSelectedSubCategoryId(id: string) {
+		this.selectedSubCategoryId = id
+	}
+
 	constructor() {
 		makeObservable(this, {
 			stores: observable,
 			search: observable,
 			allProductStore: observable,
+			chosenSubCategory: observable,
+			selectedSubCategoryId: observable,
 			store: observable,
 			getStores: action,
 			getStore: action,
 			setStore: action,
+			setSelectedSubCategoryId: action,
 			favoriteStores: observable,
 			setFavoriteStore: action,
 			getFavoriteStores: action,
 			deleteFavoriteStore: action,
 			saveFavoriteStore: action,
 			searchStores: action,
+			setChosenSubCategory: action,
 			setStores: action,
 			getAndSetAllProduct: action,
 			setSearch: action,
 		})
 		this.setFavoriteStore = this.setFavoriteStore.bind(this)
+		this.setChosenSubCategory = this.setChosenSubCategory.bind(this)
 		this.setSearch = this.setSearch.bind(this)
 		this.getAndSetAllProduct = this.getAndSetAllProduct.bind(this)
 		this.deleteFavoriteStore = this.deleteFavoriteStore.bind(this)
@@ -97,6 +120,8 @@ export class StoresStore {
 		this.setStores = this.setStores.bind(this)
 		this.searchStores = this.searchStores.bind(this)
 		this.setStore = this.setStore.bind(this)
+		this.setStore = this.setStore.bind(this)
+		this.setSelectedSubCategoryId = this.setSelectedSubCategoryId.bind(this)
 	}
 }
 

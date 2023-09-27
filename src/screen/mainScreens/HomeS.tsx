@@ -25,9 +25,16 @@ type HomeSProps = {
 const HomeS = observer(({ navigation }: HomeSProps) => {
 	const { user, banners } = AuthStore
 	const { StoresService, StoresStore, CategoriesService, CategoriesStore } = rootStore
-	const { stores, setStore, favoriteStores, search, setSearch } = StoresStore
+	const {
+		stores,
+		setStore,
+		favoriteStores,
+		search,
+		setSearch,
+		setSelectedSubCategoryId,
+		selectedSubCategoryId,
+	} = StoresStore
 	const { categories } = CategoriesStore
-	const [selectedSubCategoryId, setSelectedSubCategoryId] = useState<string>('')
 
 	const categoriesViews = ({ item }: { item: CategoryType }) => {
 		const onPressCategory = () => {
