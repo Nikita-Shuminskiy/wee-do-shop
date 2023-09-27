@@ -72,6 +72,17 @@ const OrderCourierViewer = ({
 					)}
 				</Box>
 			)}
+			{isCompletedOrder && (
+				<Box mt={2}>
+					<Button
+						backgroundColor={colors.grayLight}
+						styleText={{ color: colors.black }}
+						styleContainer={styles.containerBtn}
+						onPress={onPressInfoOrder}
+						title={'Order information'}
+					/>
+				</Box>
+			)}
 		</Box>
 	)
 }
@@ -106,4 +117,4 @@ const styles = StyleSheet.create({
 		elevation: 10,
 	},
 })
-export default OrderCourierViewer;
+export default OrderCourierViewer

@@ -18,6 +18,7 @@ export const routerConstants = {
 	USER_UPDATE: 'user-update',
 	FORGOT_PASSWORD: 'forgot-password',
 	RESET_PASSWORD: 'reset-password',
+	NEW_PASSWORD: 'new-password',
 
 	TERM_SERVICE: 'terms-service',
 	LEGAL_INFORMATION: 'legal-information',

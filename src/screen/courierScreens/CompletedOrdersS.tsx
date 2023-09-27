@@ -9,20 +9,11 @@ import { BaseWrapperComponent } from '../../components/baseWrapperComponent'
 import { Box, Text } from 'native-base'
 import { FlatList, RefreshControl, StyleSheet } from 'react-native'
 import { renderEmptyContainer } from '../../components/list-viewer/empty-list'
-import { StatusType } from '../../api/ordersApi'
+import { ApiOrderType, StatusType } from '../../api/ordersApi'
 import Button from '../../components/Button'
 import { colors } from '../../assets/colors/colors'
-import {
-	addDays,
-	addMonths,
-	addWeeks,
-	format,
-	setHours,
-	setMinutes,
-	startOfDay,
-	subDays,
-	subMonths,
-} from 'date-fns'
+import { setHours, setMinutes, startOfDay, subDays, subMonths } from 'date-fns'
+import PopUpOrderDetails from '../../components/modalPopUp/PopUpOrderDetails'
 
 enum PeriodEnum {
 	DAY_1 = '1Day',
@@ -38,6 +29,7 @@ const CompletedOrdersS = observer(({ navigation }: TakenCourierOrdersProps) => {
 	const { takenCourierOrders, setSelectedOrder } = CourierOrderStore
 	const [currentActiveBtn, setCurrentActiveBtn] = useState<PeriodEnum>(PeriodEnum.DAY_1)
 	const [refreshing, setRefreshing] = useState(false)
+
 	const onRefresh = () => {
 		setRefreshing(true)
 		onPressShowHistory(PeriodEnum.DAY_1)
@@ -49,10 +41,15 @@ const CompletedOrdersS = observer(({ navigation }: TakenCourierOrdersProps) => {
 			setSelectedOrder(item)
 			navigation.navigate(routerConstants.COURIER_PICK_ORDER)
 		}
+		const onPressInfoOrder = () => {
+			setSelectedOrder(item)
+			navigation.navigate(routerConstants.COURIER_PICK_ORDER, { checkInfo: true })
+		}
 		return (
 			<OrderCourierViewer
 				isCompletedOrder={true}
-				isMyOrder={true}
+				isMyOrder={false}
+				onPressInfoOrder={onPressInfoOrder}
 				onPressTakeOrder={onPressTakeOrder}
 				order={item}
 			/>
@@ -87,56 +84,63 @@ const CompletedOrdersS = observer(({ navigation }: TakenCourierOrdersProps) => {
 	}
 	const activeBtnStyle = { borderWidth: 1, borderColor: colors.green }
 	return (
-		<BaseWrapperComponent>
-			<Box w={'100%'} flex={1}>
-				<Box alignItems={'center'} mt={2}>
-					<Text fontSize={28} fontWeight={'700'}>
-						Completed order
-					</Text>
-					<Box mt={2} flexDirection={'row'} alignItems={'center'} justifyContent={'space-between'}>
-						<Box>
-							<Button
-								styleText={{ color: colors.black }}
-								backgroundColor={colors.grayLight}
-								styleContainer={currentActiveBtn === PeriodEnum.DAY_1 && activeBtnStyle}
-								onPress={() => onPressShowHistory(PeriodEnum.DAY_1)}
-								title={'1 day'}
-							/>
-						</Box>
-						<Box ml={1}>
-							<Button
-								styleText={{ color: colors.black }}
-								backgroundColor={colors.grayLight}
-								styleContainer={currentActiveBtn === PeriodEnum.DAYS_7 && activeBtnStyle}
-								onPress={() => onPressShowHistory(PeriodEnum.DAYS_7)}
-								title={'7 days'}
-							/>
-						</Box>
-						<Box ml={1}>
-							<Button
-								styleText={{ color: colors.black }}
-								backgroundColor={colors.grayLight}
-								styleContainer={currentActiveBtn === PeriodEnum.MONTH_1 && activeBtnStyle}
-								onPress={() => onPressShowHistory(PeriodEnum.MONTH_1)}
-								title={'1 month'}
-							/>
+		<>
+			<BaseWrapperComponent>
+				<Box w={'100%'} flex={1}>
+					<Box alignItems={'center'} mt={2}>
+						<Text fontSize={28} fontWeight={'700'}>
+							Completed orders
+						</Text>
+						<Box
+							mt={2}
+							flexDirection={'row'}
+							alignItems={'center'}
+							justifyContent={'space-between'}
+						>
+							<Box>
+								<Button
+									styleText={{ color: colors.black }}
+									backgroundColor={colors.grayLight}
+									styleContainer={currentActiveBtn === PeriodEnum.DAY_1 && activeBtnStyle}
+									onPress={() => onPressShowHistory(PeriodEnum.DAY_1)}
+									title={'1 day'}
+								/>
+							</Box>
+							<Box ml={1}>
+								<Button
+									styleText={{ color: colors.black }}
+									backgroundColor={colors.grayLight}
+									styleContainer={currentActiveBtn === PeriodEnum.DAYS_7 && activeBtnStyle}
+									onPress={() => onPressShowHistory(PeriodEnum.DAYS_7)}
+									title={'7 days'}
+								/>
+							</Box>
+							<Box ml={1}>
+								<Button
+									styleText={{ color: colors.black }}
+									backgroundColor={colors.grayLight}
+									styleContainer={currentActiveBtn === PeriodEnum.MONTH_1 && activeBtnStyle}
+									onPress={() => onPressShowHistory(PeriodEnum.MONTH_1)}
+									title={'1 month'}
+								/>
+							</Box>
 						</Box>
 					</Box>
+					<Box mt={2} alignItems={'center'} flex={1} w={'100%'}>
+						<FlatList
+							data={takenCourierOrders ?? []}
+							renderItem={orderViews}
+							scrollEnabled={true}
+							keyExtractor={(item, index) => index?.toString()}
+							style={{ width: '100%' }}
+							contentContainerStyle={!takenCourierOrders.length && styles.contentContainerOrder}
+							refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+							ListEmptyComponent={() => renderEmptyContainer(500, 'No orders.')}
+						/>
+					</Box>
 				</Box>
-				<Box mt={2} alignItems={'center'} flex={1} w={'100%'}>
-					<FlatList
-						data={takenCourierOrders ?? []}
-						renderItem={orderViews}
-						scrollEnabled={true}
-						keyExtractor={(item, index) => index?.toString()}
-						style={{ width: '100%' }}
-						contentContainerStyle={!takenCourierOrders.length && styles.contentContainerOrder}
-						refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
-						ListEmptyComponent={() => renderEmptyContainer(500, 'No orders.')}
-					/>
-				</Box>
-			</Box>
-		</BaseWrapperComponent>
+			</BaseWrapperComponent>
+		</>
 	)
 })
 const styles = StyleSheet.create({
@@ -147,4 +151,4 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 	},
 })
-export default CompletedOrdersS;
+export default CompletedOrdersS

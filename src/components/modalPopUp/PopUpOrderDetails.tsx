@@ -56,12 +56,19 @@ const orderViews = ({ item }: { item: { amount: number; product: ProductType } }
 }
 type PopUpOrderDetailsProps = {
 	show: boolean
+	isFromCourier: boolean
 	order: ApiOrderType
 	onClose: () => void
-	onPressRepeat: (order: ApiOrderType) => void
+	onPressRepeat?: (order: ApiOrderType) => void
 }
 
-const PopUpOrderDetails = ({ show, onClose, onPressRepeat, order }: PopUpOrderDetailsProps) => {
+const PopUpOrderDetails = ({
+	show,
+	onClose,
+	onPressRepeat,
+	order,
+	isFromCourier,
+}: PopUpOrderDetailsProps) => {
 	const totalPriceOrder = getTotalPriceOrder(order?.products ?? [])
 
 	const isFreeDelivery = Number(formatProductPrice(totalPriceOrder ?? 0)) >= 1500

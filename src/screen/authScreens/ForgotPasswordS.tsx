@@ -15,6 +15,8 @@ import { StyleSheet } from 'react-native'
 import { routerConstants } from '../../constants/routerConstants'
 import logoImg from '../../assets/images/logoWeeDo.png'
 import { createAlert } from '../../components/Alert'
+import { LoadingEnum } from '../../store/types/types'
+import NotificationStore from '../../store/NotificationStore/notification-store'
 
 type ForgotPasswordSProps = {
 	navigation: NavigationProp<ParamListBase>
@@ -22,6 +24,7 @@ type ForgotPasswordSProps = {
 const ForgotPasswordS = observer(({ navigation }: ForgotPasswordSProps) => {
 	const { forgotPassword, setInfoResetPassword, infoResetPassword } = AuthStore
 	const [error, setError] = useState(false)
+	const { setIsLoading } = NotificationStore
 	const onPressGoBack = () => {
 		navigation.goBack()
 	}
@@ -30,7 +33,7 @@ const ForgotPasswordS = observer(({ navigation }: ForgotPasswordSProps) => {
 			setError(true)
 			return
 		}
-		console.log(infoResetPassword)
+		setIsLoading(LoadingEnum.fetching)
 		forgotPassword(infoResetPassword.email)
 			.then((data) => {
 				if (data.success) {
@@ -43,6 +46,9 @@ const ForgotPasswordS = observer(({ navigation }: ForgotPasswordSProps) => {
 					message: "That email doesn't exist.",
 					buttons: [{ text: 'Ok', style: 'default' }],
 				})
+			})
+			.finally(() => {
+				setIsLoading(LoadingEnum.success)
 			})
 	}
 	return (

@@ -59,7 +59,7 @@ export type OrderCourierType = {
 	store: StoreType
 	products: ProductCourierOrderType[]
 	price: PriceOrderCourierType
-	totalPrice: 0
+	totalPrice: number
 	status: StatusType
 	comment: string
 	rejectReason: string

@@ -10,47 +10,58 @@ import {
 } from 'react-native-confirmation-code-field'
 import { colors } from '../assets/colors/colors'
 import { observer } from 'mobx-react-lite'
-import rootStore from '../store/RootStore/root-store'
 import { NavigationProp, ParamListBase } from '@react-navigation/native'
 import { routerConstants } from '../constants/routerConstants'
 import AuthStore from '../store/AuthStore/auth-store'
+import NotificationStore from '../store/NotificationStore/notification-store'
+import { LoadingEnum } from '../store/types/types'
 
 const CELL_COUNT = 4
 type PhoneVerificationProps = {
 	navigation: NavigationProp<ParamListBase>
 }
 const PhoneVerificationCode = observer(({ navigation }: PhoneVerificationProps) => {
-	const { resetPassword, infoResetPassword, setInfoResetPassword } = AuthStore
+	const { resetPassword, infoResetPassword, setInfoResetPassword, checkVerificationCode } =
+		AuthStore
+	const { setIsLoading } = NotificationStore
 	const [isValid, setIsValid] = useState(true)
 	const [statusServer, setStatusServer] = useState<'warning' | '' | 'error'>('')
 	const handleCodeChange = (newCode: string) => {
-		setInfoResetPassword('validationCode', newCode)
+		setInfoResetPassword('verificationCode', newCode)
 		setStatusServer('')
 		setIsValid(true)
 	}
 	useEffect(() => {
-		if (infoResetPassword.validationCode.trim().length === CELL_COUNT) {
-			console.log(infoResetPassword)
-			resetPassword(infoResetPassword)
+		if (infoResetPassword.verificationCode.trim().length === CELL_COUNT) {
+			setIsLoading(LoadingEnum.fetching)
+			checkVerificationCode({
+				verificationCode: infoResetPassword.verificationCode,
+				email: infoResetPassword.email,
+			})
 				.then((data) => {
 					if (data.success) {
-						alert('ok')
 						setIsValid(true)
-						navigation.navigate(routerConstants.FORGOT_PASSWORD, { from: 'reset' })
+						navigation.navigate(routerConstants.NEW_PASSWORD, { from: 'reset' })
 					}
 				})
 				.catch((data) => {
 					setIsValid(false)
-					console.log(data)
 					setStatusServer('error')
 				})
+				.finally(() => {
+					setIsLoading(LoadingEnum.success)
+				})
 		}
-	}, [infoResetPassword.validationCode])
-
-	const ref = useBlurOnFulfill({ value: infoResetPassword.validationCode, cellCount: CELL_COUNT })
+	}, [infoResetPassword.verificationCode])
+	useEffect(() => {
+		return () => {
+			setInfoResetPassword('verificationCode', '')
+		}
+	}, [])
+	const ref = useBlurOnFulfill({ value: infoResetPassword.verificationCode, cellCount: CELL_COUNT })
 
 	const [props, getCellOnLayoutHandler] = useClearByFocusCell({
-		value: infoResetPassword.validationCode,
+		value: infoResetPassword.verificationCode,
 		setValue: handleCodeChange,
 	})
 
@@ -60,7 +71,7 @@ const PhoneVerificationCode = observer(({ navigation }: PhoneVerificationProps) 
 				ref={ref}
 				{...props}
 				// Use `caretHidden={false}` when users can't paste a text value, because context menu doesn't appear
-				value={infoResetPassword.validationCode}
+				value={infoResetPassword.verificationCode}
 				onChangeText={handleCodeChange}
 				cellCount={CELL_COUNT}
 				rootStyle={styles.codeFieldRoot}

@@ -11,83 +11,80 @@ import { routerConstants } from '../../constants/routerConstants'
 import { NavigationProp, ParamListBase } from '@react-navigation/native'
 
 type CourierOrdersProps = {
-    navigation: NavigationProp<ParamListBase>
+	navigation: NavigationProp<ParamListBase>
 }
 
-const CourierOrders = observer(({navigation}: CourierOrdersProps) => {
-    const {CourierOrderService, CourierOrderStore} = rootStore
-    const {courierOrders, setSelectedOrder} = CourierOrderStore
-    const [refreshing, setRefreshing] = useState(false);
-    const onRefresh = () => {
-        setRefreshing(true)
-        CourierOrderService.getCourierOrders().finally(() => {
-            setRefreshing(false)
-        })
-    };
+const CourierOrders = observer(({ navigation }: CourierOrdersProps) => {
+	const { CourierOrderService, CourierOrderStore } = rootStore
+	const { courierOrders, setSelectedOrder } = CourierOrderStore
+	const [refreshing, setRefreshing] = useState(false)
+	const onRefresh = () => {
+		setRefreshing(true)
+		CourierOrderService.getCourierOrders().finally(() => {
+			setRefreshing(false)
+		})
+	}
 
-    const orderViews = ({item}: { item: OrderCourierType }) => {
-        const onPressTakeOrder = () => {
-            setSelectedOrder(item)
-            CourierOrderService.assignCourierOrder().then((data) => {
-                if(!!data) {
-                    navigation.navigate(routerConstants.COURIER_PICK_ORDER)
-                }
-            })
-        }
-        const onPressInfoOrder = () => {
-            setSelectedOrder(item)
-            navigation.navigate(routerConstants.COURIER_PICK_ORDER, {checkInfo: true})
-        }
-        return (
-            <OrderCourierViewer onPressInfoOrder={onPressInfoOrder} onPressTakeOrder={onPressTakeOrder} order={item}/>
-        )
-    }
-    useEffect(() => {
-        CourierOrderService.getCourierOrders()
-       const id = +setInterval(() => {
-            CourierOrderService.getCourierOrders()
-        }, 5000)
-        return () => {
-            clearInterval(id)
-        }
-    }, [])
+	const orderViews = ({ item }: { item: OrderCourierType }) => {
+		const onPressTakeOrder = () => {
+			setSelectedOrder(item)
+			CourierOrderService.assignCourierOrder().then((data) => {
+				if (!!data) {
+					navigation.navigate(routerConstants.COURIER_PICK_ORDER)
+				}
+			})
+		}
+		const onPressInfoOrder = () => {
+			setSelectedOrder(item)
+			navigation.navigate(routerConstants.COURIER_PICK_ORDER, { checkInfo: true })
+		}
+		return (
+			<OrderCourierViewer
+				onPressInfoOrder={onPressInfoOrder}
+				onPressTakeOrder={onPressTakeOrder}
+				order={item}
+			/>
+		)
+	}
+	useEffect(() => {
+		CourierOrderService.getCourierOrders()
+		const id = +setInterval(() => {
+			CourierOrderService.getCourierOrders()
+		}, 5000)
+		return () => {
+			clearInterval(id)
+		}
+	}, [])
 
-    return (
-        <BaseWrapperComponent>
-            <Box w={'100%'} flex={1}>
-                <Box paddingX={5} w={'100%'} alignItems={'center'}>
-                    <Text fontSize={28} fontWeight={'700'}>Placed orders</Text>
-                </Box>
-                <Box mt={5} alignItems={'center'} flex={1} w={'100%'}>
-                    <FlatList
-                        data={courierOrders ?? []}
-                        renderItem={orderViews}
-                        keyExtractor={(item, index) => index?.toString()}
-                        style={{width: '100%'}}
-                        contentContainerStyle={
-                            !courierOrders.length &&
-                            styles.contentContainerOrder
-                        }
-                        refreshControl={
-                            <RefreshControl
-                                refreshing={refreshing}
-                                onRefresh={onRefresh}
-                            />
-                        }
-                        ListEmptyComponent={() => renderEmptyContainer(500, 'No orders.')}
-                    />
-                </Box>
-            </Box>
-        </BaseWrapperComponent>
-    );
-});
-const styles = StyleSheet.create({
-    contentContainerOrder: {
-        flex: 1,
-        width: '100%',
-        alignItems: 'center',
-        justifyContent: 'center'
-    }
-
+	return (
+		<BaseWrapperComponent>
+			<Box w={'100%'} flex={1}>
+				<Box paddingX={5} w={'100%'} alignItems={'center'}>
+					<Text fontSize={28} fontWeight={'700'}>
+						Orders
+					</Text>
+				</Box>
+				<Box mt={5} alignItems={'center'} flex={1} w={'100%'}>
+					<FlatList
+						data={courierOrders ?? []}
+						renderItem={orderViews}
+						keyExtractor={(item, index) => index?.toString()}
+						style={{ width: '100%' }}
+						contentContainerStyle={!courierOrders.length && styles.contentContainerOrder}
+						refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+						ListEmptyComponent={() => renderEmptyContainer(500, 'No orders.')}
+					/>
+				</Box>
+			</Box>
+		</BaseWrapperComponent>
+	)
 })
-export default CourierOrders;
+const styles = StyleSheet.create({
+	contentContainerOrder: {
+		flex: 1,
+		width: '100%',
+		alignItems: 'center',
+		justifyContent: 'center',
+	},
+})
+export default CourierOrders

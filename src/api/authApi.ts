@@ -17,6 +17,10 @@ export const authApi = {
 	async resetPassword(payload: PayloadResetPasswordType) {
 		return await instance.post<{ success: boolean }>(`auth/reset-password`, payload)
 	},
+	async checkVerificationCode(payload: { email: string; verificationCode: string }) {
+		console.log(payload)
+		return await instance.post<{ success: boolean }>(`auth/check-verification-code`, payload)
+	},
 	async register(data: UserRegisterDataType) {
 		return await instance.post<DataLoginType>(`auth/signup`, data)
 	},
@@ -26,7 +30,7 @@ export const authApi = {
 		return await instance.post<DataLoginType>(`auth/refresh`, { refreshToken })
 	},
 }
-export type PayloadResetPasswordType = { email: string; validationCode: string; password: string }
+export type PayloadResetPasswordType = { email: string; verificationCode: string; password: string }
 export type DataLoginType = {
 	accessToken: string
 	refreshToken: string

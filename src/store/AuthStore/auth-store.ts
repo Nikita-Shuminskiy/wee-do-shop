@@ -29,7 +29,7 @@ export class AuthStore {
 	infoResetPassword: PayloadResetPasswordType = {
 		email: '',
 		password: '',
-		validationCode: '',
+		verificationCode: '',
 	}
 	currentLocation: AddressType = {} as AddressType
 	banners: BannersType[] = [] as BannersType[]
@@ -93,7 +93,10 @@ export class AuthStore {
 		const { data } = await authApi.resetPassword(payloadResetPassword)
 		return data
 	}
-
+	async checkVerificationCode(payloadResetPassword: { email: string; verificationCode: string }) {
+		const { data } = await authApi.checkVerificationCode(payloadResetPassword)
+		return data
+	}
 	setLocation(data: AddressType) {
 		this.currentLocation = data
 	}
@@ -127,6 +130,7 @@ export class AuthStore {
 			login: action,
 			updateUser: action,
 			getBanners: action,
+			checkVerificationCode: action,
 		})
 		this.setAuth = this.setAuth.bind(this)
 		this.setInfoResetPassword = this.setInfoResetPassword.bind(this)
