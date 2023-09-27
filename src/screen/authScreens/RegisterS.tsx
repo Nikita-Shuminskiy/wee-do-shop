@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react'
-import { StyleSheet, TouchableOpacity, TextInput } from 'react-native'
+import React, { useState } from 'react'
+import { StyleSheet, TextInput, TouchableOpacity } from 'react-native'
 import { NavigationProp, ParamListBase } from '@react-navigation/native'
 import { BaseWrapperComponent } from '../../components/baseWrapperComponent'
 import { Box, Image, Text } from 'native-base'
@@ -19,10 +19,9 @@ import { routerConstants } from '../../constants/routerConstants'
 import ArrowBack from '../../components/ArrowBack'
 import { observer } from 'mobx-react-lite'
 import AuthStore, { AddressType } from '../../store/AuthStore/auth-store'
-import { allowLocation, getFormattedAddress } from '../../components/MapViews/utils'
+import { getFormattedAddress } from '../../components/MapViews/utils'
 import { createAlert } from '../../components/Alert'
 import { usePermissionsPushGeo } from '../../utils/hook/usePermissionsPushGeo'
-import { Linking } from 'react-native'
 
 export type CountryData = {
 	callingCode: string[]

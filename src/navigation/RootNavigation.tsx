@@ -32,6 +32,8 @@ import MainCourierNavigation from './MainCourierNavigation'
 import UpdateUserS from '../screen/mainScreens/UpdateUserS'
 import * as Updates from 'expo-updates'
 import { createAlert } from '../components/Alert'
+import ResetPasswordS from '../screen/authScreens/ResetPasswordS'
+import ForgotPasswordS from '../screen/authScreens/ForgotPasswordS'
 
 const RootStack = createNativeStackNavigator()
 const RootNavigation = observer(() => {
@@ -164,6 +166,16 @@ const RootNavigation = observer(() => {
 							options={{ headerShown: false }}
 							name={routerConstants.REGISTRATION}
 							component={RegisterS}
+						/>
+						<RootStack.Screen
+							options={{ headerShown: false }}
+							name={routerConstants.RESET_PASSWORD}
+							component={ResetPasswordS}
+						/>
+						<RootStack.Screen
+							options={{ headerShown: false }}
+							name={routerConstants.FORGOT_PASSWORD}
+							component={ForgotPasswordS}
 						/>
 					</React.Fragment>
 				)}

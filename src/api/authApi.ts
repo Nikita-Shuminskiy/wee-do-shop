@@ -1,9 +1,8 @@
 import { instance } from './config'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { UserRegisterDataType } from 'screen/authScreens/RegisterS'
-import {StoreType} from "./storesApi";
-import {AddressType} from "../store/AuthStore/auth-store";
-
+import { StoreType } from './storesApi'
+import { AddressType } from '../store/AuthStore/auth-store'
 
 export const authApi = {
 	async login(email: string, password: string) {
@@ -11,6 +10,12 @@ export const authApi = {
 	},
 	async getMe() {
 		return await instance.get<UserType>(`auth/getme`)
+	},
+	async forgotPassword(email: string) {
+		return await instance.post<{ success: boolean }>(`auth/forgot-password`, { email })
+	},
+	async resetPassword(payload: PayloadResetPasswordType) {
+		return await instance.post<{ success: boolean }>(`auth/reset-password`, payload)
 	},
 	async register(data: UserRegisterDataType) {
 		return await instance.post<DataLoginType>(`auth/signup`, data)
@@ -21,6 +26,7 @@ export const authApi = {
 		return await instance.post<DataLoginType>(`auth/refresh`, { refreshToken })
 	},
 }
+export type PayloadResetPasswordType = { email: string; validationCode: string; password: string }
 export type DataLoginType = {
 	accessToken: string
 	refreshToken: string
@@ -28,15 +34,15 @@ export type DataLoginType = {
 	refreshExp: number
 }
 export type UserType = {
-	_id: string,
-	firstName: string,
-	lastName: string,
-	email: string,
-	phone: string,
-	address: AddressType,
-	favoritesStores: StoreType[],
-	role: RoleType,
-	createdAt: string,
+	_id: string
+	firstName: string
+	lastName: string
+	email: string
+	phone: string
+	address: AddressType
+	favoritesStores: StoreType[]
+	role: RoleType
+	createdAt: string
 	updatedAt: string
 }
 export enum RoleType {
