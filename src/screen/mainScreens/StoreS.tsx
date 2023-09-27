@@ -21,34 +21,17 @@ import { formatProductPrice } from '../../components/MapViews/utils'
 import { routerConstants } from '../../constants/routerConstants'
 import { getTotalSumProductsCart, updateValueCartProducts } from '../../utils/utilsCart'
 import * as Animatable from 'react-native-animatable'
+import { createAlert } from '../../components/Alert'
 
-const updateProduct = (currentCartStore, item, productValue, setCurrentCartStore) => {
-	const updatedProducts = updateValueCartProducts(currentCartStore.products, productValue, item._id)
-	const totalSum = getTotalSumProductsCart(updatedProducts)
-	setCurrentCartStore({
-		...currentCartStore,
-		totalSum: totalSum,
-		products: updatedProducts,
-	})
-}
-const addProductToCart = (currentCartStore, item, productValue, setCurrentCartStore) => {
-	const newProduct = { ...item, amount: productValue }
-	setCurrentCartStore({
-		...currentCartStore,
-		totalSum: currentCartStore.totalSum
-			? currentCartStore.totalSum + productValue * item.price
-			: productValue * item.price,
-		products: [...currentCartStore.products, newProduct],
-	})
-}
 type StoreSProps = {
 	navigation: NavigationProp<ParamListBase>
 }
 const StoreS = observer(({ navigation }: StoreSProps) => {
 	const { StoresStore, CartStore } = rootStore
+	const { cart, setToCartStore, setPromoCode, addProductToCart, updateProduct } = CartStore
 	const { store, allProductStore, getAndSetAllProduct } = StoresStore
 	const navigate = useNavigation()
-	const [currentCartStore, setCurrentCartStore] = useState<CartType>()
+	//const [currentCartStore, setCurrentCartStore] = useState<CartType>()
 
 	useEffect(() => {
 		const newCart: CartType = {
@@ -58,11 +41,12 @@ const StoreS = observer(({ navigation }: StoreSProps) => {
 			totalSum: 0,
 			products: [],
 		}
-		setCurrentCartStore(newCart)
+		if (!cart?.idStore) {
+			setToCartStore(newCart)
+		}
 		getAndSetAllProduct(store.subCategories)
 		return () => {
 			getAndSetAllProduct([])
-			setCurrentCartStore({} as CartType)
 		}
 	}, [])
 
@@ -72,10 +56,10 @@ const StoreS = observer(({ navigation }: StoreSProps) => {
 	const [selectedSubCategory, setSelectedSubCategory] = useState<SubCategoryType | null>()
 	const [selectedProduct, setSelectedProduct] = useState<ProductType>()
 	const [selectedSubCategoryId, setSelectedSubCategoryId] = useState<string>('')
-	const currentValueToCartProduct = currentCartStore?.products.find(
-		(cart) => cart?._id === selectedProduct?._id
+	const currentValueToCartProduct = cart?.products?.find(
+		(product) => product?._id === selectedProduct?._id
 	)
-	const totalSumCart = formatProductPrice(currentCartStore?.totalSum ?? 0)
+	const totalSumCart = formatProductPrice(cart?.totalSum ?? 0)
 	const onPressGoBack = () => {
 		navigate.goBack()
 	}
@@ -86,42 +70,75 @@ const StoreS = observer(({ navigation }: StoreSProps) => {
 		setIsShowModalAboutStore(false)
 	}
 	const onPressConfirmButton = () => {
-		CartStore.setToCartStore(currentCartStore)
+		//CartStore.setToCartStore(currentCartStore)
 		navigation.navigate(routerConstants.CART)
 	}
 	const onClosePopUpProduct = () => {
 		setIsShowModalProduct(false)
 	}
-	const saveProductValueToCard = (productValue: number) => {
-		const findProduct = currentCartStore.products.find(
-			(product) => product._id === selectedProduct._id
-		)
+	const saveProductToCarts = (productValue, currentProduct) => {
+		const findProduct = cart.products.find((product) => product._id === currentProduct._id)
 		if (findProduct) {
-			updateProduct(currentCartStore, selectedProduct, productValue, setCurrentCartStore)
+			updateProduct(cart, currentProduct, productValue)
 			return
 		}
-		addProductToCart(currentCartStore, selectedProduct, productValue, setCurrentCartStore)
+		addProductToCart(cart, currentProduct, productValue)
+	}
+	const shoppingCartMatching = (productValue, product) => {
+		const onPressClearCart = () => {
+			setPromoCode(null)
+			const newCart: CartType = {
+				idStore: store._id,
+				storeName: store.name,
+				deliviryTime: store.deliveryTime,
+				totalSum: 0,
+				products: [],
+			}
+
+			setToCartStore(newCart)
+			saveProductToCarts(productValue, product)
+		}
+		const onPressGoToCart = () => {
+			navigation.navigate(routerConstants.CART)
+		}
+		createAlert({
+			title: 'Message',
+			message: 'Need to empty your cart for a new order',
+			buttons: [
+				{ text: 'Go to cart', style: 'default', onPress: onPressGoToCart },
+				{ text: 'Continue', style: 'default', onPress: onPressClearCart },
+			],
+		})
+	}
+	const saveProductValueToCart = (productValue: number) => {
+		console.log(cart?.storeName, 'saveProductValueToCart')
+		console.log(store.name)
+		const checkCartStore = cart?.idStore && cart?.idStore !== store._id
+		if (checkCartStore) {
+			shoppingCartMatching(productValue, selectedProduct)
+			return
+		}
+		saveProductToCarts(productValue, selectedProduct)
 	}
 	const productViews = ({ item, index }: { item: ProductType; index: number }) => {
 		const onPressProduct = () => {
 			setSelectedProduct(item)
 			setIsShowModalProduct(true)
 		}
-
-		const saveProductToCard = (productValue: number) => {
-			if (productValue > 100) return
-			const findProduct = currentCartStore.products.find((product) => product._id === item._id)
-			if (findProduct) {
-				updateProduct(currentCartStore, item, productValue, setCurrentCartStore)
+		const saveProductToCart = (productValue: number) => {
+			const checkCartStore = cart?.idStore && cart?.idStore !== store._id
+			if (checkCartStore) {
+				shoppingCartMatching(productValue, item)
 				return
 			}
-			addProductToCart(currentCartStore, item, productValue, setCurrentCartStore)
+			if (productValue > 100) return
+			saveProductToCarts(productValue, item)
 		}
 
 		return (
 			<ProductViewer
-				currentCartStore={currentCartStore}
-				saveProductToCart={saveProductToCard}
+				currentCartStore={cart}
+				saveProductToCart={saveProductToCart}
 				onPressProduct={onPressProduct}
 				product={item}
 			/>
@@ -252,7 +269,7 @@ const StoreS = observer(({ navigation }: StoreSProps) => {
 					</Box>
 				</Box>
 			</BaseWrapperComponent>
-			{!!currentCartStore?.totalSum && (
+			{!!cart?.totalSum && (
 				<Box
 					style={styles.shadow}
 					position={'absolute'}
@@ -276,9 +293,7 @@ const StoreS = observer(({ navigation }: StoreSProps) => {
 								w={'100%'}
 								justifyContent={'space-between'}
 							>
-								<Text style={styles.styleTextBtn}>
-									฿ {formatProductPrice(currentCartStore?.totalSum)}
-								</Text>
+								<Text style={styles.styleTextBtn}>฿ {formatProductPrice(cart?.totalSum)}</Text>
 								<Text color={colors.white} fontWeight={'700'} fontSize={16}>
 									Confirm
 								</Text>
@@ -292,7 +307,7 @@ const StoreS = observer(({ navigation }: StoreSProps) => {
 			<PopUpProduct
 				onPressGoToCardHandler={onPressConfirmButton}
 				totalSumCart={totalSumCart}
-				saveProductValueToCard={saveProductValueToCard}
+				saveProductValueToCart={saveProductValueToCart}
 				currentValueToCartProduct={currentValueToCartProduct}
 				product={selectedProduct}
 				onClose={onClosePopUpProduct}

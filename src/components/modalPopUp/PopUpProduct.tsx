@@ -19,7 +19,7 @@ type PopUpProductProps = {
 	onClose: () => void
 	onPressGoToCardHandler: () => void
 	product: ProductType
-	saveProductValueToCard: (productValue: number) => void
+	saveProductValueToCart: (productValue: number) => void
 	totalSumCart: string
 }
 const PopUpProduct = ({
@@ -27,16 +27,16 @@ const PopUpProduct = ({
 	onClose,
 	product,
 	currentValueToCartProduct,
-	saveProductValueToCard,
+	saveProductValueToCart,
 	totalSumCart,
 	onPressGoToCardHandler,
 }: PopUpProductProps) => {
 	const onPressShowMore = () => {}
 	const saveInputNumberValue = (productValue: number) => {
-		saveProductValueToCard(productValue)
+		saveProductValueToCart(productValue)
 	}
 	const saveSliderValue = (productValue: number) => {
-		saveProductValueToCard(productValue)
+		saveProductValueToCart(productValue)
 	}
 
 	return (

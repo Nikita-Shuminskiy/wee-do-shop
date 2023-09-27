@@ -26,15 +26,7 @@ type CartSProps = {
 }
 
 const CartS = observer(({ navigation }: CartSProps) => {
-	const {
-		cart,
-		removeCart,
-		removeProductToCart,
-		updateProductToCart,
-		setToCartStore,
-		promoCode,
-		setPromoCode,
-	} = cartStore
+	const { cart, removeCart, removeProductToCart, updateProductToCart, promoCode } = cartStore
 	const { user } = authStore
 
 	const { OrderService } = rootStore
@@ -100,12 +92,7 @@ const CartS = observer(({ navigation }: CartSProps) => {
 		promoCode?.discountType === 'Delivery'
 
 	const formatted_address = getFormattedAddress(user.address)
-	useEffect(() => {
-		return () => {
-			setPromoCode(null)
-			setToCartStore(null)
-		}
-	}, [])
+
 	return (
 		<>
 			<BaseWrapperComponent

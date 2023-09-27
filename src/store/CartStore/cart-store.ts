@@ -19,6 +19,7 @@ export class CartStore {
 	promoCode: DiscountCodeType | null = null
 
 	setToCartStore(cart: CartType | null) {
+		console.log(cart.storeName, 'setToCartStore')
 		this.cart = cart
 	}
 
@@ -28,6 +29,7 @@ export class CartStore {
 
 	removeProductToCart(productId: string) {
 		const updatedProducts = this.cart.products.filter((product) => product._id !== productId)
+
 		const totalSum = getTotalSumProductsCart(updatedProducts)
 		if (!updatedProducts.length) {
 			return (this.cart = {} as CartType)
@@ -56,6 +58,27 @@ export class CartStore {
 		this.promoCode = promo
 	}
 
+	addProductToCart(currentCartStore, item, productValue) {
+		const newProduct = { ...item, amount: productValue }
+		this.setToCartStore({
+			...this.cart,
+			totalSum: this.cart.totalSum
+				? this.cart.totalSum + productValue * item.price
+				: productValue * item.price,
+			products: [...this.cart.products, newProduct],
+		})
+	}
+
+	updateProduct(currentCartStore, item, productValue) {
+		const updatedProducts = updateValueCartProducts(this.cart.products, productValue, item._id)
+		const totalSum = getTotalSumProductsCart(updatedProducts)
+		this.setToCartStore({
+			...this.cart,
+			totalSum: totalSum,
+			products: updatedProducts,
+		})
+	}
+
 	constructor() {
 		makeObservable(this, {
 			cart: observable,
@@ -65,10 +88,14 @@ export class CartStore {
 			sendPromoCode: action,
 			removeCart: action,
 			updateProductToCart: action,
+			updateProduct: action,
+			addProductToCart: action,
 			removeProductToCart: action,
 		})
 		this.setPromoCode = this.setPromoCode.bind(this)
+		this.updateProduct = this.updateProduct.bind(this)
 		this.sendPromoCode = this.sendPromoCode.bind(this)
+		this.addProductToCart = this.addProductToCart.bind(this)
 		this.setToCartStore = this.setToCartStore.bind(this)
 		this.removeCart = this.removeCart.bind(this)
 		this.updateProductToCart = this.updateProductToCart.bind(this)
