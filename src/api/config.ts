@@ -42,7 +42,6 @@ instance.interceptors.response.use(
 				const { data } = await axios.post<DataLoginType>(`${BASE_URL}auth/refresh`, {
 					refreshToken: refreshToken,
 				})
-				alert('interseptor try => ok')
 				await AsyncStorage.setItem('refreshToken', data.refreshToken)
 				await AsyncStorage.setItem('accessToken', data.accessToken)
 

@@ -18,7 +18,6 @@ export const authApi = {
 		return await instance.post<{ success: boolean }>(`auth/reset-password`, payload)
 	},
 	async checkVerificationCode(payload: { email: string; verificationCode: string }) {
-		console.log(payload)
 		return await instance.post<{ success: boolean }>(`auth/check-verification-code`, payload)
 	},
 	async register(data: UserRegisterDataType) {

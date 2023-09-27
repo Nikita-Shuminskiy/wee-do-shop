@@ -36,7 +36,6 @@ const ProductViewer = ({
 		saveProductToCart(valueProduct)
 	}
 	const formattedEffectName = product.effect.charAt(0).toUpperCase() + product.effect.slice(1)
-	console.log(!!product.effect)
 	return (
 		<Pressable
 			style={{
