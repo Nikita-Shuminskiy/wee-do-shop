@@ -102,7 +102,7 @@ const CartS = observer(({ navigation }: CartSProps) => {
 				backgroundColor={'white'}
 				isKeyboardAwareScrollView={!!cartProducts}
 			>
-				{!cartProducts ? (
+				{!cartProducts?.length ? (
 					<EmptyCart />
 				) : (
 					<Box paddingX={4} mt={2}>
@@ -180,7 +180,7 @@ const CartS = observer(({ navigation }: CartSProps) => {
 					</Box>
 				)}
 			</BaseWrapperComponent>
-			{!!cartProducts && (
+			{!!cartProducts?.length && (
 				<Box
 					flexDirection={'row'}
 					shadow={'black'}

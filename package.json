@@ -8,10 +8,10 @@
     "android": "expo run:android",
     "ios": "expo run:ios",
     "web": "expo start --web",
-    "build_apk": "eas build -p android --profile preview",
-    "build_all": "eas build --platform all",
-    "build_dev_android": "eas build --profile development --platform android",
-    "build_android_aab": "eas build --platform android"
+    "build_apk": "npx eas build -p android --profile preview",
+    "build_all": "npx eas build --platform all",
+    "build_dev_android": "npx eas build --profile development --platform android",
+    "build_android_aab": "npx eas build --platform android"
   },
   "dependencies": {
     "@expo/webpack-config": "^18.0.1",

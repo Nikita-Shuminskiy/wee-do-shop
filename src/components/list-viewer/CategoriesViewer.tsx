@@ -25,8 +25,8 @@ const SubCategoriesViewer = <T extends { name: string; image?: string }>({
 				{isCategory ? (
 					<>
 						<Image
-							resizeMode={'center'}
-							style={{ width: 65, height: 65 }}
+							resizeMode={'contain'}
+							style={{ width: 75, height: 75 }}
 							source={{ uri: subCategory.image }}
 						/>
 						<Text
@@ -42,7 +42,6 @@ const SubCategoriesViewer = <T extends { name: string; image?: string }>({
 						fontSize={22}
 						fontWeight={'600'}
 						ml={2}
-						borderBottomWidth={1}
 						borderColor={isChosenSubCategory ? colors.green : colors.gray}
 						color={isChosenSubCategory ? colors.green : colors.gray}
 					>

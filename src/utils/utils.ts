@@ -92,7 +92,7 @@ export const getFormatDateToString = (dateString: string) => {
 
 	return format(date, 'd MMMM HH:mm')
 }
-export const deliveryPrice = 100
+export const deliveryPrice = 70
 export const splittingWord = (str) => {
 	const words = str?.match(/[A-Z][a-z]+/g)
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { BaseWrapperComponent } from '../../components/baseWrapperComponent'
 import arrowLeftBack from '../../assets/images/arrow-left-back.png'
 import { Box, Text } from 'native-base'
@@ -34,7 +34,7 @@ const StoreS = observer(({ navigation }: StoreSProps) => {
 	const navigate = useNavigation()
 
 	useEffect(() => {
-		const newCart: CartType = {
+		/*	const newCart: CartType = {
 			idStore: store._id,
 			storeName: store.name,
 			deliviryTime: store.deliveryTime,
@@ -43,7 +43,7 @@ const StoreS = observer(({ navigation }: StoreSProps) => {
 		}
 		if (!cart?.idStore) {
 			setToCartStore(newCart)
-		}
+		}*/
 		getAndSetAllProduct(store.subCategories)
 		return () => {
 			getAndSetAllProduct([])
@@ -84,24 +84,30 @@ const StoreS = observer(({ navigation }: StoreSProps) => {
 		setIsShowModalProduct(false)
 	}
 	const saveProductToCarts = (productValue, currentProduct) => {
-		const findProduct = cart.products.find((product) => product._id === currentProduct._id)
+		const findProduct = cart?.products?.find((product) => product._id === currentProduct._id)
 		if (findProduct) {
-			updateProduct(cart, currentProduct, productValue)
+			updateProduct(currentProduct, productValue)
 			return
 		}
-		addProductToCart(cart, currentProduct, productValue)
+		if (!cart?.storeName) {
+			setNewCart()
+		}
+		addProductToCart(currentProduct, productValue)
+	}
+	const setNewCart = () => {
+		const newCart: CartType = {
+			idStore: store._id,
+			storeName: store.name,
+			deliviryTime: store.deliveryTime,
+			totalSum: 0,
+			products: [],
+		}
+		setToCartStore(newCart)
 	}
 	const shoppingCartMatching = (productValue, product) => {
 		const onPressClearCart = () => {
 			setPromoCode(null)
-			const newCart: CartType = {
-				idStore: store._id,
-				storeName: store.name,
-				deliviryTime: store.deliveryTime,
-				totalSum: 0,
-				products: [],
-			}
-			setToCartStore(newCart)
+			setNewCart()
 			saveProductToCarts(productValue, product)
 		}
 		const onPressGoToCart = () => {
@@ -124,51 +130,59 @@ const StoreS = observer(({ navigation }: StoreSProps) => {
 		}
 		saveProductToCarts(productValue, selectedProduct)
 	}
-	const productViews = ({ item, index }: { item: ProductType; index: number }) => {
-		const onPressProduct = () => {
-			setSelectedProduct(item)
-			setIsShowModalProduct(true)
-		}
-		const saveProductToCart = (productValue: number) => {
-			const checkCartStore = cart?.idStore && cart?.idStore !== store._id
-			if (checkCartStore) {
-				shoppingCartMatching(productValue, item)
-				return
+	const productViews = useCallback(
+		({ item, index }: { item: ProductType; index: number }) => {
+			const onPressProduct = () => {
+				setSelectedProduct(item)
+				setIsShowModalProduct(true)
 			}
-			if (productValue > 100) return
-			saveProductToCarts(productValue, item)
-		}
-
-		return (
-			<ProductViewer
-				currentCartStore={cart}
-				saveProductToCart={saveProductToCart}
-				onPressProduct={onPressProduct}
-				product={item}
-			/>
-		)
-	}
-
-	const sebCategoriesViews = ({ item }: { item: SubCategoryType }) => {
-		const onPressSelectedSubCategory = () => {
-			const isCurrentChosenSubCategory = item._id === selectedSubCategoryId
-			if (isCurrentChosenSubCategory) {
-				setSelectedSubCategory(null)
-				setSelectedSubCategoryId('')
-				return
+			const saveProductToCart = (productValue: number) => {
+				const checkCartStore = cart?.idStore && cart?.idStore !== store._id
+				if (checkCartStore) {
+					shoppingCartMatching(productValue, item)
+					return
+				}
+				if (productValue > 100) return
+				saveProductToCarts(productValue, item)
 			}
-			setSelectedSubCategory(item)
-			setSelectedSubCategoryId(item?._id)
-		}
-		return (
-			<SubCategoriesViewer<SubCategoryType>
-				selectedSubCategoryId={selectedSubCategoryId}
-				onPress={onPressSelectedSubCategory}
-				subCategory={item}
-			/>
-		)
-	}
+
+			return (
+				<ProductViewer
+					key={item._id}
+					currentCartStore={cart}
+					saveProductToCart={saveProductToCart}
+					onPressProduct={onPressProduct}
+					product={item}
+				/>
+			)
+		},
+		[cart, store._id]
+	)
+
+	const sebCategoriesViews = useCallback(
+		({ item }: { item: SubCategoryType }) => {
+			const onPressSelectedSubCategory = () => {
+				const isCurrentChosenSubCategory = item._id === selectedSubCategoryId
+				if (isCurrentChosenSubCategory) {
+					setSelectedSubCategory(null)
+					setSelectedSubCategoryId('')
+					return
+				}
+				setSelectedSubCategory(item)
+				setSelectedSubCategoryId(item?._id)
+			}
+			return (
+				<SubCategoriesViewer<SubCategoryType>
+					selectedSubCategoryId={selectedSubCategoryId}
+					onPress={onPressSelectedSubCategory}
+					subCategory={item}
+				/>
+			)
+		},
+		[selectedSubCategoryId]
+	)
 	const [isLoaded, setIsLoaded] = useState(false)
+	const currentProducts = selectedSubCategory?.products ?? allProductStore
 	return (
 		<>
 			<BaseWrapperComponent backgroundColor={'white'} isKeyboardAwareScrollView={true}>
@@ -256,7 +270,6 @@ const StoreS = observer(({ navigation }: StoreSProps) => {
 								data={selectedSubCategory?.products ?? allProductStore}
 								horizontal={false}
 								renderItem={productViews}
-								keyExtractor={(item, index) => item?._id.toString()}
 								style={{ width: '100%' }}
 								ListEmptyComponent={() =>
 									renderEmptyContainer(Dimensions.get('window').height, 'List is empty')
@@ -269,6 +282,9 @@ const StoreS = observer(({ navigation }: StoreSProps) => {
 									styles.contentContainerStyleProducts
 								}
 							/>
+							{/*{currentProducts?.map((item, index) => {
+								return productViews({ item: item, index: index })
+							})}*/}
 						</Box>
 					</Box>
 				</Box>

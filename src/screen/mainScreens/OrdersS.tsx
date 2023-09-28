@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { BaseWrapperComponent } from '../../components/baseWrapperComponent'
 import orderStore from '../../store/OrderStore/order-store'
 import rootStore from '../../store/RootStore/root-store'
@@ -78,21 +78,24 @@ const OrdersS = observer(({ navigation, route }: OrdersSProps) => {
 	const onClosePopUpAboutStore = () => {
 		setIsShowPopupDetails(false)
 	}
-	const orderViews = ({ item }: { item: ApiOrderType }) => {
-		if (isRoutHistory && item.status === StatusType.Canceled) return
-		const onPressDetails = () => {
-			setSelectedOrder(item)
-			setIsShowPopupDetails(true)
-		}
+	const orderViews = useCallback(
+		({ item }: { item: ApiOrderType }) => {
+			if (isRoutHistory && item.status === StatusType.Canceled) return
+			const onPressDetails = () => {
+				setSelectedOrder(item)
+				setIsShowPopupDetails(true)
+			}
 
-		return (
-			<OrderViewer
-				onPressRepeat={() => onPressRepeat(item)}
-				onPressDetails={onPressDetails}
-				order={item}
-			/>
-		)
-	}
+			return (
+				<OrderViewer
+					onPressRepeat={() => onPressRepeat(item)}
+					onPressDetails={onPressDetails}
+					order={item}
+				/>
+			)
+		},
+		[isRoutHistory]
+	)
 	const isLastOrders = !!(totalOrders && orders.length) && totalOrders <= orders.length
 
 	const renderFooter = () => (

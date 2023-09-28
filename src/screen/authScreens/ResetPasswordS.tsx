@@ -16,7 +16,7 @@ type ForgotPasswordSProps = {
 	route: any
 }
 const ResetPasswordS = observer(({ navigation, route }: ForgotPasswordSProps) => {
-	const { infoResetPassword, forgotPassword } = AuthStore
+	const { infoResetPassword, forgotPassword, setInfoResetPassword } = AuthStore
 	const { setIsLoading } = NotificationStore
 
 	const goBackPress = () => {
@@ -24,9 +24,13 @@ const ResetPasswordS = observer(({ navigation, route }: ForgotPasswordSProps) =>
 	}
 	const onPressSendCode = () => {
 		setIsLoading(LoadingEnum.fetching)
-		forgotPassword(infoResetPassword.email).finally(() => {
-			setIsLoading(LoadingEnum.success)
-		})
+		forgotPassword(infoResetPassword.email)
+			.then((data) => {
+				setInfoResetPassword('verificationCode', '')
+			})
+			.finally(() => {
+				setIsLoading(LoadingEnum.success)
+			})
 	}
 	return (
 		<BaseWrapperComponent isKeyboardAwareScrollView={true}>
@@ -51,5 +55,4 @@ const ResetPasswordS = observer(({ navigation, route }: ForgotPasswordSProps) =>
 		</BaseWrapperComponent>
 	)
 })
-
 export default ResetPasswordS

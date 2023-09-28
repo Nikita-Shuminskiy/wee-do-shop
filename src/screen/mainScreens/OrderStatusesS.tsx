@@ -232,7 +232,7 @@ const OrderStatusesS = observer(({ navigation }: OrderStatusesSProps) => {
 
 					<Box alignItems={'center'}>
 						<TouchableOpacity onPress={onPressClose}>
-							<Text fontSize={16} borderBottomWidth={1} fontWeight={'500'}>
+							<Text fontSize={16} fontWeight={'500'}>
 								Go to history
 							</Text>
 						</TouchableOpacity>

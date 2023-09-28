@@ -29,10 +29,9 @@ const ProductCartViewer = ({
 					style={{
 						width: 70,
 						height: 70,
-						aspectRatio: 70 / 70,
 						borderRadius: 16,
 					}}
-					resizeMode="center"
+					resizeMode="cover"
 				/>
 				<Box alignItems={'flex-start'} ml={4}>
 					<Text fontSize={16} fontWeight={'400'}>

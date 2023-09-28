@@ -47,6 +47,11 @@ const PhoneVerificationCode = observer(({ navigation }: PhoneVerificationProps) 
 				.catch((data) => {
 					setIsValid(false)
 					setStatusServer('error')
+					setTimeout(() => {
+						setInfoResetPassword('verificationCode', '')
+						setStatusServer('')
+						setIsValid(true)
+					}, 500)
 				})
 				.finally(() => {
 					setIsLoading(LoadingEnum.success)

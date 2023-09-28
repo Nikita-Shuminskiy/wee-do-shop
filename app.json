@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "weedo",
-    "slug": "weedo",
+    "slug": "Weedo",
     "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -34,7 +34,7 @@
         }
       },
       "runtimeVersion": "1.0.0",
-      "versionCode": 6
+      "versionCode": 7
     },
     "web": {
       "favicon": "./assets/favicon.png"

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import { BaseWrapperComponent } from '../../components/baseWrapperComponent'
 import { colors } from '../../assets/colors/colors'
 import { Box, Text } from 'native-base'
@@ -23,15 +23,15 @@ const ShopsS = observer(({ navigation }: ShopsSType) => {
 	const { StoresStore } = rootStore
 	const { stores, setStore, favoriteStores, search, setSearch } = StoresStore
 
-	const storesViews = ({ item }: { item: StoreType }) => {
+	const storesViews = useCallback(({ item }: { item: StoreType }) => {
 		const onPress = () => {
 			setStore(item)
 			navigation.navigate(routerConstants.STORE)
 		}
 		return <ShopsViewer onPress={onPress} stores={item} />
-	}
+	}, [])
 	useEffect(() => {
-		StoresService.getStores()
+		//StoresService.getStores()
 		return () => {
 			setSearch('')
 		}

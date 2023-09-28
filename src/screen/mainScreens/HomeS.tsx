@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import { BaseWrapperComponent } from '../../components/baseWrapperComponent'
 import { Box, Skeleton, Text } from 'native-base'
@@ -36,48 +36,54 @@ const HomeS = observer(({ navigation }: HomeSProps) => {
 	} = StoresStore
 	const { categories } = CategoriesStore
 
-	const categoriesViews = ({ item }: { item: CategoryType }) => {
-		const onPressCategory = () => {
-			const isCurrentChosenSubCategory = item._id === selectedSubCategoryId
-			if (isCurrentChosenSubCategory) {
-				setSelectedSubCategoryId('')
-			} else {
-				setSelectedSubCategoryId(item._id)
-			}
+	const categoriesViews = useCallback(
+		({ item }: { item: CategoryType }) => {
+			const onPressCategory = () => {
+				const isCurrentChosenSubCategory = item._id === selectedSubCategoryId
+				if (isCurrentChosenSubCategory) {
+					setSelectedSubCategoryId('')
+				} else {
+					setSelectedSubCategoryId(item._id)
+				}
 
-			StoresService.searchStores({ categoryId: isCurrentChosenSubCategory ? '' : item._id })
-		}
-		return (
-			<SubCategoriesViewer<CategoryType>
-				isCategory={true}
-				selectedSubCategoryId={selectedSubCategoryId}
-				onPress={onPressCategory}
-				subCategory={item}
-			/>
-		)
-	}
-	const storesViews = ({ item }: { item: StoreType }) => {
-		const onPress = () => {
-			setStore(item)
-			navigation.navigate(routerConstants.STORE)
-		}
-		const onPressSaveFavoriteStore = () => {
-			StoresService.saveFavoriteStore(item._id)
-		}
-		const onPressRemoveFavoriteStore = () => {
-			StoresService.deleteFavoriteStore(item._id)
-		}
-		const checkFavoriteStore = favoriteStores.some((storeF) => storeF._id === item._id)
-		return (
-			<StoresViewer
-				checkFavoriteStore={checkFavoriteStore}
-				onPressSaveFavoriteStore={onPressSaveFavoriteStore}
-				onPressRemoveFavoriteStore={onPressRemoveFavoriteStore}
-				onPress={onPress}
-				stores={item}
-			/>
-		)
-	}
+				StoresService.searchStores({ categoryId: isCurrentChosenSubCategory ? '' : item._id })
+			}
+			return (
+				<SubCategoriesViewer<CategoryType>
+					isCategory={true}
+					selectedSubCategoryId={selectedSubCategoryId}
+					onPress={onPressCategory}
+					subCategory={item}
+				/>
+			)
+		},
+		[selectedSubCategoryId]
+	)
+	const storesViews = useCallback(
+		({ item }: { item: StoreType }) => {
+			const onPress = () => {
+				setStore(item)
+				navigation.navigate(routerConstants.STORE)
+			}
+			const onPressSaveFavoriteStore = () => {
+				StoresService.saveFavoriteStore(item._id)
+			}
+			const onPressRemoveFavoriteStore = () => {
+				StoresService.deleteFavoriteStore(item._id)
+			}
+			const checkFavoriteStore = favoriteStores.some((storeF) => storeF._id === item._id)
+			return (
+				<StoresViewer
+					checkFavoriteStore={checkFavoriteStore}
+					onPressSaveFavoriteStore={onPressSaveFavoriteStore}
+					onPressRemoveFavoriteStore={onPressRemoveFavoriteStore}
+					onPress={onPress}
+					stores={item}
+				/>
+			)
+		},
+		[favoriteStores]
+	)
 
 	useEffect(() => {
 		StoresService.getStores()
@@ -86,15 +92,15 @@ const HomeS = observer(({ navigation }: HomeSProps) => {
 		return () => {
 			setSearch('')
 		}
-	}, [user.address?.fullAddress])
+	}, [])
 
-	const bannersView = ({ item }: { item: BannersType }) => {
+	const bannersView = useCallback(({ item }: { item: BannersType }) => {
 		return (
 			<Box mr={1} w={353} h={74}>
 				<ImageDisplay style={{ width: 353, height: 74 }} source={{ uri: item.image }} />
 			</Box>
 		)
-	}
+	}, [])
 	const carouselRef = useRef<any>(null)
 
 	return (

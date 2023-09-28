@@ -19,7 +19,6 @@ export class CartStore {
 	promoCode: DiscountCodeType | null = null
 
 	setToCartStore(cart: CartType | null) {
-		console.log(cart.storeName, 'setToCartStore')
 		this.cart = cart
 	}
 
@@ -58,7 +57,7 @@ export class CartStore {
 		this.promoCode = promo
 	}
 
-	addProductToCart(currentCartStore, item, productValue) {
+	addProductToCart(item, productValue) {
 		const newProduct = { ...item, amount: productValue }
 		this.setToCartStore({
 			...this.cart,
@@ -69,7 +68,7 @@ export class CartStore {
 		})
 	}
 
-	updateProduct(currentCartStore, item, productValue) {
+	updateProduct(item, productValue) {
 		const updatedProducts = updateValueCartProducts(this.cart.products, productValue, item._id)
 		const totalSum = getTotalSumProductsCart(updatedProducts)
 		this.setToCartStore({
