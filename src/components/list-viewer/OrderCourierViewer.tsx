@@ -31,13 +31,13 @@ const OrderCourierViewer = ({
 	return (
 		<Box style={styles.container}>
 			<Box flexDirection={'row'} justifyContent={'space-between'}>
-				<Box flexDirection={'row'} alignItems={'flex-start'}>
+				<Box flexDirection={'row'} flex={1} alignItems={'flex-start'}>
 					<Image style={styles.imageFromTo} source={fromToImg} alt={'img'} />
 					<Box ml={2}>
-						<Text maxWidth={200} fontWeight={'600'} fontSize={14}>
+						<Text fontWeight={'600'} fontSize={12}>
 							{formattedAddressStore}
 						</Text>
-						<Text maxWidth={200} fontWeight={'600'} fontSize={14}>
+						<Text fontWeight={'600'} fontSize={12}>
 							{formattedAddressUser}
 						</Text>
 					</Box>

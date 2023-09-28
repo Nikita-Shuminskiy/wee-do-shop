@@ -39,7 +39,6 @@ const CourierPickOrder = observer(({ route, navigation }: CourierPickOrderProps)
 			navigation.navigate(routerConstants.COURIER_COMPLETED_ORDERS)
 		}
 	}
-
 	useEffect(() => {
 		if (isStatusOnTheWay) {
 			setCoords({

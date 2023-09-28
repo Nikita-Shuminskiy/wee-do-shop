@@ -1,6 +1,6 @@
 import React from 'react'
 import { Box, Text } from 'native-base'
-import {Linking, StyleSheet, View} from 'react-native'
+import { Linking, StyleSheet, View } from 'react-native'
 import ModalPopup from '../pop-up'
 import { colors } from '../../assets/colors/colors'
 import { StoreType } from '../../api/storesApi'
@@ -93,18 +93,23 @@ const PopUpAboutStore = ({ show, onClose, currentStore }: PopUpAboutStoreProps) 
 						})}
 					</Box>
 				</Box>
-				<Box flexDirection={'row'} mb={5} alignItems={'center'}>
-					<Fontisto name="world-o" size={24} color={'#BABABA'} />
-					<Link
-						styleLink={styles.linkWebSite}
-						onPress={() => openWebsiteLink(currentStore?.website)}
-						text={currentStore?.website}
-					/>
-				</Box>
-				<Box flexDirection={'row'} alignItems={'center'}>
-					<Feather name="phone-call" size={24} color={'#BABABA'} />{' '}
-					<PhoneNumberComponent phoneNumber={currentStore?.phone} />
-				</Box>
+				{currentStore?.website && (
+					<Box flexDirection={'row'} mb={5} alignItems={'center'}>
+						<Fontisto name="world-o" size={24} color={'#BABABA'} />
+						<Link
+							styleLink={styles.linkWebSite}
+							onPress={() => openWebsiteLink(currentStore?.website)}
+							text={currentStore?.website}
+						/>
+					</Box>
+				)}
+				{currentStore?.phone && (
+					<Box flexDirection={'row'} alignItems={'center'}>
+						<Feather name="phone-call" size={24} color={'#BABABA'} />{' '}
+						<PhoneNumberComponent phoneNumber={currentStore?.phone} />
+					</Box>
+				)}
+
 				<Box w={'100%'} mt={2} mb={2} flexGrow={1} h={300}>
 					<MapView style={styles.mapView} initialRegion={initRegion} provider={PROVIDER_GOOGLE}>
 						<Marker
@@ -139,4 +144,4 @@ const styles = StyleSheet.create({
 	},
 })
 
-export default PopUpAboutStore;
+export default PopUpAboutStore

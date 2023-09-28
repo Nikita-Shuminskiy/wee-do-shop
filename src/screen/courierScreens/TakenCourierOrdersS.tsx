@@ -48,7 +48,7 @@ const TakenCourierOrdersS = observer(({ navigation }: TakenCourierOrdersProps) =
 				</Box>
 				<Box mt={5} alignItems={'center'} flex={1} w={'100%'}>
 					<FlatList
-						data={takenCourierOrders.filter(el => el.status !== StatusType.Completed)}
+						data={takenCourierOrders.filter((el) => el.status !== StatusType.Completed)}
 						renderItem={orderViews}
 						keyExtractor={(item, index) => item._id?.toString()}
 						style={{ width: '100%' }}
@@ -69,4 +69,4 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 	},
 })
-export default TakenCourierOrdersS;
+export default TakenCourierOrdersS

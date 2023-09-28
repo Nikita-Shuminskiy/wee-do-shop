@@ -187,7 +187,7 @@ const StoreS = observer(({ navigation }: StoreSProps) => {
 		<>
 			<BaseWrapperComponent backgroundColor={'white'} isKeyboardAwareScrollView={true}>
 				<Box>
-					<Box w={'100%'} height={239} flex={1}>
+					<Box w={'100%'} minHeight={239} flex={1}>
 						{!isLoaded && (
 							<Animatable.View
 								animation="pulse"
@@ -196,7 +196,7 @@ const StoreS = observer(({ navigation }: StoreSProps) => {
 									position: 'absolute',
 									zIndex: 2,
 									width: '100%',
-									aspectRatio: 351 / 171,
+									aspectRatio: 351 / 225,
 									backgroundColor: colors.grayWhite,
 								}}
 							/>
@@ -210,22 +210,28 @@ const StoreS = observer(({ navigation }: StoreSProps) => {
 							source={{ uri: store.image }}
 							style={{
 								width: '100%',
-								aspectRatio: 351 / 171,
+								aspectRatio: 351 / 239,
 								borderRadius: 16,
 							}}
 						>
-							<Box flex={1} w={'100%'} alignItems={'flex-start'} justifyContent={'center'}>
+							<Box
+								flex={1}
+								w={'100%'}
+								alignItems={'center'}
+								flexDirection={'row'}
+								justifyContent={'space-between'}
+							>
 								<Box ml={4} mt={5} justifyContent={'flex-start'}>
 									<Text
 										color={colors.grayLightWhite}
 										style={styles.textWithShadow}
 										fontWeight={'700'}
-										fontSize={32}
+										fontSize={28}
 									>
 										{store?.name}
 									</Text>
 								</Box>
-								<Box position={'absolute'} bottom={2} right={2}>
+								<Box position={'absolute'} bottom={10} right={5}>
 									<Button
 										backgroundColor={colors.grayDarkLight}
 										styleText={{ color: colors.white, ...styles.textWithShadow }}
@@ -244,7 +250,7 @@ const StoreS = observer(({ navigation }: StoreSProps) => {
 						borderTopLeftRadius={16}
 						borderTopRightRadius={16}
 					>
-						<Box paddingX={2} mb={3}>
+						<Box paddingX={2} mt={3} mb={3}>
 							<FlatList
 								extraData={selectedSubCategoryId}
 								data={store.subCategories}

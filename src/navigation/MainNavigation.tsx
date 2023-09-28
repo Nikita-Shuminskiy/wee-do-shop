@@ -38,20 +38,19 @@ const MainNavigation = ({ navigation, route }) => {
 					backgroundColor: colors.green,
 				},
 				tabBarLabelStyle: {
-					marginBottom: 5,
-					fontSize: 12,
+					fontSize: 11,
 					color: colors.gray,
 				},
 				tabBarIcon: ({ focused, color }) => {
 					let iconName
 					if (route.name === 'home') {
-						iconName = <Ionicons name={focused ? 'home' : 'home-outline'} size={30} color={color} />
+						iconName = <Ionicons name={focused ? 'home' : 'home-outline'} size={28} color={color} />
 					} else if (route.name === 'shops') {
-						iconName = <MaterialIcons name={focused ? 'store' : 'store'} size={30} color={color} />
+						iconName = <MaterialIcons name={focused ? 'store' : 'store'} size={28} color={color} />
 					} else if (route.name === 'history') {
-						iconName = <MaterialCommunityIcons name="history" size={30} color={color} />
+						iconName = <MaterialCommunityIcons name="history" size={28} color={color} />
 					} else if (route.name === 'cart') {
-						iconName = <MaterialCommunityIcons name="cart-outline" size={30} color={color} />
+						iconName = <MaterialCommunityIcons name="cart-outline" size={28} color={color} />
 					}
 
 					return iconName
