@@ -1,7 +1,9 @@
 import regex from './helpers/regex'
 import { WorkingHoursType } from '../api/storesApi'
-import { format, parseISO } from 'date-fns'
+import { format, getHours, getMinutes, parseISO } from 'date-fns'
 import { ProductType } from '../api/productApi'
+import * as Updates from 'expo-updates'
+import { createAlert } from '../components/Alert'
 
 export const validateEmail = (email: string) => {
 	return regex.email.test(email.trim())
@@ -26,6 +28,9 @@ export const getCurrentUntilTimeStoreTo = (workingHoursStores: WorkingHoursType)
 	if (currentHourWorkStores === 'Closed') return 'Closed today'
 	const utilTimeStore = currentHourWorkStores?.slice(-5) // get time work(to)
 	return utilTimeStore
+}
+const getInfoTime = (open: boolean, time: string) => {
+	return `Will ${open ? 'open' : 'close'} in ` + time
 }
 
 export function isCurrentTimeInRange(workingHoursStores: WorkingHoursType, isInfo = false): any {
@@ -59,29 +64,41 @@ export function isCurrentTimeInRange(workingHoursStores: WorkingHoursType, isInf
 
 	const [startTime, endTime] = currentHourWorkStores?.split(' - ')
 	const [startTimeNextDay, endTimeNextDay] = workingHoursStores[nextDayName]?.split(' - ')
-	const currentHour = date.getHours()
-	const currentMinute = date.getMinutes()
+	const currentHour = getHours(date)
+	const currentMinute = getMinutes(date)
+
 	const [startHour, startMinute] = startTime?.split(':').map(Number)
 	const [endHour, endMinute] = endTime?.split(':').map(Number)
 
 	if (currentHour > startHour && currentHour < endHour) {
 		if (isInfo) {
-			return 'Will close in  ' + endTime
+			return getInfoTime(false, endTime)
 		}
 		return true // Текущее время полностью совпадает с указанным диапазоном времени
-	} else if (currentHour === startHour && currentMinute >= startMinute) {
+	}
+	if (currentHour === startHour && currentMinute >= startMinute) {
 		if (isInfo) {
-			return 'Will close in ' + endTime
+			return getInfoTime(false, endTime)
 		}
+
 		return true // Текущее время полностью совпадает с началом диапазона
-	} else if (currentHour === endHour && currentMinute <= endMinute) {
+	}
+	if (currentHour === endHour && currentMinute <= endMinute) {
 		if (isInfo) {
-			return 'Will close in ' + endTime
+			return getInfoTime(false, endTime)
 		}
 		return true // Текущее время полностью совпадает с концом диапазона
 	}
+
+	if (startHour >= endHour && currentMinute >= startMinute) {
+		if (isInfo) {
+			return getInfoTime(false, endTime)
+		}
+		return true
+	}
+
 	if (isInfo) {
-		return 'Will open in  ' + startTimeNextDay
+		return getInfoTime(true, startTimeNextDay)
 	}
 	return false // Текущее время НЕ совпадает с указанным диапазоном времени
 }
@@ -119,4 +136,25 @@ export const getTotalPriceOrder = (
 	return products?.reduce((acc, product) => {
 		return acc + product.amount * product.product.price
 	}, 0)
+}
+export const checkNewVersionApp = async () => {
+	try {
+		const update = await Updates.checkForUpdateAsync()
+		const onPresUpdate = async () => {
+			await Updates.fetchUpdateAsync()
+			await Updates.reloadAsync()
+		}
+		if (update.isAvailable) {
+			createAlert({
+				title: 'Message',
+				message: 'A new version is available, update the app',
+				buttons: [
+					{ text: 'Update ', style: 'default', onPress: onPresUpdate },
+					{ text: 'Later ', style: 'cancel' },
+				],
+			})
+		}
+	} catch (e) {
+		console.log('error', e)
+	}
 }

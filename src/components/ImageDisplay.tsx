@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import * as Animatable from 'react-native-animatable'
 import { colors } from '../assets/colors/colors'
 import testImg from '../assets/images/testShops.png'
-import { Image } from 'react-native'
+import { Image } from 'expo-image'
 
 const ImageDisplay = ({ source, style, ...restProps }: any) => {
 	const [isLoaded, setIsLoaded] = useState(false)
@@ -35,7 +35,7 @@ const ImageDisplay = ({ source, style, ...restProps }: any) => {
 				cachePolicy={'disk'}
 				onLoad={handleImageLoad}
 				onError={onError}
-				source={errorLoaded ? testImg : source}
+				source={source}
 				style={style}
 				{...restProps}
 			/>

@@ -35,7 +35,7 @@ const ResetPasswordS = observer(({ navigation, route }: ForgotPasswordSProps) =>
 	return (
 		<BaseWrapperComponent isKeyboardAwareScrollView={true}>
 			<Box paddingX={4} alignItems={'flex-start'}>
-				<Box mb={5} mt={5}>
+				<Box mb={5} zIndex={10} mt={5}>
 					<ArrowBack goBackPress={goBackPress} />
 				</Box>
 				<Text fontSize={28}>Phone verification</Text>

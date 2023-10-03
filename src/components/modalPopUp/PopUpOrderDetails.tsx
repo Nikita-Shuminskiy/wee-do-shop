@@ -73,7 +73,7 @@ const PopUpOrderDetails = ({
 
 	const isFreeDelivery = Number(formatProductPrice(totalPriceOrder ?? 0)) >= 1500
 	return (
-		<ModalPopup visible={show} onClose={onClose}>
+		<ModalPopup visible={show} style={{ padding: 2 }} onClose={onClose}>
 			<Box alignItems={'center'}>
 				<Box mb={2} alignItems={'center'}>
 					<Text

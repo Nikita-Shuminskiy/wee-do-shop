@@ -10,7 +10,7 @@ import waitingForPickImg from '../../assets/images/orderImg/waitingForPick.png'
 import courierImg from '../../assets/images/orderImg/courier.png'
 import arrivedImg from '../../assets/images/orderImg/arrived.png'
 import confirmed from '../../assets/images/orderImg/confirmed.png'
-import { Image, Linking, StyleSheet, TouchableOpacity } from 'react-native'
+import { Image, Linking, Platform, StyleSheet, TouchableOpacity } from 'react-native'
 import { colors } from '../../assets/colors/colors'
 import { CourierType, StatusType } from '../../api/ordersApi'
 import io from 'socket.io-client'
@@ -200,7 +200,6 @@ const OrderStatusesS = observer(({ navigation }: OrderStatusesSProps) => {
 			}
 		)
 	}, [])
-	console.log(statusOrder, 'statusOrder')
 	const onPressClose = () => {
 		navigation.navigate(routerConstants.ORDERS, { from: 'statuses' })
 	}
@@ -292,7 +291,7 @@ const OrderStatusesS = observer(({ navigation }: OrderStatusesSProps) => {
 				)}
 			</Box>
 			<Box
-				style={styles.shadow}
+				style={Platform.OS === 'android' && styles.shadow}
 				mt={3}
 				borderTopRightRadius={16}
 				borderTopLeftRadius={16}

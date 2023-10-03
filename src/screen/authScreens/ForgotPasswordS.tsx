@@ -53,7 +53,7 @@ const ForgotPasswordS = observer(({ navigation }: ForgotPasswordSProps) => {
 	}
 	return (
 		<BaseWrapperComponent isKeyboardAwareScrollView={true}>
-			<Box mt={5} mb={5} position={'absolute'} left={5}>
+			<Box mt={5} mb={5} zIndex={10} position={'absolute'} left={5}>
 				<ArrowBack goBackPress={onPressGoBack} img={arrowLeft} />
 			</Box>
 			<Box paddingX={4} w={'100%'} alignItems={'center'} justifyContent={'flex-start'} flex={1}>

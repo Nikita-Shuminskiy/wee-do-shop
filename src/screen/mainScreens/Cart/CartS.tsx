@@ -5,7 +5,7 @@ import { observer } from 'mobx-react-lite'
 import { Box, Text } from 'native-base'
 import { colors } from '../../../assets/colors/colors'
 import Button from '../../../components/Button'
-import { Dimensions, FlatList, StyleSheet, TouchableOpacity } from 'react-native'
+import { Dimensions, FlatList, Platform, StyleSheet, TouchableOpacity } from 'react-native'
 import { renderEmptyContainer } from '../../../components/list-viewer/empty-list'
 import ProductCartViewer from '../../../components/list-viewer/ProductCartViewer'
 import { FontAwesome5 } from '@expo/vector-icons'
@@ -148,7 +148,7 @@ const CartS = observer(({ navigation }: CartSProps) => {
 							<Text>{isFreeDelivery ? '0 ฿' : `฿ ${deliveryPrice}`}</Text>
 						</Box>
 						<Box>
-							<Text color={colors.gray}>{`Order ฿ ${deliveryPrice} and get free delivery`}</Text>
+							<Text color={colors.gray}>{`Order ฿ 1500 and get free delivery`}</Text>
 						</Box>
 						<Box>
 							<Text>Your Address</Text>
@@ -220,14 +220,10 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 	},
 	shadow: {
-		shadowColor: '#000',
-		shadowOffset: {
-			width: -3.5,
-			height: -41.5,
-		},
+		shadowColor: 'rgba(0, 0, 0, 0.5)',
 		shadowOpacity: 0.5,
-		shadowRadius: 19.9,
-		elevation: 24,
+		shadowRadius: 20,
+		elevation: 10,
 	},
 	styleBtnContainer: {
 		width: '85%',

@@ -118,11 +118,10 @@ const OrdersS = observer(({ navigation, route }: OrdersSProps) => {
 			<BaseWrapperComponent backgroundColor={colors.white} isKeyboardAwareScrollView={true}>
 				<Box flexDirection={'row'} mt={5} justifyContent={'space-between'} alignItems={'center'}>
 					{!isRoutHistory && (
-						<Box mb={5} position={'absolute'} left={5}>
+						<Box mb={5} zIndex={10} position={'absolute'} left={5}>
 							<ArrowBack goBackPress={onPressGoBack} img={arrowLeftBack} />
 						</Box>
 					)}
-
 					<Box w={'100%'} alignItems={'center'}>
 						<Text fontSize={28} fontWeight={'700'}>
 							{' '}

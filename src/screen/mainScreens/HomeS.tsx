@@ -1,9 +1,9 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef } from 'react'
 import { observer } from 'mobx-react-lite'
 import { BaseWrapperComponent } from '../../components/baseWrapperComponent'
-import { Box, Skeleton, Text } from 'native-base'
+import { Box } from 'native-base'
 import AuthStore from '../../store/AuthStore/auth-store'
-import { Dimensions, FlatList, Image, StyleSheet, View } from 'react-native'
+import { Dimensions, FlatList, Image, StyleSheet } from 'react-native'
 import { colors } from '../../assets/colors/colors'
 import { renderEmptyContainer } from '../../components/list-viewer/empty-list'
 import SubCategoriesViewer from '../../components/list-viewer/CategoriesViewer'
@@ -17,7 +17,6 @@ import { StoreType } from '../../api/storesApi'
 import HeaderUser from '../../components/headerUser'
 import Carousel from 'react-native-snap-carousel'
 import { BannersType } from '../../api/userApi'
-import ImageDisplay from '../../components/ImageDisplay'
 
 type HomeSProps = {
 	navigation: NavigationProp<ParamListBase>
@@ -97,7 +96,7 @@ const HomeS = observer(({ navigation }: HomeSProps) => {
 	const bannersView = useCallback(({ item }: { item: BannersType }) => {
 		return (
 			<Box mr={1} w={353} h={74}>
-				<ImageDisplay style={{ width: 353, height: 74 }} source={{ uri: item.image }} />
+				<Image style={{ width: 353, height: 74 }} source={{ uri: item.image }} />
 			</Box>
 		)
 	}, [])

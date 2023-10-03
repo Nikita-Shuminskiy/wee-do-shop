@@ -65,7 +65,7 @@ const OrderViewer = memo(({ order, onPressDetails, onPressRepeat }: OrderViewerP
 					backgroundColor={'#E7E7E7'}
 					styleText={styles.textBtn}
 					styleContainer={{
-						maxWidth: !isStatusCanceled && 130,
+						maxWidth: !isStatusCanceled && 150,
 						width: '100%',
 					}}
 					onPress={onPressDetails}
@@ -97,6 +97,7 @@ const styles = StyleSheet.create({
 	},
 	containerBtn: {
 		maxWidth: 130,
+		flex: 1,
 		width: '100%',
 	},
 	container: {

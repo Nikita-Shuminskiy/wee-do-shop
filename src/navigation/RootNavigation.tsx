@@ -35,6 +35,7 @@ import { createAlert } from '../components/Alert'
 import ResetPasswordS from '../screen/authScreens/ResetPasswordS'
 import ForgotPasswordS from '../screen/authScreens/ForgotPasswordS'
 import NewPasswordS from '../screen/authScreens/NewPasswordS'
+import { checkNewVersionApp } from '../utils/utils'
 
 const RootStack = createNativeStackNavigator()
 const RootNavigation = observer(() => {
@@ -53,32 +54,11 @@ const RootNavigation = observer(() => {
 			setIsLoading(LoadingEnum.success)
 		}
 	}
-	const checkNewVersionApp = async () => {
-		try {
-			const update = await Updates.checkForUpdateAsync()
-			const onPresUpdate = async () => {
-				await Updates.fetchUpdateAsync()
-				await Updates.reloadAsync()
-			}
-			if (update.isAvailable) {
-				createAlert({
-					title: 'Message',
-					message: 'A new version is available, update the app',
-					buttons: [
-						{ text: 'Update ', style: 'default', onPress: onPresUpdate },
-						{ text: 'Later ', style: 'cancel' },
-					],
-				})
-			}
-		} catch (e) {
-			console.log('error', e)
-		}
-	}
 	useEffect(() => {
 		const unsubscribe = NetInfo.addEventListener((state) => {
 			setIsConnected(state.isConnected)
 		})
-		checkNewVersionApp()
+		//checkNewVersionApp()
 		AuthStoreService.getMe()
 		return () => {
 			unsubscribe()

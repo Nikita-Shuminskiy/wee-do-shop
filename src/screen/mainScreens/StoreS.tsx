@@ -350,9 +350,9 @@ const StoreS = observer(({ navigation }: StoreSProps) => {
 const styles = StyleSheet.create({
 	textWithShadow: {
 		fontWeight: 'bold',
-		textShadowColor: 'black', // Цвет тени
+		textShadowColor: 'black',
 		textShadowOffset: { width: 2, height: 2 },
-		textShadowRadius: 5,
+		textShadowRadius: 2,
 	},
 	contentContainerOrder: {
 		flex: 1,

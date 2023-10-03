@@ -24,7 +24,7 @@ const ShopsViewer = ({ stores, onPress }: ShopsViewerType) => {
 	return (
 		<TouchableOpacity
 			onPress={onPress}
-			style={{ minWidth: productWidth, maxWidth: productWidth, marginRight: 5 }}
+			style={{ minWidth: productWidth, maxWidth: productWidth, marginRight: 5, marginBottom: 10 }}
 		>
 			{!isLoaded && (
 				<Animatable.View

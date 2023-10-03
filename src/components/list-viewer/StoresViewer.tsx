@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Box, Text } from 'native-base'
 import { colors } from '../../assets/colors/colors'
 import like from '../../assets/images/like.png'
@@ -26,8 +26,13 @@ const StoresViewer = ({
 }: StoresViewerType) => {
 	const { width } = Dimensions.get('window')
 	const productWidth = width - 20
-
+	//	const [isFavorite, setIsFavorite] = useState(checkFavoriteStore)
 	const { isWilOpen, currentTimeInRangeText } = getInfoAboutStoreWorkTime(stores?.workingHours)
+
+	const onPressFavoriteStore = () => {
+		checkFavoriteStore ? onPressRemoveFavoriteStore() : onPressSaveFavoriteStore()
+		//	setIsFavorite((prevState) => !prevState)
+	}
 	return (
 		<TouchableOpacity
 			onPress={onPress}
@@ -53,9 +58,7 @@ const StoresViewer = ({
 						<DeliveryTime time={stores.deliveryTime} fontSizeText={13} />
 					</Box>
 					<Box position={'absolute'} p={1} zIndex={10} top={2} right={2}>
-						<TouchableOpacity
-							onPress={checkFavoriteStore ? onPressRemoveFavoriteStore : onPressSaveFavoriteStore}
-						>
+						<TouchableOpacity onPress={onPressFavoriteStore}>
 							<Image
 								style={{ width: 34, height: 34 }}
 								source={checkFavoriteStore ? likeActive : like}
@@ -99,9 +102,12 @@ const StoresViewer = ({
 						{stores?.categories?.map((subCategory, key) => {
 							const lastElem = stores?.categories?.length - 1 === key
 							return (
-								<Text key={`${subCategory._id}-${key}`} color={colors.gray} fontWeight={'500'}>{`${
-									subCategory.name
-								}${lastElem ? '' : ', '}`}</Text>
+								<Text
+									key={`${subCategory._id}-${key}`}
+									color={colors.gray}
+									fontSize={11}
+									fontWeight={'500'}
+								>{`${subCategory.name}${lastElem ? '' : ', '}`}</Text>
 							)
 						})}
 					</Box>
