@@ -43,7 +43,6 @@ const RootNavigation = observer(() => {
 	const { AuthStoreService, AuthStore } = rootStore
 	const [isConnected, setIsConnected] = useState(true)
 	const { isAuth, user } = AuthStore
-
 	const checkInternetConnection = async () => {
 		setIsLoading(LoadingEnum.fetching)
 		try {

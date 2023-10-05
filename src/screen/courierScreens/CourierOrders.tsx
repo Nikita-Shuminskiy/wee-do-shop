@@ -9,6 +9,7 @@ import { OrderCourierType } from '../../api/couierApi'
 import { observer } from 'mobx-react-lite'
 import { routerConstants } from '../../constants/routerConstants'
 import { NavigationProp, ParamListBase } from '@react-navigation/native'
+import { useRefreshing } from '../../utils/hook/useRefreshing'
 
 type CourierOrdersProps = {
 	navigation: NavigationProp<ParamListBase>
@@ -17,14 +18,10 @@ type CourierOrdersProps = {
 const CourierOrders = observer(({ navigation }: CourierOrdersProps) => {
 	const { CourierOrderService, CourierOrderStore } = rootStore
 	const { courierOrders, setSelectedOrder } = CourierOrderStore
-	const [refreshing, setRefreshing] = useState(false)
-	const onRefresh = () => {
-		setRefreshing(true)
-		CourierOrderService.getCourierOrders().finally(() => {
-			setRefreshing(false)
-		})
+	const onRefreshHandler = async () => {
+		await CourierOrderService.getCourierOrders()
 	}
-
+	const { refreshing, onRefresh } = useRefreshing(onRefreshHandler)
 	const orderViews = ({ item }: { item: OrderCourierType }) => {
 		const onPressTakeOrder = () => {
 			setSelectedOrder(item)

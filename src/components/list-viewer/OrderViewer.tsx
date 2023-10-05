@@ -15,82 +15,83 @@ type OrderViewerProps = {
 	order: ApiOrderType
 	onPressDetails: () => void
 	onPressRepeat: () => void
+	navigation: any
 }
-const OrderViewer = memo(({ order, onPressDetails, onPressRepeat }: OrderViewerProps) => {
-	const { setOrderData, setStatus } = orderStore
-	const { OrderService } = rootStore
-	const isStatusCanceled = order.status === StatusType.Canceled
+const OrderViewer = memo(
+	({ order, onPressDetails, onPressRepeat, navigation }: OrderViewerProps) => {
+		const { setOrderData, setStatus } = orderStore
+		const { OrderService } = rootStore
+		const isStatusCanceled = order.status === StatusType.Canceled
+		//const { status } = useOrderDataStatus({ orderId: order._id })
 
-	//const { status } = useOrderDataStatus({ orderId: order._id })
-	const navigation = useNavigation<any>()
+		const onPressCheckStatus = () => {
+			OrderService.getOrder(order._id).then((data) => {
+				setStatus(data.status)
+				navigation.navigate(routerConstants.ORDER_STATUSES)
+			})
+		}
+		const isCompletedStatuses = order.status === StatusType.Completed
 
-	const onPressCheckStatus = () => {
-		OrderService.getOrder(order._id).then((data) => {
-			setStatus(data.status)
-			navigation.navigate(routerConstants.ORDER_STATUSES)
-		})
+		return (
+			<Box style={styles.container}>
+				<Box flexDirection={'row'} justifyContent={'space-between'}>
+					<Text fontWeight={'600'} fontSize={16}>
+						{order?.store?.name}
+					</Text>
+					<Text fontWeight={'600'} fontSize={16}>
+						฿{formatProductPrice(order.totalPrice)}
+					</Text>
+				</Box>
+				<Box flexDirection={'row'} mt={1} justifyContent={'space-between'}>
+					<Text fontWeight={'600'} color={colors.gray} fontSize={12}>
+						{getFormatDateToString(order?.createdAt)}
+					</Text>
+					<Text
+						fontWeight={'600'}
+						fontSize={14}
+						color={
+							order.status === StatusType.Canceled
+								? colors.red
+								: order.status === StatusType.Completed
+								? colors.green
+								: '#556c60'
+						}
+					>
+						{splittingWord(order.status)}
+					</Text>
+				</Box>
+				<Box flexDirection={'row'} mt={2} justifyContent={'space-between'}>
+					<Button
+						backgroundColor={'#E7E7E7'}
+						styleText={styles.textBtn}
+						styleContainer={{
+							maxWidth: !isStatusCanceled && 150,
+							width: '100%',
+						}}
+						onPress={onPressDetails}
+						title={`Order details (${order.products?.length}+)`}
+					/>
+					{isCompletedStatuses && !isStatusCanceled && (
+						<Button
+							backgroundColor={colors.green}
+							styleContainer={styles.containerBtn}
+							onPress={onPressRepeat}
+							title={'Repeat order'}
+						/>
+					)}
+					{!isCompletedStatuses && !isStatusCanceled && (
+						<Button
+							backgroundColor={colors.green}
+							styleContainer={styles.containerBtn}
+							onPress={onPressCheckStatus}
+							title={'Check status'}
+						/>
+					)}
+				</Box>
+			</Box>
+		)
 	}
-	const isCompletedStatuses = order.status === StatusType.Completed
-
-	return (
-		<Box style={styles.container}>
-			<Box flexDirection={'row'} justifyContent={'space-between'}>
-				<Text fontWeight={'600'} fontSize={16}>
-					{order?.store?.name}
-				</Text>
-				<Text fontWeight={'600'} fontSize={16}>
-					฿{formatProductPrice(order.totalPrice)}
-				</Text>
-			</Box>
-			<Box flexDirection={'row'} mt={1} justifyContent={'space-between'}>
-				<Text fontWeight={'600'} color={colors.gray} fontSize={12}>
-					{getFormatDateToString(order?.createdAt)}
-				</Text>
-				<Text
-					fontWeight={'600'}
-					fontSize={14}
-					color={
-						order.status === StatusType.Canceled
-							? colors.red
-							: order.status === StatusType.Completed
-							? colors.green
-							: '#556c60'
-					}
-				>
-					{splittingWord(order.status)}
-				</Text>
-			</Box>
-			<Box flexDirection={'row'} mt={2} justifyContent={'space-between'}>
-				<Button
-					backgroundColor={'#E7E7E7'}
-					styleText={styles.textBtn}
-					styleContainer={{
-						maxWidth: !isStatusCanceled && 150,
-						width: '100%',
-					}}
-					onPress={onPressDetails}
-					title={`Order details (${order.products?.length}+)`}
-				/>
-				{isCompletedStatuses && !isStatusCanceled && (
-					<Button
-						backgroundColor={colors.green}
-						styleContainer={styles.containerBtn}
-						onPress={onPressRepeat}
-						title={'Repeat order'}
-					/>
-				)}
-				{!isCompletedStatuses && !isStatusCanceled && (
-					<Button
-						backgroundColor={colors.green}
-						styleContainer={styles.containerBtn}
-						onPress={onPressCheckStatus}
-						title={'Check status'}
-					/>
-				)}
-			</Box>
-		</Box>
-	)
-})
+)
 const styles = StyleSheet.create({
 	textBtn: {
 		color: colors.black,

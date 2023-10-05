@@ -6,7 +6,7 @@ import ArrowBack from '../../components/ArrowBack'
 import { NavigationProp, ParamListBase, useNavigation } from '@react-navigation/native'
 import { colors } from '../../assets/colors/colors'
 import Button from '../../components/Button'
-import { Dimensions, FlatList, ImageBackground, StyleSheet } from 'react-native'
+import { Dimensions, FlatList, ImageBackground, StyleSheet, Text as Text1 } from 'react-native'
 import SubCategoriesViewer from '../../components/list-viewer/CategoriesViewer'
 import { renderEmptyContainer } from '../../components/list-viewer/empty-list'
 import { observer } from 'mobx-react-lite'
@@ -19,9 +19,9 @@ import { CartType } from '../../store/CartStore/cart-store'
 import PopUpAboutStore from '../../components/modalPopUp/PopUpAboutStore'
 import { formatProductPrice } from '../../components/MapViews/utils'
 import { routerConstants } from '../../constants/routerConstants'
-import { getTotalSumProductsCart, updateValueCartProducts } from '../../utils/utilsCart'
 import * as Animatable from 'react-native-animatable'
 import { createAlert } from '../../components/Alert'
+import { LinearGradient } from 'expo-linear-gradient'
 
 type StoreSProps = {
 	navigation: NavigationProp<ParamListBase>
@@ -31,45 +31,22 @@ const StoreS = observer(({ navigation }: StoreSProps) => {
 	const { cart, setToCartStore, setPromoCode, addProductToCart, updateProduct } = CartStore
 	const { store, allProductStore, getAndSetAllProduct, chosenSubCategory, setChosenSubCategory } =
 		StoresStore
-	const navigate = useNavigation()
-
-	useEffect(() => {
-		/*	const newCart: CartType = {
-			idStore: store._id,
-			storeName: store.name,
-			deliviryTime: store.deliveryTime,
-			totalSum: 0,
-			products: [],
-		}
-		if (!cart?.idStore) {
-			setToCartStore(newCart)
-		}*/
-		getAndSetAllProduct(store.subCategories)
-		return () => {
-			getAndSetAllProduct([])
-			setChosenSubCategory(null)
-		}
-	}, [])
-
 	const [isShowModalProduct, setIsShowModalProduct] = useState<boolean>(false)
 	const [isShowModalAboutStore, setIsShowModalAboutStore] = useState<boolean>(false)
 
 	const [selectedSubCategory, setSelectedSubCategory] = useState<SubCategoryType | null>()
 	const [selectedProduct, setSelectedProduct] = useState<ProductType>()
 	const [selectedSubCategoryId, setSelectedSubCategoryId] = useState<string>('')
-	useEffect(() => {
-		if (chosenSubCategory) {
-			setSelectedSubCategory(chosenSubCategory)
-			// @ts-ignore
-			setSelectedSubCategoryId(chosenSubCategory?._id)
-		}
-	}, [chosenSubCategory])
+	const [isLoaded, setIsLoaded] = useState(false)
+
+	const currentProducts = selectedSubCategory?.products ?? allProductStore
+
 	const currentValueToCartProduct = cart?.products?.find(
 		(product) => product?._id === selectedProduct?._id
 	)
 	const totalSumCart = formatProductPrice(cart?.totalSum ?? 0)
 	const onPressGoBack = () => {
-		navigate.goBack()
+		navigation.goBack()
 	}
 	const onPressAboutStore = () => {
 		setIsShowModalAboutStore(true)
@@ -181,8 +158,19 @@ const StoreS = observer(({ navigation }: StoreSProps) => {
 		},
 		[selectedSubCategoryId]
 	)
-	const [isLoaded, setIsLoaded] = useState(false)
-	const currentProducts = selectedSubCategory?.products ?? allProductStore
+	useEffect(() => {
+		getAndSetAllProduct(store.subCategories)
+		return () => {
+			getAndSetAllProduct([])
+			setChosenSubCategory(null)
+		}
+	}, [])
+	useEffect(() => {
+		if (chosenSubCategory) {
+			setSelectedSubCategory(chosenSubCategory)
+			setSelectedSubCategoryId(chosenSubCategory?._id)
+		}
+	}, [chosenSubCategory])
 	return (
 		<>
 			<BaseWrapperComponent backgroundColor={'white'} isKeyboardAwareScrollView={true}>
@@ -217,24 +205,34 @@ const StoreS = observer(({ navigation }: StoreSProps) => {
 							<Box
 								flex={1}
 								w={'100%'}
+								position={'absolute'}
+								bottom={10}
 								alignItems={'center'}
 								flexDirection={'row'}
 								justifyContent={'space-between'}
 							>
-								<Box ml={4} mt={5} justifyContent={'flex-start'}>
+								<Box
+									ml={2}
+									borderRadius={10}
+									maxWidth={200}
+									paddingY={2}
+									paddingX={3}
+									backgroundColor={`rgba(192, 188, 188, 0.44)`}
+									justifyContent={'flex-start'}
+								>
 									<Text
 										color={colors.grayLightWhite}
-										style={styles.textWithShadow}
+										style={{ fontSize: 20, ...styles.textWithShadow }}
 										fontWeight={'700'}
-										fontSize={28}
 									>
 										{store?.name}
 									</Text>
 								</Box>
-								<Box position={'absolute'} bottom={10} right={5}>
+
+								<Box mr={2}>
 									<Button
-										backgroundColor={colors.grayDarkLight}
-										styleText={{ color: colors.white, ...styles.textWithShadow }}
+										backgroundColor={'transparent'}
+										styleText={{ fontSize: 18, color: colors.white, ...styles.textWithShadow }}
 										onPress={onPressAboutStore}
 										title={'About store'}
 									/>
@@ -273,7 +271,7 @@ const StoreS = observer(({ navigation }: StoreSProps) => {
 						<Box mb={10}>
 							<FlatList
 								scrollEnabled={false}
-								data={selectedSubCategory?.products ?? allProductStore}
+								data={currentProducts}
 								horizontal={false}
 								renderItem={productViews}
 								style={{ width: '100%' }}
@@ -288,9 +286,6 @@ const StoreS = observer(({ navigation }: StoreSProps) => {
 									styles.contentContainerStyleProducts
 								}
 							/>
-							{/*{currentProducts?.map((item, index) => {
-								return productViews({ item: item, index: index })
-							})}*/}
 						</Box>
 					</Box>
 				</Box>
@@ -350,9 +345,10 @@ const StoreS = observer(({ navigation }: StoreSProps) => {
 const styles = StyleSheet.create({
 	textWithShadow: {
 		fontWeight: 'bold',
-		textShadowColor: 'black',
-		textShadowOffset: { width: 2, height: 2 },
-		textShadowRadius: 2,
+		color: colors.grayLightWhite, // Цвет текста
+		textShadowColor: 'black', // Цвет контура
+		textShadowOffset: { width: 1, height: 2 }, // Смещение контура
+		textShadowRadius: 2, // Радиус контура
 	},
 	contentContainerOrder: {
 		flex: 1,

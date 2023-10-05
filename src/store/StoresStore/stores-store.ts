@@ -19,13 +19,15 @@ export class StoresStore {
 		const chosenSubCategories = subCategories?.filter(
 			(el) => el.category === this.selectedSubCategoryId
 		)
+
 		if (chosenSubCategories[0]?.products?.length) {
 			this.setChosenSubCategory(chosenSubCategories[0])
-			return (this.allProductStore = chosenSubCategories[0]?.products)
 		}
+
 		if (!subCategories?.length) {
 			return (this.allProductStore = [])
 		}
+
 		subCategories?.map((subCategory) => {
 			subCategory.products?.map((product) => {
 				this.allProductStore.push(product)

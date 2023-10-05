@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { memo, useCallback, useState } from 'react'
 import { Box, Text } from 'native-base'
 import { colors } from '../../assets/colors/colors'
 import like from '../../assets/images/like.png'
@@ -8,6 +8,8 @@ import { StoreType } from '../../api/storesApi'
 import ImageDisplay from '../ImageDisplay'
 import DeliveryTime from '../DeliveryTime'
 import { getInfoAboutStoreWorkTime } from './utils'
+import { observer } from 'mobx-react-lite'
+import rootStore from '../../store/RootStore/root-store'
 
 type StoresViewerType = {
 	stores: StoreType
@@ -16,105 +18,119 @@ type StoresViewerType = {
 	onPressRemoveFavoriteStore: () => void
 	checkFavoriteStore: boolean
 }
+/*const test = {
+	monday: 'Closed',
 
-const StoresViewer = ({
-	stores,
-	onPress,
-	checkFavoriteStore,
-	onPressSaveFavoriteStore,
-	onPressRemoveFavoriteStore,
-}: StoresViewerType) => {
-	const { width } = Dimensions.get('window')
-	const productWidth = width - 20
-	//	const [isFavorite, setIsFavorite] = useState(checkFavoriteStore)
-	const { isWilOpen, currentTimeInRangeText } = getInfoAboutStoreWorkTime(stores?.workingHours)
-
-	const onPressFavoriteStore = () => {
-		checkFavoriteStore ? onPressRemoveFavoriteStore() : onPressSaveFavoriteStore()
-		//	setIsFavorite((prevState) => !prevState)
-	}
-	return (
-		<TouchableOpacity
-			onPress={onPress}
-			style={{
-				flex: 1,
-				borderRadius: 16,
-				height: 223,
-				minWidth: productWidth,
-				maxWidth: productWidth,
-				marginBottom: 20,
-			}}
-		>
-			<Box
-				backgroundColor={'rgba(203,203,203,0.27)'}
-				borderRadius={16}
-				alignItems={'flex-start'}
-				justifyContent={'space-between'}
-				mb={3}
-				borderColor={colors.green}
+	tuesday: '10:59 - 11:00',
+	wednesday: '10:19 - 15:05',
+	thursday: 'Closed',
+	friday: 'Closed',
+	saturday: 'Closed',
+	sunday: 'Closed',
+}*/
+const StoresViewer = memo(
+	({
+		stores,
+		onPress,
+		checkFavoriteStore,
+		onPressSaveFavoriteStore,
+		onPressRemoveFavoriteStore,
+	}: StoresViewerType) => {
+		const { width } = Dimensions.get('window')
+		const productWidth = width - 20
+		//	const [isFavorite, setIsFavorite] = useState(checkFavoriteStore)
+		const { isWilOpen, currentTimeInRangeText } = getInfoAboutStoreWorkTime(stores?.workingHours)
+		console.log('StoresViewer')
+		const onPressFavoriteStore = () => {
+			checkFavoriteStore ? onPressRemoveFavoriteStore() : onPressSaveFavoriteStore()
+			//	setIsFavorite((prevState) => !prevState)
+		}
+		return (
+			<TouchableOpacity
+				onPress={onPress}
+				style={{
+					flex: 1,
+					borderRadius: 16,
+					height: 223,
+					minWidth: productWidth,
+					maxWidth: productWidth,
+					marginBottom: 20,
+				}}
 			>
-				<Box>
-					<Box position={'absolute'} top={2} left={2} zIndex={10}>
-						<DeliveryTime time={stores.deliveryTime} fontSizeText={13} />
-					</Box>
-					<Box position={'absolute'} p={1} zIndex={10} top={2} right={2}>
-						<TouchableOpacity onPress={onPressFavoriteStore}>
-							<Image
-								style={{ width: 34, height: 34 }}
-								source={checkFavoriteStore ? likeActive : like}
-								alt={'like'}
+				<Box
+					backgroundColor={'rgba(203,203,203,0.27)'}
+					borderRadius={16}
+					alignItems={'flex-start'}
+					justifyContent={'space-between'}
+					mb={3}
+					borderColor={colors.green}
+				>
+					<Box>
+						<Box position={'absolute'} top={2} left={2} zIndex={10}>
+							<DeliveryTime time={stores.deliveryTime} fontSizeText={13} />
+						</Box>
+						<Box position={'absolute'} p={1} zIndex={10} top={2} right={2}>
+							<TouchableOpacity onPress={onPressFavoriteStore}>
+								<Image
+									style={{ width: 34, height: 34 }}
+									source={checkFavoriteStore ? likeActive : like}
+									alt={'like'}
+								/>
+							</TouchableOpacity>
+						</Box>
+						<Box width={productWidth} h={170}>
+							<ImageDisplay
+								alt={'image-store'}
+								borderRadius={16}
+								source={{ uri: stores.image }}
+								style={{
+									flex: 1,
+									width: '100%',
+									height: '100%',
+									borderRadius: 16,
+								}}
 							/>
-						</TouchableOpacity>
-					</Box>
-					<Box width={productWidth} h={170}>
-						<ImageDisplay
-							alt={'image-store'}
+						</Box>
+						<Box
+							position={'absolute'}
+							bottom={0}
+							right={0}
+							backgroundColor={isWilOpen ? colors.red : colors.green}
 							borderRadius={16}
-							source={{ uri: stores.image }}
-							style={{
-								flex: 1,
-								width: '100%',
-								height: '100%',
-								borderRadius: 16,
-							}}
-						/>
+							borderRightRadius={0}
+							paddingY={1}
+							paddingX={3}
+						>
+							<Text color={colors.white} fontWeight={'600'} fontSize={14}>
+								{currentTimeInRangeText}
+							</Text>
+						</Box>
 					</Box>
-					<Box
-						position={'absolute'}
-						bottom={0}
-						right={0}
-						backgroundColor={isWilOpen ? colors.red : colors.green}
-						borderRadius={16}
-						borderRightRadius={0}
-						paddingY={1}
-						paddingX={3}
-					>
-						<Text color={colors.white} fontWeight={'600'} fontSize={14}>
-							{currentTimeInRangeText}
+					<Box paddingY={2} w={'100%'} borderBottomRightRadius={16} borderBottomLeftRadius={16}>
+						<Text ml={3} fontSize={18} fontWeight={'700'} color={colors.balck}>
+							{stores?.name}
 						</Text>
+						<Box ml={3} flexDirection={'row'} flexWrap={'wrap'} w={'90%'} alignItems={'center'}>
+							{stores?.categories?.map((subCategory, key) => {
+								const lastElem = stores?.categories?.length - 1 === key
+								return (
+									<Text
+										key={`${subCategory._id}-${key}`}
+										color={colors.gray}
+										fontSize={11}
+										fontWeight={'500'}
+									>{`${subCategory.name}${lastElem ? '' : ', '}`}</Text>
+								)
+							})}
+						</Box>
 					</Box>
 				</Box>
-				<Box paddingY={2} w={'100%'} borderBottomRightRadius={16} borderBottomLeftRadius={16}>
-					<Text ml={3} fontSize={18} fontWeight={'700'} color={colors.balck}>
-						{stores?.name}
-					</Text>
-					<Box ml={3} flexDirection={'row'} flexWrap={'wrap'} w={'90%'} alignItems={'center'}>
-						{stores?.categories?.map((subCategory, key) => {
-							const lastElem = stores?.categories?.length - 1 === key
-							return (
-								<Text
-									key={`${subCategory._id}-${key}`}
-									color={colors.gray}
-									fontSize={11}
-									fontWeight={'500'}
-								>{`${subCategory.name}${lastElem ? '' : ', '}`}</Text>
-							)
-						})}
-					</Box>
-				</Box>
-			</Box>
-		</TouchableOpacity>
-	)
-}
+			</TouchableOpacity>
+		)
+	},
+	(prevProps, nextProps) => {
+		return nextProps.stores._id === prevProps.stores._id
+	}
+)
 
 export default StoresViewer

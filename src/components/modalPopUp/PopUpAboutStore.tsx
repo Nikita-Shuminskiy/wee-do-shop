@@ -25,9 +25,8 @@ type PopUpAboutStoreProps = {
 /*const test = {
 	monday: 'Closed',
 
-	tuesday: '19:47 - 02:03',
-
-	wednesday: 'Closed',
+	tuesday: '10:00 - 03:00',
+	wednesday: '10:19 - 15:05',
 	thursday: 'Closed',
 	friday: 'Closed',
 	saturday: 'Closed',

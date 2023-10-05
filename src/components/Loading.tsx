@@ -6,21 +6,20 @@ import { Box } from 'native-base'
 import { BlurView } from 'expo-blur'
 
 const Loading = memo(({ visible }: any) => {
-    const rotateAnim = new Animated.Value(0);
-    useEffect(() => {
-        const rotationAnimation = Animated.loop(
-            Animated.timing(rotateAnim, {
-                toValue: 2,
-                duration: 2000,
-                useNativeDriver: true,
+	const rotateAnim = new Animated.Value(0)
+	useEffect(() => {
+		const rotationAnimation = Animated.loop(
+			Animated.timing(rotateAnim, {
+				toValue: 2,
+				duration: 2000,
+				useNativeDriver: true,
+			})
+		)
 
-            })
-        );
+		rotationAnimation.start()
 
-        rotationAnimation.start();
-
-        return () => rotationAnimation.stop();
-    }, [visible]);
+		return () => rotationAnimation.stop()
+	}, [visible])
 
 	const rotateInterpolate = rotateAnim.interpolate({
 		inputRange: [0, 1],
@@ -33,7 +32,7 @@ const Loading = memo(({ visible }: any) => {
 			position={'absolute'}
 			top={'50%'}
 			zIndex={10}
-            w={'100%'}
+			w={'100%'}
 			backgroundColor={'transparent'}
 			justifyContent={'center'}
 			alignItems={'center'}

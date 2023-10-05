@@ -31,24 +31,24 @@ const orderViews = ({ item }: { item: { amount: number; product: ProductType } }
 						height: 47,
 						aspectRatio: 47 / 47,
 					}}
-					source={{ uri: item.product.image }}
+					source={{ uri: item?.product?.image }}
 					alt={'img-product'}
 				/>
 				<Box ml={2}>
 					<Text fontSize={12} fontWeight={'500'}>
-						{item.product.name}
+						{item.product?.name}
 					</Text>
 					<Text fontSize={12} fontWeight={'500'}>
-						{item.product.effect}
+						{item.product?.effect}
 					</Text>
 					<Text fontSize={12} fontWeight={'500'}>
-						x{item.amount}
+						x{item?.amount}
 					</Text>
 				</Box>
 			</Box>
 			<Box>
 				<Text fontSize={14} fontWeight={'500'}>
-					฿ {formatProductPrice(item.product.price)}
+					฿ {formatProductPrice(item?.product?.price)}
 				</Text>
 			</Box>
 		</Box>

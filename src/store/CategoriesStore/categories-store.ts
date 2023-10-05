@@ -8,7 +8,6 @@ export class CategoriesStore {
 
 	async getCategories(): Promise<void> {
 		const { data } = await categoriesApi.getCategories()
-		console.log(data)
 		this.setCategories(data.results)
 	}
 
