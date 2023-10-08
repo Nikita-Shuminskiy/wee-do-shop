@@ -104,11 +104,7 @@ const HomeS = observer(({ navigation, route }: HomeSProps) => {
 					navigation={navigation}
 				/>
 				<Box mt={2} w={'100%'} flex={1} borderTopLeftRadius={16} borderTopRightRadius={16}>
-					<SearchStores
-						setSearch={setSearch}
-						search={search}
-						selectedSubCategoryId={chosenSubCategoryId}
-					/>
+					<SearchStores setSearch={setSearch} search={search} />
 					<Box mt={5} alignItems={'center'} w={'100%'}>
 						<Carousel
 							keyExtractor={(item, index) => index.toString()}
