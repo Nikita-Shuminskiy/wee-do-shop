@@ -61,9 +61,10 @@ export class StoresStore {
 		this.setStore(data)
 	}
 
-	async getFavoriteStores(id: string): Promise<void> {
+	async getFavoriteStores(id: string): Promise<StoreType[]> {
 		const { data } = await storesApi.getFavoriteStores(id)
 		this.setFavoriteStore(data)
+		return data
 	}
 
 	async searchStores(dataSearch: dataSearchType): Promise<void> {

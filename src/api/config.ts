@@ -49,8 +49,6 @@ instance.interceptors.response.use(
 
 				return axios(originalRequest)
 			} catch (e) {
-				console.log(e?.response?.data)
-				console.log('interceptors response catch')
 				// return Promise.reject(e);
 			}
 		}

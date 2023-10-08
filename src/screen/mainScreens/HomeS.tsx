@@ -1,7 +1,7 @@
-import React, { useCallback, useEffect, useRef } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import { BaseWrapperComponent } from '../../components/baseWrapperComponent'
-import { Box } from 'native-base'
+import { Box, ScrollView } from 'native-base'
 import AuthStore from '../../store/AuthStore/auth-store'
 import { Dimensions, FlatList, Image, StyleSheet } from 'react-native'
 import { colors } from '../../assets/colors/colors'
@@ -9,7 +9,6 @@ import { renderEmptyContainer } from '../../components/list-viewer/empty-list'
 import SubCategoriesViewer from '../../components/list-viewer/CategoriesViewer'
 import StoresViewer from '../../components/list-viewer/StoresViewer'
 import rootStore from '../../store/RootStore/root-store'
-import { CategoryType } from '../../api/categoriesApi'
 import { routerConstants } from '../../constants/routerConstants'
 import { NavigationProp, ParamListBase } from '@react-navigation/native'
 import SearchStores from '../../components/SearchStores'
@@ -17,103 +16,102 @@ import { StoreType } from '../../api/storesApi'
 import HeaderUser from '../../components/headerUser'
 import Carousel from 'react-native-snap-carousel'
 import { BannersType } from '../../api/userApi'
+import BannersViewer from '../../components/list-viewer/BannersViewer'
 
 type HomeSProps = {
 	navigation: NavigationProp<ParamListBase>
+	route: any
 }
-const HomeS = observer(({ navigation }: HomeSProps) => {
+const HomeS = observer(({ navigation, route }: HomeSProps) => {
 	const { user, banners } = AuthStore
 	const { StoresService, StoresStore, CategoriesService, CategoriesStore } = rootStore
-	const {
-		stores,
-		setStore,
-		favoriteStores,
-		search,
-		setSearch,
-		setSelectedSubCategoryId,
-		selectedSubCategoryId,
-	} = StoresStore
+	const { stores, setStore, favoriteStores, search, setSearch, setSelectedSubCategoryId } =
+		StoresStore
 	const { categories } = CategoriesStore
+	const carouselRef = useRef<any>(null)
+	const [chosenSubCategoryId, setChosenSubCategoryId] = useState('')
+	const [favoritesStores, setFavoritesStores] = useState<string[]>([])
 
-	const categoriesViews = useCallback(
-		({ item }: { item: CategoryType }) => {
-			const onPressCategory = () => {
-				const isCurrentChosenSubCategory = item._id === selectedSubCategoryId
-				if (isCurrentChosenSubCategory) {
-					setSelectedSubCategoryId('')
-				} else {
-					setSelectedSubCategoryId(item._id)
-				}
+	const onPressCategory = useCallback((item) => {
+		setChosenSubCategoryId((prevState) => {
+			StoresService.searchStores({ categoryId: prevState === item._id ? '' : item._id })
+			setSelectedSubCategoryId(prevState === item._id ? '' : item._id)
+			return prevState === item._id ? '' : item._id
+		})
+	}, [])
 
-				StoresService.searchStores({ categoryId: isCurrentChosenSubCategory ? '' : item._id })
+	const onPressToggleFavoriteStore = useCallback((storeId) => {
+		setFavoritesStores((prevState) => {
+			const checkStore = prevState.find((prevS) => prevS === storeId)
+			if (checkStore) {
+				StoresService.deleteFavoriteStore(storeId)
+				return prevState.filter((favStore) => favStore !== storeId)
+			} else {
+				StoresService.saveFavoriteStore(storeId)
+				return [...prevState, storeId]
 			}
-			return (
-				<SubCategoriesViewer<CategoryType>
-					isCategory={true}
-					selectedSubCategoryId={selectedSubCategoryId}
-					onPress={onPressCategory}
-					subCategory={item}
-				/>
-			)
-		},
-		[selectedSubCategoryId]
-	)
+		})
+	}, [])
+
+	const onPress = useCallback((store) => {
+		setStore(store)
+		navigation.navigate(routerConstants.STORE)
+	}, [])
+
 	const storesViews = useCallback(
 		({ item }: { item: StoreType }) => {
-			const onPress = () => {
-				setStore(item)
-				navigation.navigate(routerConstants.STORE)
-			}
-			const onPressSaveFavoriteStore = () => {
-				StoresService.saveFavoriteStore(item._id)
-			}
-			const onPressRemoveFavoriteStore = () => {
-				StoresService.deleteFavoriteStore(item._id)
-			}
-			const checkFavoriteStore = favoriteStores.some((storeF) => storeF._id === item._id)
 			return (
 				<StoresViewer
-					checkFavoriteStore={checkFavoriteStore}
-					onPressSaveFavoriteStore={onPressSaveFavoriteStore}
-					onPressRemoveFavoriteStore={onPressRemoveFavoriteStore}
+					isFavorite={favoritesStores.some((storeId) => storeId === item._id)}
+					onPressToggleFavoriteStore={onPressToggleFavoriteStore}
 					onPress={onPress}
 					stores={item}
 				/>
 			)
 		},
-		[favoriteStores]
+		[favoritesStores]
 	)
-
+	const getFavoriteStores = () => {
+		StoresService.getFavoriteStores().then((data) => {
+			setFavoritesStores(data.map((el) => el._id))
+		})
+	}
+	useEffect(() => {
+		if (route.params?.from === 'favorite') {
+			getFavoriteStores()
+		}
+	}, [route?.params])
 	useEffect(() => {
 		StoresService.getStores()
 		CategoriesService.getCategories()
-		StoresService.getFavoriteStores()
+		getFavoriteStores()
 		return () => {
 			setSearch('')
+			setFavoritesStores([])
 		}
 	}, [])
 
 	const bannersView = useCallback(({ item }: { item: BannersType }) => {
-		return (
-			<Box mr={1} w={353} h={74}>
-				<Image style={{ width: 353, height: 74 }} source={{ uri: item.image }} />
-			</Box>
-		)
+		return <BannersViewer image={item.image} />
 	}, [])
-	const carouselRef = useRef<any>(null)
 
 	return (
 		<BaseWrapperComponent backgroundColor={colors.white} isKeyboardAwareScrollView={true}>
 			<Box paddingX={2} w={'100%'} flex={1}>
-				<HeaderUser address={user?.address} navigation={navigation} />
+				<HeaderUser
+					address={user?.address}
+					setFavoritesStores={() => setFavoritesStores([])}
+					navigation={navigation}
+				/>
 				<Box mt={2} w={'100%'} flex={1} borderTopLeftRadius={16} borderTopRightRadius={16}>
 					<SearchStores
 						setSearch={setSearch}
 						search={search}
-						selectedSubCategoryId={selectedSubCategoryId}
+						selectedSubCategoryId={chosenSubCategoryId}
 					/>
 					<Box mt={5} alignItems={'center'} w={'100%'}>
 						<Carousel
+							keyExtractor={(item, index) => index.toString()}
 							ref={carouselRef}
 							layout={'default'}
 							data={banners}
@@ -128,20 +126,27 @@ const HomeS = observer(({ navigation }: HomeSProps) => {
 						/>
 					</Box>
 					<Box mt={3} mb={3} w={'100%'} flex={1}>
-						<FlatList
-							data={categories}
-							renderItem={categoriesViews}
-							keyExtractor={(item, index) => index.toString()}
-							style={{ width: '100%' }}
-							contentContainerStyle={!categories?.length && styles.contentContainerStyle}
-							ListEmptyComponent={() => renderEmptyContainer(0, '')}
+						<ScrollView
 							horizontal={true}
-							showsVerticalScrollIndicator={false}
 							showsHorizontalScrollIndicator={false}
-						/>
+							contentContainerStyle={{ flexGrow: 1, flexDirection: 'row' }}
+						>
+							{categories.map((el) => {
+								return (
+									<SubCategoriesViewer
+										key={el._id}
+										isChosen={chosenSubCategoryId === el?._id}
+										isCategory={true}
+										onPress={onPressCategory}
+										subCategory={el}
+									/>
+								)
+							})}
+						</ScrollView>
 					</Box>
 					<Box flex={5}>
 						<FlatList
+							extraData={favoritesStores}
 							scrollEnabled={false}
 							data={stores}
 							renderItem={storesViews}

@@ -1,11 +1,11 @@
-import React, { useEffect } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import { BaseWrapperComponent } from '../../components/baseWrapperComponent'
 import { observer } from 'mobx-react-lite'
 import AuthStore from '../../store/AuthStore/auth-store'
 import { Box, Text } from 'native-base'
 import { routerConstants } from '../../constants/routerConstants'
 import StoresViewer from '../../components/list-viewer/StoresViewer'
-import EmptyList from '../../components/list-viewer/empty-list'
+import EmptyList, { renderEmptyContainer } from '../../components/list-viewer/empty-list'
 import { NavigationProp, ParamListBase } from '@react-navigation/native'
 import { Dimensions, FlatList, StyleSheet } from 'react-native'
 import rootStore from '../../store/RootStore/root-store'
@@ -13,44 +13,41 @@ import ArrowBack from '../../components/ArrowBack'
 import arrowLeftBack from '../../assets/images/arrow-left.png'
 import { colors } from '../../assets/colors/colors'
 import { StoreType } from '../../api/storesApi'
+import useGoBackNative from '../../utils/hook/useGoBackNative'
 
 type FavoriteSType = {
 	navigation: NavigationProp<ParamListBase>
 }
 const FavoriteS = observer(({ navigation }: FavoriteSType) => {
-	const { user } = AuthStore
 	const { StoresStore, StoresService } = rootStore
 	const { setStore, favoriteStores } = StoresStore
-
-	const storesViews = ({ item }: { item: StoreType }) => {
-		const onPress = () => {
-			setStore(item)
-			navigation.navigate(routerConstants.STORE)
-		}
-		const onPressSaveFavoriteStore = () => {}
-		const onPressRemoveFavoriteStore = () => {
-			StoresService.deleteFavoriteStore(item._id)
-		}
+	const onPress = useCallback((store) => {
+		setStore(store)
+		navigation.navigate(routerConstants.STORE)
+	}, [])
+	const onPressRemoveFavoriteStore = useCallback((id) => {
+		StoresService.deleteFavoriteStore(id)
+	}, [])
+	const storesViews = useCallback(({ item }: { item: StoreType }) => {
 		return (
 			<StoresViewer
-				checkFavoriteStore={true}
-				onPressSaveFavoriteStore={onPressSaveFavoriteStore}
-				onPressRemoveFavoriteStore={onPressRemoveFavoriteStore}
+				isFavorite={true}
+				onPressToggleFavoriteStore={onPressRemoveFavoriteStore}
 				onPress={onPress}
 				stores={item}
 			/>
 		)
-	}
-	const renderEmptyContainer = (height, text) => {
-		const onPressLink = () => {}
-		return <EmptyList height={height} text={text} onPressLink={onPressLink} />
-	}
+	}, [])
 	const onPressGoBack = () => {
-		navigation.goBack()
+		navigation.navigate(routerConstants.HOME, { from: 'favorite' })
+		// Возвращаем true, чтобы предотвратить стандартное поведение кнопки "Назад" (например, закрытие приложения)
+		return true
 	}
 	useEffect(() => {
 		StoresService.getFavoriteStores()
 	}, [])
+	useGoBackNative(onPressGoBack)
+
 	return (
 		<BaseWrapperComponent isKeyboardAwareScrollView={true}>
 			<Box paddingX={2} mt={5}>

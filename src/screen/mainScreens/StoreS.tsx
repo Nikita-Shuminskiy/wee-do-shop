@@ -35,15 +35,15 @@ const StoreS = observer(({ navigation }: StoreSProps) => {
 
 	useEffect(() => {
 		/*	const newCart: CartType = {
-			idStore: store._id,
-			storeName: store.name,
-			deliviryTime: store.deliveryTime,
-			totalSum: 0,
-			products: [],
-		}
-		if (!cart?.idStore) {
-			setToCartStore(newCart)
-		}*/
+      idStore: store._id,
+      storeName: store.name,
+      deliviryTime: store.deliveryTime,
+      totalSum: 0,
+      products: [],
+    }
+    if (!cart?.idStore) {
+      setToCartStore(newCart)
+    }*/
 		getAndSetAllProduct(store.subCategories)
 		return () => {
 			getAndSetAllProduct([])
@@ -57,6 +57,7 @@ const StoreS = observer(({ navigation }: StoreSProps) => {
 	const [selectedSubCategory, setSelectedSubCategory] = useState<SubCategoryType | null>()
 	const [selectedProduct, setSelectedProduct] = useState<ProductType>()
 	const [selectedSubCategoryId, setSelectedSubCategoryId] = useState<string>('')
+	const [isLoaded, setIsLoaded] = useState(false)
 	useEffect(() => {
 		if (chosenSubCategory) {
 			setSelectedSubCategory(chosenSubCategory)
@@ -158,22 +159,18 @@ const StoreS = observer(({ navigation }: StoreSProps) => {
 		},
 		[cart, store._id]
 	)
+	const onPressSelectedSubCategory = useCallback((item) => {
+		setSelectedSubCategoryId((prevState) => {
+			prevState === item._id ? setSelectedSubCategory(null) : setSelectedSubCategory(item)
+			return prevState === item._id ? '' : item._id
+		})
+	}, [])
 
 	const sebCategoriesViews = useCallback(
 		({ item }: { item: SubCategoryType }) => {
-			const onPressSelectedSubCategory = () => {
-				const isCurrentChosenSubCategory = item._id === selectedSubCategoryId
-				if (isCurrentChosenSubCategory) {
-					setSelectedSubCategory(null)
-					setSelectedSubCategoryId('')
-					return
-				}
-				setSelectedSubCategory(item)
-				setSelectedSubCategoryId(item?._id)
-			}
 			return (
-				<SubCategoriesViewer<SubCategoryType>
-					selectedSubCategoryId={selectedSubCategoryId}
+				<SubCategoriesViewer
+					isChosen={selectedSubCategoryId === item._id}
 					onPress={onPressSelectedSubCategory}
 					subCategory={item}
 				/>
@@ -181,8 +178,7 @@ const StoreS = observer(({ navigation }: StoreSProps) => {
 		},
 		[selectedSubCategoryId]
 	)
-	const [isLoaded, setIsLoaded] = useState(false)
-	const currentProducts = selectedSubCategory?.products ?? allProductStore
+
 	return (
 		<>
 			<BaseWrapperComponent backgroundColor={'white'} isKeyboardAwareScrollView={true}>
