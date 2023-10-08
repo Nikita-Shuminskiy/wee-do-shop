@@ -34,16 +34,6 @@ const StoreS = observer(({ navigation }: StoreSProps) => {
 	const navigate = useNavigation()
 
 	useEffect(() => {
-		/*	const newCart: CartType = {
-      idStore: store._id,
-      storeName: store.name,
-      deliviryTime: store.deliveryTime,
-      totalSum: 0,
-      products: [],
-    }
-    if (!cart?.idStore) {
-      setToCartStore(newCart)
-    }*/
 		getAndSetAllProduct(store.subCategories)
 		return () => {
 			getAndSetAllProduct([])
@@ -61,7 +51,7 @@ const StoreS = observer(({ navigation }: StoreSProps) => {
 	useEffect(() => {
 		if (chosenSubCategory) {
 			setSelectedSubCategory(chosenSubCategory)
-			// @ts-ignore
+
 			setSelectedSubCategoryId(chosenSubCategory?._id)
 		}
 	}, [chosenSubCategory])

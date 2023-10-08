@@ -15,16 +15,17 @@ export class StoresStore {
 	chosenSubCategory: SubCategoryType | null = null
 
 	getAndSetAllProduct(subCategories: SubCategoryType[]) {
+		if (!subCategories?.length) {
+			return (this.allProductStore = [])
+		}
+		console.log(subCategories?.length)
 		// @ts-ignore el.category === string
 		const chosenSubCategories = subCategories?.filter(
 			(el) => el.category === this.selectedSubCategoryId
 		)
 		if (chosenSubCategories[0]?.products?.length) {
 			this.setChosenSubCategory(chosenSubCategories[0])
-			return (this.allProductStore = chosenSubCategories[0]?.products)
-		}
-		if (!subCategories?.length) {
-			return (this.allProductStore = [])
+			//	return (this.allProductStore = chosenSubCategories[0]?.products)
 		}
 		subCategories?.map((subCategory) => {
 			subCategory.products?.map((product) => {
