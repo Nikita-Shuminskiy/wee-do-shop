@@ -18,7 +18,6 @@ export class StoresStore {
 		if (!subCategories?.length) {
 			return (this.allProductStore = [])
 		}
-		console.log(subCategories?.length)
 		// @ts-ignore el.category === string
 		const chosenSubCategories = subCategories?.filter(
 			(el) => el.category === this.selectedSubCategoryId

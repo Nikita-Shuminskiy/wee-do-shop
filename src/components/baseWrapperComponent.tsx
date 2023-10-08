@@ -1,59 +1,71 @@
-import React, {forwardRef} from 'react'
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
-import {GestureResponderEvent, Platform, SafeAreaView} from 'react-native'
-import {VirtualizedList} from "./virtualized-list";
+import React, { forwardRef, useState } from 'react'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import { GestureResponderEvent, Platform, RefreshControl, SafeAreaView } from 'react-native'
+import { VirtualizedList } from './virtualized-list'
 
 type BaseWrapperComponentType = {
-    children: JSX.Element | JSX.Element[]
-    onTouchStart?: (event: GestureResponderEvent) => void
-    onTouchEnd?: (event: GestureResponderEvent) => void
-    isKeyboardAwareScrollView?: boolean
-    styleSafeArea?: any
-    isBackdrop?: boolean
-    backgroundColor?: string
-    extraScrollHeight?: number
+	children: JSX.Element | JSX.Element[]
+	onTouchStart?: (event: GestureResponderEvent) => void
+	onTouchEnd?: (event: GestureResponderEvent) => void
+	isKeyboardAwareScrollView?: boolean
+	styleSafeArea?: any
+	isBackdrop?: boolean
+	backgroundColor?: string
+	extraScrollHeight?: number
+	onRefreshHandler?: () => void
 }
 export const BaseWrapperComponent = ({
-                                         children,
-                                         onTouchEnd,
-                                         onTouchStart,
-                                         isKeyboardAwareScrollView = false,
-                                         styleSafeArea,
-                                         backgroundColor = 'white',
-                                         extraScrollHeight
-                                     }: BaseWrapperComponentType) => {
+	children,
+	onTouchEnd,
+	onTouchStart,
+	isKeyboardAwareScrollView = false,
+	styleSafeArea,
+	backgroundColor = 'white',
+	extraScrollHeight,
+	onRefreshHandler,
+}: BaseWrapperComponentType) => {
+	const [refreshing, setRefreshing] = useState(false)
 
-    return (
-        <SafeAreaView style={{
-            flex: 1,
-            width: '100%',
-            marginTop: Platform.OS === 'ios' ? 0 : 29,
-            backgroundColor: backgroundColor, ...styleSafeArea
-        }}>
-            {isKeyboardAwareScrollView ? (
-
-                <KeyboardAwareScrollView
-                    enableOnAndroid={true}
-                    extraScrollHeight={extraScrollHeight}
-                    keyboardShouldPersistTaps={'handled'}
-                    contentContainerStyle={{
-                        marginBottom: 10,
-                        flexGrow: 1,
-                        width: '100%',
-                    }}
-                    style={{
-                        flex: 1,
-                        width: '100%'
-                    }}
-                    onTouchStart={onTouchStart}
-                    onTouchEnd={onTouchEnd}
-                >
-                    {children}
-                </KeyboardAwareScrollView>
-
-            ) : (
-                children
-            )}
-        </SafeAreaView>
-    )
+	const onRefresh = () => {
+		setRefreshing(true)
+		onRefreshHandler()
+		setTimeout(() => {
+			setRefreshing(false)
+		}, 1000)
+	}
+	return (
+		<SafeAreaView
+			style={{
+				flex: 1,
+				width: '100%',
+				marginTop: Platform.OS === 'ios' ? 0 : 29,
+				backgroundColor: backgroundColor,
+				...styleSafeArea,
+			}}
+		>
+			{isKeyboardAwareScrollView ? (
+				<KeyboardAwareScrollView
+					enableOnAndroid={true}
+					extraScrollHeight={extraScrollHeight}
+					keyboardShouldPersistTaps={'handled'}
+					refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+					contentContainerStyle={{
+						marginBottom: 10,
+						flexGrow: 1,
+						width: '100%',
+					}}
+					style={{
+						flex: 1,
+						width: '100%',
+					}}
+					onTouchStart={onTouchStart}
+					onTouchEnd={onTouchEnd}
+				>
+					{children}
+				</KeyboardAwareScrollView>
+			) : (
+				children
+			)}
+		</SafeAreaView>
+	)
 }

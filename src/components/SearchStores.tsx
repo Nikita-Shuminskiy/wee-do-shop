@@ -11,8 +11,9 @@ import { TouchableOpacity } from 'react-native'
 type SearchStoresType = {
 	search: string
 	setSearch: (text: string) => void
+	selectCategory: string
 }
-const SearchStores = memo(({ search, setSearch }: SearchStoresType) => {
+const SearchStores = memo(({ search, setSearch, selectCategory }: SearchStoresType) => {
 	const { StoresService } = rootStore
 
 	const handleTextChange = (newText) => {
@@ -20,7 +21,7 @@ const SearchStores = memo(({ search, setSearch }: SearchStoresType) => {
 	}
 
 	const onSubmitEditing = () => {
-		StoresService.searchStores({ search })
+		StoresService.searchStores({ search, categoryId: selectCategory })
 	}
 
 	return (
@@ -31,7 +32,7 @@ const SearchStores = memo(({ search, setSearch }: SearchStoresType) => {
 					search && (
 						<TouchableOpacity
 							onPress={() => {
-								StoresService.searchStores({ search: '' })
+								StoresService.searchStores({ search: '', categoryId: selectCategory })
 								setSearch('')
 							}}
 						>

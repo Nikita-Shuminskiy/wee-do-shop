@@ -81,10 +81,13 @@ const HomeS = observer(({ navigation, route }: HomeSProps) => {
 			getFavoriteStores()
 		}
 	}, [route?.params])
-	useEffect(() => {
+	const getHomeData = () => {
 		StoresService.getStores()
 		CategoriesService.getCategories()
 		getFavoriteStores()
+	}
+	useEffect(() => {
+		getHomeData()
 		return () => {
 			setSearch('')
 			setFavoritesStores([])
@@ -96,7 +99,11 @@ const HomeS = observer(({ navigation, route }: HomeSProps) => {
 	}, [])
 
 	return (
-		<BaseWrapperComponent backgroundColor={colors.white} isKeyboardAwareScrollView={true}>
+		<BaseWrapperComponent
+			onRefreshHandler={getHomeData}
+			backgroundColor={colors.white}
+			isKeyboardAwareScrollView={true}
+		>
 			<Box paddingX={2} w={'100%'} flex={1}>
 				<HeaderUser
 					address={user?.address}
@@ -104,7 +111,11 @@ const HomeS = observer(({ navigation, route }: HomeSProps) => {
 					navigation={navigation}
 				/>
 				<Box mt={2} w={'100%'} flex={1} borderTopLeftRadius={16} borderTopRightRadius={16}>
-					<SearchStores setSearch={setSearch} search={search} />
+					<SearchStores
+						selectCategory={chosenSubCategoryId}
+						setSearch={setSearch}
+						search={search}
+					/>
 					<Box mt={5} alignItems={'center'} w={'100%'}>
 						<Carousel
 							keyExtractor={(item, index) => index.toString()}
