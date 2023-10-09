@@ -35,11 +35,12 @@ const orderViews = ({ item }: { item: { amount: number; product: ProductType } }
 					alt={'img-product'}
 				/>
 				<Box ml={2}>
-					<Text fontSize={12} fontWeight={'500'}>
-						{item?.product?.name}
+					<Text fontSize={12} maxWidth={'70%'} fontWeight={'500'}>
+						{item?.product?.name}1 313 13 131 31 313 131 31 31 313 1 3{' '}
 					</Text>
-					<Text fontSize={12} fontWeight={'500'}>
-						{item?.product?.effect}
+					<Text fontSize={12} maxWidth={'70%'} fontWeight={'500'}>
+						{item?.product?.effect}{' '}
+						<Text color={colors.red}>{item?.product?.isDeleted && 'Product not available'}</Text>
 					</Text>
 					<Text fontSize={12} fontWeight={'500'}>
 						x{item?.amount}

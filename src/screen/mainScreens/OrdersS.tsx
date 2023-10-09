@@ -38,7 +38,8 @@ const OrdersS = observer(({ navigation, route }: OrdersSProps) => {
 	const ordersLength = orders?.length
 
 	const limit = 50
-	const offset = (page - 1) * limit
+	const offset = page - 1 === 0 ? 0 : page * limit
+
 	const requestAPI = () => {
 		setLoadingData(true)
 		OrderService.getOrders({
@@ -62,7 +63,9 @@ const OrdersS = observer(({ navigation, route }: OrdersSProps) => {
 		navigation.navigate(isFromStatusesScreen ? routerConstants.HOME : routerConstants.PROFILE_USER)
 	}
 	const onPressRepeat = useCallback((item: ApiOrderType) => {
-		const getProductsForOrder = item.products.map((product) => {
+		const filterDeletedProduct = item.products.filter((product) => !product.product.isDeleted)
+		if (!filterDeletedProduct.length) return
+		const getProductsForOrder = filterDeletedProduct.map((product) => {
 			return { amount: product.amount, ...product.product }
 		})
 		const gettotalSum = getTotalSumProductsCart(getProductsForOrder)
@@ -94,7 +97,7 @@ const OrdersS = observer(({ navigation, route }: OrdersSProps) => {
 		<Box style={styles.footerText}>
 			{isLoadingData && <ActivityIndicator size={'small'} color={colors.green} />}
 			{isLastOrders && orders.length >= totalOrders ? (
-				<Text color={colors.gray} fontWeight={'500'} fontSize={15}>
+				<Text color={colors.gray} fontWeight={'500'} fontSize={13}>
 					No more orders at the moment
 				</Text>
 			) : (
@@ -110,16 +113,18 @@ const OrdersS = observer(({ navigation, route }: OrdersSProps) => {
 	)
 	const fetchMoreData = () => {
 		if (isLastOrders || isLoadingData) return
-		console.log('requestAPI')
 		requestAPI()
 	}
 	const getHomeData = () => {
 		OrderService.getOrders({
 			limit,
 			offset,
+		}).then(() => {
+			setPage((prevState) => prevState + 1)
 		})
 	}
 	useEffect(() => {
+		console.log('use effect')
 		requestAPI()
 	}, [])
 	return (

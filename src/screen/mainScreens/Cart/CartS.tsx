@@ -88,6 +88,7 @@ const CartS = observer(({ navigation }: CartSProps) => {
 			],
 		})
 	}
+
 	const productTotalPrice = Number(formatProductPrice(cart?.totalSum ?? 0))
 	const isFreeDelivery =
 		Number(formatProductPrice(cart?.totalSum ?? 0)) >= 1500 ||
