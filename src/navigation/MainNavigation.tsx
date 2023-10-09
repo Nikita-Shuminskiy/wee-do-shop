@@ -68,7 +68,7 @@ const MainNavigation = ({ navigation, route }) => {
 				component={ShopsS}
 			/>
 			<TabMainStack.Screen
-				options={{ tabBarLabel: 'Orders', headerShown: false }}
+				options={{ tabBarLabel: 'Orders', headerShown: false, unmountOnBlur: true }}
 				name={routerConstants.HISTORY}
 				component={OrdersS}
 			/>

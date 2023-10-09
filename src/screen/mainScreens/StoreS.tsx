@@ -181,24 +181,34 @@ const StoreS = observer(({ navigation }: StoreSProps) => {
 							<Box
 								flex={1}
 								w={'100%'}
+								position={'absolute'}
+								bottom={10}
 								alignItems={'center'}
 								flexDirection={'row'}
 								justifyContent={'space-between'}
 							>
-								<Box ml={4} mt={5} justifyContent={'flex-start'}>
+								<Box
+									ml={2}
+									borderRadius={10}
+									maxWidth={200}
+									paddingY={2}
+									paddingX={3}
+									backgroundColor={`rgba(192, 188, 188, 0.44)`}
+									justifyContent={'flex-start'}
+								>
 									<Text
 										color={colors.grayLightWhite}
-										style={styles.textWithShadow}
+										style={{ fontSize: 20, ...styles.textWithShadow }}
 										fontWeight={'700'}
-										fontSize={28}
 									>
 										{store?.name}
 									</Text>
 								</Box>
-								<Box position={'absolute'} bottom={10} right={5}>
+
+								<Box mr={2}>
 									<Button
-										backgroundColor={colors.grayDarkLight}
-										styleText={{ color: colors.white, ...styles.textWithShadow }}
+										backgroundColor={'transparent'}
+										styleText={{ fontSize: 14, color: colors.white, ...styles.textWithShadow }}
 										onPress={onPressAboutStore}
 										title={'About store'}
 									/>
@@ -310,7 +320,7 @@ const styles = StyleSheet.create({
 	textWithShadow: {
 		fontWeight: 'bold',
 		textShadowColor: 'black',
-		textShadowOffset: { width: 2, height: 2 },
+		textShadowOffset: { width: -1, height: 2 },
 		textShadowRadius: 2,
 	},
 	contentContainerOrder: {
