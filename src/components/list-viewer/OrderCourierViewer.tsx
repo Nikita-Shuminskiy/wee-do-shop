@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { memo } from 'react'
 import { Image, StyleSheet } from 'react-native'
 import { Box, Text } from 'native-base'
 import { formatProductPrice, getFormattedAddress } from '../MapViews/utils'
@@ -15,53 +15,66 @@ type OrderCourierProps = {
 	isMyOrder?: boolean
 	isCompletedOrder?: boolean
 }
-const OrderCourierViewer = ({
-	order,
-	onPressTakeOrder,
-	isMyOrder = false,
-	onPressInfoOrder,
-	isCompletedOrder = false,
-}: OrderCourierProps) => {
-	const formattedAddressStore = getFormattedAddress({
-		fullAddress: order.store?.address,
-		location: order.store?.location,
-	})
-	const formattedAddressUser = getFormattedAddress(order?.user?.address)
-	const productTotalPrice = formatProductPrice(order.totalPrice)
-	return (
-		<Box style={styles.container}>
-			<Box flexDirection={'row'} justifyContent={'space-between'}>
-				<Box flexDirection={'row'} flex={1} alignItems={'flex-start'}>
-					<Image style={styles.imageFromTo} source={fromToImg} alt={'img'} />
-					<Box ml={2}>
-						<Text fontWeight={'600'} fontSize={12}>
-							{formattedAddressStore}
+const OrderCourierViewer = memo(
+	({
+		order,
+		onPressTakeOrder,
+		isMyOrder = false,
+		onPressInfoOrder,
+		isCompletedOrder = false,
+	}: OrderCourierProps) => {
+		const formattedAddressStore = getFormattedAddress({
+			fullAddress: order.store?.address,
+			location: order.store?.location,
+		})
+		const formattedAddressUser = getFormattedAddress(order?.user?.address)
+		const productTotalPrice = formatProductPrice(order.totalPrice)
+		return (
+			<Box style={styles.container}>
+				<Box flexDirection={'row'} justifyContent={'space-between'}>
+					<Box flexDirection={'row'} flex={1} alignItems={'flex-start'}>
+						<Image style={styles.imageFromTo} source={fromToImg} alt={'img'} />
+						<Box ml={2}>
+							<Text fontWeight={'600'} fontSize={12}>
+								{formattedAddressStore}
+							</Text>
+							<Text fontWeight={'600'} fontSize={12}>
+								{formattedAddressUser}
+							</Text>
+						</Box>
+					</Box>
+					<Box justifyContent={'space-between'} alignItems={'flex-end'}>
+						<Text fontWeight={'600'} fontSize={16}>
+							฿ {productTotalPrice}
 						</Text>
-						<Text fontWeight={'600'} fontSize={12}>
-							{formattedAddressUser}
+						<Text fontWeight={'600'} color={colors.green} fontSize={12}>
+							{splittingWord(order.status)}
 						</Text>
 					</Box>
 				</Box>
-				<Box justifyContent={'space-between'} alignItems={'flex-end'}>
-					<Text fontWeight={'600'} fontSize={16}>
-						฿ {productTotalPrice}
-					</Text>
-					<Text fontWeight={'600'} color={colors.green} fontSize={12}>
-						{splittingWord(order.status)}
-					</Text>
-				</Box>
-			</Box>
 
-			{!isCompletedOrder && (
-				<Box flexDirection={'row'} mt={2} justifyContent={'space-between'}>
-					<Button
-						backgroundColor={colors.green}
-						styleText={styles.textBtn}
-						styleContainer={styles.containerBtn}
-						onPress={onPressTakeOrder}
-						title={isMyOrder ? 'Go to order' : 'Take order'}
-					/>
-					{!isMyOrder && (
+				{!isCompletedOrder && (
+					<Box flexDirection={'row'} mt={2} justifyContent={'space-between'}>
+						<Button
+							backgroundColor={colors.green}
+							styleText={styles.textBtn}
+							styleContainer={styles.containerBtn}
+							onPress={onPressTakeOrder}
+							title={isMyOrder ? 'Go to order' : 'Take order'}
+						/>
+						{!isMyOrder && (
+							<Button
+								backgroundColor={colors.grayLight}
+								styleText={{ color: colors.black }}
+								styleContainer={styles.containerBtn}
+								onPress={onPressInfoOrder}
+								title={'Order information'}
+							/>
+						)}
+					</Box>
+				)}
+				{isCompletedOrder && (
+					<Box mt={2}>
 						<Button
 							backgroundColor={colors.grayLight}
 							styleText={{ color: colors.black }}
@@ -69,23 +82,12 @@ const OrderCourierViewer = ({
 							onPress={onPressInfoOrder}
 							title={'Order information'}
 						/>
-					)}
-				</Box>
-			)}
-			{isCompletedOrder && (
-				<Box mt={2}>
-					<Button
-						backgroundColor={colors.grayLight}
-						styleText={{ color: colors.black }}
-						styleContainer={styles.containerBtn}
-						onPress={onPressInfoOrder}
-						title={'Order information'}
-					/>
-				</Box>
-			)}
-		</Box>
-	)
-}
+					</Box>
+				)}
+			</Box>
+		)
+	}
+)
 const styles = StyleSheet.create({
 	imageFromTo: {
 		position: 'relative',

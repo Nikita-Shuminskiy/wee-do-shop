@@ -27,7 +27,7 @@ const OrdersS = observer(({ navigation, route }: OrdersSProps) => {
 	const isFromStatusesScreen = route?.params?.from === 'statuses'
 
 	const { setToCartStore } = cartStore
-	const { orders, setClearOrders, totalOrders, setOrders } = orderStore
+	const { orders, setClearOrders, totalOrders } = orderStore
 	const { OrderService } = rootStore
 	const [isShowPopupDetails, setIsShowPopupDetails] = useState<boolean>(false)
 	const [selectedOrder, setSelectedOrder] = useState<ApiOrderType>()

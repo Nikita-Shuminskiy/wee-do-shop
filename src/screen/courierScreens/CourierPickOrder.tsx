@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { BaseWrapperComponent } from '../../components/baseWrapperComponent'
 import { Box, Text } from 'native-base'
-import { StyleSheet, TouchableOpacity, View } from 'react-native'
+import { Linking, StyleSheet, TouchableOpacity, View } from 'react-native'
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps'
 import Button from '../../components/Button'
 import { colors } from '../../assets/colors/colors'
-import { getFormattedAddress } from '../../components/MapViews/utils'
-import { useNavigation } from '@react-navigation/native'
+import { allowLocation, getFormattedAddress } from '../../components/MapViews/utils'
 import { observer } from 'mobx-react-lite'
 import CourierOrderStore from '../../store/CourierOrderStore/courier-order-store'
 import rootStore from '../../store/RootStore/root-store'
@@ -15,7 +14,13 @@ import { routerConstants } from '../../constants/routerConstants'
 import { splittingWord } from '../../utils/utils'
 import { AntDesign } from '@expo/vector-icons'
 import OrderUserInfo from '../../components/OrderUserInfo'
+import * as Location from 'expo-location'
+import Link from '../../components/Link'
 
+type Coordinates = {
+	latitude: number
+	longitude: number
+}
 type CourierPickOrderProps = {
 	route: any
 	navigation: any
@@ -25,6 +30,8 @@ const CourierPickOrder = observer(({ route, navigation }: CourierPickOrderProps)
 	const { selectedOrder, connectToSocketOrder } = CourierOrderStore
 	const { CourierOrderService } = rootStore
 	const [showUserInfoModal, setShowUserInfoModal] = useState(false)
+	const [myPosition, setMyPosition] = useState<Coordinates>()
+
 	const [coords, setCoords] = useState({
 		latitude: selectedOrder.user.address?.location.coordinates[1],
 		longitude: selectedOrder.user.address?.location.coordinates[0],
@@ -32,7 +39,35 @@ const CourierPickOrder = observer(({ route, navigation }: CourierPickOrderProps)
 		longitudeDelta: 0.0421,
 	})
 	const isStatusOnTheWay = selectedOrder?.status === StatusType.OnTheWay
+	const onPressNavigate = () => {
+		if (!myPosition?.latitude) {
+			getCurrentPosition()
+			return
+		}
 
+		const endLocation = [coords.latitude, coords.longitude]
+		const startLocation = [myPosition.latitude, myPosition.longitude]
+
+		const googleMapsUrl = `https://www.google.com/maps/dir/?api=1&origin=${startLocation}&destination=${endLocation}`
+		Linking.openURL(googleMapsUrl).catch((err) => console.error('Error opening Google Maps: ', err))
+	}
+
+	const getCurrentPosition = async () => {
+		try {
+			const status = await allowLocation()
+			if (status) {
+				let currentLocation = await Location.getCurrentPositionAsync()
+				const { latitude, longitude } = currentLocation.coords
+				console.log(latitude)
+				setMyPosition({ latitude, longitude })
+			}
+		} catch (e) {
+			console.log(e)
+		}
+	}
+	useEffect(() => {
+		getCurrentPosition()
+	}, [])
 	const onPressPickOrder = (status: StatusType) => {
 		CourierOrderService.updateOrderStatus(status)
 		if (status === StatusType.Completed) {
@@ -95,7 +130,7 @@ const CourierPickOrder = observer(({ route, navigation }: CourierPickOrderProps)
 							</Text>
 							<Text color={colors.gray}>
 								Current order status:{' '}
-								<Text color={colors.black}>{splittingWord(selectedOrder.status)}</Text>
+								<Text color={colors.black}>{splittingWord(selectedOrder?.status)}</Text>
 							</Text>
 						</Box>
 						<TouchableOpacity onPress={onShowUserInfoModal}>
@@ -126,7 +161,12 @@ const CourierPickOrder = observer(({ route, navigation }: CourierPickOrderProps)
 							/>
 						</MapView>
 					</Box>
+
 					<Box w={'100%'}>
+						{selectedOrder?.status !== StatusType.Completed && (
+							<Link onPress={onPressNavigate} text={'Navigate'} />
+						)}
+
 						{isCheckOrderIfo ? (
 							<Button
 								styleContainer={styles.styleBtnContainer}

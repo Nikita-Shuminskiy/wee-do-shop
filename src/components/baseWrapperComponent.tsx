@@ -49,10 +49,9 @@ export const BaseWrapperComponent = ({
 					extraScrollHeight={extraScrollHeight}
 					keyboardShouldPersistTaps={'handled'}
 					refreshControl={
-						<RefreshControl
-							refreshing={refreshing}
-							onRefresh={onRefreshHandler ? onRefresh : null}
-						/>
+						onRefreshHandler ? (
+							<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+						) : null
 					}
 					contentContainerStyle={{
 						marginBottom: 10,

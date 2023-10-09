@@ -32,7 +32,7 @@ const CompletedOrdersS = observer(({ navigation }: TakenCourierOrdersProps) => {
 
 	const onRefresh = () => {
 		setRefreshing(true)
-		onPressShowHistory(PeriodEnum.DAY_1)
+		onPressShowHistory(currentActiveBtn)
 		setRefreshing(false)
 	}
 

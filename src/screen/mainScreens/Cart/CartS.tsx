@@ -81,7 +81,7 @@ const CartS = observer(({ navigation }: CartSProps) => {
 		}
 		createAlert({
 			title: 'Message',
-			message: 'Do you really want to delete the order?',
+			message: 'Delete the order ?',
 			buttons: [
 				{ text: 'Remove', style: 'cancel', onPress: onPressRemove },
 				{ text: 'Exit', style: 'cancel' },

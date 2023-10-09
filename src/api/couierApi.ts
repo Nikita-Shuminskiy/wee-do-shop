@@ -22,7 +22,13 @@ export const courierApi = {
 		return await instance.patch<OrderCourierType>(`order/${idOrder}/status`, { status })
 	},
 }
-export type PayloadOrdersType = { status?: StatusType; startDate?: string; endDate?: string }
+export type PayloadOrdersType = {
+	status?: StatusType
+	startDate?: string
+	endDate?: string
+	limit?: number
+	offset?: number
+}
 export type AssignCourierOrderType = {
 	__v: number
 	_id: string

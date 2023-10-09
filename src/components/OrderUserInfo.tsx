@@ -25,10 +25,10 @@ const OrderUserInfo = ({ show, onClose, order }: OrderUserInfoProps) => {
 				<Box mb={2}>
 					<Box flexDirection={'row'} alignItems={'flex-start'}>
 						<Text fontSize={15}>Phone: </Text>
-						<PhoneNumberComponent phoneNumber={order.user.phone} />
+						<PhoneNumberComponent phoneNumber={order?.user?.phone} />
 					</Box>
-					<Text fontSize={15}>First name: {order.user.firstName}</Text>
-					<Text fontSize={15}>Last name: {order.user.lastName}</Text>
+					<Text fontSize={15}>First name: {order?.user?.firstName}</Text>
+					<Text fontSize={15}>Last name: {order?.user?.lastName}</Text>
 				</Box>
 				<Box mb={2}>
 					<Text fontSize={22} fontWeight={'600'}>
@@ -44,7 +44,7 @@ const OrderUserInfo = ({ show, onClose, order }: OrderUserInfoProps) => {
 					// тут нету sub category - category
 					return (
 						<Box
-							key={product.product._id}
+							key={product?.product?._id}
 							flexDirection={'row'}
 							borderBottomWidth={1}
 							borderColor={colors.gray}
@@ -56,7 +56,7 @@ const OrderUserInfo = ({ show, onClose, order }: OrderUserInfoProps) => {
 								<Image
 									alt={'image-store'}
 									borderRadius={16}
-									source={{ uri: product.product.image }}
+									source={{ uri: product?.product?.image }}
 									style={{
 										height: 40,
 										width: 40,
@@ -66,12 +66,12 @@ const OrderUserInfo = ({ show, onClose, order }: OrderUserInfoProps) => {
 								/>
 								<Box alignItems={'flex-start'} ml={4}>
 									<Text fontSize={16} fontWeight={'400'}>
-										{product.product.name}
+										{product?.product?.name}
 									</Text>
 								</Box>
 							</Box>
 							<Text fontSize={16} fontWeight={'400'}>
-								x{product.amount}
+								x{product?.amount}
 							</Text>
 						</Box>
 					)
@@ -82,7 +82,7 @@ const OrderUserInfo = ({ show, onClose, order }: OrderUserInfoProps) => {
 					</Text>
 					<Text fontSize={15}>฿{productTotalPrice}</Text>
 				</Box>
-				{order.comment && (
+				{order?.comment && (
 					<Box mt={2}>
 						<Text fontSize={15}>Comment: {order.comment}</Text>
 					</Box>
@@ -92,4 +92,4 @@ const OrderUserInfo = ({ show, onClose, order }: OrderUserInfoProps) => {
 	)
 }
 
-export default OrderUserInfo;
+export default OrderUserInfo
