@@ -5,7 +5,6 @@ import { colors } from '../../assets/colors/colors'
 import Button from '../Button'
 import InputNumber from '../InputNumber'
 import { ProductType } from '../../api/productApi'
-import { CartType, ProductCartType } from '../../store/CartStore/cart-store'
 import { formatProductPrice } from '../MapViews/utils'
 import ImageDisplay from '../ImageDisplay'
 import { LinearGradient } from 'expo-linear-gradient'
@@ -14,10 +13,10 @@ type StoreViewerProps = {
 	product: ProductType
 	onPressProduct: (product: ProductType) => void
 	saveProductToCart: (valueProduct: number, product: ProductType) => void
-	currentCartStore: ProductCartType
+	currentCartProductAmount: number
 }
 const ProductViewer = memo(
-	({ product, onPressProduct, saveProductToCart, currentCartStore }: StoreViewerProps) => {
+	({ product, onPressProduct, saveProductToCart, currentCartProductAmount }: StoreViewerProps) => {
 		const { width } = Dimensions.get('window')
 		const productWidth = (width - 10) / 2
 
@@ -30,7 +29,6 @@ const ProductViewer = memo(
 			saveProductToCart(valueProduct, product)
 		}
 
-		console.log('ProductViewer')
 		const formattedEffectName = product.effect.charAt(0).toUpperCase() + product.effect.slice(1)
 		return (
 			<Pressable
@@ -97,7 +95,7 @@ const ProductViewer = memo(
 							{product?.name}
 						</Text>
 						<Box mt={5} height={50}>
-							{!currentCartStore?.amount ? (
+							{!currentCartProductAmount ? (
 								<Button
 									styleText={styles.styleTextBtn}
 									backgroundColor={colors.grayDarkLight}
@@ -106,7 +104,7 @@ const ProductViewer = memo(
 								/>
 							) : (
 								<InputNumber
-									values={currentCartStore?.amount}
+									values={currentCartProductAmount}
 									onChangeValue={onChangeValueNumber}
 								/>
 							)}

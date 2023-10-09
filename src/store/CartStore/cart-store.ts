@@ -2,6 +2,7 @@ import { action, makeObservable, observable } from 'mobx'
 import { ProductType } from '../../api/productApi'
 import { getTotalSumProductsCart, updateValueCartProducts } from '../../utils/utilsCart'
 import { DiscountCodeType, userApi } from '../../api/userApi'
+import { StoreType } from '../../api/storesApi'
 
 export type ProductCartType = ProductType & {
 	amount: number
@@ -28,11 +29,10 @@ export class CartStore {
 
 	removeProductToCart(productId: string) {
 		const updatedProducts = this.cart.products.filter((product) => product._id !== productId)
-
-		const totalSum = getTotalSumProductsCart(updatedProducts)
 		if (!updatedProducts.length) {
 			return (this.cart = {} as CartType)
 		}
+		const totalSum = getTotalSumProductsCart(updatedProducts)
 		this.cart = { ...this.cart, products: updatedProducts, totalSum }
 	}
 
@@ -71,11 +71,36 @@ export class CartStore {
 	updateProduct(item, productValue) {
 		const updatedProducts = updateValueCartProducts(this.cart.products, productValue, item._id)
 		const totalSum = getTotalSumProductsCart(updatedProducts)
+
 		this.setToCartStore({
 			...this.cart,
 			totalSum: totalSum,
 			products: updatedProducts,
 		})
+	}
+
+	setNewCart(store: StoreType) {
+		const newCart: CartType = {
+			idStore: store._id,
+			storeName: store.name,
+			deliviryTime: store.deliveryTime,
+			totalSum: 0,
+			products: [],
+		}
+		this.setToCartStore(newCart)
+	}
+
+	saveProductToCarts(currentProduct: ProductType, productValue: number, store: StoreType) {
+		if (!this.cart?.storeName) {
+			this.setNewCart(store)
+		}
+		const findProduct = this.cart?.products?.find((product) => product._id === currentProduct._id)
+
+		if (findProduct) {
+			this.updateProduct(currentProduct, productValue)
+			return
+		}
+		this.addProductToCart(currentProduct, productValue)
 	}
 
 	constructor() {
@@ -87,11 +112,15 @@ export class CartStore {
 			sendPromoCode: action,
 			removeCart: action,
 			updateProductToCart: action,
+			setNewCart: action,
 			updateProduct: action,
 			addProductToCart: action,
 			removeProductToCart: action,
+			saveProductToCarts: action,
 		})
 		this.setPromoCode = this.setPromoCode.bind(this)
+		this.setNewCart = this.setNewCart.bind(this)
+		this.saveProductToCarts = this.saveProductToCarts.bind(this)
 		this.updateProduct = this.updateProduct.bind(this)
 		this.sendPromoCode = this.sendPromoCode.bind(this)
 		this.addProductToCart = this.addProductToCart.bind(this)

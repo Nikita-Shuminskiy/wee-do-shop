@@ -28,11 +28,10 @@ type StoreSProps = {
 }
 const StoreS = observer(({ navigation }: StoreSProps) => {
 	const { StoresStore, CartStore } = rootStore
-	const { cart, setToCartStore, setPromoCode, addProductToCart, updateProduct } = CartStore
+	const { cart, saveProductToCarts, setPromoCode, removeCart } = CartStore
 	const { store, allProductStore, getAndSetAllProduct, chosenSubCategory, setChosenSubCategory } =
 		StoresStore
 	const navigate = useNavigation()
-
 	useEffect(() => {
 		getAndSetAllProduct(store.subCategories)
 		return () => {
@@ -48,6 +47,8 @@ const StoreS = observer(({ navigation }: StoreSProps) => {
 	const [selectedProduct, setSelectedProduct] = useState<ProductType>()
 	const [selectedSubCategoryId, setSelectedSubCategoryId] = useState<string>('')
 	const [isLoaded, setIsLoaded] = useState(false)
+	const checkCartStore = cart?.idStore && cart?.idStore !== store._id
+
 	useEffect(() => {
 		if (chosenSubCategory) {
 			setSelectedSubCategory(chosenSubCategory)
@@ -56,7 +57,6 @@ const StoreS = observer(({ navigation }: StoreSProps) => {
 		}
 	}, [chosenSubCategory])
 
-	const totalSumCart = formatProductPrice(cart?.totalSum ?? 0)
 	const onPressGoBack = () => {
 		navigate.goBack()
 	}
@@ -72,32 +72,12 @@ const StoreS = observer(({ navigation }: StoreSProps) => {
 	const onClosePopUpProduct = () => {
 		setIsShowModalProduct(false)
 	}
-	const saveProductToCarts = (productValue, currentProduct) => {
-		const findProduct = cart?.products?.find((product) => product._id === currentProduct._id)
-		if (findProduct) {
-			updateProduct(currentProduct, productValue)
-			return
-		}
-		if (!cart?.storeName) {
-			setNewCart()
-		}
-		addProductToCart(currentProduct, productValue)
-	}
-	const setNewCart = () => {
-		const newCart: CartType = {
-			idStore: store._id,
-			storeName: store.name,
-			deliviryTime: store.deliveryTime,
-			totalSum: 0,
-			products: [],
-		}
-		setToCartStore(newCart)
-	}
+
 	const shoppingCartMatching = (productValue, product) => {
 		const onPressClearCart = () => {
 			setPromoCode(null)
-			setNewCart()
-			saveProductToCarts(productValue, product)
+			removeCart()
+			saveProductToCarts(product, productValue, store)
 		}
 		const onPressGoToCart = () => {
 			navigation.navigate(routerConstants.CART)
@@ -111,41 +91,6 @@ const StoreS = observer(({ navigation }: StoreSProps) => {
 			],
 		})
 	}
-	const saveProductValueToCart = (productValue: number) => {
-		const checkCartStore = cart?.idStore && cart?.idStore !== store._id
-		if (checkCartStore) {
-			shoppingCartMatching(productValue, selectedProduct)
-			return
-		}
-		saveProductToCarts(productValue, selectedProduct)
-	}
-	const saveProductToCart = useCallback((productValue: number, product) => {
-		const checkCartStore = cart?.idStore && cart?.idStore !== store._id
-		if (checkCartStore) {
-			shoppingCartMatching(productValue, product)
-			return
-		}
-		if (productValue > 100) return
-		saveProductToCarts(productValue, product)
-	}, [])
-	const onPressProduct = useCallback((product) => {
-		setSelectedProduct(product)
-		setIsShowModalProduct(true)
-	}, [])
-	const currentValueToCartProduct = cart?.products?.find(
-		(product) => product?._id === selectedProduct?._id
-	)
-	const productViews = useCallback(({ item, index }: { item: ProductType; index: number }) => {
-		return (
-			<ProductViewer
-				currentCartStore={currentValueToCartProduct}
-				key={item._id}
-				saveProductToCart={saveProductToCart}
-				onPressProduct={onPressProduct}
-				product={item}
-			/>
-		)
-	}, [])
 	const onPressSelectedSubCategory = useCallback((item) => {
 		setSelectedSubCategoryId((prevState) => {
 			prevState === item._id ? setSelectedSubCategory(null) : setSelectedSubCategory(item)
@@ -165,6 +110,42 @@ const StoreS = observer(({ navigation }: StoreSProps) => {
 		},
 		[selectedSubCategoryId]
 	)
+	const onPressProduct = useCallback((product: ProductType) => {
+		setSelectedProduct(product)
+		setIsShowModalProduct(true)
+	}, [])
+	const saveProductValueToCart = (productValue: number) => {
+		if (checkCartStore) {
+			shoppingCartMatching(productValue, selectedProduct)
+			return
+		}
+		saveProductToCarts(selectedProduct, productValue, store)
+	}
+
+	const saveProductToCart = useCallback(
+		(productValue: number, product: ProductType) => {
+			if (checkCartStore) {
+				shoppingCartMatching(productValue, product)
+				return
+			}
+			if (productValue > 100) return
+			saveProductToCarts(product, productValue, store)
+		},
+		[checkCartStore]
+	)
+
+	const productViews = ({ item, index }: { item: ProductType; index: number }) => {
+		const currentCartProduct = cart?.products?.find((cartProduct) => cartProduct?._id === item._id)
+		return (
+			<ProductViewer
+				currentCartProductAmount={currentCartProduct?.amount}
+				key={item._id}
+				saveProductToCart={saveProductToCart}
+				onPressProduct={onPressProduct}
+				product={item}
+			/>
+		)
+	}
 
 	return (
 		<>
@@ -252,10 +233,8 @@ const StoreS = observer(({ navigation }: StoreSProps) => {
 								{selectedSubCategory?.name ?? 'All products'}
 							</Text>
 						</Box>
-
 						<Box mb={10}>
 							<FlatList
-								extraData={cart}
 								scrollEnabled={false}
 								data={selectedSubCategory?.products ?? allProductStore}
 								horizontal={false}
@@ -272,9 +251,6 @@ const StoreS = observer(({ navigation }: StoreSProps) => {
 									styles.contentContainerStyleProducts
 								}
 							/>
-							{/*{currentProducts?.map((item, index) => {
-								return productViews({ item: item, index: index })
-							})}*/}
 						</Box>
 					</Box>
 				</Box>
@@ -316,9 +292,7 @@ const StoreS = observer(({ navigation }: StoreSProps) => {
 
 			<PopUpProduct
 				onPressGoToCardHandler={onPressConfirmButton}
-				totalSumCart={totalSumCart}
 				saveProductValueToCart={saveProductValueToCart}
-				currentValueToCartProduct={currentValueToCartProduct}
 				product={selectedProduct}
 				onClose={onClosePopUpProduct}
 				show={isShowModalProduct}

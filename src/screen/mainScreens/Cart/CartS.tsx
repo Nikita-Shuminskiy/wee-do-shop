@@ -129,7 +129,7 @@ const CartS = observer(({ navigation }: CartSProps) => {
 							scrollEnabled={false}
 							horizontal={false}
 							renderItem={productCartViews}
-							keyExtractor={(item, index) => item?._id.toString()}
+							keyExtractor={(item, index) => item?._id?.toString()}
 							style={{ width: '100%' }}
 							ListEmptyComponent={() =>
 								renderEmptyContainer(Dimensions.get('window').height, 'List is empty')
