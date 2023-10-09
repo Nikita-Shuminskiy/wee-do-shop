@@ -48,7 +48,12 @@ export const BaseWrapperComponent = ({
 					enableOnAndroid={true}
 					extraScrollHeight={extraScrollHeight}
 					keyboardShouldPersistTaps={'handled'}
-					refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+					refreshControl={
+						<RefreshControl
+							refreshing={refreshing}
+							onRefresh={onRefreshHandler ? onRefresh : null}
+						/>
+					}
 					contentContainerStyle={{
 						marginBottom: 10,
 						flexGrow: 1,

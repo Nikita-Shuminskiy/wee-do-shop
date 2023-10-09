@@ -13,14 +13,13 @@ import rootStore from '../../store/RootStore/root-store'
 
 type OrderViewerProps = {
 	order: ApiOrderType
-	onPressDetails: () => void
-	onPressRepeat: () => void
+	onPressDetails: (order: ApiOrderType) => void
+	onPressRepeat: (order: ApiOrderType) => void
 }
 const OrderViewer = memo(({ order, onPressDetails, onPressRepeat }: OrderViewerProps) => {
 	const { setOrderData, setStatus } = orderStore
 	const { OrderService } = rootStore
 	const isStatusCanceled = order.status === StatusType.Canceled
-
 	//const { status } = useOrderDataStatus({ orderId: order._id })
 	const navigation = useNavigation<any>()
 
@@ -39,7 +38,7 @@ const OrderViewer = memo(({ order, onPressDetails, onPressRepeat }: OrderViewerP
 					{order?.store?.name}
 				</Text>
 				<Text fontWeight={'600'} fontSize={16}>
-					฿{formatProductPrice(order.totalPrice)}
+					฿{formatProductPrice(order?.totalPrice)}
 				</Text>
 			</Box>
 			<Box flexDirection={'row'} mt={1} justifyContent={'space-between'}>
@@ -68,14 +67,14 @@ const OrderViewer = memo(({ order, onPressDetails, onPressRepeat }: OrderViewerP
 						maxWidth: !isStatusCanceled && 150,
 						width: '100%',
 					}}
-					onPress={onPressDetails}
+					onPress={() => onPressDetails(order)}
 					title={`Order details (${order.products?.length}+)`}
 				/>
 				{isCompletedStatuses && !isStatusCanceled && (
 					<Button
 						backgroundColor={colors.green}
 						styleContainer={styles.containerBtn}
-						onPress={onPressRepeat}
+						onPress={() => onPressRepeat(order)}
 						title={'Repeat order'}
 					/>
 				)}

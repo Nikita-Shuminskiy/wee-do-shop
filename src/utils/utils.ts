@@ -134,7 +134,7 @@ export const getTotalPriceOrder = (
 	}[]
 ) => {
 	return products?.reduce((acc, product) => {
-		return acc + product.amount * product.product.price
+		return acc + product?.amount * product?.product?.price
 	}, 0)
 }
 export const checkNewVersionApp = async () => {

@@ -29,7 +29,7 @@ const ProductViewer = memo(
 			saveProductToCart(valueProduct, product)
 		}
 
-		const formattedEffectName = product.effect.charAt(0).toUpperCase() + product.effect.slice(1)
+		const formattedEffectName = product?.effect?.charAt(0).toUpperCase() + product?.effect?.slice(1)
 		return (
 			<Pressable
 				style={{
@@ -73,7 +73,7 @@ const ProductViewer = memo(
 						<Box width={productWidth - 10} h={170}>
 							<ImageDisplay
 								alt={'image-store'}
-								source={{ uri: product.image }}
+								source={{ uri: product?.image }}
 								style={{
 									width: '100%',
 									height: '100%',

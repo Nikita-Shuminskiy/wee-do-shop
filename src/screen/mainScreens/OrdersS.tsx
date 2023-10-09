@@ -7,7 +7,7 @@ import ArrowBack from '../../components/ArrowBack'
 import arrowLeftBack from '../../assets/images/arrow-left.png'
 import { NavigationProp, ParamListBase } from '@react-navigation/native'
 import { colors } from '../../assets/colors/colors'
-import { FlatList, StyleSheet } from 'react-native'
+import { ActivityIndicator, FlatList, StyleSheet, TouchableOpacity } from 'react-native'
 import { ApiOrderType, StatusType } from '../../api/ordersApi'
 import OrderViewer from '../../components/list-viewer/OrderViewer'
 import { observer } from 'mobx-react-lite'
@@ -16,6 +16,7 @@ import { routerConstants } from '../../constants/routerConstants'
 import cartStore from '../../store/CartStore/cart-store'
 import { renderEmptyContainer } from '../../components/list-viewer/empty-list'
 import { getTotalSumProductsCart } from '../../utils/utilsCart'
+import Loading from '../../components/Loading'
 
 type OrdersSProps = {
 	navigation: NavigationProp<ParamListBase>
@@ -33,35 +34,29 @@ const OrdersS = observer(({ navigation, route }: OrdersSProps) => {
 
 	const [page, setPage] = useState(1)
 	const [isLoadingData, setLoadingData] = useState(false)
-
+	const isLastOrders = !!(totalOrders && orders.length) && totalOrders <= orders.length
 	const ordersLength = orders?.length
+
+	const limit = 50
+	const offset = (page - 1) * limit
 	const requestAPI = () => {
-		/*setLoadingData(true)
-		const offset = (page - 1) * 40
+		setLoadingData(true)
 		OrderService.getOrders({
-			limit: 40,
+			limit,
 			offset,
-		}).finally(() => {
-			setLoadingData(false)
-		})*/
-		OrderService.getOrders({})
+		})
+			.then(() => {
+				setPage((prevState) => prevState + 1)
+			})
+			.finally(() => {
+				setLoadingData(false)
+			})
 	}
-
-	useEffect(() => {
-		requestAPI()
-	}, [])
-
-	/*	useEffect(() => {
-		return () => {
-			setPage(1)
-			setClearOrders()
-		}
-	}, [])*/
 
 	const onPressGoBack = () => {
 		navigation.navigate(isFromStatusesScreen ? routerConstants.HOME : routerConstants.PROFILE_USER)
 	}
-	const onPressRepeat = (item: ApiOrderType) => {
+	const onPressRepeat = useCallback((item: ApiOrderType) => {
 		const getProductsForOrder = item.products.map((product) => {
 			return { amount: product.amount, ...product.product }
 		})
@@ -74,48 +69,61 @@ const OrdersS = observer(({ navigation, route }: OrdersSProps) => {
 			deliviryTime: item.store.deliveryTime,
 		})
 		navigation.navigate(routerConstants.CART)
-	}
+	}, [])
 	const onClosePopUpAboutStore = () => {
 		setIsShowPopupDetails(false)
 	}
-	const orderViews = useCallback(
-		({ item }: { item: ApiOrderType }) => {
-			if (isRoutHistory && item.status === StatusType.Canceled) return
-			const onPressDetails = () => {
-				setSelectedOrder(item)
-				setIsShowPopupDetails(true)
-			}
+	const onPressDetails = useCallback((order) => {
+		setSelectedOrder(order)
+		setIsShowPopupDetails(true)
+	}, [])
+	const orderViews = useCallback(({ item }: { item: ApiOrderType }) => {
+		if (isRoutHistory && item.status === StatusType.Canceled) return
 
-			return (
-				<OrderViewer
-					onPressRepeat={() => onPressRepeat(item)}
-					onPressDetails={onPressDetails}
-					order={item}
-				/>
-			)
-		},
-		[isRoutHistory]
-	)
-	const isLastOrders = !!(totalOrders && orders.length) && totalOrders <= orders.length
+		return (
+			<OrderViewer onPressRepeat={onPressRepeat} onPressDetails={onPressDetails} order={item} />
+		)
+	}, [])
 
 	const renderFooter = () => (
 		<Box style={styles.footerText}>
-			{/*{isLoadingData && <Loading visible={isLoadingData} />}*/}
-			{isLastOrders && orders.length >= 10 && (
+			{isLoadingData && <ActivityIndicator size={'small'} color={colors.green} />}
+			{isLastOrders && orders.length >= totalOrders ? (
 				<Text color={colors.gray} fontWeight={'500'} fontSize={15}>
 					No more orders at the moment
 				</Text>
+			) : (
+				!isLoadingData && (
+					<TouchableOpacity onPress={fetchMoreData}>
+						<Text color={colors.green} fontSize={20} fontWeight={'500'}>
+							Load more
+						</Text>
+					</TouchableOpacity>
+				)
 			)}
 		</Box>
 	)
-
 	const fetchMoreData = () => {
 		if (isLastOrders || isLoadingData) return
-		setPage(page + 1)
+		console.log('requestAPI')
+		requestAPI()
 	}
+	const getHomeData = () => {
+		OrderService.getOrders({
+			limit,
+			offset,
+		})
+	}
+	useEffect(() => {
+		requestAPI()
+	}, [])
 	return (
 		<>
-			<BaseWrapperComponent backgroundColor={colors.white} isKeyboardAwareScrollView={true}>
+			<BaseWrapperComponent
+				onRefreshHandler={getHomeData}
+				backgroundColor={colors.white}
+				isKeyboardAwareScrollView={true}
+			>
 				<Box flexDirection={'row'} mt={5} justifyContent={'space-between'} alignItems={'center'}>
 					{!isRoutHistory && (
 						<Box mb={5} zIndex={10} position={'absolute'} left={5}>
@@ -137,21 +145,21 @@ const OrdersS = observer(({ navigation, route }: OrdersSProps) => {
 						keyExtractor={(item, index) => item._id?.toString()}
 						style={{ width: '100%' }}
 						contentContainerStyle={!ordersLength && styles.contentContainerOrder}
-						/*		ListFooterComponent={orders.length ? renderFooter : null}*/
+						ListFooterComponent={orders.length ? renderFooter : null}
 						ListEmptyComponent={() =>
 							renderEmptyContainer(0, 'You haven’t placed\n any orders yet.')
 						}
-						/*onEndReached={fetchMoreData}
-						onEndReachedThreshold={0.5}*/
 					/>
 				</Box>
 			</BaseWrapperComponent>
-			<PopUpOrderDetails
-				onPressRepeat={onPressRepeat}
-				order={selectedOrder}
-				show={isShowPopupDetails}
-				onClose={onClosePopUpAboutStore}
-			/>
+			{isShowPopupDetails && (
+				<PopUpOrderDetails
+					onPressRepeat={onPressRepeat}
+					order={selectedOrder}
+					show={isShowPopupDetails}
+					onClose={onClosePopUpAboutStore}
+				/>
+			)}
 		</>
 	)
 })
@@ -160,7 +168,6 @@ const styles = StyleSheet.create({
 		flex: 1,
 		alignItems: 'center',
 		justifyContent: 'center',
-		marginVertical: 2,
 	},
 	contentContainerOrder: {
 		flex: 1,

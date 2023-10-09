@@ -139,7 +139,7 @@ const StoreS = observer(({ navigation }: StoreSProps) => {
 		return (
 			<ProductViewer
 				currentCartProductAmount={currentCartProduct?.amount}
-				key={item._id}
+				key={item?._id}
 				saveProductToCart={saveProductToCart}
 				onPressProduct={onPressProduct}
 				product={item}
@@ -239,6 +239,7 @@ const StoreS = observer(({ navigation }: StoreSProps) => {
 								data={selectedSubCategory?.products ?? allProductStore}
 								horizontal={false}
 								renderItem={productViews}
+								keyExtractor={(item, index) => index.toString()}
 								style={{ width: '100%' }}
 								ListEmptyComponent={() =>
 									renderEmptyContainer(Dimensions.get('window').height, 'List is empty')
