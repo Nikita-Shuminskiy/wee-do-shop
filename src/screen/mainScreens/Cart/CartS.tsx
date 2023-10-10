@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { BaseWrapperComponent } from '../../../components/baseWrapperComponent'
 import cartStore, { ProductCartType } from '../../../store/CartStore/cart-store'
 import { observer } from 'mobx-react-lite'
@@ -18,7 +18,6 @@ import { SendDataOrderType } from '../../../api/ordersApi'
 import authStore from '../../../store/AuthStore/auth-store'
 import { NavigationProp, ParamListBase } from '@react-navigation/native'
 import { routerConstants } from '../../../constants/routerConstants'
-import { deliveryPrice } from '../../../utils/utils'
 import { Accordions } from './PromoCode'
 
 type CartSProps = {
@@ -26,8 +25,15 @@ type CartSProps = {
 }
 
 const CartS = observer(({ navigation }: CartSProps) => {
-	const { cart, removeCart, removeProductToCart, updateProductToCart, promoCode, setToCartStore } =
-		cartStore
+	const {
+		cart,
+		currDeliveryPrice,
+		removeCart,
+		removeProductToCart,
+		updateProductToCart,
+		promoCode,
+		setToCartStore,
+	} = cartStore
 	const { user } = authStore
 
 	const { OrderService } = rootStore
@@ -54,19 +60,18 @@ const CartS = observer(({ navigation }: CartSProps) => {
 			}
 		})
 	}
+	const onPressRemoveProduct = useCallback((idProduct: string) => {
+		removeProductToCart(idProduct)
+	}, [])
+
+	const onChangeValueNumber = useCallback((productValue: number, idProduct: string) => {
+		if (productValue > 100) return
+		if (!productValue) {
+			return removeProductToCart(idProduct)
+		}
+		updateProductToCart(idProduct, productValue)
+	}, [])
 	const productCartViews = ({ item }: { item: ProductCartType }) => {
-		const onPressRemoveProduct = () => {
-			removeProductToCart(item._id)
-		}
-
-		const onChangeValueNumber = (productValue: number) => {
-			if (productValue > 100) return
-			if (!productValue) {
-				return removeProductToCart(item._id)
-			}
-			updateProductToCart(item._id, productValue)
-		}
-
 		return (
 			<ProductCartViewer
 				onPressRemoveProduct={onPressRemoveProduct}
@@ -90,9 +95,7 @@ const CartS = observer(({ navigation }: CartSProps) => {
 	}
 
 	const productTotalPrice = Number(formatProductPrice(cart?.totalSum ?? 0))
-	const isFreeDelivery =
-		Number(formatProductPrice(cart?.totalSum ?? 0)) >= 1500 ||
-		promoCode?.discountType === 'Delivery'
+	const isFreeDelivery = productTotalPrice >= 1500
 
 	const formatted_address = getFormattedAddress(user.address)
 
@@ -146,7 +149,7 @@ const CartS = observer(({ navigation }: CartSProps) => {
 							borderColor={colors.grayDarkLight}
 						>
 							<Text>Delivery</Text>
-							<Text>{isFreeDelivery ? '0 ฿' : `฿ ${deliveryPrice}`}</Text>
+							<Text>{`฿ ${isFreeDelivery ? '0' : currDeliveryPrice}`}</Text>
 						</Box>
 						<Box>
 							<Text color={colors.gray}>{`Order ฿ 1500 and get free delivery`}</Text>
@@ -165,10 +168,6 @@ const CartS = observer(({ navigation }: CartSProps) => {
 								onChangeText={onChangeTextCommentHandler}
 								heightInput={40}
 								borderRadius={16}
-								/*onFocus={(event: Event) => {
-                                        // `bind` the function if you're using ES6 classes
-                                        inputRef.current(event.target)
-                                    }}*/
 								placeholder={'Add comment'}
 								textAlignVertical={'top'}
 								multiline={true}
@@ -196,7 +195,7 @@ const CartS = observer(({ navigation }: CartSProps) => {
 				>
 					<Box mr={2}>
 						<Text fontSize={18} fontWeight={'500'}>
-							฿ {!isFreeDelivery ? productTotalPrice + deliveryPrice : productTotalPrice}
+							฿ {isFreeDelivery ? productTotalPrice : productTotalPrice + currDeliveryPrice}
 						</Text>
 						<Text fontSize={13} color={colors.gray}>
 							{cart.deliviryTime} min

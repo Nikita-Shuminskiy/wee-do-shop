@@ -3,6 +3,7 @@ import { ProductType } from '../../api/productApi'
 import { getTotalSumProductsCart, updateValueCartProducts } from '../../utils/utilsCart'
 import { DiscountCodeType, userApi } from '../../api/userApi'
 import { StoreType } from '../../api/storesApi'
+import { deliveryPrice } from '../../utils/utils'
 
 export type ProductCartType = ProductType & {
 	amount: number
@@ -18,25 +19,26 @@ export type CartType = {
 export class CartStore {
 	cart: CartType | null = null
 	promoCode: DiscountCodeType | null = null
+	currDeliveryPrice: number = deliveryPrice
 
 	setToCartStore(cart: CartType | null) {
 		this.cart = cart
 	}
-
 	removeCart() {
+		this.promoCode = null
 		this.cart = {} as CartType
+		this.currDeliveryPrice = deliveryPrice
 	}
-
 	removeProductToCart(productId: string) {
 		const updatedProducts = this.cart.products.filter((product) => product._id !== productId)
 		if (!updatedProducts.length) {
-			return (this.cart = {} as CartType)
+			this.removeCart()
+			return
 		}
 		const totalSum = getTotalSumProductsCart(updatedProducts)
 		this.cart = { ...this.cart, products: updatedProducts, totalSum }
 	}
-
-	updateProductToCart(productId: string, productValue) {
+	updateProductToCart(productId: string, productValue: number) {
 		const updatedProducts = updateValueCartProducts(this.cart.products, productValue, productId)
 		const totalSum = getTotalSumProductsCart(updatedProducts)
 
@@ -46,14 +48,17 @@ export class CartStore {
 			products: updatedProducts,
 		}
 	}
-
 	async sendPromoCode(key: string, userId: string) {
 		const { data } = await userApi.sendDiscountCode(key, userId)
 		this.setPromoCode(data)
 		return data
 	}
-
 	setPromoCode(promo: DiscountCodeType) {
+		let currDeliveryPrice = this.cart.totalSum >= 150000 ? 0 : deliveryPrice
+
+		if (currDeliveryPrice > 0 && promo?.discountType === 'Delivery') {
+			this.currDeliveryPrice = currDeliveryPrice * ((100 - promo?.discountPercentage) / 100)
+		}
 		this.promoCode = promo
 	}
 
@@ -106,6 +111,7 @@ export class CartStore {
 	constructor() {
 		makeObservable(this, {
 			cart: observable,
+			currDeliveryPrice: observable,
 			setToCartStore: action,
 			setPromoCode: observable,
 			promoCode: observable,
