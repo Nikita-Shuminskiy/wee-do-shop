@@ -53,10 +53,11 @@ const CartS = observer(({ navigation }: CartSProps) => {
 			userId: user._id,
 			discountCode: promoCode?.key,
 		}
+		console.log(dataOrder)
 		OrderService.sendOrder(dataOrder).then((data) => {
 			if (data) {
 				navigation.navigate(routerConstants.ORDER_STATUSES)
-				setToCartStore(null)
+				removeCart()
 			}
 		})
 	}

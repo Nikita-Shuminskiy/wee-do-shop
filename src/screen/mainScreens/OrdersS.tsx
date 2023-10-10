@@ -37,7 +37,7 @@ const OrdersS = observer(({ navigation, route }: OrdersSProps) => {
 	const isLastOrders = !!(totalOrders && orders.length) && totalOrders <= orders.length
 	const ordersLength = orders?.length
 
-	const limit = 2
+	const limit = 30
 	const offset = (page - 1) * limit
 
 	const requestAPI = () => {
@@ -99,19 +99,19 @@ const OrdersS = observer(({ navigation, route }: OrdersSProps) => {
 	const renderFooter = () => (
 		<Box style={styles.footerText}>
 			{isLoadingData && <ActivityIndicator size={'small'} color={colors.green} />}
-			{isLastOrders && orders.length >= totalOrders ? (
-				<Text color={colors.gray} fontWeight={'500'} fontSize={13}>
-					No more orders at the moment
-				</Text>
-			) : (
-				!isLoadingData && (
-					<TouchableOpacity onPress={requestAPI}>
-						<Text color={colors.green} fontSize={20} fontWeight={'500'}>
-							Load more
+			{isLastOrders && orders.length >= totalOrders
+				? orders.length > 20 && (
+						<Text color={colors.gray} fontWeight={'500'} fontSize={13}>
+							No more orders at the moment
 						</Text>
-					</TouchableOpacity>
-				)
-			)}
+				  )
+				: !isLoadingData && (
+						<TouchableOpacity onPress={requestAPI}>
+							<Text color={colors.green} fontSize={20} fontWeight={'500'}>
+								Load more
+							</Text>
+						</TouchableOpacity>
+				  )}
 		</Box>
 	)
 	useEffect(() => {
