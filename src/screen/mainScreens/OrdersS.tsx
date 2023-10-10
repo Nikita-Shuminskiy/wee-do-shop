@@ -37,7 +37,7 @@ const OrdersS = observer(({ navigation, route }: OrdersSProps) => {
 	const isLastOrders = !!(totalOrders && orders.length) && totalOrders <= orders.length
 	const ordersLength = orders?.length
 
-	const limit = 30
+	const limit = 50
 	const offset = (page - 1) * limit
 
 	const requestAPI = () => {

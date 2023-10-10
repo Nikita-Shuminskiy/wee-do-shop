@@ -22,6 +22,16 @@ type PopUpAboutStoreProps = {
 	currentStore: StoreType
 	onClose: () => void
 }
+/*const test = {
+	monday: '07:06 - 02:03',
+	tuesday: '09:00 - 02:00',
+
+	wednesday: 'Closed',
+	thursday: 'Closed',
+	friday: 'Closed',
+	saturday: 'Closed',
+	sunday: 'Closed',
+}*/
 
 const PopUpAboutStore = ({ show, onClose, currentStore }: PopUpAboutStoreProps) => {
 	const workingHoursArray = Object.entries(currentStore?.workingHours ?? {})

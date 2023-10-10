@@ -206,13 +206,11 @@ const OrderStatusesS = observer(({ navigation }: OrderStatusesSProps) => {
 	const isCanceled = statusOrder === StatusType.Canceled
 
 	const handlePhonePress = async () => {
-		const url = `tel:${order.courier.phone}`
-		const supported = await Linking.canOpenURL(url)
-
-		if (supported) {
+		try {
+			const url = `tel:${order.courier.phone}`
 			await Linking.openURL(url)
-		} else {
-			console.error('Невозможно открыть телефонную книгу')
+		} catch (e) {
+			console.log('error open tel book')
 		}
 	}
 	const onPressGoToStores = () => {

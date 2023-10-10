@@ -5,13 +5,11 @@ import { colors } from '../assets/colors/colors'
 
 export const PhoneNumberComponent = ({ phoneNumber }) => {
 	const handlePhonePress = async () => {
-		const url = `tel:${phoneNumber}`
-		const supported = await Linking.canOpenURL(url)
-
-		if (supported) {
+		try {
+			const url = `tel://${phoneNumber}`
 			await Linking.openURL(url)
-		} else {
-			console.error('Невозможно открыть телефонную книгу')
+		} catch (e) {
+			console.log('error open tel book')
 		}
 	}
 

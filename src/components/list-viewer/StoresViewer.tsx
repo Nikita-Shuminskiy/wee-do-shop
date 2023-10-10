@@ -20,7 +20,7 @@ type StoresViewerType = {
 }
 /*const test = {
 	monday: '07:06 - 02:03',
-	tuesday: '09:37 - 06:00',
+	tuesday: '10:00 - 02:30',
 
 	wednesday: 'Closed',
 	thursday: 'Closed',

@@ -29,8 +29,8 @@ export const getCurrentUntilTimeStoreTo = (workingHoursStores: WorkingHoursType)
 	const utilTimeStore = currentHourWorkStores?.slice(-5) // get time work(to)
 	return utilTimeStore
 }
-const getInfoTime = (open: boolean, time: string) => {
-	return `Will ${open ? 'open' : 'close'} in ` + time
+const getInfoTime = (open: boolean, time?: string) => {
+	return `Will ${open ? 'open' : 'close'} in ` + time ?? ''
 }
 
 export function isCurrentTimeInRange(workingHoursStores: WorkingHoursType, isInfo = false): any {
@@ -81,19 +81,16 @@ export function isCurrentTimeInRange(workingHoursStores: WorkingHoursType, isInf
 			return getInfoTime(false, endTime)
 		}
 
-		return true // Текущее время полностью совпадает с началом диапазона
+		return true
 	}
 	if (currentHour === endHour && currentMinute <= endMinute) {
 		if (isInfo) {
 			return getInfoTime(false, endTime)
 		}
-		return true // Текущее время полностью совпадает с концом диапазона
+		return true
 	}
 
-	if (
-		(startHour >= endHour && startMinute >= endMinute) ||
-		(startHour >= endHour && currentMinute <= endMinute)
-	) {
+	if ((startHour >= endHour || startHour >= endHour) && currentHour > startHour) {
 		if (isInfo) {
 			return getInfoTime(false, endTime)
 		}
