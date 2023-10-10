@@ -10,6 +10,7 @@ import DeliveryTime from '../DeliveryTime'
 import { getInfoAboutStoreWorkTime } from './utils'
 import { observer } from 'mobx-react-lite'
 import StoresStore from '../../store/StoresStore/stores-store'
+import { isCurrentTimeInRange } from '../../utils/utils'
 
 type StoresViewerType = {
 	stores: StoreType
@@ -17,7 +18,16 @@ type StoresViewerType = {
 	onPress: (store: StoreType) => void
 	onPressToggleFavoriteStore: (id: string) => void
 }
+/*const test = {
+	monday: '07:06 - 02:03',
+	tuesday: '09:37 - 06:00',
 
+	wednesday: 'Closed',
+	thursday: 'Closed',
+	friday: 'Closed',
+	saturday: 'Closed',
+	sunday: 'Closed',
+}*/
 const StoresViewer = memo(
 	({ stores, onPress, onPressToggleFavoriteStore, isFavorite }: StoresViewerType) => {
 		const { width } = Dimensions.get('window')

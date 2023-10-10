@@ -90,7 +90,10 @@ export function isCurrentTimeInRange(workingHoursStores: WorkingHoursType, isInf
 		return true // Текущее время полностью совпадает с концом диапазона
 	}
 
-	if (startHour >= endHour && currentMinute >= startMinute) {
+	if (
+		(startHour >= endHour && startMinute >= endMinute) ||
+		(startHour >= endHour && currentMinute <= endMinute)
+	) {
 		if (isInfo) {
 			return getInfoTime(false, endTime)
 		}
@@ -98,6 +101,8 @@ export function isCurrentTimeInRange(workingHoursStores: WorkingHoursType, isInf
 	}
 
 	if (isInfo) {
+		if (startTimeNextDay === 'Closed') return 'Closed'
+
 		return getInfoTime(true, startTimeNextDay)
 	}
 	return false // Текущее время НЕ совпадает с указанным диапазоном времени
