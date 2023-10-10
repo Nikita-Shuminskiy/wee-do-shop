@@ -37,8 +37,8 @@ const OrdersS = observer(({ navigation, route }: OrdersSProps) => {
 	const isLastOrders = !!(totalOrders && orders.length) && totalOrders <= orders.length
 	const ordersLength = orders?.length
 
-	const limit = 50
-	const offset = page - 1 === 0 ? 0 : page * limit
+	const limit = 2
+	const offset = (page - 1) * limit
 
 	const requestAPI = () => {
 		setLoadingData(true)
@@ -46,13 +46,16 @@ const OrdersS = observer(({ navigation, route }: OrdersSProps) => {
 			limit,
 			offset,
 		})
-			.then(() => {
-				setPage((prevState) => prevState + 1)
+			.then((data) => {
+				if (!!data.results?.length) {
+					setPage((prevState) => prevState + 1)
+				}
 			})
 			.finally(() => {
 				setLoadingData(false)
 			})
 	}
+
 	useEffect(() => {
 		return () => {
 			setPage(1)
@@ -102,7 +105,7 @@ const OrdersS = observer(({ navigation, route }: OrdersSProps) => {
 				</Text>
 			) : (
 				!isLoadingData && (
-					<TouchableOpacity onPress={fetchMoreData}>
+					<TouchableOpacity onPress={requestAPI}>
 						<Text color={colors.green} fontSize={20} fontWeight={'500'}>
 							Load more
 						</Text>
@@ -111,26 +114,13 @@ const OrdersS = observer(({ navigation, route }: OrdersSProps) => {
 			)}
 		</Box>
 	)
-	const fetchMoreData = () => {
-		if (isLastOrders || isLoadingData) return
-		requestAPI()
-	}
-	const getHomeData = () => {
-		OrderService.getOrders({
-			limit,
-			offset,
-		}).then(() => {
-			setPage((prevState) => prevState + 1)
-		})
-	}
 	useEffect(() => {
-		console.log('use effect')
 		requestAPI()
 	}, [])
 	return (
 		<>
 			<BaseWrapperComponent
-				onRefreshHandler={getHomeData}
+				onRefreshHandler={requestAPI}
 				backgroundColor={colors.white}
 				isKeyboardAwareScrollView={true}
 			>
