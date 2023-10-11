@@ -33,12 +33,9 @@
           "apiKey": "AIzaSyCDu3dMvEFIDgw_uqJWabVuauq0JVsu3NI"
         }
       },
-      "versionCode": 19,
+      "versionCode": 17,
       "permissions": [
-        "CALL_PHONE",
-        "INTERNET",
-        "USE_CREDENTIALS",
-        "ACCESS_NETWORK_STATE"
+        "CALL_PHONE"
       ]
     },
     "web": {
@@ -60,7 +57,7 @@
       ]
     ],
     "updates": {
-      "releaseChannel": "stable",
+      "releaseChannel": "production",
       "fallbackToCacheTimeout": 0,
       "url": "https://u.expo.dev/a20d1224-8625-45c9-88e1-e242c9fff915"
     }

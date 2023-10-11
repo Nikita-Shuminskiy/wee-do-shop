@@ -35,7 +35,7 @@ const CourierPickOrder = observer(({ route, navigation }: CourierPickOrderProps)
 	const { CourierOrderService } = rootStore
 	const [showUserInfoModal, setShowUserInfoModal] = useState(false)
 	const [myPosition, setMyPosition] = useState<Coordinates>()
-
+	console.log(myPosition)
 	const [coords, setCoords] = useState({
 		latitude: selectedOrder.user.address?.location.coordinates[1],
 		longitude: selectedOrder.user.address?.location.coordinates[0],
