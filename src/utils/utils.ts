@@ -88,7 +88,7 @@ export const getCurrentUntilTimeStoreTo = (workingHoursStores: WorkingHoursType)
 }
 const getInfoTime = (open: boolean, time?: string) => {
 	if (time === 'Closed') return 'Closed'
-	return `Will ${open ? 'open' : 'close'} in ` + time ?? ''
+	return `Will ${open ? 'open' : 'close'} at ` + time ?? ''
 }
 
 export function isCurrentTimeInRange(workingHoursStores: WorkingHoursType, isInfo = false): any {

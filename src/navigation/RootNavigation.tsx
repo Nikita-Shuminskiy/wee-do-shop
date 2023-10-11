@@ -58,7 +58,7 @@ const RootNavigation = observer(() => {
 		const unsubscribe = NetInfo.addEventListener((state) => {
 			setIsConnected(state.isConnected)
 		})
-		//checkNewVersionApp()
+
 		AuthStoreService.getMe()
 		return () => {
 			unsubscribe()

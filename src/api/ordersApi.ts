@@ -33,6 +33,7 @@ export type OrdersResponseType = {
 }
 export type ApiOrderType = {
 	_id: string
+	discountCode: string
 	user: {
 		_id: string
 		firstName: string
@@ -46,6 +47,7 @@ export type ApiOrderType = {
 		role: RoleType
 		createdAt: string
 		updatedAt: string
+		usedDiscountCodes: any[]
 	}
 	courier: CourierType
 	products: {
@@ -59,6 +61,11 @@ export type ApiOrderType = {
 	createdAt: string
 	updatedAt: string
 	rejectReason: string
+	price: {
+		deliveryPrice: number
+		serviceCommission: number
+		storeProfit: number
+	}
 }
 
 export type SendDataOrderType = {

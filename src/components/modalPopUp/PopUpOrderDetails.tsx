@@ -22,7 +22,7 @@ const orderViews = ({ item }: { item: { amount: number; product: ProductType } }
 			justifyContent={'space-between'}
 			borderColor={colors.grayLight}
 		>
-			<Box flexDirection={'row'}>
+			<Box flexDirection={'row'} flex={1}>
 				<Image
 					resizeMode="cover"
 					borderRadius={16}
@@ -35,8 +35,8 @@ const orderViews = ({ item }: { item: { amount: number; product: ProductType } }
 					alt={'img-product'}
 				/>
 				<Box ml={2}>
-					<Text fontSize={12} maxWidth={'70%'} fontWeight={'500'}>
-						{item?.product?.name}1 313 13 131 31 313 131 31 31 313 1 3{' '}
+					<Text fontSize={12} fontWeight={'500'}>
+						{item?.product?.name}
 					</Text>
 					<Text fontSize={12} maxWidth={'70%'} fontWeight={'500'}>
 						{item?.product?.effect}{' '}
@@ -66,7 +66,9 @@ type PopUpOrderDetailsProps = {
 const PopUpOrderDetails = memo(
 	({ show, onClose, onPressRepeat, order, isFromCourier }: PopUpOrderDetailsProps) => {
 		const totalPriceOrder = getTotalPriceOrder(order?.products ?? [])
+
 		const isFreeDelivery = Number(formatProductPrice(totalPriceOrder ?? 0)) >= 1500
+
 		return (
 			<ModalPopup visible={show} style={{ padding: 2 }} onClose={onClose}>
 				<Box alignItems={'center'}>
@@ -129,7 +131,7 @@ const PopUpOrderDetails = memo(
 								Delivery
 							</Text>
 							<Text fontWeight={'500'} fontSize={16}>
-								{isFreeDelivery ? 'free' : `฿ ${deliveryPrice}`}
+								{isFreeDelivery ? 'free' : `฿ ${formatProductPrice(order?.price?.deliveryPrice)}`}
 							</Text>
 						</Box>
 					</Box>
@@ -139,7 +141,7 @@ const PopUpOrderDetails = memo(
 								Total
 							</Text>
 							<Text fontWeight={'500'} fontSize={16}>
-								{/*				฿{formatProductPrice(order?.totalPrice)}*/}
+								฿{formatProductPrice(order?.totalPrice)}
 							</Text>
 						</Box>
 					</Box>

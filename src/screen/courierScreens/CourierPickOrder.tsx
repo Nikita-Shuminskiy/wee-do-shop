@@ -164,7 +164,17 @@ const CourierPickOrder = observer(({ route, navigation }: CourierPickOrderProps)
 
 					<Box w={'100%'}>
 						{selectedOrder?.status !== StatusType.Completed && (
-							<Link onPress={onPressNavigate} text={'Navigate'} />
+							<Box
+								borderWidth={1}
+								height={9}
+								marginY={1}
+								alignItems={'center'}
+								justifyContent={'center'}
+								borderRadius={16}
+								borderColor={colors.green}
+							>
+								<Link onPress={onPressNavigate} text={'Make a route '} />
+							</Box>
 						)}
 
 						{isCheckOrderIfo ? (
