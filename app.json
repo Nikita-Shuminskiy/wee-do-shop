@@ -55,6 +55,7 @@
       ]
     ],
     "updates": {
+      "releaseChannel": "stable",
       "fallbackToCacheTimeout": 0,
       "url": "https://u.expo.dev/a20d1224-8625-45c9-88e1-e242c9fff915"
     }

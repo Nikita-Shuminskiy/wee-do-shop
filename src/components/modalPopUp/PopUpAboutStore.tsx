@@ -22,11 +22,11 @@ type PopUpAboutStoreProps = {
 	currentStore: StoreType
 	onClose: () => void
 }
-/*const test = {
+/*export const test = {
 	monday: '07:06 - 02:03',
 	tuesday: '09:00 - 02:00',
 
-	wednesday: 'Closed',
+	wednesday: '09:00 - 00:00',
 	thursday: 'Closed',
 	friday: 'Closed',
 	saturday: 'Closed',
