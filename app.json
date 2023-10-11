@@ -33,8 +33,13 @@
           "apiKey": "AIzaSyCDu3dMvEFIDgw_uqJWabVuauq0JVsu3NI"
         }
       },
-      "versionCode": 13,
-      "permissions": ["CALL_PHONE"]
+      "versionCode": 19,
+      "permissions": [
+        "CALL_PHONE",
+        "INTERNET",
+        "USE_CREDENTIALS",
+        "ACCESS_NETWORK_STATE"
+      ]
     },
     "web": {
       "favicon": "./assets/favicon.png"

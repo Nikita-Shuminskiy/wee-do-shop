@@ -55,3 +55,22 @@ export const formatProductPrice = (price) => {
 	const priceInDollars = price / 100
 	return price % 100 === 0 ? String(priceInDollars) : priceInDollars.toFixed(2)
 }
+export const getCurrentPositionHandler = async () => {
+	try {
+		const status = await allowLocation()
+		if (status) {
+			let currentLocation = await Location.getCurrentPositionAsync({
+				accuracy: Location.Accuracy.BestForNavigation,
+			})
+			const { latitude, longitude } = currentLocation.coords
+			return { latitude, longitude }
+		}
+	} catch (e) {
+		/*		createAlert({
+          title: 'Message',
+          message: 'Permission to access location was denied',
+          buttons: [{ text: 'Exit'}],
+        })*/
+	} finally {
+	}
+}

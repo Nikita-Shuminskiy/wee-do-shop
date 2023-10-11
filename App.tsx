@@ -15,7 +15,7 @@ export default function App() {
 
 	const appInfo = {
 		appId: 'com.wee_doo.th', // Your app id in play store or app store
-		appName: 'Weedo delivery', // Your app name
+		appName: 'Weedo', // Your app name
 		appVersion: '1.0.3', // Your app version
 		platform: 'android', // App Platform, android or ios
 		environment: 'production', // App Environment, production, development

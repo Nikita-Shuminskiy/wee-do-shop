@@ -1,11 +1,15 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { BaseWrapperComponent } from '../../components/baseWrapperComponent'
 import { Box, Text } from 'native-base'
 import { Linking, StyleSheet, TouchableOpacity, View } from 'react-native'
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps'
 import Button from '../../components/Button'
 import { colors } from '../../assets/colors/colors'
-import { allowLocation, getFormattedAddress } from '../../components/MapViews/utils'
+import {
+	allowLocation,
+	getCurrentPositionHandler,
+	getFormattedAddress,
+} from '../../components/MapViews/utils'
 import { observer } from 'mobx-react-lite'
 import CourierOrderStore from '../../store/CourierOrderStore/courier-order-store'
 import rootStore from '../../store/RootStore/root-store'
@@ -38,15 +42,12 @@ const CourierPickOrder = observer(({ route, navigation }: CourierPickOrderProps)
 		latitudeDelta: 0.0922,
 		longitudeDelta: 0.0421,
 	})
+	console.log(myPosition)
 	const isStatusOnTheWay = selectedOrder?.status === StatusType.OnTheWay
-	const onPressNavigate = () => {
-		if (!myPosition?.latitude) {
-			getCurrentPosition()
-			return
-		}
-
+	const onPressNavigate = async () => {
+		if (!myPosition?.latitude) return
 		const endLocation = [coords.latitude, coords.longitude]
-		const startLocation = [myPosition.latitude, myPosition.longitude]
+		const startLocation = [myPosition?.latitude, myPosition.longitude]
 
 		const googleMapsUrl = `https://www.google.com/maps/dir/?api=1&origin=${startLocation}&destination=${endLocation}`
 		Linking.openURL(googleMapsUrl).catch((err) => console.error('Error opening Google Maps: ', err))
@@ -54,16 +55,9 @@ const CourierPickOrder = observer(({ route, navigation }: CourierPickOrderProps)
 
 	const getCurrentPosition = async () => {
 		try {
-			const status = await allowLocation()
-			if (status) {
-				let currentLocation = await Location.getCurrentPositionAsync()
-				const { latitude, longitude } = currentLocation.coords
-				console.log(latitude)
-				setMyPosition({ latitude, longitude })
-			}
-		} catch (e) {
-			console.log(e)
-		}
+			const { latitude, longitude } = await getCurrentPositionHandler()
+			setMyPosition({ latitude, longitude })
+		} catch (e) {}
 	}
 	useEffect(() => {
 		getCurrentPosition()
@@ -164,17 +158,19 @@ const CourierPickOrder = observer(({ route, navigation }: CourierPickOrderProps)
 
 					<Box w={'100%'}>
 						{selectedOrder?.status !== StatusType.Completed && (
-							<Box
-								borderWidth={1}
-								height={9}
-								marginY={1}
-								alignItems={'center'}
-								justifyContent={'center'}
-								borderRadius={16}
-								borderColor={colors.green}
-							>
-								<Link onPress={onPressNavigate} text={'Make a route '} />
-							</Box>
+							<TouchableOpacity onPress={onPressNavigate}>
+								<Box
+									borderWidth={1}
+									height={9}
+									marginY={1}
+									alignItems={'center'}
+									justifyContent={'center'}
+									borderRadius={16}
+									borderColor={colors.green}
+								>
+									<Text>Make a route</Text>
+								</Box>
+							</TouchableOpacity>
 						)}
 
 						{isCheckOrderIfo ? (
