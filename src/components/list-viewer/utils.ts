@@ -5,7 +5,7 @@ export const getInfoAboutStoreWorkTime = (workingHours: WorkingHoursType) => {
 	const currentTimeInRangeResult = isCurrentTimeInRange(workingHours, true)
 
 	const isWilOpen =
-		currentTimeInRangeResult?.indexOf('Will open in') !== -1 ||
+		currentTimeInRangeResult?.indexOf('Will open at') !== -1 ||
 		currentTimeInRangeResult?.indexOf('Closed') !== -1
 
 	return {

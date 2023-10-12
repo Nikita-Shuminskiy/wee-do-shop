@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Weedo",
-    "slug": "weedo",
+    "slug": "weedoo",
     "version": "1.0.3",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -22,7 +22,6 @@
       }
     },
     "android": {
-      "package": "com.wee_doo.th",
       "userInterfaceStyle": "light",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
@@ -33,17 +32,18 @@
           "apiKey": "AIzaSyCDu3dMvEFIDgw_uqJWabVuauq0JVsu3NI"
         }
       },
-      "versionCode": 17,
+      "versionCode": 24,
       "permissions": [
         "CALL_PHONE"
-      ]
+      ],
+      "package": "com.wee_doo.th"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "extra": {
       "eas": {
-        "projectId": "a20d1224-8625-45c9-88e1-e242c9fff915"
+        "projectId": "5089860a-124c-4e1e-8c9f-95c034202c40"
       }
     },
     "owner": "nick_we-do",
@@ -57,7 +57,6 @@
       ]
     ],
     "updates": {
-      "releaseChannel": "production",
       "fallbackToCacheTimeout": 0,
       "url": "https://u.expo.dev/a20d1224-8625-45c9-88e1-e242c9fff915"
     }

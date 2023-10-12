@@ -57,7 +57,9 @@ const CartS = observer(({ navigation }: CartSProps) => {
 		OrderService.sendOrder(dataOrder).then((data) => {
 			if (data) {
 				navigation.navigate(routerConstants.ORDER_STATUSES)
-				removeCart()
+				setTimeout(() => {
+					removeCart()
+				}, 10)
 			}
 		})
 	}
