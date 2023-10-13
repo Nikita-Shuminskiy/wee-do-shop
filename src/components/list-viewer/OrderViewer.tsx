@@ -30,7 +30,6 @@ const OrderViewer = memo(({ order, onPressDetails, onPressRepeat }: OrderViewerP
 		})
 	}
 	const isCompletedStatuses = order.status === StatusType.Completed
-
 	return (
 		<Box style={styles.container}>
 			<Box flexDirection={'row'} justifyContent={'space-between'}>
@@ -64,7 +63,7 @@ const OrderViewer = memo(({ order, onPressDetails, onPressRepeat }: OrderViewerP
 					backgroundColor={'#E7E7E7'}
 					styleText={styles.textBtn}
 					styleContainer={{
-						maxWidth: !isStatusCanceled && 150,
+						maxWidth: !isStatusCanceled ? 150 : null,
 						width: '100%',
 					}}
 					onPress={() => onPressDetails(order)}

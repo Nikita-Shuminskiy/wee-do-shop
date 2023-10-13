@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { BaseWrapperComponent } from '../../components/baseWrapperComponent'
 import arrowLeftBack from '../../assets/images/arrow-left-back.png'
 import { Box, Text } from 'native-base'
@@ -15,11 +15,9 @@ import ProductViewer from '../../components/list-viewer/ProductViewer'
 import { SubCategoryType } from '../../api/subCategoriesApi'
 import { ProductType } from '../../api/productApi'
 import PopUpProduct from '../../components/modalPopUp/PopUpProduct'
-import { CartType } from '../../store/CartStore/cart-store'
 import PopUpAboutStore from '../../components/modalPopUp/PopUpAboutStore'
 import { formatProductPrice } from '../../components/MapViews/utils'
 import { routerConstants } from '../../constants/routerConstants'
-import { getTotalSumProductsCart, updateValueCartProducts } from '../../utils/utilsCart'
 import * as Animatable from 'react-native-animatable'
 import { createAlert } from '../../components/Alert'
 
@@ -272,7 +270,7 @@ const StoreS = observer(({ navigation }: StoreSProps) => {
 					position={'absolute'}
 					borderTopRightRadius={16}
 					borderTopLeftRadius={16}
-					height={90}
+					height={100}
 					justifyContent={'center'}
 					w={'100%'}
 					bottom={0}

@@ -33,7 +33,7 @@ const UpdateUserS = ({ navigation }: UpdateUserSProps) => {
 	const [touchedPassword, setTouchedPassword] = useState<boolean>(false)
 
 	const onSubmit = (values: DataType) => {
-		if (!isValidPhone && values.phone) return
+		if (!values.phone) return
 
 		const formattedPhoneNumber = `+${countryCode.callingCode[0]}${values.phone}`
 		const dataToSend: OptionalUserType = {}

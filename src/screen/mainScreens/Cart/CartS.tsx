@@ -59,7 +59,7 @@ const CartS = observer(({ navigation }: CartSProps) => {
 				navigation.navigate(routerConstants.ORDER_STATUSES)
 				setTimeout(() => {
 					removeCart()
-				}, 10)
+				}, 1000)
 			}
 		})
 	}

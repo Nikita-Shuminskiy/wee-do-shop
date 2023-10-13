@@ -148,8 +148,7 @@ const RegisterS = observer(({ navigation }: LoginSProps) => {
 		!!(errors.firstName && !values.firstName.trim()) ||
 		!!(errors.password && values.password.length <= 5) ||
 		!!(errors.confirmPassword && !values.confirmPassword) ||
-		isSubmitting ||
-		!!(!isValidPhone && touched.phone)
+		isSubmitting
 
 	const onPressNavigateToLocation = async () => {
 		//	await Linking.openSettings()

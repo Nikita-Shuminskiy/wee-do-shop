@@ -18,8 +18,7 @@
       },
       "android": {
         "buildType": "apk"
-      },
-      "autoIncrement": true
+      }
     },
     "production": {
       "channel": "production",
@@ -30,6 +29,12 @@
     }
   },
   "submit": {
-    "production": {}
+    "production": {
+      "ios": {
+        "appleId": "weedoshop420@gmail.com",
+        "ascAppId": "6469359046",
+        "appleTeamId": "GDF9TY2R89"
+      }
+    }
   }
 }
