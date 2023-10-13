@@ -10,7 +10,9 @@
     "build_apk": "npx eas build -p android --profile preview",
     "build_all": "npx eas build --platform all",
     "build_dev_android": "npx eas build --profile development --platform android",
-    "build_android_aab": "npx eas build --platform android"
+    "build_android_aab": "npx eas build --platform android",
+    "uplad_ios": "eas submit -p ios",
+    "uplad_android": "eas submit -p android"
   },
   "dependencies": {
     "@expo/webpack-config": "^18.0.1",

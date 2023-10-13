@@ -35,14 +35,12 @@ const CourierPickOrder = observer(({ route, navigation }: CourierPickOrderProps)
 	const { CourierOrderService } = rootStore
 	const [showUserInfoModal, setShowUserInfoModal] = useState(false)
 	const [myPosition, setMyPosition] = useState<Coordinates>()
-	console.log(myPosition)
 	const [coords, setCoords] = useState({
 		latitude: selectedOrder.user.address?.location.coordinates[1],
 		longitude: selectedOrder.user.address?.location.coordinates[0],
 		latitudeDelta: 0.0922,
 		longitudeDelta: 0.0421,
 	})
-	console.log(myPosition)
 	const isStatusOnTheWay = selectedOrder?.status === StatusType.OnTheWay
 	const onPressNavigate = async () => {
 		if (!myPosition?.latitude) return
@@ -157,7 +155,7 @@ const CourierPickOrder = observer(({ route, navigation }: CourierPickOrderProps)
 					</Box>
 
 					<Box w={'100%'}>
-						{selectedOrder?.status !== StatusType.Completed && (
+						{selectedOrder?.status !== StatusType.Completed && myPosition?.longitude && (
 							<TouchableOpacity onPress={onPressNavigate}>
 								<Box
 									borderWidth={1}
