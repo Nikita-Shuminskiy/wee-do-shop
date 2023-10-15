@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { StyleSheet } from 'react-native'
 import { NavigationProp, ParamListBase } from '@react-navigation/native'
 import { BaseWrapperComponent } from '../../components/baseWrapperComponent'
@@ -52,8 +52,14 @@ const LoginS = ({ navigation }: LoginSProps) => {
 	const onPressSignUpHandler = () => {
 		navigation.navigate(routerConstants.REGISTRATION)
 	}
+	useEffect(() => {
+		AuthStoreService.getMe()
+	}, [])
 	return (
-		<BaseWrapperComponent isKeyboardAwareScrollView={true}>
+		<BaseWrapperComponent
+			onRefreshHandler={() => AuthStoreService.getMe()}
+			isKeyboardAwareScrollView={true}
+		>
 			<Box w={'100%'} alignItems={'center'} justifyContent={'space-evenly'} flex={1} paddingX={4}>
 				<Image w={247} h={318} alt={'logo'} source={logoImg} mt={5} />
 				<Box w={'100%'} mb={5}>

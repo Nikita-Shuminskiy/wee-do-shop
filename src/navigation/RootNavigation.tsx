@@ -36,13 +36,39 @@ import ResetPasswordS from '../screen/authScreens/ResetPasswordS'
 import ForgotPasswordS from '../screen/authScreens/ForgotPasswordS'
 import NewPasswordS from '../screen/authScreens/NewPasswordS'
 import { checkNewVersionApp } from '../utils/utils'
-
+import * as BackgroundFetch from 'expo-background-fetch'
+import * as TaskManager from 'expo-task-manager'
+import { BackHandler, Platform } from 'react-native'
 const RootStack = createNativeStackNavigator()
+const TASK_NAME = 'my-background-task'
+
+/*TaskManager.defineTask(TASK_NAME, async () => {
+	console.log('Background task is running')
+	// Здесь можно выполнить необходимые операции, например, проверить, прошло 5 минут.
+	// Если прошло 5 минут, вы можете закрыть приложение.
+	// В данном примере, просто ждем 5 минут (300000 миллисекунд) перед закрытием приложения.
+	setTimeout(() => {
+		BackgroundFetch.unregisterTaskAsync(TASK_NAME)
+		// Это закроет приложение
+		if (Platform.OS === 'android') {
+			BackHandler.exitApp()
+		} else {
+			//RNExitApp.exitApp()
+		}
+	}, 30)
+})*/
 const RootNavigation = observer(() => {
 	const { isLoading, setIsLoading } = NotificationStore
 	const { AuthStoreService, AuthStore } = rootStore
 	const [isConnected, setIsConnected] = useState(true)
 	const { isAuth, user } = AuthStore
+	/*	useEffect(() => {
+		;(async () => {
+			await BackgroundFetch.registerTaskAsync(TASK_NAME, {
+				minimumInterval: 15, // Минимальный интервал выполнения задачи в минутах
+			})
+		})()
+	}, [])*/
 
 	const checkInternetConnection = async () => {
 		setIsLoading(LoadingEnum.fetching)
