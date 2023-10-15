@@ -13,8 +13,16 @@ export const capitalizeFirstLetter = (str: string) => {
 	const capitalizedString = str.charAt(0).toUpperCase() + str.slice(1)
 	return capitalizedString
 }
+const daysOfWeek: (keyof WorkingHoursType)[] = [
+	'monday',
+	'tuesday',
+	'wednesday',
+	'thursday',
+	'friday',
+	'saturday',
+	'sunday',
+]
 export const getCurrentDayName = () => {
-	const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
 	const today = new Date()
 	const currentDayOfWeek = today.getUTCDay()
 	const currentDay = daysOfWeek[currentDayOfWeek]
@@ -79,7 +87,6 @@ export const checkNewVersionApp = async () => {
 
 export const getCurrentUntilTimeStoreTo = (workingHoursStores: WorkingHoursType) => {
 	if (!workingHoursStores) return ''
-
 	const currentDay = getCurrentDayName()
 	const currentHourWorkStores = workingHoursStores[currentDay]
 	if (currentHourWorkStores === 'Closed') return 'Closed today'
@@ -90,15 +97,7 @@ const getInfoTime = (open: boolean, time?: string) => {
 	if (time === 'Closed') return 'Closed'
 	return `Will ${open ? 'open' : 'close'} at ` + time ?? ''
 }
-const daysOfWeek: (keyof WorkingHoursType)[] = [
-	'monday',
-	'tuesday',
-	'wednesday',
-	'thursday',
-	'friday',
-	'saturday',
-	'sunday',
-]
+
 export function isCurrentTimeInRange(workingHoursStores: WorkingHoursType, isInfo = false): any {
 	if (!workingHoursStores) return ''
 	const date = new Date()

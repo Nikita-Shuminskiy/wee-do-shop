@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import axios from 'axios'
-import { DataLoginType } from './authApi'
+import { authApi, DataLoginType } from './authApi'
 import AuthStore from '../store/AuthStore/auth-store'
 import { createAlert } from '../components/Alert'
 import { deviceStorage } from '../utils/storage/storage'
@@ -29,6 +29,7 @@ instance.interceptors.response.use(
 	(response) => response,
 	async function (error) {
 		const originalRequest = error.config
+
 		if (error.response.status === 401 && !originalRequest._retry) {
 			originalRequest._retry = true
 			try {
@@ -42,7 +43,7 @@ instance.interceptors.response.use(
 
 				originalRequest.headers.authorization = `Bearer ${data.accessToken}`
 
-				return axios.request(originalRequest)
+				return instance.request(originalRequest)
 			} catch (e) {
 				if (e.response?.status === 401 && e.response?.data.message === 'Unauthorized') {
 					console.log('remove tokens')
@@ -52,7 +53,7 @@ instance.interceptors.response.use(
 				}
 			}
 		}
-		console.log(error)
+		console.log(error, 'Promise.reject(error)')
 		return Promise.reject(error)
 	}
 )

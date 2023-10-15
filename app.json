@@ -11,6 +11,9 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
     "assetBundlePatterns": [
       "**/*"
     ],
@@ -18,10 +21,7 @@
       "userInterfaceStyle": "light",
       "supportsTablet": true,
       "bundleIdentifier": "com.weedo.ios",
-      "buildNumber": "1.0.3",
-      "config": {
-        "googleMapsApiKey": "AIzaSyD-3PKe63YHjDDaxjVahTekuyvvOFfwKp4"
-      }
+      "buildNumber": "1.0.4"
     },
     "android": {
       "userInterfaceStyle": "light",
@@ -29,12 +29,8 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "config": {
-        "googleMaps": {
-          "apiKey": "AIzaSyCDu3dMvEFIDgw_uqJWabVuauq0JVsu3NI"
-        }
-      },
       "versionCode": 24,
+      "useNextNotificationsApi": true,
       "permissions": [
         "CALL_PHONE"
       ],
@@ -59,8 +55,10 @@
       ]
     ],
     "updates": {
+      "checkAutomatically": "ON_LOAD",
       "fallbackToCacheTimeout": 0,
-      "url": "https://u.expo.dev/a20d1224-8625-45c9-88e1-e242c9fff915"
+      "enabled": true,
+      "url": "https://u.expo.dev/5089860a-124c-4e1e-8c9f-95c034202c40"
     }
   }
 }

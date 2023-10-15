@@ -37,7 +37,7 @@ const PopUpAboutStore = ({ show, onClose, currentStore }: PopUpAboutStoreProps) 
 	const workingHoursArray = Object.entries(currentStore?.workingHours ?? {})
 
 	const isOpenStoreNow = isCurrentTimeInRange(currentStore?.workingHours)
-	const untilTimeStoreTo = getCurrentUntilTimeStoreTo(currentStore?.workingHours)
+	//const untilTimeStoreTo = getCurrentUntilTimeStoreTo(currentStore?.workingHours)
 	const currentDayOfWeek = getCurrentDayName()
 
 	const formatted_address = getFormattedAddress({
@@ -83,11 +83,11 @@ const PopUpAboutStore = ({ show, onClose, currentStore }: PopUpAboutStoreProps) 
 						</Text>
 						<Text color={colors.grayLight} fontSize={22}>
 							{' '}
-							|{' '}
+							{/*	|{' '}*/}
 						</Text>
-						<Text fontWeight={'400'} width={200} fontSize={18}>
-							Closes: {untilTimeStoreTo}
-						</Text>
+						{/*	<Text fontWeight={'400'} width={200} fontSize={18}>
+							Closes
+						</Text>*/}
 					</Box>
 					<Box ml={8} mb={2} alignItems={'flex-start'}>
 						{workingHoursArray?.map((day) => {

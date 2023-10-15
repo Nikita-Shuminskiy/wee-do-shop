@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 
 import { observer } from 'mobx-react-lite'
 import NotificationStore from '../store/NotificationStore/notification-store'
-import { NavigationContainer } from '@react-navigation/native'
+import { NavigationContainer, useNavigation } from '@react-navigation/native'
 import { LoadingEnum } from '../store/types/types'
 import Loading from '../components/Loading'
 import { routerConstants } from '../constants/routerConstants'
@@ -39,36 +39,20 @@ import { checkNewVersionApp } from '../utils/utils'
 import * as BackgroundFetch from 'expo-background-fetch'
 import * as TaskManager from 'expo-task-manager'
 import { BackHandler, Platform } from 'react-native'
-const RootStack = createNativeStackNavigator()
-const TASK_NAME = 'my-background-task'
 
-/*TaskManager.defineTask(TASK_NAME, async () => {
-	console.log('Background task is running')
-	// Здесь можно выполнить необходимые операции, например, проверить, прошло 5 минут.
-	// Если прошло 5 минут, вы можете закрыть приложение.
-	// В данном примере, просто ждем 5 минут (300000 миллисекунд) перед закрытием приложения.
-	setTimeout(() => {
-		BackgroundFetch.unregisterTaskAsync(TASK_NAME)
-		// Это закроет приложение
-		if (Platform.OS === 'android') {
-			BackHandler.exitApp()
-		} else {
-			//RNExitApp.exitApp()
-		}
-	}, 30)
-})*/
+const RootStack = createNativeStackNavigator()
+const TASK_NAME = 'task_go_home'
+
 const RootNavigation = observer(() => {
 	const { isLoading, setIsLoading } = NotificationStore
 	const { AuthStoreService, AuthStore } = rootStore
 	const [isConnected, setIsConnected] = useState(true)
 	const { isAuth, user } = AuthStore
-	/*	useEffect(() => {
-		;(async () => {
-			await BackgroundFetch.registerTaskAsync(TASK_NAME, {
-				minimumInterval: 15, // Минимальный интервал выполнения задачи в минутах
-			})
-		})()
-	}, [])*/
+	const [navigation, setNav] = useState<any>()
+	TaskManager.defineTask(TASK_NAME, async () => {
+		console.log('Background task is running')
+		isAuth && navigation?.navigate(routerConstants.HOME)
+	})
 
 	const checkInternetConnection = async () => {
 		setIsLoading(LoadingEnum.fetching)
@@ -81,6 +65,11 @@ const RootNavigation = observer(() => {
 		}
 	}
 	useEffect(() => {
+		;(async () => {
+			await BackgroundFetch.registerTaskAsync(TASK_NAME, {
+				minimumInterval: 1,
+			})
+		})()
 		const unsubscribe = NetInfo.addEventListener((state) => {
 			setIsConnected(state.isConnected)
 		})
@@ -92,7 +81,11 @@ const RootNavigation = observer(() => {
 	}, [])
 
 	return (
-		<NavigationContainer>
+		<NavigationContainer
+			ref={(navigationRef) => {
+				setNav(navigationRef)
+			}}
+		>
 			{isLoading === LoadingEnum.fetching && (
 				<Loading visible={isLoading === LoadingEnum.fetching} />
 			)}
