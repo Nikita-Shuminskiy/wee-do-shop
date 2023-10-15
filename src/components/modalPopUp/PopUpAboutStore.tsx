@@ -15,23 +15,23 @@ import {
 } from '../../utils/utils'
 import { getFormattedAddress } from '../MapViews/utils'
 import { PhoneNumberComponent } from '../PhoneNumberLink'
-import { getInfoAboutStoreWorkTime } from '../list-viewer/utils'
 
 type PopUpAboutStoreProps = {
 	show: boolean
 	currentStore: StoreType
 	onClose: () => void
 }
-/*export const test = {
-	monday: '07:06 - 02:03',
-	tuesday: '09:00 - 02:00',
-
-	wednesday: '09:00 - 00:00',
-	thursday: 'Closed',
-	friday: 'Closed',
-	saturday: 'Closed',
+/*
+export const test = {
 	sunday: 'Closed',
-}*/
+	monday: '09:00 - 21:00',
+	tuesday: '09:00 - 21:00',
+	wednesday: '09:00 - 00:00',
+	thursday: '09:00 - 21:00',
+	friday: '09:00 - 21:00',
+	saturday: '10:00 - 23:00',
+}
+*/
 
 const PopUpAboutStore = ({ show, onClose, currentStore }: PopUpAboutStoreProps) => {
 	const workingHoursArray = Object.entries(currentStore?.workingHours ?? {})

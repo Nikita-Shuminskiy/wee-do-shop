@@ -13,7 +13,6 @@ import { ApiOrderType, StatusType } from '../../api/ordersApi'
 import Button from '../../components/Button'
 import { colors } from '../../assets/colors/colors'
 import { setHours, setMinutes, startOfDay, subDays, subMonths } from 'date-fns'
-import PopUpOrderDetails from '../../components/modalPopUp/PopUpOrderDetails'
 
 enum PeriodEnum {
 	DAY_1 = '1Day',

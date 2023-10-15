@@ -25,7 +25,6 @@ export class CartStore {
 		this.cart = cart
 	}
 	removeCart() {
-		console.log('remove')
 		this.promoCode = null
 		this.cart = {} as CartType
 		this.currDeliveryPrice = deliveryPrice

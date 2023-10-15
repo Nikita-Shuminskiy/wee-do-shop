@@ -29,6 +29,7 @@ const OrderCourierViewer = memo(
 		})
 		const formattedAddressUser = getFormattedAddress(order?.user?.address)
 		const productTotalPrice = formatProductPrice(order.totalPrice)
+
 		return (
 			<Box style={styles.container}>
 				<Box flexDirection={'row'} justifyContent={'space-between'}>
@@ -53,7 +54,7 @@ const OrderCourierViewer = memo(
 					</Box>
 				</Box>
 
-				{!isCompletedOrder && (
+				{!isCompletedOrder && formattedAddressStore.trim() && (
 					<Box flexDirection={'row'} mt={2} justifyContent={'space-between'}>
 						<Button
 							backgroundColor={colors.green}
@@ -62,7 +63,7 @@ const OrderCourierViewer = memo(
 							onPress={onPressTakeOrder}
 							title={isMyOrder ? 'Go to order' : 'Take order'}
 						/>
-						{!isMyOrder && (
+						{!isMyOrder && !!formattedAddressStore && (
 							<Button
 								backgroundColor={colors.grayLight}
 								styleText={{ color: colors.black }}
@@ -73,7 +74,7 @@ const OrderCourierViewer = memo(
 						)}
 					</Box>
 				)}
-				{isCompletedOrder && (
+				{isCompletedOrder && order.store?.address && (
 					<Box mt={2}>
 						<Button
 							backgroundColor={colors.grayLight}

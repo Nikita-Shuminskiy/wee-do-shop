@@ -90,21 +90,19 @@ const getInfoTime = (open: boolean, time?: string) => {
 	if (time === 'Closed') return 'Closed'
 	return `Will ${open ? 'open' : 'close'} at ` + time ?? ''
 }
-
+const daysOfWeek: (keyof WorkingHoursType)[] = [
+	'monday',
+	'tuesday',
+	'wednesday',
+	'thursday',
+	'friday',
+	'saturday',
+	'sunday',
+]
 export function isCurrentTimeInRange(workingHoursStores: WorkingHoursType, isInfo = false): any {
 	if (!workingHoursStores) return ''
 	const date = new Date()
 	const currentDayName = getCurrentDayName()
-
-	const daysOfWeek: (keyof WorkingHoursType)[] = [
-		'monday',
-		'tuesday',
-		'wednesday',
-		'thursday',
-		'friday',
-		'saturday',
-		'sunday',
-	]
 
 	// Находим индекс текущего дня недели
 	const currentDayIndex = daysOfWeek.indexOf(currentDayName as keyof WorkingHoursType)
@@ -149,7 +147,7 @@ export function isCurrentTimeInRange(workingHoursStores: WorkingHoursType, isInf
 			return isInfo ? getInfoTime(false, endTime) : true
 		} else {
 			// Время находится за пределами рабочего интервала
-			return isInfo ? getInfoTime(true, startTimeNextDay) : false
+			return isInfo ? getInfoTime(true, startTime) : false
 		}
 	}
 }

@@ -89,8 +89,7 @@ const OrdersS = observer(({ navigation, route }: OrdersSProps) => {
 		setIsShowPopupDetails(true)
 	}, [])
 	const orderViews = useCallback(({ item }: { item: ApiOrderType }) => {
-		if (isRoutHistory && item.status === StatusType.Canceled) return
-
+		if ((isRoutHistory && item.status === StatusType.Canceled) || !item?.store?.name) return
 		return (
 			<OrderViewer onPressRepeat={onPressRepeat} onPressDetails={onPressDetails} order={item} />
 		)

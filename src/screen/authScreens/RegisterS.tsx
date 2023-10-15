@@ -149,7 +149,7 @@ const RegisterS = observer(({ navigation }: LoginSProps) => {
 		!!(errors.password && values.password.length <= 5) ||
 		!!(errors.confirmPassword && !values.confirmPassword) ||
 		isSubmitting
-
+	/*!!(!isValidPhone && touched.phone)*/
 	const onPressNavigateToLocation = async () => {
 		//	await Linking.openSettings()
 		await askLocationPermissionHandler().then((data) => {

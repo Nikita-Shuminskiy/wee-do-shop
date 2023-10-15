@@ -32,7 +32,6 @@ const CartS = observer(({ navigation }: CartSProps) => {
 		removeProductToCart,
 		updateProductToCart,
 		promoCode,
-		setToCartStore,
 	} = cartStore
 	const { user } = authStore
 
@@ -53,13 +52,13 @@ const CartS = observer(({ navigation }: CartSProps) => {
 			userId: user._id,
 			discountCode: promoCode?.key,
 		}
-		console.log(dataOrder)
 		OrderService.sendOrder(dataOrder).then((data) => {
 			if (data) {
 				navigation.navigate(routerConstants.ORDER_STATUSES)
+				console.log(1)
 				setTimeout(() => {
 					removeCart()
-				}, 1000)
+				}, 2000)
 			}
 		})
 	}

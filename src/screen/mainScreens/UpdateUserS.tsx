@@ -30,10 +30,9 @@ const UpdateUserS = ({ navigation }: UpdateUserSProps) => {
 	const { AuthStoreService } = rootStore
 	const [isValidPhone, setIsValidPhone] = useState(true)
 	const [countryCode, setCountryCode] = useState<CountryData>(countryDataDefault)
-	const [touchedPassword, setTouchedPassword] = useState<boolean>(false)
 
 	const onSubmit = (values: DataType) => {
-		if (!values.phone) return
+		if (!isValidPhone && values.phone) return
 
 		const formattedPhoneNumber = `+${countryCode.callingCode[0]}${values.phone}`
 		const dataToSend: OptionalUserType = {}

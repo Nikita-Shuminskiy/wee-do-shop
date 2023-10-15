@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "Weedo delivery",
+    "name": "Weedo",
     "slug": "weedoo",
     "version": "1.0.2",
     "orientation": "portrait",
@@ -18,7 +18,7 @@
       "userInterfaceStyle": "light",
       "supportsTablet": true,
       "bundleIdentifier": "com.weedo.ios",
-      "buildNumber": "1.0.2",
+      "buildNumber": "1.0.3",
       "config": {
         "googleMapsApiKey": "AIzaSyD-3PKe63YHjDDaxjVahTekuyvvOFfwKp4"
       }
