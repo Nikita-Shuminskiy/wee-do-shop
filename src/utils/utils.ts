@@ -1,6 +1,6 @@
 import regex from './helpers/regex'
 import { WorkingHoursType } from '../api/storesApi'
-import { format, getDay, getHours, getMinutes, parseISO } from 'date-fns'
+import { addDays, format, getDay, getHours, getMinutes, parseISO } from 'date-fns'
 import { ProductType } from '../api/productApi'
 import { createAlert } from '../components/Alert'
 import { log } from 'expo-updates/build-cli/utils/log'
@@ -75,55 +75,93 @@ const getInfoTime = (open: boolean, time?: string) => {
 	if (time === 'Closed') return 'Closed'
 	return `Will ${open ? 'open' : 'close'} at ` + time ?? ''
 }
+const date = new Date()
+const nextDayName = daysOfWeek[addDays(date, 1).getDay()]
+const prevDayName = daysOfWeek[addDays(date, -1).getDay()]
+const currentDayName = getCurrentDayName()
+
+export const test = {
+	sunday: 'Closed',
+	monday: '09:00 - 03:30',
+	tuesday: '01:30 - 13:00',
+	wednesday: '09:30 - 02:00',
+	thursday: '09:00 - 03:00',
+	friday: '09:00 - 21:00',
+	saturday: '10:00 - 23:00',
+}
+const currentHour = '05'
+const currentMinute = '09'
 
 export function isCurrentTimeInRange(workingHoursStores: WorkingHoursType, isInfo = false): any {
 	if (!workingHoursStores) return ''
-	const date = new Date()
-	const currentDayName = getCurrentDayName()
-
-	const currentDayIndex = daysOfWeek.indexOf(currentDayName as keyof WorkingHoursType)
-	const nextDayIndex = (currentDayIndex + 1) % 7 // Вычисляем индекс следующего дня
-	const nextDayName = daysOfWeek[nextDayIndex]
+	const currentDayIndex = getDay(date)
 	const [startTimeNextDay, endTimeNextDay] = workingHoursStores[nextDayName]?.split(' - ')
 	const currentHourWorkStores = workingHoursStores[currentDayName]
+	const currentHourWorkStoresPrevDay = workingHoursStores[prevDayName]
+	const [startTimePrevDay, endTimePrevDay] = currentHourWorkStoresPrevDay?.split(' - ')
+	const [startHourPrevDay, startMinutePrevDay] = startTimePrevDay?.split(':')
+	const [endHourPrevDay, endMinutePrevDay] = endTimePrevDay?.split(':')
+	// is closed will closed
+	const isCurrentDayClosed = !currentHourWorkStores || currentHourWorkStores === 'Closed'
+	const isPrevDayAfterMidnight =
+		Number(startHourPrevDay + startMinutePrevDay) > Number(endHourPrevDay + endMinutePrevDay)
 
-	if (!currentHourWorkStores || currentHourWorkStores === 'Closed') {
+	const isCurrentTimeMoreThenPrevEndHour =
+		Number(currentHour + currentMinute) > Number(endHourPrevDay + endMinutePrevDay)
+
+	const [startTime, endTime] = currentHourWorkStores?.split(' - ')
+	const [startHour, startMinute] = startTime?.split(':')
+	const isCurrentTimeLessThenCurrentDayStartHour =
+		currentHourWorkStores === 'Closed' ||
+		Number(currentHour + currentMinute) < Number(startHour + startMinute)
+	/*	console.log(Number(startHour + startMinute))
+	console.log(currentMinute)*/
+	/*	console.log(isCurrentDayClosed, 'isCurrentDayClosed')
+	console.log(isPrevDayAfterMidnight, 'isPrevDayAfterMidnight')
+	console.log(isCurrentTimeMoreThenPrevEndHour, 'isCurrentTimeMoreThenPrevEndHour')
+	console.log(isCurrentTimeLessThenCurrentDayStartHour, 'isCurrentTimeLessThenCurrentDayStartHour')*/
+	//current hour = 02
+	/*	monday: '09:00 - 03:30',
+      tuesday: '09:00 - 02:30',
+      wednesday: '09:00 - 02:00',*/
+	if (
+		(isPrevDayAfterMidnight && isCurrentTimeMoreThenPrevEndHour && isCurrentDayClosed) ||
+		(!isPrevDayAfterMidnight && isCurrentDayClosed) ||
+		(isCurrentTimeLessThenCurrentDayStartHour && isCurrentTimeMoreThenPrevEndHour)
+	) {
+		console.log('isClosed')
 		if (isInfo) return getInfoTime(true, startTimeNextDay)
 		return false
 	}
-	const [startTime, endTime] = currentHourWorkStores?.split(' - ')
-
-	const currentHour = getHours(date)
-	const currentMinute = getMinutes(date)
-
-	const [startHour, startMinute] = startTime?.split(':').map(Number)
-	const [endHour, endMinute] = endTime?.split(':').map(Number)
-
-	if (startHour > endHour) {
-		// Режим работы переходит через полночь
-		if (
-			currentHour > startHour ||
-			(currentHour === startHour && currentMinute >= startMinute) ||
-			currentHour < endHour ||
-			(currentHour === endHour && currentMinute < endMinute)
-		) {
-			// Время находится в интервале между началом и концом рабочего дня
-			return isInfo ? getInfoTime(false, endTime) : true
-		} else {
-			// Время находится за пределами рабочего интервала
-			return isInfo ? getInfoTime(true, startTimeNextDay) : false
-		}
-	} else {
-		// Режим работы не переходит через полночь
-		if (
-			(currentHour > startHour || (currentHour === startHour && currentMinute >= startMinute)) &&
-			(currentHour < endHour || (currentHour === endHour && currentMinute < endMinute))
-		) {
-			// Время находится в интервале между началом и концом рабочего дня
-			return isInfo ? getInfoTime(false, endTime) : true
-		} else {
-			// Время находится за пределами рабочего интервала
-			return isInfo ? getInfoTime(true, startTime) : false
-		}
-	}
+	console.log('ok')
+	/*	const [startTime, endTime] = currentHourWorkStores?.split(' - ')
+  const [startHour, startMinute] = startTime?.split(':').map(Number)
+  const [endHour, endMinute] = endTime?.split(':').map(Number)*/
+	/*if (startHour > endHour) {
+    // Режим работы переходит через полночь
+    if (
+      currentHour > startHour ||
+      (currentHour === startHour && currentMinute >= startMinute) ||
+      currentHour < endHour ||
+      (currentHour === endHour && currentMinute < endMinute)
+    ) {
+      // Время находится в интервале между началом и концом рабочего дня
+      return isInfo ? getInfoTime(false, endTime) : true
+    } else {
+      // Время находится за пределами рабочего интервала
+      return isInfo ? getInfoTime(true, startTimeNextDay) : false
+    }
+  } else {
+    // Режим работы не переходит через полночь
+    if (
+      (currentHour > startHour || (currentHour === startHour && currentMinute >= startMinute)) &&
+      (currentHour < endHour || (currentHour === endHour && currentMinute < endMinute))
+    ) {
+      // Время находится в интервале между началом и концом рабочего дня
+      return isInfo ? getInfoTime(false, endTime) : true
+    } else {
+      // Время находится за пределами рабочего интервала
+      return isInfo ? getInfoTime(true, startTime) : false
+    }
+  }*/
 }

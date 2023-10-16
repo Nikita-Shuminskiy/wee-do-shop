@@ -7,6 +7,8 @@ import { routerConstants } from '../constants/routerConstants'
 import { NavigationProp, ParamListBase } from '@react-navigation/native'
 import { getFormattedAddress } from './MapViews/utils'
 import { AddressType } from '../store/AuthStore/auth-store'
+import StoresStore from '../store/StoresStore/stores-store'
+import rootStore from '../store/RootStore/root-store'
 
 export type HeaderUserType = {
 	navigation: NavigationProp<ParamListBase>

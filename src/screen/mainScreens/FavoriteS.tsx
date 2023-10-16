@@ -19,7 +19,7 @@ type FavoriteSType = {
 }
 const FavoriteS = observer(({ navigation }: FavoriteSType) => {
 	const { StoresStore, StoresService } = rootStore
-	const { setStore, favoriteStores } = StoresStore
+	const { favoriteStores } = StoresStore
 	const onPress = useCallback((store) => {
 		StoresService.getStore(store._id).then((data) => {
 			if (data) {
@@ -30,6 +30,7 @@ const FavoriteS = observer(({ navigation }: FavoriteSType) => {
 	const onPressRemoveFavoriteStore = useCallback((id) => {
 		StoresService.deleteFavoriteStore(id)
 	}, [])
+
 	const storesViews = useCallback(({ item }: { item: StoreType }) => {
 		return (
 			<StoresViewer
@@ -45,9 +46,7 @@ const FavoriteS = observer(({ navigation }: FavoriteSType) => {
 		// Возвращаем true, чтобы предотвратить стандартное поведение кнопки "Назад" (например, закрытие приложения)
 		return true
 	}
-	useEffect(() => {
-		StoresService.getFavoriteStores()
-	}, [])
+
 	useGoBackNative(onPressGoBack)
 
 	return (

@@ -1,11 +1,11 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { BaseWrapperComponent } from '../../../components/baseWrapperComponent'
 import cartStore, { ProductCartType } from '../../../store/CartStore/cart-store'
 import { observer } from 'mobx-react-lite'
 import { Box, Text } from 'native-base'
 import { colors } from '../../../assets/colors/colors'
 import Button from '../../../components/Button'
-import { Dimensions, FlatList, Platform, StyleSheet, TouchableOpacity } from 'react-native'
+import { Dimensions, FlatList, StyleSheet, TouchableOpacity } from 'react-native'
 import { renderEmptyContainer } from '../../../components/list-viewer/empty-list'
 import ProductCartViewer from '../../../components/list-viewer/ProductCartViewer'
 import { FontAwesome5 } from '@expo/vector-icons'
@@ -55,7 +55,6 @@ const CartS = observer(({ navigation }: CartSProps) => {
 		OrderService.sendOrder(dataOrder).then((data) => {
 			if (data) {
 				navigation.navigate(routerConstants.ORDER_STATUSES)
-				console.log(1)
 				setTimeout(() => {
 					removeCart()
 				}, 2000)

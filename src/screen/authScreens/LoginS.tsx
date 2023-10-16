@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { memo, useCallback, useEffect, useMemo } from 'react'
 import { StyleSheet } from 'react-native'
 import { NavigationProp, ParamListBase } from '@react-navigation/native'
 import { BaseWrapperComponent } from '../../components/baseWrapperComponent'
@@ -7,7 +7,7 @@ import TextInput from '../../components/TextInput'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import logoImg from '../../assets/images/logoWeeDo.png'
 import { useFormik } from 'formik'
-import { validateEmail } from '../../utils/utils'
+import { isCurrentTimeInRange, test, validateEmail } from '../../utils/utils'
 import { colors } from '../../assets/colors/colors'
 import Button from '../../components/Button'
 import { routerConstants } from '../../constants/routerConstants'
@@ -19,7 +19,7 @@ type LoginSProps = {
 	navigation: NavigationProp<ParamListBase>
 }
 
-const LoginS = ({ navigation }: LoginSProps) => {
+const LoginS = memo(({ navigation }: LoginSProps) => {
 	const { AuthStoreService } = rootStore
 	const onSubmit = (values) => {
 		AuthStoreService.login({
@@ -55,6 +55,9 @@ const LoginS = ({ navigation }: LoginSProps) => {
 	/*	useEffect(() => {
 		AuthStoreService.getMe()
 	}, [])*/
+
+	const test1 = isCurrentTimeInRange(test, true)
+	console.log(test1)
 	return (
 		<BaseWrapperComponent
 			onRefreshHandler={() => AuthStoreService.getMe()}
@@ -131,7 +134,7 @@ const LoginS = ({ navigation }: LoginSProps) => {
 			</Box>
 		</BaseWrapperComponent>
 	)
-}
+})
 const styles = StyleSheet.create({
 	linkCourierText: {
 		fontSize: 18,
