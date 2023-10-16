@@ -17,13 +17,18 @@ import HeaderUser from '../../components/headerUser'
 import Carousel from 'react-native-snap-carousel'
 import { BannersType } from '../../api/userApi'
 import BannersViewer from '../../components/list-viewer/BannersViewer'
+import * as Updates from 'expo-updates'
+import { LoadingEnum } from '../../store/types/types'
+import NotificationStore from '../../store/NotificationStore/notification-store'
 
 type HomeSProps = {
 	navigation: NavigationProp<ParamListBase>
 	route: any
 }
+
 const HomeS = observer(({ navigation, route }: HomeSProps) => {
 	const { user, banners } = AuthStore
+	const { setIsLoading } = NotificationStore
 	const { StoresService, StoresStore, CategoriesService, CategoriesStore } = rootStore
 	const { stores, setStore, favoriteStores, search, setSearch, setSelectedSubCategoryId } =
 		StoresStore

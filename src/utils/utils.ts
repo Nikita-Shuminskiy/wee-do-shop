@@ -2,7 +2,6 @@ import regex from './helpers/regex'
 import { WorkingHoursType } from '../api/storesApi'
 import { format, getHours, getMinutes, parseISO } from 'date-fns'
 import { ProductType } from '../api/productApi'
-import * as Updates from 'expo-updates'
 import { createAlert } from '../components/Alert'
 import { log } from 'expo-updates/build-cli/utils/log'
 
@@ -62,27 +61,6 @@ export const getTotalPriceOrder = (
 	return products?.reduce((acc, product) => {
 		return acc + product?.amount * product?.product?.price
 	}, 0)
-}
-export const checkNewVersionApp = async () => {
-	try {
-		const update = await Updates.checkForUpdateAsync()
-		const onPresUpdate = async () => {
-			await Updates.fetchUpdateAsync()
-			await Updates.reloadAsync()
-		}
-		if (update.isAvailable) {
-			createAlert({
-				title: 'Message',
-				message: 'A new version is available, update the app',
-				buttons: [
-					{ text: 'Update ', style: 'default', onPress: onPresUpdate },
-					{ text: 'Later ', style: 'cancel' },
-				],
-			})
-		}
-	} catch (e) {
-		console.log('error', e)
-	}
 }
 
 export const getCurrentUntilTimeStoreTo = (workingHoursStores: WorkingHoursType) => {

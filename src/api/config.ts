@@ -43,10 +43,10 @@ instance.interceptors.response.use(
 
 				originalRequest.headers.authorization = `Bearer ${data.accessToken}`
 
-				return instance.request(originalRequest)
+				return axios.request(originalRequest)
 			} catch (e) {
 				if (e.response?.status === 401 && e.response?.data.message === 'Unauthorized') {
-					console.log('remove tokens')
+					console.log(error, 'remove token')
 					await AsyncStorage.removeItem('refreshToken')
 					await AsyncStorage.removeItem('accessToken')
 					return Promise.reject(error)

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 
 import { observer } from 'mobx-react-lite'
 import NotificationStore from '../store/NotificationStore/notification-store'
-import { NavigationContainer, useNavigation } from '@react-navigation/native'
+import { NavigationContainer } from '@react-navigation/native'
 import { LoadingEnum } from '../store/types/types'
 import Loading from '../components/Loading'
 import { routerConstants } from '../constants/routerConstants'
@@ -30,15 +30,11 @@ import ModalReconnect from '../components/modal/modal-reconnect'
 import NetInfo from '@react-native-community/netinfo'
 import MainCourierNavigation from './MainCourierNavigation'
 import UpdateUserS from '../screen/mainScreens/UpdateUserS'
-import * as Updates from 'expo-updates'
-import { createAlert } from '../components/Alert'
 import ResetPasswordS from '../screen/authScreens/ResetPasswordS'
 import ForgotPasswordS from '../screen/authScreens/ForgotPasswordS'
 import NewPasswordS from '../screen/authScreens/NewPasswordS'
-import { checkNewVersionApp } from '../utils/utils'
 import * as BackgroundFetch from 'expo-background-fetch'
 import * as TaskManager from 'expo-task-manager'
-import { BackHandler, Platform } from 'react-native'
 
 const RootStack = createNativeStackNavigator()
 const TASK_NAME = 'task_go_home'
@@ -51,6 +47,7 @@ const RootNavigation = observer(() => {
 	const [navigation, setNav] = useState<any>()
 	TaskManager.defineTask(TASK_NAME, async () => {
 		console.log('Background task is running')
+		//await Updates.reloadAsync()
 		isAuth && navigation?.navigate(routerConstants.HOME)
 	})
 
@@ -73,7 +70,6 @@ const RootNavigation = observer(() => {
 		const unsubscribe = NetInfo.addEventListener((state) => {
 			setIsConnected(state.isConnected)
 		})
-		checkNewVersionApp()
 		AuthStoreService.getMe()
 		return () => {
 			unsubscribe()
