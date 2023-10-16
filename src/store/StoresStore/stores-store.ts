@@ -56,7 +56,7 @@ export class StoresStore {
 		this.setStores(data.results)
 	}
 
-	async getStore(id: number): Promise<void> {
+	async getStore(id: string): Promise<void> {
 		const { data } = await storesApi.getStores(id)
 		this.setStore(data)
 	}
@@ -78,6 +78,7 @@ export class StoresStore {
 
 	setStore(store: StoreType) {
 		this.store = store
+		this.getAndSetAllProduct(store.subCategories)
 	}
 
 	setSearch(text: string) {
@@ -119,7 +120,6 @@ export class StoresStore {
 		this.saveFavoriteStore = this.saveFavoriteStore.bind(this)
 		this.setStores = this.setStores.bind(this)
 		this.searchStores = this.searchStores.bind(this)
-		this.setStore = this.setStore.bind(this)
 		this.setStore = this.setStore.bind(this)
 		this.setSelectedSubCategoryId = this.setSelectedSubCategoryId.bind(this)
 	}

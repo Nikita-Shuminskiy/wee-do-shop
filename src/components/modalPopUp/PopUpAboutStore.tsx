@@ -21,22 +21,20 @@ type PopUpAboutStoreProps = {
 	currentStore: StoreType
 	onClose: () => void
 }
-/*
 export const test = {
 	sunday: 'Closed',
-	monday: '09:00 - 21:00',
-	tuesday: '09:00 - 21:00',
-	wednesday: '09:00 - 00:00',
-	thursday: '09:00 - 21:00',
+	monday: '09:00 - 14:00',
+	tuesday: 'Closed',
+	wednesday: 'Closed',
+	thursday: '09:00 - 03:00',
 	friday: '09:00 - 21:00',
 	saturday: '10:00 - 23:00',
 }
-*/
 
 const PopUpAboutStore = ({ show, onClose, currentStore }: PopUpAboutStoreProps) => {
 	const workingHoursArray = Object.entries(currentStore?.workingHours ?? {})
 
-	const isOpenStoreNow = isCurrentTimeInRange(currentStore?.workingHours)
+	const isOpenStoreNow = isCurrentTimeInRange(test)
 	//const untilTimeStoreTo = getCurrentUntilTimeStoreTo(currentStore?.workingHours)
 	const currentDayOfWeek = getCurrentDayName()
 

@@ -8,6 +8,7 @@ import { StoreType } from '../../api/storesApi'
 import ImageDisplay from '../ImageDisplay'
 import DeliveryTime from '../DeliveryTime'
 import { getInfoAboutStoreWorkTime } from './utils'
+import { test } from '../modalPopUp/PopUpAboutStore'
 
 type StoresViewerType = {
 	stores: StoreType
@@ -20,8 +21,7 @@ const StoresViewer = memo(
 	({ stores, onPress, onPressToggleFavoriteStore, isFavorite }: StoresViewerType) => {
 		const { width } = Dimensions.get('window')
 		const productWidth = width - 20
-		const { isWilOpen, currentTimeInRangeText } = getInfoAboutStoreWorkTime(stores?.workingHours)
-
+		const { isWilOpen, currentTimeInRangeText } = getInfoAboutStoreWorkTime(test)
 		const onPressFavoriteStore = () => {
 			onPressToggleFavoriteStore(stores._id)
 		}

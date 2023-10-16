@@ -33,23 +33,13 @@ import UpdateUserS from '../screen/mainScreens/UpdateUserS'
 import ResetPasswordS from '../screen/authScreens/ResetPasswordS'
 import ForgotPasswordS from '../screen/authScreens/ForgotPasswordS'
 import NewPasswordS from '../screen/authScreens/NewPasswordS'
-import * as BackgroundFetch from 'expo-background-fetch'
-import * as TaskManager from 'expo-task-manager'
-
 const RootStack = createNativeStackNavigator()
-const TASK_NAME = 'task_go_home'
 
 const RootNavigation = observer(() => {
 	const { isLoading, setIsLoading } = NotificationStore
 	const { AuthStoreService, AuthStore } = rootStore
 	const [isConnected, setIsConnected] = useState(true)
 	const { isAuth, user } = AuthStore
-	const [navigation, setNav] = useState<any>()
-	TaskManager.defineTask(TASK_NAME, async () => {
-		console.log('Background task is running')
-		//await Updates.reloadAsync()
-		isAuth && navigation?.navigate(routerConstants.HOME)
-	})
 
 	const checkInternetConnection = async () => {
 		setIsLoading(LoadingEnum.fetching)
@@ -61,12 +51,8 @@ const RootNavigation = observer(() => {
 			setIsLoading(LoadingEnum.success)
 		}
 	}
+
 	useEffect(() => {
-		;(async () => {
-			await BackgroundFetch.registerTaskAsync(TASK_NAME, {
-				minimumInterval: 1,
-			})
-		})()
 		const unsubscribe = NetInfo.addEventListener((state) => {
 			setIsConnected(state.isConnected)
 		})
@@ -77,11 +63,7 @@ const RootNavigation = observer(() => {
 	}, [])
 
 	return (
-		<NavigationContainer
-			ref={(navigationRef) => {
-				setNav(navigationRef)
-			}}
-		>
+		<NavigationContainer>
 			{isLoading === LoadingEnum.fetching && (
 				<Loading visible={isLoading === LoadingEnum.fetching} />
 			)}

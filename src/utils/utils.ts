@@ -1,6 +1,6 @@
 import regex from './helpers/regex'
 import { WorkingHoursType } from '../api/storesApi'
-import { format, getHours, getMinutes, parseISO } from 'date-fns'
+import { format, getDay, getHours, getMinutes, parseISO } from 'date-fns'
 import { ProductType } from '../api/productApi'
 import { createAlert } from '../components/Alert'
 import { log } from 'expo-updates/build-cli/utils/log'
@@ -13,17 +13,17 @@ export const capitalizeFirstLetter = (str: string) => {
 	return capitalizedString
 }
 const daysOfWeek: (keyof WorkingHoursType)[] = [
+	'sunday',
 	'monday',
 	'tuesday',
 	'wednesday',
 	'thursday',
 	'friday',
 	'saturday',
-	'sunday',
 ]
 export const getCurrentDayName = () => {
-	const today = new Date()
-	const currentDayOfWeek = today.getUTCDay()
+	const date = new Date()
+	const currentDayOfWeek = getDay(date)
 	const currentDay = daysOfWeek[currentDayOfWeek]
 	return currentDay.toLowerCase()
 }
@@ -81,9 +81,8 @@ export function isCurrentTimeInRange(workingHoursStores: WorkingHoursType, isInf
 	const date = new Date()
 	const currentDayName = getCurrentDayName()
 
-	// Находим индекс текущего дня недели
 	const currentDayIndex = daysOfWeek.indexOf(currentDayName as keyof WorkingHoursType)
-	const nextDayIndex = (currentDayIndex + 1) % 7 // Вычисляем индекс следующего дня, учитывая, что неделя состоит из 7 дней
+	const nextDayIndex = (currentDayIndex + 1) % 7 // Вычисляем индекс следующего дня
 	const nextDayName = daysOfWeek[nextDayIndex]
 	const [startTimeNextDay, endTimeNextDay] = workingHoursStores[nextDayName]?.split(' - ')
 	const currentHourWorkStores = workingHoursStores[currentDayName]

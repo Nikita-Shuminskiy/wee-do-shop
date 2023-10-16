@@ -34,7 +34,6 @@
     "expo-permissions": "^14.2.1",
     "expo-splash-screen": "~0.20.4",
     "expo-status-bar": "~1.6.0",
-    "expo-updates": "~0.18.11",
     "formik": "^2.4.2",
     "mobx": "^6.6.1",
     "mobx-react-lite": "^3.4.0",

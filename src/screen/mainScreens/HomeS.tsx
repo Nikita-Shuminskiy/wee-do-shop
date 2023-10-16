@@ -1,9 +1,9 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import { BaseWrapperComponent } from '../../components/baseWrapperComponent'
 import { Box, ScrollView } from 'native-base'
 import AuthStore from '../../store/AuthStore/auth-store'
-import { Dimensions, FlatList, Image, StyleSheet } from 'react-native'
+import { Dimensions, FlatList, StyleSheet } from 'react-native'
 import { colors } from '../../assets/colors/colors'
 import { renderEmptyContainer } from '../../components/list-viewer/empty-list'
 import SubCategoriesViewer from '../../components/list-viewer/CategoriesViewer'
@@ -17,18 +17,28 @@ import HeaderUser from '../../components/headerUser'
 import Carousel from 'react-native-snap-carousel'
 import { BannersType } from '../../api/userApi'
 import BannersViewer from '../../components/list-viewer/BannersViewer'
-import * as Updates from 'expo-updates'
-import { LoadingEnum } from '../../store/types/types'
 import NotificationStore from '../../store/NotificationStore/notification-store'
+import * as TaskManager from 'expo-task-manager'
+import * as BackgroundFetch from 'expo-background-fetch'
 
 type HomeSProps = {
 	navigation: NavigationProp<ParamListBase>
 	route: any
 }
-
+/*const TASK_NAME = 'fetch-home-data'
+TaskManager.defineTask(TASK_NAME, async () => {
+	console.log(1)
+	await StoresService.getStores()
+	getFavoriteStores()
+})
+;(async () => {
+	await BackgroundFetch.registerTaskAsync(TASK_NAME, {
+		minimumInterval: 1,
+	})
+})()*/
 const HomeS = observer(({ navigation, route }: HomeSProps) => {
 	const { user, banners } = AuthStore
-	const { setIsLoading } = NotificationStore
+
 	const { StoresService, StoresStore, CategoriesService, CategoriesStore } = rootStore
 	const { stores, setStore, favoriteStores, search, setSearch, setSelectedSubCategoryId } =
 		StoresStore
@@ -36,6 +46,10 @@ const HomeS = observer(({ navigation, route }: HomeSProps) => {
 	const carouselRef = useRef<any>(null)
 	const [chosenSubCategoryId, setChosenSubCategoryId] = useState('')
 	const [favoritesStores, setFavoritesStores] = useState<string[]>([])
+
+	const bannersView = useCallback(({ item }: { item: BannersType }) => {
+		return <BannersViewer image={item.image} />
+	}, [])
 
 	const onPressCategory = useCallback((item) => {
 		setChosenSubCategoryId((prevState) => {
@@ -58,9 +72,12 @@ const HomeS = observer(({ navigation, route }: HomeSProps) => {
 		})
 	}, [])
 
-	const onPress = useCallback((store) => {
-		setStore(store)
-		navigation.navigate(routerConstants.STORE)
+	const onPress = useCallback((store: StoreType) => {
+		StoresService.getStore(store._id).then((data) => {
+			if (data) {
+				navigation.navigate(routerConstants.STORE)
+			}
+		})
 	}, [])
 
 	const storesViews = useCallback(
@@ -81,27 +98,24 @@ const HomeS = observer(({ navigation, route }: HomeSProps) => {
 			setFavoritesStores(data.map((el) => el._id))
 		})
 	}
+
+	const getHomeData = () => {
+		CategoriesService.getCategories()
+		StoresService.getStores()
+		getFavoriteStores()
+	}
+
+	useEffect(() => {
+		getHomeData()
+		return () => {
+			setFavoritesStores([])
+		}
+	}, [])
 	useEffect(() => {
 		if (route.params?.from === 'favorite') {
 			getFavoriteStores()
 		}
 	}, [route?.params])
-	const getHomeData = () => {
-		StoresService.getStores()
-		CategoriesService.getCategories()
-		getFavoriteStores()
-	}
-	useEffect(() => {
-		getHomeData()
-		return () => {
-			setSearch('')
-			setFavoritesStores([])
-		}
-	}, [])
-
-	const bannersView = useCallback(({ item }: { item: BannersType }) => {
-		return <BannersViewer image={item.image} />
-	}, [])
 
 	return (
 		<BaseWrapperComponent

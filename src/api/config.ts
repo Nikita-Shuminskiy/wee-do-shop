@@ -46,14 +46,10 @@ instance.interceptors.response.use(
 				return axios.request(originalRequest)
 			} catch (e) {
 				if (e.response?.status === 401 && e.response?.data.message === 'Unauthorized') {
-					console.log(error, 'remove token')
-					await AsyncStorage.removeItem('refreshToken')
-					await AsyncStorage.removeItem('accessToken')
 					return Promise.reject(error)
 				}
 			}
 		}
-		console.log(error, 'Promise.reject(error)')
 		return Promise.reject(error)
 	}
 )

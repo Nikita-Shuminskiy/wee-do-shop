@@ -30,13 +30,6 @@ const StoreS = observer(({ navigation }: StoreSProps) => {
 	const { store, allProductStore, getAndSetAllProduct, chosenSubCategory, setChosenSubCategory } =
 		StoresStore
 	const navigate = useNavigation()
-	useEffect(() => {
-		getAndSetAllProduct(store.subCategories)
-		return () => {
-			getAndSetAllProduct([])
-			setChosenSubCategory(null)
-		}
-	}, [])
 
 	const [isShowModalProduct, setIsShowModalProduct] = useState<boolean>(false)
 	const [isShowModalAboutStore, setIsShowModalAboutStore] = useState<boolean>(false)
@@ -89,6 +82,7 @@ const StoreS = observer(({ navigation }: StoreSProps) => {
 			],
 		})
 	}
+
 	const onPressSelectedSubCategory = useCallback((item) => {
 		setSelectedSubCategoryId((prevState) => {
 			prevState === item._id ? setSelectedSubCategory(null) : setSelectedSubCategory(item)
@@ -241,7 +235,7 @@ const StoreS = observer(({ navigation }: StoreSProps) => {
 								{selectedSubCategory?.name ?? 'All products'}
 							</Text>
 						</Box>
-						<Box mb={10}>
+						<Box mb={20}>
 							<FlatList
 								scrollEnabled={false}
 								data={selectedSubCategory?.products ?? allProductStore}

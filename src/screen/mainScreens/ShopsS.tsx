@@ -25,8 +25,11 @@ const ShopsS = observer(({ navigation }: ShopsSType) => {
 
 	const storesViews = useCallback(({ item }: { item: StoreType }) => {
 		const onPress = () => {
-			setStore(item)
-			navigation.navigate(routerConstants.STORE)
+			StoresService.getStore(item._id).then((data) => {
+				if (data) {
+					navigation.navigate(routerConstants.STORE)
+				}
+			})
 		}
 		return <ShopsViewer onPress={onPress} stores={item} />
 	}, [])

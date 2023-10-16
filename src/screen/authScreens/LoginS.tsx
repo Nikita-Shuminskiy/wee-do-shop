@@ -52,9 +52,9 @@ const LoginS = ({ navigation }: LoginSProps) => {
 	const onPressSignUpHandler = () => {
 		navigation.navigate(routerConstants.REGISTRATION)
 	}
-	useEffect(() => {
+	/*	useEffect(() => {
 		AuthStoreService.getMe()
-	}, [])
+	}, [])*/
 	return (
 		<BaseWrapperComponent
 			onRefreshHandler={() => AuthStoreService.getMe()}
