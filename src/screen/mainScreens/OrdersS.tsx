@@ -39,7 +39,16 @@ const OrdersS = observer(({ navigation, route }: OrdersSProps) => {
 
 	const limit = 50
 	const offset = (page - 1) * limit
-
+	const onRefreshHandler = () => {
+		setLoadingData(true)
+		OrderService.getOrders({
+			limit: ordersLength,
+		})
+			.then((data) => {})
+			.finally(() => {
+				setLoadingData(false)
+			})
+	}
 	const requestAPI = () => {
 		setLoadingData(true)
 		OrderService.getOrders({
@@ -116,10 +125,11 @@ const OrdersS = observer(({ navigation, route }: OrdersSProps) => {
 	useEffect(() => {
 		requestAPI()
 	}, [])
+
 	return (
 		<>
 			<BaseWrapperComponent
-				onRefreshHandler={requestAPI}
+				//onRefreshHandler={onRefreshHandler}
 				backgroundColor={colors.white}
 				isKeyboardAwareScrollView={true}
 			>

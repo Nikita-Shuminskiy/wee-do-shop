@@ -21,7 +21,7 @@ const StoresViewer = memo(
 	({ stores, onPress, onPressToggleFavoriteStore, isFavorite }: StoresViewerType) => {
 		const { width } = Dimensions.get('window')
 		const productWidth = width - 20
-		const { isWilOpen, currentTimeInRangeText } = getInfoAboutStoreWorkTime(test)
+		const { isWilOpen, currentTimeInRangeText } = getInfoAboutStoreWorkTime(stores?.workingHours)
 		const onPressFavoriteStore = () => {
 			onPressToggleFavoriteStore(stores._id)
 		}

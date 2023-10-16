@@ -1,11 +1,10 @@
 import React, { useCallback, useEffect } from 'react'
 import { BaseWrapperComponent } from '../../components/baseWrapperComponent'
 import { observer } from 'mobx-react-lite'
-import AuthStore from '../../store/AuthStore/auth-store'
 import { Box, Text } from 'native-base'
 import { routerConstants } from '../../constants/routerConstants'
 import StoresViewer from '../../components/list-viewer/StoresViewer'
-import EmptyList, { renderEmptyContainer } from '../../components/list-viewer/empty-list'
+import { renderEmptyContainer } from '../../components/list-viewer/empty-list'
 import { NavigationProp, ParamListBase } from '@react-navigation/native'
 import { Dimensions, FlatList, StyleSheet } from 'react-native'
 import rootStore from '../../store/RootStore/root-store'
@@ -22,8 +21,11 @@ const FavoriteS = observer(({ navigation }: FavoriteSType) => {
 	const { StoresStore, StoresService } = rootStore
 	const { setStore, favoriteStores } = StoresStore
 	const onPress = useCallback((store) => {
-		setStore(store)
-		navigation.navigate(routerConstants.STORE)
+		StoresService.getStore(store._id).then((data) => {
+			if (data) {
+				navigation.navigate(routerConstants.STORE)
+			}
+		})
 	}, [])
 	const onPressRemoveFavoriteStore = useCallback((id) => {
 		StoresService.deleteFavoriteStore(id)

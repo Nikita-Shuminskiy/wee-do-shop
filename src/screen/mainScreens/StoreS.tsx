@@ -25,10 +25,9 @@ type StoreSProps = {
 	navigation: NavigationProp<ParamListBase>
 }
 const StoreS = observer(({ navigation }: StoreSProps) => {
-	const { StoresStore, CartStore } = rootStore
+	const { StoresStore, CartStore, StoresService } = rootStore
 	const { cart, saveProductToCarts, setPromoCode, removeCart } = CartStore
-	const { store, allProductStore, getAndSetAllProduct, chosenSubCategory, setChosenSubCategory } =
-		StoresStore
+	const { store, allProductStore, getAndSetAllProduct, chosenSubCategory } = StoresStore
 	const navigate = useNavigation()
 
 	const [isShowModalProduct, setIsShowModalProduct] = useState<boolean>(false)
@@ -138,10 +137,16 @@ const StoreS = observer(({ navigation }: StoreSProps) => {
 			/>
 		)
 	}
-
+	const onRefreshHandler = () => {
+		StoresService.getStore(store._id, false)
+	}
 	return (
 		<>
-			<BaseWrapperComponent backgroundColor={'white'} isKeyboardAwareScrollView={true}>
+			<BaseWrapperComponent
+				onRefreshHandler={onRefreshHandler}
+				backgroundColor={'white'}
+				isKeyboardAwareScrollView={true}
+			>
 				<Box>
 					<Box w={'100%'} minHeight={239} flex={1}>
 						{!isLoaded && (

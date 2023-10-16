@@ -50,7 +50,7 @@ const ShopsS = observer(({ navigation }: ShopsSType) => {
 					borderTopLeftRadius={16}
 					borderTopRightRadius={16}
 				>
-					<SearchStores setSearch={setSearch} search={search} />
+					<SearchStores selectCategory={''} setSearch={setSearch} search={search} />
 					<Text mt={2} mb={2} fontSize={24} fontWeight={'500'}>
 						Shops near you
 					</Text>

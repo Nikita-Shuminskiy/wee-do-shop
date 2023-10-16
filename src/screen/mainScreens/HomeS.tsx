@@ -17,25 +17,12 @@ import HeaderUser from '../../components/headerUser'
 import Carousel from 'react-native-snap-carousel'
 import { BannersType } from '../../api/userApi'
 import BannersViewer from '../../components/list-viewer/BannersViewer'
-import NotificationStore from '../../store/NotificationStore/notification-store'
-import * as TaskManager from 'expo-task-manager'
-import * as BackgroundFetch from 'expo-background-fetch'
 
 type HomeSProps = {
 	navigation: NavigationProp<ParamListBase>
 	route: any
 }
-/*const TASK_NAME = 'fetch-home-data'
-TaskManager.defineTask(TASK_NAME, async () => {
-	console.log(1)
-	await StoresService.getStores()
-	getFavoriteStores()
-})
-;(async () => {
-	await BackgroundFetch.registerTaskAsync(TASK_NAME, {
-		minimumInterval: 1,
-	})
-})()*/
+
 const HomeS = observer(({ navigation, route }: HomeSProps) => {
 	const { user, banners } = AuthStore
 

@@ -11,12 +11,12 @@ import { AddressType } from '../store/AuthStore/auth-store'
 export type HeaderUserType = {
 	navigation: NavigationProp<ParamListBase>
 	address: AddressType
-	setFavoritesStores: () => void
+	setFavoritesStores?: () => void
 }
 export const HeaderUser = ({ navigation, address, setFavoritesStores }: HeaderUserType) => {
 	const formatted_address = getFormattedAddress(address)
 	const onPressFavoriteHandler = () => {
-		setFavoritesStores()
+		setFavoritesStores?.()
 		navigation.navigate(routerConstants.FAVORITE)
 	}
 	const onPressUserHandler = () => {

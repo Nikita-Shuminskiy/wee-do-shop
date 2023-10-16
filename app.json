@@ -21,10 +21,7 @@
       "userInterfaceStyle": "light",
       "supportsTablet": true,
       "bundleIdentifier": "com.weedo.ios",
-      "buildNumber": "1.0.4",
-      "infoPlist": {
-        "UIBackgroundModes": ["fetch-home-data"]
-      }
+      "buildNumber": "1.0.6"
     },
     "android": {
       "userInterfaceStyle": "light",

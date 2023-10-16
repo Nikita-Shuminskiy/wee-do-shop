@@ -23,8 +23,8 @@ type PopUpAboutStoreProps = {
 }
 export const test = {
 	sunday: 'Closed',
-	monday: '09:00 - 14:00',
-	tuesday: 'Closed',
+	monday: '09:00 - 18:00',
+	tuesday: '09:00 - 03:00',
 	wednesday: 'Closed',
 	thursday: '09:00 - 03:00',
 	friday: '09:00 - 21:00',
@@ -32,7 +32,7 @@ export const test = {
 }
 
 const PopUpAboutStore = ({ show, onClose, currentStore }: PopUpAboutStoreProps) => {
-	const workingHoursArray = Object.entries(currentStore?.workingHours ?? {})
+	const workingHoursArray = Object.entries(test ?? {})
 
 	const isOpenStoreNow = isCurrentTimeInRange(test)
 	//const untilTimeStoreTo = getCurrentUntilTimeStoreTo(currentStore?.workingHours)
