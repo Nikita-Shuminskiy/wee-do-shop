@@ -28,6 +28,9 @@ export const authApi = {
 		const refreshToken = await AsyncStorage.getItem('refreshToken')
 		return await instance.post<DataLoginType>(`auth/refresh`, { refreshToken })
 	},
+	async getAppVersion() {
+		return await instance.get<{mobileAppVersion: string}>(`settings`)
+	},
 }
 export type PayloadResetPasswordType = { email: string; verificationCode: string; password: string }
 export type DataLoginType = {

@@ -3,7 +3,10 @@ import { deviceStorage } from '../../utils/storage/storage'
 import { authApi, PayloadResetPasswordType, UserType } from '../../api/authApi'
 import { UserRegisterDataType } from 'screen/authScreens/RegisterS'
 import { BannersType, DiscountCodeType, OptionalUserType, userApi } from '../../api/userApi'
-import { ErrorResponse } from '../../api/commonTypes'
+import Constants from "expo-constants";
+import { Linking, Platform } from "react-native";
+import { PLAY_STORE_URL } from "../../utils/utils";
+import { createAlert } from "../../components/Alert";
 
 export type fullAddressType = {
 	country: string
@@ -56,6 +59,7 @@ export class AuthStore {
 
 	async getMe(): Promise<void> {
 		const { data } = await authApi.getMe()
+		await this.getAppVersion()
 		this.setUser(data)
 	}
 
@@ -95,6 +99,24 @@ export class AuthStore {
 	}
 	async checkVerificationCode(payloadResetPassword: { email: string; verificationCode: string }) {
 		const { data } = await authApi.checkVerificationCode(payloadResetPassword)
+		return data
+	}
+	async getAppVersion() {
+		const { data } = await authApi.getAppVersion()
+		if(Constants?.expoConfig?.version < data?.mobileAppVersion) { // version from app.json
+			if(Platform.OS !== 'ios') {
+				const onPressGoMarket = async () => {
+					await Linking.openURL(PLAY_STORE_URL);
+				}
+				createAlert({
+					title: 'Message',
+					message: 'Updates available',
+					buttons: [
+						{ text: 'Update', style: 'default', onPress: onPressGoMarket }
+					],
+				})
+			}
+		}
 		return data
 	}
 	setLocation(data: AddressType) {

@@ -8,7 +8,7 @@ import Button from '../Button'
 import { renderEmptyContainer } from '../list-viewer/empty-list'
 import testImg from '../../assets/images/test.png'
 import { ProductType } from '../../api/productApi'
-import { deliveryPrice, getFormatDateToString, getTotalPriceOrder } from '../../utils/utils'
+import { DELIVERY_PRICE, getFormatDateToString, getTotalPriceOrder } from '../../utils/utils'
 import { formatProductPrice } from '../MapViews/utils'
 
 const orderViews = ({ item }: { item: { amount: number; product: ProductType } }) => {

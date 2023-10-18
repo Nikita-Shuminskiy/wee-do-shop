@@ -1,19 +1,19 @@
-import React, { memo } from 'react'
-import { StyleSheet } from 'react-native'
-import { NavigationProp, ParamListBase } from '@react-navigation/native'
-import { BaseWrapperComponent } from '../../components/baseWrapperComponent'
-import { Box, Image } from 'native-base'
-import TextInput from '../../components/TextInput'
-import { MaterialCommunityIcons } from '@expo/vector-icons'
-import logoImg from '../../assets/images/logoWeeDo.png'
-import { useFormik } from 'formik'
-import { isCurrentTimeWorkStoreRange, test, validateEmail } from '../../utils/utils'
-import { colors } from '../../assets/colors/colors'
-import Button from '../../components/Button'
-import { routerConstants } from '../../constants/routerConstants'
-import rootStore from '../../store/RootStore'
-import PrivacyPolicy from '../../components/PrivacyPolicy'
-import Link from '../../components/Link'
+import React, { memo } from "react";
+import { StyleSheet } from "react-native";
+import { NavigationProp, ParamListBase } from "@react-navigation/native";
+import { BaseWrapperComponent } from "../../components/baseWrapperComponent";
+import { Box, Image } from "native-base";
+import TextInput from "../../components/TextInput";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import logoImg from "../../assets/images/logoWeeDo.png";
+import { useFormik } from "formik";
+import { validateEmail } from "../../utils/utils";
+import { colors } from "../../assets/colors/colors";
+import Button from "../../components/Button";
+import { routerConstants } from "../../constants/routerConstants";
+import rootStore from "../../store/RootStore";
+import PrivacyPolicy from "../../components/PrivacyPolicy";
+import Link from "../../components/Link";
 
 type LoginSProps = {
 	navigation: NavigationProp<ParamListBase>
@@ -56,7 +56,6 @@ const LoginS = memo(({ navigation }: LoginSProps) => {
     AuthStoreService.getMe()
   }, [])*/
 
-	const test1 = isCurrentTimeWorkStoreRange(test, true)
 	return (
 		<BaseWrapperComponent
 			onRefreshHandler={() => AuthStoreService.getMe()}

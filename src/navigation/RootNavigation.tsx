@@ -1,45 +1,46 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from "react";
 
-import { observer } from 'mobx-react-lite'
-import NotificationStore from '../store/NotificationStore/notification-store'
-import { NavigationContainer } from '@react-navigation/native'
-import { LoadingEnum } from '../store/types/types'
-import Loading from '../components/Loading'
-import { routerConstants } from '../constants/routerConstants'
-import LoginS from '../screen/authScreens/LoginS'
-import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import RegisterS from '../screen/authScreens/RegisterS'
-import rootStore from '../store/RootStore'
-import AllowLocationS from '../screen/authScreens/AllowLocationS'
-import GoogleAutocompleteMapS from '../screen/authScreens/GoogleAutocompleteMapS'
-import MainNavigation from './MainNavigation'
-import StoreS from '../screen/mainScreens/StoreS'
-import FavoriteS from '../screen/mainScreens/FavoriteS'
-import UserProfileS from '../screen/mainScreens/UserProfileS'
-import OrderStatusesS from '../screen/mainScreens/OrderStatusesS'
-import OrdersS from '../screen/mainScreens/OrdersS'
-import AddressS from '../screen/mainScreens/AddressS'
-import { RoleType } from '../api/authApi'
-import CourierPickOrder from '../screen/courierScreens/CourierPickOrder'
-import PrivacyPolicyS from '../screen/commonScreens/PrivacyPolicyS'
-import TermServiceS from '../screen/commonScreens/TermServiceS'
-import LegalInformationS from '../screen/commonScreens/LegalInformationS'
-import CourierInProgressS from '../screen/courierScreens/CourierInProgressS'
+import { observer } from "mobx-react-lite";
+import NotificationStore from "../store/NotificationStore/notification-store";
+import { NavigationContainer } from "@react-navigation/native";
+import { LoadingEnum } from "../store/types/types";
+import Loading from "../components/Loading";
+import { routerConstants } from "../constants/routerConstants";
+import LoginS from "../screen/authScreens/LoginS";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import RegisterS from "../screen/authScreens/RegisterS";
+import rootStore from "../store/RootStore";
+import AllowLocationS from "../screen/authScreens/AllowLocationS";
+import GoogleAutocompleteMapS from "../screen/authScreens/GoogleAutocompleteMapS";
+import MainNavigation from "./MainNavigation";
+import StoreS from "../screen/mainScreens/StoreS";
+import FavoriteS from "../screen/mainScreens/FavoriteS";
+import UserProfileS from "../screen/mainScreens/UserProfileS";
+import OrderStatusesS from "../screen/mainScreens/OrderStatusesS";
+import OrdersS from "../screen/mainScreens/OrdersS";
+import AddressS from "../screen/mainScreens/AddressS";
+import { RoleType } from "../api/authApi";
+import CourierPickOrder from "../screen/courierScreens/CourierPickOrder";
+import PrivacyPolicyS from "../screen/commonScreens/PrivacyPolicyS";
+import TermServiceS from "../screen/commonScreens/TermServiceS";
+import LegalInformationS from "../screen/commonScreens/LegalInformationS";
+import CourierInProgressS from "../screen/courierScreens/CourierInProgressS";
 
-import ModalReconnect from '../components/modal/modal-reconnect'
-import NetInfo from '@react-native-community/netinfo'
-import MainCourierNavigation from './MainCourierNavigation'
-import UpdateUserS from '../screen/mainScreens/UpdateUserS'
-import ResetPasswordS from '../screen/authScreens/ResetPasswordS'
-import ForgotPasswordS from '../screen/authScreens/ForgotPasswordS'
-import NewPasswordS from '../screen/authScreens/NewPasswordS'
+import ModalReconnect from "../components/modal/modal-reconnect";
+import NetInfo from "@react-native-community/netinfo";
+import MainCourierNavigation from "./MainCourierNavigation";
+import UpdateUserS from "../screen/mainScreens/UpdateUserS";
+import ResetPasswordS from "../screen/authScreens/ResetPasswordS";
+import ForgotPasswordS from "../screen/authScreens/ForgotPasswordS";
+import NewPasswordS from "../screen/authScreens/NewPasswordS";
+
 const RootStack = createNativeStackNavigator()
 
 const RootNavigation = observer(() => {
 	const { isLoading, setIsLoading } = NotificationStore
 	const { AuthStoreService, AuthStore } = rootStore
 	const [isConnected, setIsConnected] = useState(true)
-	const { isAuth, user } = AuthStore
+	const { isAuth, user, getAppVersion } = AuthStore
 
 	const checkInternetConnection = async () => {
 		setIsLoading(LoadingEnum.fetching)
@@ -51,7 +52,6 @@ const RootNavigation = observer(() => {
 			setIsLoading(LoadingEnum.success)
 		}
 	}
-
 	useEffect(() => {
 		const unsubscribe = NetInfo.addEventListener((state) => {
 			setIsConnected(state.isConnected)

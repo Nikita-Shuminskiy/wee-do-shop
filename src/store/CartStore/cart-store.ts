@@ -3,7 +3,7 @@ import { ProductType } from '../../api/productApi'
 import { getTotalSumProductsCart, updateValueCartProducts } from '../../utils/utilsCart'
 import { DiscountCodeType, userApi } from '../../api/userApi'
 import { StoreType } from '../../api/storesApi'
-import { deliveryPrice } from '../../utils/utils'
+import { DELIVERY_PRICE } from '../../utils/utils'
 
 export type ProductCartType = ProductType & {
 	amount: number
@@ -19,7 +19,7 @@ export type CartType = {
 export class CartStore {
 	cart: CartType | null = null
 	promoCode: DiscountCodeType | null = null
-	currDeliveryPrice: number = deliveryPrice
+	currDeliveryPrice: number = DELIVERY_PRICE
 
 	setToCartStore(cart: CartType | null) {
 		this.cart = cart
@@ -27,7 +27,7 @@ export class CartStore {
 	removeCart() {
 		this.promoCode = null
 		this.cart = {} as CartType
-		this.currDeliveryPrice = deliveryPrice
+		this.currDeliveryPrice = DELIVERY_PRICE
 	}
 	removeProductToCart(productId: string) {
 		const updatedProducts = this.cart.products.filter((product) => product._id !== productId)
@@ -54,7 +54,7 @@ export class CartStore {
 		return data
 	}
 	setPromoCode(promo: DiscountCodeType) {
-		let currDeliveryPrice = this.cart.totalSum >= 150000 ? 0 : deliveryPrice
+		let currDeliveryPrice = this.cart.totalSum >= 150000 ? 0 : DELIVERY_PRICE
 
 		if (currDeliveryPrice > 0 && promo?.discountType === 'Delivery') {
 			this.currDeliveryPrice = currDeliveryPrice * ((100 - promo?.discountPercentage) / 100)

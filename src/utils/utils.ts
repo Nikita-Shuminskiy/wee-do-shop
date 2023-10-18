@@ -1,17 +1,11 @@
 import regex from "./helpers/regex";
 import { WorkingHoursType } from "../api/storesApi";
-import { addDays, format, getDay, getHours, getISODay, getMinutes, parseISO } from "date-fns";
+import { addDays, format, getDay, getHours, getMinutes, parseISO } from "date-fns";
 import { ProductType } from "../api/productApi";
-import { createAlert } from "../components/Alert";
-import { log } from "expo-updates/build-cli/utils/log";
 
-export const validateEmail = (email: string) => {
-  return regex.email.test(email.trim());
-};
-export const capitalizeFirstLetter = (str: string) => {
-  const capitalizedString = str.charAt(0).toUpperCase() + str.slice(1);
-  return capitalizedString;
-};
+export const DATE = new Date();
+export const PLAY_STORE_URL = "https://play.google.com/store/apps/details?id=com.wee_doo.th";
+export const DELIVERY_PRICE = 70;
 const daysOfWeek: (keyof WorkingHoursType)[] = [
   "sunday",
   "monday",
@@ -21,6 +15,22 @@ const daysOfWeek: (keyof WorkingHoursType)[] = [
   "friday",
   "saturday"
 ];
+export const test = {
+  sunday: "Closed",
+  monday: "Closed",
+  tuesday: "Closed",
+  wednesday: "08:30 - 23:50",
+  thursday: "Closed",
+  friday: "Closed",
+  saturday: "Closed"
+};
+export const validateEmail = (email: string) => {
+  return regex.email.test(email.trim());
+};
+export const capitalizeFirstLetter = (str: string) => {
+  const capitalizedString = str.charAt(0).toUpperCase() + str.slice(1);
+  return capitalizedString;
+};
 export const getCurrentDayName = () => {
   const currentDayOfWeek = getDay(DATE);
   const currentDay = daysOfWeek[currentDayOfWeek];
@@ -33,7 +43,6 @@ export const getFormatDateToString = (dateString: string) => {
 
   return format(date, "d MMMM HH:mm");
 };
-export const deliveryPrice = 70;
 export const splittingWord = (str) => {
   const words = str?.match(/[A-Z][a-z]+/g);
 
@@ -48,7 +57,6 @@ export const splittingWord = (str) => {
       return word.toLowerCase();
     }
   });
-
   return transformedWords.join(" ");
 };
 export const getTotalPriceOrder = (
@@ -62,39 +70,13 @@ export const getTotalPriceOrder = (
   }, 0);
 };
 
-export const getCurrentUntilTimeStoreTo = (workingHoursStores: WorkingHoursType) => {
-  if (!workingHoursStores) return "";
-  const currentDay = getCurrentDayName();
-  const currentHourWorkStores = workingHoursStores[currentDay];
-  if (currentHourWorkStores === "Closed") return "Closed today";
-  const utilTimeStore = currentHourWorkStores?.slice(-5); // get time work(to)
-  return utilTimeStore;
-};
-const getInfoTime = (open: boolean, time?: string) => {
-  if (time === "Closed") return "Closed";
-  return `Will ${open ? "open" : "close"} at ` + time ?? "";
-};
-export const DATE = new Date();
-
-const nextDayName = daysOfWeek[addDays(DATE, 1).getDay()];
-const prevDayName = daysOfWeek[addDays(DATE, -1).getDay()];
-const currentDayName = getCurrentDayName();
-
-export const test = {
-  sunday: "Closed",
-  monday: "Closed",
-  tuesday: "Closed",
-  wednesday: "08:30 - 23:50",
-  thursday: "Closed",
-  friday: "Closed",
-  saturday: "Closed"
-};
-const current_hour = getHours(DATE).toString()
-const current_minute = getMinutes(DATE).toString()
 export function isCurrentTimeWorkStoreRange(workingHoursStores: WorkingHoursType, isInfo = false): any {
+  const prevDayName = daysOfWeek[addDays(DATE, -1).getDay()];
+  const currentDayName = getCurrentDayName();
+  const current_hour = getHours(DATE).toString();
+  const current_minute = getMinutes(DATE).toString();
   const prev_day_time_work_store = workingHoursStores[prevDayName];
   const current_day_time_work_store = workingHoursStores[currentDayName];
-
   const [prev_start_time_day, prev_end_time_day] = prev_day_time_work_store?.split(" - ");
   const [prev_start_hour, prev_start_minute] = prev_start_time_day?.split(":");
   let prev_end_hour = null;
@@ -130,12 +112,12 @@ export function isCurrentTimeWorkStoreRange(workingHoursStores: WorkingHoursType
   //console.log( (!is_prev_day_after_midnight && (current_time < curr_work_time_start || current_time > curr_work_time_end)) );
 
   if (/*(!is_prev_day_after_midnight && (current_time < curr_work_time_start || current_time > curr_work_time_end))*/
-  /*  || (is_prev_day_after_midnight && (current_time > prev_work_time_end && (current_time < curr_work_time_start || current_time > curr_work_time_end))) // not ok если текущий день перешагнул*/
-     (!is_prev_day_after_midnight && (current_time < curr_work_time_start || (current_time > curr_work_time_end && !is_current_day_after_midnight)))
+    /*  || (is_prev_day_after_midnight && (current_time > prev_work_time_end && (current_time < curr_work_time_start || current_time > curr_work_time_end))) // not ok если текущий день перешагнул*/
+    (!is_prev_day_after_midnight && (current_time < curr_work_time_start || (current_time > curr_work_time_end && !is_current_day_after_midnight)))
     || (is_prev_day_after_midnight && (current_time > prev_work_time_end && (current_time < curr_work_time_start || (current_time > curr_work_time_end && !is_current_day_after_midnight))))
     || (!is_prev_day_after_midnight && is_current_day_closed) ||
     (is_prev_day_after_midnight && (current_time > prev_work_time_end && is_current_day_closed)) ||
-  /*  (is_prev_day_closed && (current_time < curr_work_time_start || current_time > curr_work_time_end)) ||*/
+    /*  (is_prev_day_closed && (current_time < curr_work_time_start || current_time > curr_work_time_end)) ||*/
     (is_prev_day_closed && (current_time < curr_work_time_start || (current_time > curr_work_time_end && !is_current_day_after_midnight))) ||
     (is_prev_day_closed && is_current_day_closed)
   ) {
@@ -143,4 +125,3 @@ export function isCurrentTimeWorkStoreRange(workingHoursStores: WorkingHoursType
   }
   return true;
 }
-
