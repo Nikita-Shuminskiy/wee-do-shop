@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useEffect, useMemo } from 'react'
+import React, { memo } from 'react'
 import { StyleSheet } from 'react-native'
 import { NavigationProp, ParamListBase } from '@react-navigation/native'
 import { BaseWrapperComponent } from '../../components/baseWrapperComponent'
@@ -7,7 +7,7 @@ import TextInput from '../../components/TextInput'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import logoImg from '../../assets/images/logoWeeDo.png'
 import { useFormik } from 'formik'
-import { isCurrentTimeInRange, test, validateEmail } from '../../utils/utils'
+import { isCurrentTimeWorkStoreRange, test, validateEmail } from '../../utils/utils'
 import { colors } from '../../assets/colors/colors'
 import Button from '../../components/Button'
 import { routerConstants } from '../../constants/routerConstants'
@@ -53,11 +53,10 @@ const LoginS = memo(({ navigation }: LoginSProps) => {
 		navigation.navigate(routerConstants.REGISTRATION)
 	}
 	/*	useEffect(() => {
-		AuthStoreService.getMe()
-	}, [])*/
+    AuthStoreService.getMe()
+  }, [])*/
 
-	const test1 = isCurrentTimeInRange(test, true)
-	console.log(test1)
+	const test1 = isCurrentTimeWorkStoreRange(test, true)
 	return (
 		<BaseWrapperComponent
 			onRefreshHandler={() => AuthStoreService.getMe()}

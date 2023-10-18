@@ -14,17 +14,13 @@ const Loading = memo(({ visible }: any) => {
 				useNativeDriver: true,
 			})
 		)
-
 		rotationAnimation.start()
-
 		return () => rotationAnimation.stop()
 	}, [visible])
-
 	const rotateInterpolate = rotateAnim.interpolate({
 		inputRange: [0, 1],
 		outputRange: ['0deg', '360deg'],
 	})
-
 	return (
 		<Box
 			flex={1}

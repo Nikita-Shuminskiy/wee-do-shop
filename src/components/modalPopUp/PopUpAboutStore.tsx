@@ -7,7 +7,7 @@ import { StoreType } from '../../api/storesApi'
 import Link from '../Link'
 import { Feather, Fontisto, Ionicons, SimpleLineIcons } from '@expo/vector-icons'
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps'
-import { capitalizeFirstLetter, getCurrentDayName, isCurrentTimeInRange } from '../../utils/utils'
+import { capitalizeFirstLetter, getCurrentDayName, isCurrentTimeWorkStoreRange } from '../../utils/utils'
 import { getFormattedAddress } from '../MapViews/utils'
 import { PhoneNumberComponent } from '../PhoneNumberLink'
 
@@ -16,20 +16,10 @@ type PopUpAboutStoreProps = {
 	currentStore: StoreType
 	onClose: () => void
 }
-export const test = {
-	sunday: 'Closed',
-	monday: '09:00 - 01:40',
-	tuesday: 'Closed',
-	wednesday: 'Closed',
-	thursday: '09:00 - 03:00',
-	friday: '09:00 - 21:00',
-	saturday: '10:00 - 23:00',
-}
-
 const PopUpAboutStore = ({ show, onClose, currentStore }: PopUpAboutStoreProps) => {
 	const workingHoursArray = Object.entries(currentStore?.workingHours ?? {})
 
-	const isOpenStoreNow = isCurrentTimeInRange(currentStore?.workingHours)
+	const isOpenStoreNow = isCurrentTimeWorkStoreRange(currentStore?.workingHours)
 	//const untilTimeStoreTo = getCurrentUntilTimeStoreTo(currentStore?.workingHours)
 	const currentDayOfWeek = getCurrentDayName()
 

@@ -1,9 +1,9 @@
 {
-  "singleQuote": true,
+  "singleQuote": false,
   "useTabs": true,
   "trailingComma": "es5",
   "semi": false,
-  "bracketSpacing": true,
+  "bracketSpacing": false,
   "printWidth": 100,
   "endOfLine": "auto",
   "baseUrl": "."

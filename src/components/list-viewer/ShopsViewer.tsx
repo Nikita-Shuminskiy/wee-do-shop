@@ -4,7 +4,7 @@ import { Box, Text } from 'native-base'
 import { colors } from '../../assets/colors/colors'
 import motorcycle from '../../assets/images/moto.png'
 import test from '../../assets/images/testShops.png'
-import { isCurrentTimeInRange } from '../../utils/utils'
+import { getCurrentDayName, isCurrentTimeWorkStoreRange } from "../../utils/utils";
 import { StoreType } from '../../api/storesApi'
 import * as Animatable from 'react-native-animatable'
 import DeliveryTime from '../DeliveryTime'
@@ -20,7 +20,8 @@ const ShopsViewer = ({ stores, onPress }: ShopsViewerType) => {
 
 	const { width } = Dimensions.get('window')
 	const productWidth = (width - 15) / 2 - 15
-	const { isWilOpen, currentTimeInRangeText } = getInfoAboutStoreWorkTime(stores?.workingHours)
+	const isOpenStoreNow = isCurrentTimeWorkStoreRange(stores?.workingHours)
+	const getTimeWorkStore = stores?.workingHours[getCurrentDayName()]
 	return (
 		<TouchableOpacity
 			onPress={onPress}
@@ -69,14 +70,14 @@ const ShopsViewer = ({ stores, onPress }: ShopsViewerType) => {
 					position={'absolute'}
 					bottom={0}
 					right={0}
-					backgroundColor={isWilOpen ? colors.red : colors.green}
+					backgroundColor={!isOpenStoreNow ? colors.red : colors.green}
 					borderRadius={16}
 					borderTopRightRadius={0}
 					paddingY={1}
 					paddingX={3}
 				>
 					<Text color={colors.white} fontWeight={'600'} fontSize={8}>
-						{currentTimeInRangeText}
+						{getTimeWorkStore}
 					</Text>
 				</Box>
 			</ImageBackground>

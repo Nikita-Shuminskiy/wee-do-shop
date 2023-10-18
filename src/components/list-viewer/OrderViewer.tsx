@@ -1,15 +1,15 @@
-import React, { memo } from 'react'
-import { StyleSheet } from 'react-native'
-import { ApiOrderType, StatusType } from '../../api/ordersApi'
-import { colors } from '../../assets/colors/colors'
-import { Box, Text } from 'native-base'
-import Button from '../Button'
-import { getFormatDateToString, splittingWord } from '../../utils/utils'
-import { formatProductPrice } from '../MapViews/utils'
-import { useNavigation } from '@react-navigation/native'
-import { routerConstants } from '../../constants/routerConstants'
-import orderStore from '../../store/OrderStore/order-store'
-import rootStore from '../../store/RootStore/root-store'
+import React, { memo } from "react";
+import { StyleSheet } from "react-native";
+import { ApiOrderType, StatusType } from "../../api/ordersApi";
+import { colors } from "../../assets/colors/colors";
+import { Box, Text } from "native-base";
+import Button from "../Button";
+import { getFormatDateToString, isCurrentTimeWorkStoreRange, splittingWord } from "../../utils/utils";
+import { formatProductPrice } from "../MapViews/utils";
+import { useNavigation } from "@react-navigation/native";
+import { routerConstants } from "../../constants/routerConstants";
+import orderStore from "../../store/OrderStore/order-store";
+import rootStore from "../../store/RootStore/root-store";
 
 type OrderViewerProps = {
 	order: ApiOrderType

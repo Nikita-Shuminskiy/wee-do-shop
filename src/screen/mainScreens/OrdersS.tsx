@@ -17,6 +17,8 @@ import cartStore from '../../store/CartStore/cart-store'
 import { renderEmptyContainer } from '../../components/list-viewer/empty-list'
 import { getTotalSumProductsCart } from '../../utils/utilsCart'
 import Loading from '../../components/Loading'
+import { isCurrentTimeWorkStoreRange } from "../../utils/utils";
+import { alertStoreClosed } from "../../components/list-viewer/utils";
 
 type OrdersSProps = {
 	navigation: NavigationProp<ParamListBase>
@@ -75,6 +77,11 @@ const OrdersS = observer(({ navigation, route }: OrdersSProps) => {
 		navigation.navigate(isFromStatusesScreen ? routerConstants.HOME : routerConstants.PROFILE_USER)
 	}
 	const onPressRepeat = useCallback((item: ApiOrderType) => {
+		const isOpenStoreNow = isCurrentTimeWorkStoreRange(item?.store?.workingHours)
+		if(!isOpenStoreNow) {
+			alertStoreClosed()
+			return
+		}
 		const filterDeletedProduct = item.products.filter((product) => !product.product.isDeleted)
 		if (!filterDeletedProduct.length) return
 		const getProductsForOrder = filterDeletedProduct.map((product) => {

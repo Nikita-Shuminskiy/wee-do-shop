@@ -1,14 +1,13 @@
-import React, { memo, useState } from 'react'
-import { Box, Text } from 'native-base'
-import { colors } from '../../assets/colors/colors'
-import like from '../../assets/images/like.png'
-import likeActive from '../../assets/images/likeActive.png'
-import { Dimensions, Image, TouchableOpacity } from 'react-native'
-import { StoreType } from '../../api/storesApi'
-import ImageDisplay from '../ImageDisplay'
-import DeliveryTime from '../DeliveryTime'
-import { getInfoAboutStoreWorkTime } from './utils'
-import { test } from '../modalPopUp/PopUpAboutStore'
+import React, { memo } from "react";
+import { Box, Text } from "native-base";
+import { colors } from "../../assets/colors/colors";
+import like from "../../assets/images/like.png";
+import likeActive from "../../assets/images/likeActive.png";
+import { Dimensions, Image, TouchableOpacity } from "react-native";
+import { StoreType } from "../../api/storesApi";
+import ImageDisplay from "../ImageDisplay";
+import DeliveryTime from "../DeliveryTime";
+import { getCurrentDayName, isCurrentTimeWorkStoreRange } from "../../utils/utils";
 
 type StoresViewerType = {
 	stores: StoreType
@@ -21,7 +20,8 @@ const StoresViewer = memo(
 	({ stores, onPress, onPressToggleFavoriteStore, isFavorite }: StoresViewerType) => {
 		const { width } = Dimensions.get('window')
 		const productWidth = width - 20
-		const { isWilOpen, currentTimeInRangeText } = getInfoAboutStoreWorkTime(stores?.workingHours)
+		const isOpenStoreNow = isCurrentTimeWorkStoreRange(stores?.workingHours)
+		const getTimeWorkStore = stores?.workingHours[getCurrentDayName()]
 		const onPressFavoriteStore = () => {
 			onPressToggleFavoriteStore(stores._id)
 		}
@@ -75,14 +75,14 @@ const StoresViewer = memo(
 							position={'absolute'}
 							bottom={0}
 							right={0}
-							backgroundColor={isWilOpen ? colors.red : colors.green}
+							backgroundColor={!isOpenStoreNow ? colors.red : colors.green}
 							borderRadius={16}
 							borderRightRadius={0}
 							paddingY={1}
 							paddingX={3}
 						>
 							<Text color={colors.white} fontWeight={'600'} fontSize={14}>
-								{currentTimeInRangeText}
+								{getTimeWorkStore}
 							</Text>
 						</Box>
 					</Box>
