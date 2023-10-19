@@ -1,9 +1,9 @@
-import { action, makeObservable, observable } from 'mobx'
-import { ProductType } from '../../api/productApi'
-import { getTotalSumProductsCart, updateValueCartProducts } from '../../utils/utilsCart'
-import { DiscountCodeType, userApi } from '../../api/userApi'
-import { StoreType } from '../../api/storesApi'
-import { DELIVERY_PRICE } from '../../utils/utils'
+import {action, makeObservable, observable} from "mobx"
+import {ProductType} from "../../api/productApi"
+import {getTotalSumProductsCart, updateValueCartProducts} from "../../utils/utilsCart"
+import {DiscountCodeType, userApi} from "../../api/userApi"
+import {StoreType} from "../../api/storesApi"
+import {DELIVERY_PRICE} from "../../utils/utils"
 
 export type ProductCartType = ProductType & {
 	amount: number
@@ -24,11 +24,13 @@ export class CartStore {
 	setToCartStore(cart: CartType | null) {
 		this.cart = cart
 	}
+
 	removeCart() {
 		this.promoCode = null
 		this.cart = {} as CartType
 		this.currDeliveryPrice = DELIVERY_PRICE
 	}
+
 	removeProductToCart(productId: string) {
 		const updatedProducts = this.cart.products.filter((product) => product._id !== productId)
 		if (!updatedProducts.length) {
@@ -36,8 +38,9 @@ export class CartStore {
 			return
 		}
 		const totalSum = getTotalSumProductsCart(updatedProducts)
-		this.cart = { ...this.cart, products: updatedProducts, totalSum }
+		this.cart = {...this.cart, products: updatedProducts, totalSum}
 	}
+
 	updateProductToCart(productId: string, productValue: number) {
 		const updatedProducts = updateValueCartProducts(this.cart.products, productValue, productId)
 		const totalSum = getTotalSumProductsCart(updatedProducts)
@@ -48,35 +51,42 @@ export class CartStore {
 			products: updatedProducts,
 		}
 	}
+
 	async sendPromoCode(key: string, userId: string) {
-		const { data } = await userApi.sendDiscountCode(key, userId)
+		const {data} = await userApi.sendDiscountCode(key, userId)
 		this.setPromoCode(data)
 		return data
 	}
+
 	setPromoCode(promo: DiscountCodeType) {
 		let currDeliveryPrice = this.cart.totalSum >= 150000 ? 0 : DELIVERY_PRICE
 
-		if (currDeliveryPrice > 0 && promo?.discountType === 'Delivery') {
+		if (currDeliveryPrice > 0 && promo?.discountType === "Delivery") {
 			this.currDeliveryPrice = currDeliveryPrice * ((100 - promo?.discountPercentage) / 100)
 		}
 		this.promoCode = promo
 	}
 
 	addProductToCart(item, productValue) {
-		const newProduct = { ...item, amount: productValue }
+		const newProduct = {...item, amount: productValue}
+		const updatedProducts = [...this.cart.products, newProduct]
+
 		this.setToCartStore({
 			...this.cart,
 			totalSum: this.cart.totalSum
 				? this.cart.totalSum + productValue * item.price
 				: productValue * item.price,
-			products: [...this.cart.products, newProduct],
+			products: updatedProducts,
 		})
 	}
 
 	updateProduct(item, productValue) {
 		const updatedProducts = updateValueCartProducts(this.cart.products, productValue, item._id)
 		const totalSum = getTotalSumProductsCart(updatedProducts)
-
+		if (!updatedProducts.length) {
+			this.removeCart()
+			return
+		}
 		this.setToCartStore({
 			...this.cart,
 			totalSum: totalSum,

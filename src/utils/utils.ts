@@ -2,8 +2,6 @@ import regex from "./helpers/regex";
 import { WorkingHoursType } from "../api/storesApi";
 import { addDays, format, getDay, getHours, getMinutes, parseISO } from "date-fns";
 import { ProductType } from "../api/productApi";
-
-export const DATE = new Date();
 export const PLAY_STORE_URL = "https://play.google.com/store/apps/details?id=com.wee_doo.th";
 export const DELIVERY_PRICE = 70;
 const daysOfWeek: (keyof WorkingHoursType)[] = [
@@ -32,7 +30,8 @@ export const capitalizeFirstLetter = (str: string) => {
   return capitalizedString;
 };
 export const getCurrentDayName = () => {
-  const currentDayOfWeek = getDay(DATE);
+  const date = new Date();
+  const currentDayOfWeek = getDay(date);
   const currentDay = daysOfWeek[currentDayOfWeek];
   return currentDay.toLowerCase();
 };
@@ -71,10 +70,11 @@ export const getTotalPriceOrder = (
 };
 
 export function isCurrentTimeWorkStoreRange(workingHoursStores: WorkingHoursType, isInfo = false): any {
-  const prevDayName = daysOfWeek[addDays(DATE, -1).getDay()];
+  const date = new Date();
+  const prevDayName = daysOfWeek[addDays(date, -1).getDay()];
   const currentDayName = getCurrentDayName();
-  const current_hour = getHours(DATE).toString();
-  const current_minute = getMinutes(DATE).toString();
+  const current_hour = getHours(date).toString();
+  const current_minute = getMinutes(date).toString();
   const prev_day_time_work_store = workingHoursStores[prevDayName];
   const current_day_time_work_store = workingHoursStores[currentDayName];
   const [prev_start_time_day, prev_end_time_day] = prev_day_time_work_store?.split(" - ");
