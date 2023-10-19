@@ -21,7 +21,10 @@
       "userInterfaceStyle": "light",
       "supportsTablet": true,
       "bundleIdentifier": "com.weedo.ios",
-      "buildNumber": "1.0.6"
+      "buildNumber": "1.0.10",
+      "config": {
+        "googleMapsApiKey": "AIzaSyD-3PKe63YHjDDaxjVahTekuyvvOFfwKp4"
+      }
     },
     "android": {
       "userInterfaceStyle": "light",
@@ -29,8 +32,12 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "versionCode": 24,
-      "useNextNotificationsApi": true,
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyCDu3dMvEFIDgw_uqJWabVuauq0JVsu3NI"
+        }
+      },
+      "versionCode": 28,
       "permissions": [
         "CALL_PHONE"
       ],
