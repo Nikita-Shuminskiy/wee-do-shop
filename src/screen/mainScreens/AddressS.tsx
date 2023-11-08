@@ -134,7 +134,7 @@ const AddressS = observer(({ navigation }: AddressSProps) => {
 						</Box>
 					)}
 				</Box>
-				{showLocationMap && (
+				{showLocationMap && currentMapLocation?.latitude && (
 					<MapViews
 						from={'edit'}
 						currentDataMap={{

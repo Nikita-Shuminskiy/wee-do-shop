@@ -24,7 +24,6 @@ const CourierOrders = observer(({ navigation }: CourierOrdersProps) => {
 			setRefreshing(false)
 		})
 	}
-
 	const orderViews = ({ item }: { item: OrderCourierType }) => {
 		const onPressTakeOrder = () => {
 			setSelectedOrder(item)
@@ -46,6 +45,7 @@ const CourierOrders = observer(({ navigation }: CourierOrdersProps) => {
 			/>
 		)
 	}
+
 	useEffect(() => {
 		CourierOrderService.getCourierOrders()
 		const id = +setInterval(() => {

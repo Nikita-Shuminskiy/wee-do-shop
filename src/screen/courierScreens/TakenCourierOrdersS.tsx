@@ -36,8 +36,13 @@ const TakenCourierOrdersS = observer(({ navigation }: TakenCourierOrdersProps) =
 	}
 	useEffect(() => {
 		CourierOrderService.getTakenCourierOrders()
+		const id = +setInterval(() => {
+			CourierOrderService.getTakenCourierOrders()
+		}, 5000)
+		return () => {
+			clearInterval(id)
+		}
 	}, [])
-
 	return (
 		<BaseWrapperComponent>
 			<Box w={'100%'} flex={1}>

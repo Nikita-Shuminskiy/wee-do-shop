@@ -1,8 +1,8 @@
 {
   "expo": {
     "name": "Weedo",
-    "slug": "weedoo",
-    "version": "1.0.2",
+    "slug": "weedo",
+    "version": "1.0.5",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -21,7 +21,7 @@
       "userInterfaceStyle": "light",
       "supportsTablet": true,
       "bundleIdentifier": "com.weedo.ios",
-      "buildNumber": "1.0.10",
+      "buildNumber": "1.0.11",
       "config": {
         "googleMapsApiKey": "AIzaSyD-3PKe63YHjDDaxjVahTekuyvvOFfwKp4"
       }
@@ -37,7 +37,7 @@
           "apiKey": "AIzaSyCDu3dMvEFIDgw_uqJWabVuauq0JVsu3NI"
         }
       },
-      "versionCode": 28,
+      "versionCode": 30,
       "permissions": [
         "CALL_PHONE"
       ],
@@ -48,16 +48,16 @@
     },
     "extra": {
       "eas": {
-        "projectId": "5089860a-124c-4e1e-8c9f-95c034202c40"
+        "projectId": "e788e2ed-368d-4561-9f10-7f4ef763701c"
       }
     },
-    "owner": "nick_we-do",
+    "owner": "wee_do12345",
     "plugins": [
       "expo-localization",
       [
         "expo-updates",
         {
-          "username": "nick_we-do"
+          "username": "wee_do12345"
         }
       ]
     ],

@@ -14,8 +14,13 @@ export const useBackgroundTime = ({backgroundHandler}: useBackgroundTimeProps) =
 		} else if (nextAppState === "active") {
 			const timeBackground = await deviceStorage.getItem("timeBackground")
 			const timeActive = new Date().getTime()
-			const elapsedMinutes = Math.floor((timeActive - Number(timeBackground)) / 60000) // Преобразовать миллисекунды в минуты
+			if (!timeBackground) {
+				await deviceStorage.removeItem("timeBackground")
+				return
+			}
+			let elapsedMinutes = Math.floor((timeActive - Number(timeBackground)) / 60000) // Преобразовать миллисекунды в минуты
 			backgroundHandler(elapsedMinutes)
+			elapsedMinutes = 0
 			await deviceStorage.removeItem("timeBackground")
 		}
 	}

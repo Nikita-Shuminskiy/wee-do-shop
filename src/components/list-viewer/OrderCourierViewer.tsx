@@ -1,12 +1,12 @@
-import React, { memo } from 'react'
-import { Image, StyleSheet } from 'react-native'
-import { Box, Text } from 'native-base'
-import { formatProductPrice, getFormattedAddress } from '../MapViews/utils'
-import { colors } from '../../assets/colors/colors'
-import Button from '../Button'
-import { OrderCourierType } from '../../api/couierApi'
-import fromToImg from '../../assets/images/courierImages/fromTo.png'
-import { splittingWord } from '../../utils/utils'
+import React, {memo} from "react"
+import {Image, StyleSheet} from "react-native"
+import {Box, Text} from "native-base"
+import {formatProductPrice, getFormattedAddress} from "../MapViews/utils"
+import {colors} from "../../assets/colors/colors"
+import Button from "../Button"
+import {OrderCourierType} from "../../api/couierApi"
+import fromToImg from "../../assets/images/courierImages/fromTo.png"
+import {splittingWord} from "../../utils/utils"
 
 type OrderCourierProps = {
 	order: OrderCourierType

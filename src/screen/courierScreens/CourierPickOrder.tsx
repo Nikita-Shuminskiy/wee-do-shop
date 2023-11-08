@@ -1,25 +1,20 @@
-import React, { useEffect, useLayoutEffect, useState } from 'react'
-import { BaseWrapperComponent } from '../../components/baseWrapperComponent'
-import { Box, Text } from 'native-base'
-import { Linking, StyleSheet, TouchableOpacity, View } from 'react-native'
-import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps'
-import Button from '../../components/Button'
-import { colors } from '../../assets/colors/colors'
-import {
-	allowLocation,
-	getCurrentPositionHandler,
-	getFormattedAddress,
-} from '../../components/MapViews/utils'
-import { observer } from 'mobx-react-lite'
-import CourierOrderStore from '../../store/CourierOrderStore/courier-order-store'
-import rootStore from '../../store/RootStore/root-store'
-import { StatusType } from '../../api/ordersApi'
-import { routerConstants } from '../../constants/routerConstants'
-import { splittingWord } from '../../utils/utils'
-import { AntDesign } from '@expo/vector-icons'
-import OrderUserInfo from '../../components/OrderUserInfo'
-import * as Location from 'expo-location'
-import Link from '../../components/Link'
+import React, {useEffect, useState} from "react"
+import {BaseWrapperComponent} from "../../components/baseWrapperComponent"
+import {Box, Text} from "native-base"
+import {Linking, StyleSheet, TouchableOpacity, View} from "react-native"
+import MapView, {Marker, PROVIDER_GOOGLE} from "react-native-maps"
+import Button from "../../components/Button"
+import {colors} from "../../assets/colors/colors"
+import {getCurrentPositionHandler, getFormattedAddress} from "../../components/MapViews/utils"
+import {observer} from "mobx-react-lite"
+import CourierOrderStore from "../../store/CourierOrderStore/courier-order-store"
+import rootStore from "../../store/RootStore/root-store"
+import {StatusType} from "../../api/ordersApi"
+import {routerConstants} from "../../constants/routerConstants"
+import {splittingWord} from "../../utils/utils"
+import {AntDesign} from "@expo/vector-icons"
+import OrderUserInfo from "../../components/OrderUserInfo"
+import {useOrderDataStatus} from "../../utils/hook/useOrderDataStatus"
 
 type Coordinates = {
 	latitude: number
@@ -31,10 +26,13 @@ type CourierPickOrderProps = {
 }
 const CourierPickOrder = observer(({ route, navigation }: CourierPickOrderProps) => {
 	const isCheckOrderIfo = route.params?.checkInfo
-	const { selectedOrder, connectToSocketOrder } = CourierOrderStore
+	const { selectedOrder } = CourierOrderStore
 	const { CourierOrderService } = rootStore
 	const [showUserInfoModal, setShowUserInfoModal] = useState(false)
 	const [myPosition, setMyPosition] = useState<Coordinates>()
+	const {status} = useOrderDataStatus({orderId: selectedOrder?._id})
+	const isStatusConfirmed = !!(!status && selectedOrder?.status === StatusType.Confirmed) || status === StatusType.Confirmed
+
 	const [coords, setCoords] = useState({
 		latitude: selectedOrder.user.address?.location.coordinates[1],
 		longitude: selectedOrder.user.address?.location.coordinates[0],
@@ -87,9 +85,6 @@ const CourierPickOrder = observer(({ route, navigation }: CourierPickOrderProps)
 		location: selectedOrder.store?.location,
 	})
 	const formattedAddressUser = getFormattedAddress(selectedOrder?.user?.address)
-	useEffect(() => {
-		connectToSocketOrder()
-	}, [])
 	const onShowUserInfoModal = () => {
 		setShowUserInfoModal(true)
 	}
@@ -122,7 +117,7 @@ const CourierPickOrder = observer(({ route, navigation }: CourierPickOrderProps)
 							</Text>
 							<Text color={colors.gray}>
 								Current order status:{' '}
-								<Text color={colors.black}>{splittingWord(selectedOrder?.status)}</Text>
+								<Text color={colors.black}>{splittingWord( status ?? selectedOrder?.status)}</Text>
 							</Text>
 						</Box>
 						<TouchableOpacity onPress={onShowUserInfoModal}>
@@ -183,7 +178,8 @@ const CourierPickOrder = observer(({ route, navigation }: CourierPickOrderProps)
 						) : (
 							<Button
 								styleContainer={styles.styleBtnContainer}
-								backgroundColor={colors.green}
+								backgroundColor={isStatusConfirmed ? colors.gray : colors.green}
+								disabled={isStatusConfirmed}
 								onPress={() => {
 									onPressPickOrder(isStatusOnTheWay ? StatusType.Completed : StatusType.OnTheWay)
 								}}
