@@ -25,12 +25,16 @@ type UserProfileSProps = {
 	navigation: NavigationProp<ParamListBase>
 }
 const UserProfileS = observer(({ navigation }: UserProfileSProps) => {
-	const { user, logOut } = AuthStore
+	const { user } = AuthStore
 	const { completedOrdersNum } = OrderStore
-	const { OrderService } = rootStore
-	const formattedAddress = `${user.address?.fullAddress?.country}, ${user.address?.fullAddress?.city}`
+	const { OrderService, AuthStoreService } = rootStore
+	const formattedAddress = `${user?.address?.fullAddress?.country}, ${user?.address?.fullAddress?.city}`
 	const onPressGoBack = () => {
 		navigation.navigate(routerConstants.HOME)
+	}
+	const onPressLogOutHandler =()=> {
+		navigation.navigate(routerConstants.LOGIN)
+		AuthStoreService.logOut()
 	}
 	const onPressOrderHandler = () => {
 		navigation.navigate(routerConstants.ORDERS)
@@ -62,9 +66,9 @@ const UserProfileS = observer(({ navigation }: UserProfileSProps) => {
 					<Image mb={2} w={109} h={109} alt={'logo-we-do'} source={userImg} />
 
 					<Text fontSize={24} mt={2} fontWeight={'500'}>
-						{user.firstName} {user.lastName}
+						{user?.firstName} {user?.lastName}
 					</Text>
-					{user.address?.fullAddress?.country && (
+					{user?.address?.fullAddress?.country && (
 						<Text fontSize={15} color={colors.gray} fontWeight={'500'}>
 							{formattedAddress}
 						</Text>
@@ -195,7 +199,7 @@ const UserProfileS = observer(({ navigation }: UserProfileSProps) => {
 							</Box>
 						</Box>
 					</TouchableOpacity>
-					<TouchableOpacity onPress={logOut}>
+					<TouchableOpacity onPress={onPressLogOutHandler}>
 						<Box
 							flexDirection={'row'}
 							alignItems={'center'}

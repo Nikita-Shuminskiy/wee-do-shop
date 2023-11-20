@@ -8,16 +8,18 @@ import {StoreType} from "../../api/storesApi"
 import ImageDisplay from "../ImageDisplay"
 import DeliveryTime from "../DeliveryTime"
 import {getCurrentDayName, isCurrentTimeWorkStoreRange} from "../../utils/utils"
+import lockImg from "../../assets/images/lock.png"
 
 type StoresViewerType = {
 	stores: StoreType
 	isFavorite: boolean
-	onPress: (store: StoreType) => void
+	isAuth: boolean
+	onPress: (store: StoreType, checkISLegalStore: boolean) => void
 	onPressToggleFavoriteStore: (id: string) => void
 }
 
 const StoresViewer = memo(
-	({stores, onPress, onPressToggleFavoriteStore, isFavorite}: StoresViewerType) => {
+	({stores, onPress, onPressToggleFavoriteStore, isFavorite, isAuth}: StoresViewerType) => {
 		const {width} = Dimensions.get("window")
 		const productWidth = width - 20
 		const isOpenStoreNow = isCurrentTimeWorkStoreRange(stores?.workingHours)
@@ -26,9 +28,10 @@ const StoresViewer = memo(
 		const onPressFavoriteStore = () => {
 			onPressToggleFavoriteStore(stores._id)
 		}
+		const checkISLegalStore = true
 		return (
 			<TouchableOpacity
-				onPress={() => onPress(stores)}
+				onPress={() => onPress(stores, checkISLegalStore)}
 				style={{
 					flex: 1,
 					borderRadius: 16,
@@ -46,19 +49,36 @@ const StoresViewer = memo(
 					mb={3}
 					borderColor={colors.green}
 				>
+				{/*	{checkISLegalStore && (
+						<Box
+							position={"absolute"}
+							zIndex={2}
+							borderRadius={16}
+							backgroundColor={colors.grayLight}
+							opacity={0.7}
+							alignItems={'center'}
+							justifyContent={'center'}
+							w={"100%"}
+							h={"100%"}
+						>
+							<Image source={lockImg} />
+						</Box>
+					)}*/}
 					<Box>
 						<Box position={"absolute"} top={2} left={2} zIndex={10}>
 							<DeliveryTime time={stores.deliveryTime} fontSizeText={13} />
 						</Box>
-						<Box position={"absolute"} p={1} zIndex={10} top={2} right={2}>
-							<TouchableOpacity onPress={onPressFavoriteStore}>
-								<Image
-									style={{width: 34, height: 34}}
-									source={isFavorite ? likeActive : like}
-									alt={"like"}
-								/>
-							</TouchableOpacity>
-						</Box>
+						{isAuth && (
+							<Box position={"absolute"} p={1} zIndex={10} top={2} right={2}>
+								<TouchableOpacity onPress={onPressFavoriteStore}>
+									<Image
+										style={{width: 34, height: 34}}
+										source={isFavorite ? likeActive : like}
+										alt={"like"}
+									/>
+								</TouchableOpacity>
+							</Box>
+						)}
 						<Box width={productWidth} h={170}>
 							<ImageDisplay
 								alt={"image-store"}
@@ -111,4 +131,4 @@ const StoresViewer = memo(
 	}
 )
 
-export default StoresViewer
+export default StoresViewer;

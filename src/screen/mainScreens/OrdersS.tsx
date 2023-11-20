@@ -19,6 +19,7 @@ import { getTotalSumProductsCart } from '../../utils/utilsCart'
 import Loading from '../../components/Loading'
 import { isCurrentTimeWorkStoreRange } from "../../utils/utils";
 import { alertStoreClosed } from "../../components/list-viewer/utils";
+import AuthStore from "../../store/AuthStore/auth-store";
 
 type OrdersSProps = {
 	navigation: NavigationProp<ParamListBase>
@@ -30,6 +31,7 @@ const OrdersS = observer(({ navigation, route }: OrdersSProps) => {
 
 	const { setToCartStore } = cartStore
 	const { orders, setClearOrders, totalOrders } = orderStore
+	const { isAuth } = AuthStore
 	const { OrderService } = rootStore
 	const [isShowPopupDetails, setIsShowPopupDetails] = useState<boolean>(false)
 	const [selectedOrder, setSelectedOrder] = useState<ApiOrderType>()
@@ -52,6 +54,7 @@ const OrdersS = observer(({ navigation, route }: OrdersSProps) => {
 			})
 	}
 	const requestAPI = () => {
+		if(!isAuth) return
 		setLoadingData(true)
 		OrderService.getOrders({
 			limit,
@@ -156,6 +159,7 @@ const OrdersS = observer(({ navigation, route }: OrdersSProps) => {
 				<Box mt={5} alignItems={'center'} flex={1} w={'100%'}>
 					<FlatList
 						scrollEnabled={false}
+						removeClippedSubviews={true}
 						data={orders}
 						renderItem={orderViews}
 						keyExtractor={(item, index) => item._id?.toString()}

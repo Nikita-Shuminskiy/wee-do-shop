@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from "react"
-
 import {observer} from "mobx-react-lite"
 import NotificationStore from "../store/NotificationStore/notification-store"
 import {NavigationContainer} from "@react-navigation/native"
@@ -75,99 +74,91 @@ const RootNavigation = observer(() => {
 			)}
 			<ModalReconnect checkInternetConnection={checkInternetConnection} visible={!isConnected} />
 			<RootStack.Navigator>
-				{isAuth ? (
-					user?.role === RoleType.Customer ? (
-						<React.Fragment>
-							<RootStack.Screen
-								options={{headerShown: false}}
-								name={routerConstants.MAIN}
-								component={MainNavigation}
-							/>
-							<RootStack.Screen
-								options={{headerShown: false}}
-								name={routerConstants.STORE}
-								component={StoreS}
-							/>
-							<RootStack.Screen
-								options={{headerShown: false}}
-								name={routerConstants.FAVORITE}
-								component={FavoriteS}
-							/>
-							<RootStack.Screen
-								options={{headerShown: false}}
-								name={routerConstants.ORDER_STATUSES}
-								component={OrderStatusesS}
-							/>
-							<RootStack.Screen
-								options={{headerShown: false}}
-								name={routerConstants.ORDERS}
-								component={OrdersS}
-							/>
-							<RootStack.Screen
-								options={{headerShown: false}}
-								name={routerConstants.PROFILE_USER}
-								component={UserProfileS}
-							/>
-							<RootStack.Screen
-								options={{headerShown: false}}
-								name={routerConstants.USER_UPDATE}
-								component={UpdateUserS}
-							/>
-							<RootStack.Screen
-								options={{headerShown: false}}
-								name={routerConstants.ADDRESS}
-								component={AddressS}
-							/>
-						</React.Fragment>
-					) : (
-						<React.Fragment>
-							<RootStack.Screen
-								options={{headerShown: false}}
-								name={routerConstants.MAIN_COURIER}
-								component={MainCourierNavigation}
-							/>
-
-							<RootStack.Screen
-								options={{headerShown: false}}
-								name={routerConstants.COURIER_PICK_ORDER}
-								component={CourierPickOrder}
-							/>
-							<RootStack.Screen
-								options={{headerShown: false}}
-								name={routerConstants.COURIER_IN_PROGRESS}
-								component={CourierInProgressS}
-							/>
-						</React.Fragment>
-					)
-				) : (
+				{isAuth && user?.role === RoleType.Courier && (
 					<React.Fragment>
 						<RootStack.Screen
 							options={{headerShown: false}}
-							name={routerConstants.LOGIN}
-							component={LoginS}
+							name={routerConstants.MAIN_COURIER}
+							component={MainCourierNavigation}
 						/>
 						<RootStack.Screen
 							options={{headerShown: false}}
-							name={routerConstants.REGISTRATION}
-							component={RegisterS}
+							name={routerConstants.COURIER_PICK_ORDER}
+							component={CourierPickOrder}
 						/>
 						<RootStack.Screen
 							options={{headerShown: false}}
-							name={routerConstants.RESET_PASSWORD}
-							component={ResetPasswordS}
-						/>
-						<RootStack.Screen
-							options={{headerShown: false}}
-							name={routerConstants.FORGOT_PASSWORD}
-							component={ForgotPasswordS}
-						/>
-						<RootStack.Screen
-							options={{headerShown: false}}
-							name={routerConstants.NEW_PASSWORD}
-							component={NewPasswordS}
+							name={routerConstants.COURIER_IN_PROGRESS}
+							component={CourierInProgressS}
 						/>
 					</React.Fragment>
 				)}
+				<RootStack.Screen
+					options={{headerShown: false}}
+					name={routerConstants.MAIN}
+					component={MainNavigation}
+				/>
+				<RootStack.Screen
+					options={{headerShown: false}}
+					name={routerConstants.LOGIN}
+					component={LoginS}
+				/>
+				<RootStack.Screen
+					options={{headerShown: false}}
+					name={routerConstants.REGISTRATION}
+					component={RegisterS}
+				/>
+				<RootStack.Screen
+					options={{headerShown: false}}
+					name={routerConstants.ORDERS}
+					component={OrdersS}
+				/>
+				<RootStack.Screen
+					options={{headerShown: false}}
+					name={routerConstants.PROFILE_USER}
+					component={UserProfileS}
+				/>
+				<RootStack.Screen
+					options={{headerShown: false}}
+					name={routerConstants.STORE}
+					component={StoreS}
+				/>
+				<RootStack.Screen
+					options={{headerShown: false}}
+					name={routerConstants.FAVORITE}
+					component={FavoriteS}
+				/>
+				<RootStack.Screen
+					options={{headerShown: false}}
+					name={routerConstants.ORDER_STATUSES}
+					component={OrderStatusesS}
+				/>
+				<RootStack.Screen
+					options={{headerShown: false}}
+					name={routerConstants.USER_UPDATE}
+					component={UpdateUserS}
+				/>
+				<RootStack.Screen
+					options={{headerShown: false}}
+					name={routerConstants.ADDRESS}
+					component={AddressS}
+				/>
+
+				<RootStack.Screen
+					options={{headerShown: false}}
+					name={routerConstants.RESET_PASSWORD}
+					component={ResetPasswordS}
+				/>
+				<RootStack.Screen
+					options={{headerShown: false}}
+					name={routerConstants.FORGOT_PASSWORD}
+					component={ForgotPasswordS}
+				/>
+				<RootStack.Screen
+					options={{headerShown: false}}
+					name={routerConstants.NEW_PASSWORD}
+					component={NewPasswordS}
+				/>
 				<RootStack.Screen
 					options={{headerShown: false}}
 					name={routerConstants.ALLOW_LOCATION}
@@ -199,4 +190,4 @@ const RootNavigation = observer(() => {
 	)
 })
 
-export default RootNavigation
+export default RootNavigation;

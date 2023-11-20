@@ -22,6 +22,7 @@ import * as Animatable from "react-native-animatable"
 import {createAlert} from "../../components/Alert"
 import {isCurrentTimeWorkStoreRange} from "../../utils/utils"
 import {alertStoreClosed} from "../../components/list-viewer/utils"
+import AuthStore from "../../store/AuthStore/auth-store";
 
 type StoreSProps = {
 	navigation: NavigationProp<ParamListBase>
@@ -30,6 +31,7 @@ const StoreS = observer(({navigation}: StoreSProps) => {
 	const {StoresStore, CartStore, StoresService} = rootStore
 	const {cart, saveProductToCarts, setPromoCode, removeCart} = CartStore
 	const {store, allProductStore, getAndSetAllProduct, chosenSubCategory} = StoresStore
+	const {isAuth} = AuthStore
 	const navigate = useNavigation()
 	const isOpenStoreNow = isCurrentTimeWorkStoreRange(store?.workingHours)
 	const [isShowModalProduct, setIsShowModalProduct] = useState<boolean>(false)
@@ -48,7 +50,20 @@ const StoreS = observer(({navigation}: StoreSProps) => {
 			setSelectedSubCategoryId(chosenSubCategory?._id)
 		}
 	}, [chosenSubCategory])
-
+const modalLoginHandler = () => {
+	const onPressGoLogin = () => {
+		navigation.navigate(routerConstants.LOGIN)
+	}
+	createAlert({
+		title: "Message",
+		message: "You need to register to view the store.",
+		buttons: [
+			{text: "Go to login", style: "cancel", onPress: onPressGoLogin},
+			{text: "Exit", style: "cancel"},
+		],
+	})
+	return
+}
 	const onPressGoBack = () => {
 		navigate.goBack()
 	}
@@ -125,6 +140,7 @@ const StoreS = observer(({navigation}: StoreSProps) => {
 
 	const saveProductToCart = useCallback(
 		(productValue: number, product: ProductType) => {
+			if(!isAuth) return modalLoginHandler()
 			if (!isOpenStoreNow) {
 				alertStoreClosed()
 				removeCart()
@@ -261,8 +277,9 @@ const StoreS = observer(({navigation}: StoreSProps) => {
 								scrollEnabled={false}
 								data={selectedSubCategory?.products ?? allProductStore}
 								horizontal={false}
+								removeClippedSubviews={true}
 								renderItem={productViews}
-								keyExtractor={(item, index) => index.toString()}
+								keyExtractor={(item, index) => item?._id.toString()}
 								style={{width: "100%"}}
 								ListEmptyComponent={() =>
 									renderEmptyContainer(Dimensions.get("window").height, "List is empty")
@@ -279,7 +296,7 @@ const StoreS = observer(({navigation}: StoreSProps) => {
 					</Box>
 				</Box>
 			</BaseWrapperComponent>
-			{!!cart?.totalSum && (
+			{!!cart?.totalSum  && (
 				<Box
 					style={styles.shadow}
 					position={"absolute"}

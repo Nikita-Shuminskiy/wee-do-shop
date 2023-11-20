@@ -13,6 +13,7 @@ import arrowLeftBack from '../../assets/images/arrow-left.png'
 import { colors } from '../../assets/colors/colors'
 import { StoreType } from '../../api/storesApi'
 import useGoBackNative from '../../utils/hook/useGoBackNative'
+import AuthStore from "../../store/AuthStore/auth-store";
 
 type FavoriteSType = {
 	navigation: NavigationProp<ParamListBase>
@@ -20,6 +21,7 @@ type FavoriteSType = {
 const FavoriteS = observer(({ navigation }: FavoriteSType) => {
 	const { StoresStore, StoresService } = rootStore
 	const { favoriteStores } = StoresStore
+	const { isAuth } = AuthStore
 	const onPress = useCallback((store) => {
 		StoresService.getStore(store._id).then((data) => {
 			if (data) {
@@ -34,13 +36,14 @@ const FavoriteS = observer(({ navigation }: FavoriteSType) => {
 	const storesViews = useCallback(({ item }: { item: StoreType }) => {
 		return (
 			<StoresViewer
+				isAuth={isAuth}
 				isFavorite={true}
 				onPressToggleFavoriteStore={onPressRemoveFavoriteStore}
 				onPress={onPress}
 				stores={item}
 			/>
 		)
-	}, [])
+	}, [isAuth])
 	const onPressGoBack = () => {
 		navigation.navigate(routerConstants.HOME, { from: 'favorite' })
 		// Возвращаем true, чтобы предотвратить стандартное поведение кнопки "Назад" (например, закрытие приложения)

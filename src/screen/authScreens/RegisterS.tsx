@@ -88,6 +88,10 @@ const RegisterS = observer(({navigation}: LoginSProps) => {
 			email: values.email.trim(),
 			phone: formattedPhoneNumber,
 			address: currentLocation,
+		}).then((data) => {
+			if(data) {
+				navigation.navigate(routerConstants.MAIN)
+			}
 		})
 		setIsValidPhone(true)
 		setSubmitting(false)

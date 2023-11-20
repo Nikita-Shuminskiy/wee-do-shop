@@ -12,6 +12,7 @@ import { formatProductPrice } from "../MapViews/utils";
 import ImageDisplay from "../ImageDisplay";
 import { BaseWrapperComponent } from "../baseWrapperComponent";
 import { observer } from "mobx-react-lite";
+import AuthStore from "../../store/AuthStore/auth-store";
 
 type PopUpProductProps = {
   show: boolean
@@ -31,6 +32,7 @@ const PopUpProduct = observer(
      isOpenStoreNow
    }: PopUpProductProps) => {
     const { cart } = CartStore;
+    const { isAuth } = AuthStore;
     const totalSumCart = formatProductPrice(cart?.totalSum ?? 0);
     const saveInputNumberValue = (productValue: number) => {
       saveProductValueToCart(productValue);
@@ -59,17 +61,6 @@ const PopUpProduct = observer(
                 {product?.name}
               </Text>
               <Text mb={2}>{product?.description}</Text>
-              <Box>
-                {/* <Text fontWeight={'500'}>-THC 15%</Text>
-                        <Text fontWeight={'500'}>-CBD 12%</Text>
-                        <Text fontWeight={'500'}>-Energizing</Text>
-                        <Text fontWeight={'500'}>-Uplifting</Text>*/}
-                {/*	<Text fontWeight={'500'}>{product?.effect}</Text>*/}
-              </Box>
-              {/*  <Box flex={1} w={'25%'}>
-                        <Link styleLink={{backgroundColor: colors.grayDarkLight, borderRadius: 16}}
-                              onPress={onPressShowMore} text={'Show more'}/>
-                    </Box>*/}
               <Box mt={2} w={"100%"} flex={1}>
                 <Box
                   mb={4}
@@ -82,7 +73,7 @@ const PopUpProduct = observer(
                   <Text>฿ {formatProductPrice(product?.price)}</Text>
                 </Box>
                 {
-                  isOpenStoreNow && <SliderComponent
+                  isOpenStoreNow && isAuth && <SliderComponent
                     valueSlider={currentValueToCartProduct?.amount ?? 0}
                     onChangeValue={saveSliderValue}
                   />
@@ -91,7 +82,7 @@ const PopUpProduct = observer(
             </Box>
           </BaseWrapperComponent>
         </ModalPopup>
-        {show  && (
+        {show  && isAuth && (
           <Box
             justifyContent={"space-evenly"}
             style={styles.shadow}

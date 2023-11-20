@@ -18,9 +18,8 @@ export class StoresStore {
 		if (!subCategories?.length) {
 			return (this.allProductStore = [])
 		}
-		// @ts-ignore el.category === string
-		const chosenSubCategories = subCategories?.filter(
-			(el) => el.category === this.selectedSubCategoryId
+		// @ts-ignore
+		const chosenSubCategories = subCategories?.filter((el) => el.category === this.selectedSubCategoryId
 		)
 		if (chosenSubCategories[0]?.products?.length) {
 			this.setChosenSubCategory(chosenSubCategories[0])

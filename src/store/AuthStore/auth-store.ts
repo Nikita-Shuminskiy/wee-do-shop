@@ -84,10 +84,10 @@ export class AuthStore {
 	}
 
 	async logOut() {
-		this.user = null
 		this.isAuth = false
 		await deviceStorage.removeItem('refreshToken')
 		await deviceStorage.removeItem('accessToken')
+		this.user = null
 	}
 	async forgotPassword(email: string) {
 		const { data } = await authApi.forgotPassword(email)
@@ -132,11 +132,9 @@ export class AuthStore {
 	constructor() {
 		makeObservable(this, {
 			user: observable,
-
 			banners: observable,
 			isAuth: observable,
 			infoResetPassword: observable,
-
 			currentLocation: observable,
 			setUser: action,
 			setInfoResetPassword: action,
@@ -145,7 +143,6 @@ export class AuthStore {
 			getUser: action,
 			setBanners: action,
 			setLocation: action,
-
 			logOut: action,
 			setAuth: action,
 			getMe: action,

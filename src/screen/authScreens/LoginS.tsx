@@ -25,6 +25,10 @@ const LoginS = memo(({navigation}: LoginSProps) => {
 		AuthStoreService.login({
 			email: values.email.trim(),
 			password: values.password,
+		}).then((data) => {
+			if(data) {
+				navigation.navigate(routerConstants.MAIN)
+			}
 		})
 		setSubmitting(false)
 	}
@@ -125,6 +129,13 @@ const LoginS = memo(({navigation}: LoginSProps) => {
 							onPress={() => navigation.navigate(routerConstants.FORGOT_PASSWORD)}
 							styleText={styles.linkCourierText}
 							text={"Forgot your password ?"}
+						/>
+					</Box>
+					<Box mt={3}>
+						<Link
+							onPress={() => navigation.navigate(routerConstants.MAIN)}
+							styleText={{fontSize: 18, color: colors.green}}
+							text={"Continue without registration"}
 						/>
 					</Box>
 				</Box>

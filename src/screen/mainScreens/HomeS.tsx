@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useRef, useState} from "react"
+import React, {useCallback, useEffect, useLayoutEffect, useRef, useState} from "react"
 import {observer} from "mobx-react-lite"
 import {BaseWrapperComponent} from "../../components/baseWrapperComponent"
 import {Box, ScrollView} from "native-base"
@@ -17,6 +17,9 @@ import HeaderUser from "../../components/headerUser"
 import Carousel from "react-native-snap-carousel"
 import {BannersType} from "../../api/userApi"
 import BannersViewer from "../../components/list-viewer/BannersViewer"
+import {createAlert} from "../../components/Alert"
+import NotificationStore from "../../store/NotificationStore/notification-store"
+import {LoadingEnum} from "../../store/types/types"
 
 type HomeSProps = {
 	navigation: NavigationProp<ParamListBase>
@@ -24,7 +27,8 @@ type HomeSProps = {
 }
 
 const HomeS = observer(({navigation, route}: HomeSProps) => {
-	const {user, banners} = AuthStore
+	const {user, banners, isAuth} = AuthStore
+	const {setIsLoading} = NotificationStore
 
 	const {StoresService, StoresStore, CategoriesService, CategoriesStore} = rootStore
 	const {stores, setStore, favoriteStores, search, setSearch, setSelectedSubCategoryId} =
@@ -72,13 +76,14 @@ const HomeS = observer(({navigation, route}: HomeSProps) => {
 			return (
 				<StoresViewer
 					isFavorite={favoritesStores.some((storeId) => storeId === item._id)}
+					isAuth={isAuth}
 					onPressToggleFavoriteStore={onPressToggleFavoriteStore}
 					onPress={onPress}
 					stores={item}
 				/>
 			)
 		},
-		[favoritesStores]
+		[favoritesStores, isAuth]
 	)
 	const getFavoriteStores = () => {
 		StoresService.getFavoriteStores().then((data) => {
@@ -92,7 +97,7 @@ const HomeS = observer(({navigation, route}: HomeSProps) => {
 		getFavoriteStores()
 	}
 
-	useEffect(() => {
+	useLayoutEffect(() => {
 		getHomeData()
 		return () => {
 			setFavoritesStores([])

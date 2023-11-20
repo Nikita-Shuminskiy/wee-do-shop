@@ -98,7 +98,7 @@ const CartS = observer(({ navigation }: CartSProps) => {
 	const productTotalPrice = Number(formatProductPrice(cart?.totalSum ?? 0))
 	const isFreeDelivery = productTotalPrice >= 1500
 
-	const formatted_address = getFormattedAddress(user.address)
+	const formatted_address = getFormattedAddress(user?.address)
 
 	return (
 		<>
@@ -162,7 +162,7 @@ const CartS = observer(({ navigation }: CartSProps) => {
 							</Text>
 						</Box>
 						<Box mt={2} mb={2}>
-							<Accordions addedPromoCode={promoCode} userId={user._id} />
+							<Accordions addedPromoCode={promoCode} userId={user?._id} />
 						</Box>
 						<Box>
 							<TextInput
