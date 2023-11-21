@@ -159,7 +159,6 @@ const OrdersS = observer(({ navigation, route }: OrdersSProps) => {
 				<Box mt={5} alignItems={'center'} flex={1} w={'100%'}>
 					<FlatList
 						scrollEnabled={false}
-						removeClippedSubviews={true}
 						data={orders}
 						renderItem={orderViews}
 						keyExtractor={(item, index) => item._id?.toString()}

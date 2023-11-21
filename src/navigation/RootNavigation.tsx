@@ -37,7 +37,7 @@ import {useBackgroundTime} from "../utils/hook/useBackgroundTime"
 const RootStack = createNativeStackNavigator()
 
 const RootNavigation = observer(() => {
-	const {isLoading, setIsLoading} = NotificationStore
+	const {isLoading, setIsLoading, setNavigation} = NotificationStore
 	const {AuthStoreService, AuthStore} = rootStore
 	const [isConnected, setIsConnected] = useState(true)
 	const {isAuth, user, getAppVersion} = AuthStore
@@ -68,7 +68,11 @@ const RootNavigation = observer(() => {
 	}, [])
 
 	return (
-		<NavigationContainer>
+		<NavigationContainer
+			ref={(navigationRef) => {
+				setNavigation(navigationRef)
+			}}
+		>
 			{isLoading === LoadingEnum.fetching && (
 				<Loading visible={isLoading === LoadingEnum.fetching} />
 			)}

@@ -4,6 +4,9 @@ import {getTotalSumProductsCart, updateValueCartProducts} from "../../utils/util
 import {DiscountCodeType, userApi} from "../../api/userApi"
 import {StoreType} from "../../api/storesApi"
 import {DELIVERY_PRICE} from "../../utils/utils"
+import { useCallback } from "react";
+import { routerConstants } from "../../constants/routerConstants";
+import { createAlert } from "../../components/Alert";
 
 export type ProductCartType = ProductType & {
 	amount: number
@@ -104,7 +107,24 @@ export class CartStore {
 		}
 		this.setToCartStore(newCart)
 	}
-
+	shoppingCartMatching = (currentProduct: ProductType, productValue: number, store: StoreType, navigation: any) => {
+		const onPressClearCart = () => {
+			this.setPromoCode(null)
+			this.removeCart()
+			this.saveProductToCarts(currentProduct, productValue, store)
+		}
+		const onPressGoToCart = () => {
+			navigation.navigate(routerConstants.CART)
+		}
+		createAlert({
+			title: "Message",
+			message: "Need to empty your cart for a new order",
+			buttons: [
+				{text: "Go to cart", style: "default", onPress: onPressGoToCart},
+				{text: "Continue", style: "default", onPress: onPressClearCart},
+			],
+		})
+	}
 	saveProductToCarts(currentProduct: ProductType, productValue: number, store: StoreType) {
 		if (!this.cart?.storeName) {
 			this.setNewCart(store)
@@ -130,6 +150,7 @@ export class CartStore {
 			updateProductToCart: action,
 			setNewCart: action,
 			updateProduct: action,
+			shoppingCartMatching: action,
 			addProductToCart: action,
 			removeProductToCart: action,
 			saveProductToCarts: action,

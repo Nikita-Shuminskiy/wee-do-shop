@@ -13,7 +13,7 @@ import ImageDisplay from "../ImageDisplay";
 import { BaseWrapperComponent } from "../baseWrapperComponent";
 import { observer } from "mobx-react-lite";
 import AuthStore from "../../store/AuthStore/auth-store";
-
+import {Image} from 'expo-image'
 type PopUpProductProps = {
   show: boolean
   isOpenStoreNow: boolean
@@ -48,13 +48,13 @@ const PopUpProduct = observer(
         <ModalPopup style={{}} visible={show} onClose={onClose}>
           <BaseWrapperComponent isKeyboardAwareScrollView={true}>
             <Box flex={1} mb={120} w={"100%"} justifyContent={"space-between"}>
-              <ImageDisplay
+              <Image
                 source={{ uri: product?.image }}
                 style={{
                   width: "100%",
                   aspectRatio: 200 / 171
                 }}
-                resizeMode="cover"
+                contentFit={'cover'}
                 alt={"photoProduct"}
               />
               <Text mb={2} mt={2} fontSize={16} fontWeight={"600"}>

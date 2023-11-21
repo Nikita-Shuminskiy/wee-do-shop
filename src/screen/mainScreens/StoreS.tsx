@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from "react"
+import React, {useCallback, useEffect, useMemo, useState} from "react"
 import {BaseWrapperComponent} from "../../components/baseWrapperComponent"
 import arrowLeftBack from "../../assets/images/arrow-left-back.png"
 import {Box, Text} from "native-base"
@@ -22,14 +22,14 @@ import * as Animatable from "react-native-animatable"
 import {createAlert} from "../../components/Alert"
 import {isCurrentTimeWorkStoreRange} from "../../utils/utils"
 import {alertStoreClosed} from "../../components/list-viewer/utils"
-import AuthStore from "../../store/AuthStore/auth-store";
+import AuthStore from "../../store/AuthStore/auth-store"
 
 type StoreSProps = {
 	navigation: NavigationProp<ParamListBase>
 }
 const StoreS = observer(({navigation}: StoreSProps) => {
-	const {StoresStore, CartStore, StoresService} = rootStore
-	const {cart, saveProductToCarts, setPromoCode, removeCart} = CartStore
+	const {StoresStore, CartStore, StoresService, CartService} = rootStore
+	const {cart, setPromoCode, removeCart} = CartStore
 	const {store, allProductStore, getAndSetAllProduct, chosenSubCategory} = StoresStore
 	const {isAuth} = AuthStore
 	const navigate = useNavigation()
@@ -41,7 +41,6 @@ const StoreS = observer(({navigation}: StoreSProps) => {
 	const [selectedProduct, setSelectedProduct] = useState<ProductType>()
 	const [selectedSubCategoryId, setSelectedSubCategoryId] = useState<string>("")
 	const [isLoaded, setIsLoaded] = useState(false)
-	const checkCartStore = cart?.idStore && cart?.idStore !== store._id
 
 	useEffect(() => {
 		if (chosenSubCategory) {
@@ -50,20 +49,20 @@ const StoreS = observer(({navigation}: StoreSProps) => {
 			setSelectedSubCategoryId(chosenSubCategory?._id)
 		}
 	}, [chosenSubCategory])
-const modalLoginHandler = () => {
-	const onPressGoLogin = () => {
-		navigation.navigate(routerConstants.LOGIN)
+	const modalLoginHandler = () => {
+		const onPressGoLogin = () => {
+			navigation.navigate(routerConstants.LOGIN)
+		}
+		createAlert({
+			title: "Message",
+			message: "You need to register to view the store.",
+			buttons: [
+				{text: "Go to login", style: "cancel", onPress: onPressGoLogin},
+				{text: "Exit", style: "cancel"},
+			],
+		})
+		return
 	}
-	createAlert({
-		title: "Message",
-		message: "You need to register to view the store.",
-		buttons: [
-			{text: "Go to login", style: "cancel", onPress: onPressGoLogin},
-			{text: "Exit", style: "cancel"},
-		],
-	})
-	return
-}
 	const onPressGoBack = () => {
 		navigate.goBack()
 	}
@@ -83,32 +82,12 @@ const modalLoginHandler = () => {
 		setIsShowModalProduct(false)
 	}
 
-	const shoppingCartMatching = (productValue, product) => {
-		const onPressClearCart = () => {
-			setPromoCode(null)
-			removeCart()
-			saveProductToCarts(product, productValue, store)
-		}
-		const onPressGoToCart = () => {
-			navigation.navigate(routerConstants.CART)
-		}
-		createAlert({
-			title: "Message",
-			message: "Need to empty your cart for a new order",
-			buttons: [
-				{text: "Go to cart", style: "default", onPress: onPressGoToCart},
-				{text: "Continue", style: "default", onPress: onPressClearCart},
-			],
-		})
-	}
-
 	const onPressSelectedSubCategory = useCallback((item) => {
 		setSelectedSubCategoryId((prevState) => {
 			prevState === item._id ? setSelectedSubCategory(null) : setSelectedSubCategory(item)
 			return prevState === item._id ? "" : item._id
 		})
 	}, [])
-
 	const sebCategoriesViews = useCallback(
 		({item}: {item: SubCategoryType}) => {
 			return (
@@ -131,43 +110,37 @@ const modalLoginHandler = () => {
 			removeCart()
 			return
 		}
-		if (checkCartStore) {
-			shoppingCartMatching(productValue, selectedProduct)
+		CartService.saveProductToCart(selectedProduct, productValue, store)
+	}
+
+	const saveProductToCart = useCallback((productValue: number, product: ProductType) => {
+		if (!isAuth) return modalLoginHandler()
+		if (!isOpenStoreNow) {
+			alertStoreClosed()
+			removeCart()
 			return
 		}
-		saveProductToCarts(selectedProduct, productValue, store)
-	}
+		if (productValue > 100) return
+		CartService.saveProductToCart(product, productValue, store)
+	}, [])
 
-	const saveProductToCart = useCallback(
-		(productValue: number, product: ProductType) => {
-			if(!isAuth) return modalLoginHandler()
-			if (!isOpenStoreNow) {
-				alertStoreClosed()
-				removeCart()
-				return
-			}
-			if (checkCartStore) {
-				shoppingCartMatching(productValue, product)
-				return
-			}
-			if (productValue > 100) return
-			saveProductToCarts(product, productValue, store)
+	const productViews = useCallback(
+		({item, index}: {item: ProductType; index: number}) => {
+			const currentCartProduct = cart?.products?.find(
+				(cartProduct) => cartProduct?._id === item._id
+			)
+			return (
+				<ProductViewer
+					currentCartProductAmount={currentCartProduct?.amount}
+					key={item?._id}
+					saveProductToCart={saveProductToCart}
+					onPressProduct={onPressProduct}
+					product={item}
+				/>
+			)
 		},
-		[checkCartStore]
+		[cart]
 	)
-
-	const productViews = ({item, index}: {item: ProductType; index: number}) => {
-		const currentCartProduct = cart?.products?.find((cartProduct) => cartProduct?._id === item._id)
-		return (
-			<ProductViewer
-				currentCartProductAmount={currentCartProduct?.amount}
-				key={item?._id}
-				saveProductToCart={saveProductToCart}
-				onPressProduct={onPressProduct}
-				product={item}
-			/>
-		)
-	}
 	const onRefreshHandler = () => {
 		StoresService.getStore(store._id, false)
 	}
@@ -272,18 +245,20 @@ const modalLoginHandler = () => {
 								{selectedSubCategory?.name ?? "All products"}
 							</Text>
 						</Box>
-						<Box mb={20}>
+						<Box mb={20} h={"100%"}>
 							<FlatList
 								scrollEnabled={false}
 								data={selectedSubCategory?.products ?? allProductStore}
 								horizontal={false}
-								removeClippedSubviews={true}
 								renderItem={productViews}
 								keyExtractor={(item, index) => item?._id.toString()}
 								style={{width: "100%"}}
 								ListEmptyComponent={() =>
 									renderEmptyContainer(Dimensions.get("window").height, "List is empty")
 								}
+								removeClippedSubviews={true}
+								initialNumToRender={20}
+								maxToRenderPerBatch={20}
 								numColumns={2}
 								columnWrapperStyle={{justifyContent: "space-between"}}
 								contentContainerStyle={
@@ -296,7 +271,7 @@ const modalLoginHandler = () => {
 					</Box>
 				</Box>
 			</BaseWrapperComponent>
-			{!!cart?.totalSum  && (
+			{!!cart?.totalSum && (
 				<Box
 					style={styles.shadow}
 					position={"absolute"}
@@ -387,4 +362,4 @@ const styles = StyleSheet.create({
 	},
 })
 
-export default StoreS
+export default StoreS;
