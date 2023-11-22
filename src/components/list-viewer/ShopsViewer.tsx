@@ -53,14 +53,17 @@ const ShopsViewer = ({ stores, onPress }: ShopsViewerType) => {
 				}}
 				onLoad={() => setIsLoaded(true)}
 			>
-				<Box position={'absolute'} top={2} left={2} zIndex={10} w={66} h={19}>
-					<DeliveryTime
-						styleGradient={{ paddingVertical: 1, paddingHorizontal: 2 }}
-						styleImg={{ width: 14, height: 9 }}
-						fontSizeText={8}
-						time={stores?.deliveryTime}
-					/>
-				</Box>
+				{
+					stores?.deliveryTime && <Box position={'absolute'} top={2} left={2} zIndex={10} w={66} h={19}>
+						<DeliveryTime
+							styleGradient={{ paddingVertical: 1, paddingHorizontal: 2 }}
+							styleImg={{ width: 14, height: 9 }}
+							fontSizeText={8}
+							time={stores?.deliveryTime}
+						/>
+					</Box>
+				}
+
 				<Box flex={1} alignItems={'center'} justifyContent={'center'}>
 					<Text fontSize={19} fontWeight={'700'} style={styles.textWithShadow} color={colors.white}>
 						{stores.name}

@@ -1,5 +1,6 @@
 import React, {useCallback, useEffect, useLayoutEffect, useRef, useState} from "react"
 import {observer} from "mobx-react-lite"
+import * as Location from 'expo-location';
 import {BaseWrapperComponent} from "../../components/baseWrapperComponent"
 import {Box, ScrollView} from "native-base"
 import AuthStore from "../../store/AuthStore/auth-store"
@@ -91,7 +92,7 @@ const HomeS = observer(({navigation, route}: HomeSProps) => {
 		})
 	}
 
-	const getHomeData = () => {
+	const getHomeData = async () => {
 		CategoriesService.getCategories()
 		StoresService.getStores()
 		getFavoriteStores()

@@ -23,7 +23,6 @@ export class StoresStore {
 		)
 		if (chosenSubCategories[0]?.products?.length) {
 			this.setChosenSubCategory(chosenSubCategories[0])
-			//	return (this.allProductStore = chosenSubCategories[0]?.products)
 		}
 		subCategories?.map((subCategory) => {
 			subCategory.products?.map((product) => {

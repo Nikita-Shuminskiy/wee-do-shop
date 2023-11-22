@@ -49,7 +49,7 @@ const StoresViewer = memo(
 					mb={3}
 					borderColor={colors.green}
 				>
-				{/*	{checkISLegalStore && (
+					{/*	{checkISLegalStore && (
 						<Box
 							position={"absolute"}
 							zIndex={2}
@@ -65,9 +65,11 @@ const StoresViewer = memo(
 						</Box>
 					)}*/}
 					<Box>
-						<Box position={"absolute"} top={2} left={2} zIndex={10}>
-							<DeliveryTime time={stores.deliveryTime} fontSizeText={13} />
-						</Box>
+						{stores?.deliveryTime && (
+							<Box position={"absolute"} top={2} left={2} zIndex={10}>
+								<DeliveryTime time={stores.deliveryTime} fontSizeText={13} />
+							</Box>
+						)}
 						{isAuth && (
 							<Box position={"absolute"} p={1} zIndex={10} top={2} right={2}>
 								<TouchableOpacity onPress={onPressFavoriteStore}>
@@ -80,7 +82,7 @@ const StoresViewer = memo(
 							</Box>
 						)}
 						<Box width={productWidth} h={170}>
-							<ImageDisplay
+							<Image
 								alt={"image-store"}
 								borderRadius={16}
 								source={{uri: stores.image}}
@@ -88,7 +90,6 @@ const StoresViewer = memo(
 									flex: 1,
 									width: "100%",
 									height: "100%",
-									borderRadius: 16,
 								}}
 							/>
 						</Box>

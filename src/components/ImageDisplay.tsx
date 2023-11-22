@@ -30,6 +30,8 @@ const ImageDisplay = ({ source, style, ...restProps }: any) => {
 			)}
 
 			<Image
+				resizeMode={'cover'}
+				resizeMethod={'resize'}
 				onLoad={handleImageLoad}
 				onError={onError}
 				source={source}

@@ -53,6 +53,12 @@
     },
     "owner": "wee_do12345",
     "plugins": [
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "Allow your geolocation to be used to find nearby stores"
+        }
+      ],
       "expo-localization",
       [
         "expo-updates",
@@ -60,12 +66,6 @@
           "username": "wee_do12345"
         }
       ]
-    ],
-    "updates": {
-      "checkAutomatically": "ON_LOAD",
-      "fallbackToCacheTimeout": 0,
-      "enabled": true,
-      "url": "https://u.expo.dev/5089860a-124c-4e1e-8c9f-95c034202c40"
-    }
+    ]
   }
 }

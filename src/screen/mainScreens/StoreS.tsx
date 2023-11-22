@@ -256,9 +256,6 @@ const StoreS = observer(({navigation}: StoreSProps) => {
 								ListEmptyComponent={() =>
 									renderEmptyContainer(Dimensions.get("window").height, "List is empty")
 								}
-								removeClippedSubviews={true}
-								initialNumToRender={20}
-								maxToRenderPerBatch={20}
 								numColumns={2}
 								columnWrapperStyle={{justifyContent: "space-between"}}
 								contentContainerStyle={
