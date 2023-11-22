@@ -3,7 +3,7 @@ import {Box, Text} from "native-base"
 import {colors} from "../../assets/colors/colors"
 import like from "../../assets/images/like.png"
 import likeActive from "../../assets/images/likeActive.png"
-import {Dimensions, Image, TouchableOpacity} from "react-native"
+import {Dimensions, TouchableOpacity} from "react-native"
 import {StoreType} from "../../api/storesApi"
 import ImageDisplay from "../ImageDisplay"
 import DeliveryTime from "../DeliveryTime"
@@ -46,7 +46,6 @@ const StoresViewer = memo(
 					borderRadius={16}
 					alignItems={"flex-start"}
 					justifyContent={"space-between"}
-					mb={3}
 					borderColor={colors.green}
 				>
 					{/*	{checkISLegalStore && (
@@ -65,15 +64,13 @@ const StoresViewer = memo(
 						</Box>
 					)}*/}
 					<Box>
-						{stores?.deliveryTime && (
-							<Box position={"absolute"} top={2} left={2} zIndex={10}>
-								<DeliveryTime time={stores.deliveryTime} fontSizeText={13} />
-							</Box>
-						)}
+						<Box position={"absolute"} top={2} left={2} zIndex={10}>
+							<DeliveryTime time={stores?.deliveryTime} fontSizeText={13} />
+						</Box>
 						{isAuth && (
 							<Box position={"absolute"} p={1} zIndex={10} top={2} right={2}>
 								<TouchableOpacity onPress={onPressFavoriteStore}>
-									<Image
+									<ImageDisplay
 										style={{width: 34, height: 34}}
 										source={isFavorite ? likeActive : like}
 										alt={"like"}
@@ -82,14 +79,15 @@ const StoresViewer = memo(
 							</Box>
 						)}
 						<Box width={productWidth} h={170}>
-							<Image
+							<ImageDisplay
 								alt={"image-store"}
-								borderRadius={16}
 								source={{uri: stores.image}}
 								style={{
 									flex: 1,
 									width: "100%",
 									height: "100%",
+									borderTopRightRadius: 16,
+									borderTopLeftRadius: 16
 								}}
 							/>
 						</Box>
@@ -108,7 +106,7 @@ const StoresViewer = memo(
 							</Text>
 						</Box>
 					</Box>
-					<Box paddingY={2} w={"100%"} borderBottomRightRadius={16} borderBottomLeftRadius={16}>
+					<Box paddingY={1} w={"100%"} borderBottomRightRadius={16} borderBottomLeftRadius={16}>
 						<Text ml={3} fontSize={18} fontWeight={"700"} color={colors.balck}>
 							{stores?.name}
 						</Text>

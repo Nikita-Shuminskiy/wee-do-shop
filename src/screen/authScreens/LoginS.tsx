@@ -14,6 +14,7 @@ import {routerConstants} from "../../constants/routerConstants"
 import rootStore from "../../store/RootStore"
 import PrivacyPolicy from "../../components/PrivacyPolicy"
 import Link from "../../components/Link"
+import {RoleType} from "../../api/authApi"
 
 type LoginSProps = {
 	navigation: NavigationProp<ParamListBase>
@@ -25,9 +26,14 @@ const LoginS = memo(({navigation}: LoginSProps) => {
 		AuthStoreService.login({
 			email: values.email.trim(),
 			password: values.password,
-		}).then((data) => {
-			if(data) {
+		}).then((role) => {
+			if (role === RoleType.Courier) {
+				navigation.navigate(routerConstants.MAIN_COURIER)
+				return
+			}
+			if (role === RoleType.Customer) {
 				navigation.navigate(routerConstants.MAIN)
+				return
 			}
 		})
 		setSubmitting(false)
@@ -159,4 +165,4 @@ const styles = StyleSheet.create({
 	},
 })
 
-export default LoginS
+export default LoginS;

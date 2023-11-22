@@ -57,10 +57,11 @@ export class AuthStore {
 		return await authApi.register(dataUser)
 	}
 
-	async getMe(): Promise<void> {
+	async getMe() {
 		const { data } = await authApi.getMe()
 		await this.getAppVersion()
 		this.setUser(data)
+		return data
 	}
 
 	async getUser(idUser: string): Promise<UserType> {

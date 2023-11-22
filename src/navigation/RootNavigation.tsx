@@ -38,9 +38,8 @@ const RootStack = createNativeStackNavigator()
 
 const RootNavigation = observer(() => {
 	const {isLoading, setIsLoading, setNavigation} = NotificationStore
-	const {AuthStoreService, AuthStore} = rootStore
+	const {AuthStoreService} = rootStore
 	const [isConnected, setIsConnected] = useState(true)
-	const {isAuth, user, getAppVersion} = AuthStore
 	const backgroundHandler = async (time: number) => {
 		if (time >= 20) {
 			await Updates.reloadAsync()
@@ -66,7 +65,6 @@ const RootNavigation = observer(() => {
 			unsubscribe()
 		}
 	}, [])
-
 	return (
 		<NavigationContainer
 			ref={(navigationRef) => {
@@ -77,26 +75,7 @@ const RootNavigation = observer(() => {
 				<Loading visible={isLoading === LoadingEnum.fetching} />
 			)}
 			<ModalReconnect checkInternetConnection={checkInternetConnection} visible={!isConnected} />
-			<RootStack.Navigator>
-				{isAuth && user?.role === RoleType.Courier && (
-					<React.Fragment>
-						<RootStack.Screen
-							options={{headerShown: false}}
-							name={routerConstants.MAIN_COURIER}
-							component={MainCourierNavigation}
-						/>
-						<RootStack.Screen
-							options={{headerShown: false}}
-							name={routerConstants.COURIER_PICK_ORDER}
-							component={CourierPickOrder}
-						/>
-						<RootStack.Screen
-							options={{headerShown: false}}
-							name={routerConstants.COURIER_IN_PROGRESS}
-							component={CourierInProgressS}
-						/>
-					</React.Fragment>
-				)}
+			<RootStack.Navigator initialRouteName={routerConstants.LOGIN}>
 				<RootStack.Screen
 					options={{headerShown: false}}
 					name={routerConstants.MAIN}
@@ -188,6 +167,22 @@ const RootNavigation = observer(() => {
 					options={{headerShown: false}}
 					name={routerConstants.TERM_SERVICE}
 					component={TermServiceS}
+				/>
+
+				<RootStack.Screen
+					options={{headerShown: false}}
+					name={routerConstants.MAIN_COURIER}
+					component={MainCourierNavigation}
+				/>
+				<RootStack.Screen
+					options={{headerShown: false}}
+					name={routerConstants.COURIER_PICK_ORDER}
+					component={CourierPickOrder}
+				/>
+				<RootStack.Screen
+					options={{headerShown: false}}
+					name={routerConstants.COURIER_IN_PROGRESS}
+					component={CourierInProgressS}
 				/>
 			</RootStack.Navigator>
 		</NavigationContainer>
