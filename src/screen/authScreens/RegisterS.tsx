@@ -1,5 +1,5 @@
 import React, {useState} from "react"
-import {StyleSheet, TextInput, TouchableOpacity} from "react-native"
+import {Linking, StyleSheet, TextInput, TouchableOpacity} from "react-native"
 import {NavigationProp, ParamListBase} from "@react-navigation/native"
 import {BaseWrapperComponent} from "../../components/baseWrapperComponent"
 import {Box, Checkbox, Image, Text} from "native-base"
@@ -18,11 +18,12 @@ import {RoleType} from "../../api/authApi"
 import {routerConstants} from "../../constants/routerConstants"
 import ArrowBack from "../../components/ArrowBack"
 import {observer} from "mobx-react-lite"
-import AuthStore, {AddressType} from "../../store/AuthStore/auth-store"
+import AuthStore, {AddressType, fullAddressType} from "../../store/AuthStore/auth-store"
 import {getFormattedAddress} from "../../components/MapViews/utils"
 import {createAlert} from "../../components/Alert"
 import {usePermissionsPushGeo} from "../../utils/hook/usePermissionsPushGeo"
 import {color} from "native-base/lib/typescript/theme/styled-system"
+import Link from "../../components/Link"
 
 export type CountryData = {
 	callingCode: string[]
@@ -64,14 +65,15 @@ const RegisterS = observer(({navigation}: LoginSProps) => {
 	const [checkAge, setAgeCheck] = useState(false)
 	const [isErrorCheckAge, setCheckError] = useState(false)
 	const [countryCode, setCountryCode] = useState<CountryData>(countryDataDefault)
-	const {askLocationPermissionHandler} = usePermissionsPushGeo()
 	const onSubmit = (values: UserRegisterDataType) => {
 		if (!checkAge) {
 			setCheckError(true)
 			setSubmitting(false)
 			return
 		}
-		if (!currentLocation?.location?.coordinates[0]) {
+
+		if ((!currentLocation?.fullAddress?.country && !currentLocation?.fullAddress?.city)
+			|| !currentLocation?.location.coordinates[0]) {
 			createAlert({
 				title: "Message",
 				message: "Enter a location",
@@ -82,16 +84,16 @@ const RegisterS = observer(({navigation}: LoginSProps) => {
 		}
 		const formattedPhoneNumber = `+${countryCode.callingCode[0]}${values.phone}`
 		AuthStoreService.registration({
-			...values,
-			role: RoleType.Customer,
-			email: values.email.trim(),
-			phone: formattedPhoneNumber,
-			address: currentLocation,
-		}).then((data) => {
-			if(data) {
-				navigation.navigate(routerConstants.MAIN)
-			}
-		})
+      ...values,
+      role: RoleType.Customer,
+      email: values.email.trim(),
+      phone: formattedPhoneNumber,
+      address: currentLocation,
+    }).then((data) => {
+      if(data) {
+        navigation.navigate(routerConstants.MAIN)
+      }
+    })
 		setSubmitting(false)
 	}
 	const {
@@ -131,24 +133,29 @@ const RegisterS = observer(({navigation}: LoginSProps) => {
 			if (!values.firstName.trim()) {
 				errors["firstName"] = true
 			}
+			if (!values.lastName.trim()) {
+				errors["lastName"] = true
+			}
+			if (values.phone.length <= 3) {
+				errors["phone"] = true
+			}
 			if (values.password !== values.confirmPassword) {
 				errors["confirmPassword"] = true
 			}
+
 			return errors
 		},
 	})
-
-	const onValidNumberHandler = (isValidNumber: boolean) => {
-	}
 	const onPressGoBack = () => {
 		navigation.goBack()
 	}
 	const disabledBtnSignUp =
 		!!(errors.email && !validateEmail(values.email.trim())) ||
-		!!(errors.phone && !values.phone) ||
 		!!(errors.firstName && !values.firstName.trim()) ||
+		!!(errors.lastName && !values.lastName.trim()) ||
 		!!(errors.password && values.password.length <= 5) ||
 		!!(errors.confirmPassword && !values.confirmPassword) ||
+		!!(errors.phone && values.phone.length <= 3) ||
 		isSubmitting
 
 	const onPressNavigateToLocation = async () => {
@@ -160,6 +167,19 @@ const RegisterS = observer(({navigation}: LoginSProps) => {
 	const onChangeCountry = (country) => {
 		setCountryCode(country)
 	}
+	const onChangeTextAddress = (text: string, key: keyof fullAddressType) => {
+		if(text?.length > 10) return
+		setLocation({
+			...currentLocation,
+			fullAddress: {...currentLocation?.fullAddress, [key]: text},
+		})
+	}
+	const onPressOpenLegalNotice = () => {
+		Linking.openURL(
+			"https://docs.google.com/document/d/e/2PACX-1vT1f6tmdyx4tiXcwLdHDoZcTvtquB0jF__AFWFb1QuYYG7ERhqwaejgTa-VLYU7dE55LMs8KASbt8tl/pub"
+		)
+	}
+	console.log(currentLocation);
 	return (
 		<BaseWrapperComponent isKeyboardAwareScrollView={true}>
 			<Box alignItems={"center"}>
@@ -176,7 +196,7 @@ const RegisterS = observer(({navigation}: LoginSProps) => {
 						value={values.firstName}
 						onBlur={handleBlur("firstName")}
 						errorMessage={!values.firstName.trim() && "Enter a name"}
-						isInvalid={!!(errors.email && !validateEmail(values.email.trim()))}
+						isInvalid={!!(errors.firstName && !values.firstName.trim())}
 						isRequired={true}
 						borderRadius={16}
 						iconRight={<AntDesign name="user" size={24} color={colors.gray} />}
@@ -185,11 +205,11 @@ const RegisterS = observer(({navigation}: LoginSProps) => {
 
 					<CustomInput
 						onChangeText={handleChange("lastName")}
-						placeholder={"Last name"}
+						placeholder={"Last name*"}
 						value={values.lastName}
 						onBlur={handleBlur("lastName")}
-						errorMessage={!values.firstName.trim() && "Enter a name"}
-						isInvalid={!!(errors.email && !validateEmail(values.email.trim()))}
+						errorMessage={!values.lastName.trim() && "Enter a name"}
+						isInvalid={!!(errors.lastName && !values.lastName.trim())}
 						isRequired={true}
 						borderRadius={16}
 						iconRight={<AntDesign name="user" size={24} color={colors.gray} />}
@@ -216,10 +236,9 @@ const RegisterS = observer(({navigation}: LoginSProps) => {
 					/>
 					<Box mt={2}>
 						<PhoneNumberField
-							onValidNumber={onValidNumberHandler}
 							onChangeCountry={onChangeCountry}
 							errorMessage={"Incorrect phone number"}
-							isInvalid={false}
+							isInvalid={!!(errors.phone && values.phone.length <= 3)}
 							isRequired={true}
 							defaultValue={values.phone}
 							onChangeText={handleChange("phone")}
@@ -276,21 +295,15 @@ const RegisterS = observer(({navigation}: LoginSProps) => {
 					)}
 				</Box>
 				<Box w={"100%"} flex={1} alignItems={"flex-start"}>
-					<TextInput
-						placeholder={"Enter apartment"}
-						style={styles.input}
-						keyboardType="numeric"
-						value={currentLocation?.fullAddress?.apartment}
-						onChangeText={(text) => {
-							if (text?.length > 5) {
-								return
-							}
-							setLocation({
-								...currentLocation,
-								fullAddress: {...currentLocation?.fullAddress, apartment: text},
-							})
-						}}
-					/>
+					<Box mt={2} w={"100%"}>
+						<TextInput
+							placeholder={"Enter apartment"}
+							style={styles.input}
+							keyboardType="numeric"
+							value={currentLocation?.fullAddress?.apartment}
+							onChangeText={(text) => onChangeTextAddress(text, "apartment")}
+						/>
+					</Box>
 				</Box>
 				<Box mt={5} w={"100%"} alignItems={"flex-start"}>
 					<TouchableOpacity>
@@ -304,15 +317,21 @@ const RegisterS = observer(({navigation}: LoginSProps) => {
 								}}
 								colorScheme="info"
 							/>
-							<Text fontSize={14} fontWeight={"500"} ml={1}>
-								I'm over 20 years old.
-								https://docs.google.com/document/d/1s3-ieSgE-B0YvymMibCKNX1pwiueQcQgNn8X7baYjP4/edit
-							</Text>
+							<Box flexDirection={"row"} justifyContent={"flex-start"} alignItems={"center"}>
+								<Text fontSize={13} alignItems={"center"} ml={1} mr={1}>
+									I agree with
+								</Text>
+								<Link
+									onPress={onPressOpenLegalNotice}
+									styleText={{color: colors.green, fontWeight: "500"}}
+									text={"Legal Notice"}
+								/>
+							</Box>
 						</Box>
 					</TouchableOpacity>
 					{isErrorCheckAge && (
 						<Text fontSize={14} color={colors.red} fontWeight={"500"} ml={1}>
-							You must be at least 20 years old
+							You must confirm the Legal Notice
 						</Text>
 					)}
 				</Box>
@@ -349,4 +368,4 @@ const styles = StyleSheet.create({
 	},
 })
 
-export default RegisterS
+export default RegisterS;

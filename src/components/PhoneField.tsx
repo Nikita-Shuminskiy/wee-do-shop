@@ -16,7 +16,7 @@ const PhoneNumberField: React.FC<PhoneNumberFieldProps> = ({ isRequired, isInval
 	const phoneInput = useRef<PhoneInput>(null)
 	const onChangeTextHandler = (text) => {
 		onChangeText(text)
-		onValidNumber(phoneInput.current?.isValidNumber(text))
+		onValidNumber?.(phoneInput.current?.isValidNumber(text))
 	}
 	return (
 		<Box w={'100%'}>
@@ -39,7 +39,7 @@ const PhoneNumberField: React.FC<PhoneNumberFieldProps> = ({ isRequired, isInval
 					codeTextStyle={{ color: colors.gray, height: 23, fontSize: 16 }}
 					textInputStyle={{ color: colors.gray, fontSize: 16 }}
 					defaultCode={'TH'}
-					placeholder={'Phone'}
+					placeholder={'Phone*'}
 					layout='first'
 					onChangeText={onChangeTextHandler}
 					{...rest}

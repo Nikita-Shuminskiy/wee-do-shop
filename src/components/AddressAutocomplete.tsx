@@ -33,9 +33,6 @@ const AddressAutocomplete = ({onSave}: AddressAutocompleteProps) => {
                 }
 
             }}
-            onNotFound={() => {
-                console.log('not found')
-            }}
             debounce={200}
             query={{
                 key: 'AIzaSyCDu3dMvEFIDgw_uqJWabVuauq0JVsu3NI',

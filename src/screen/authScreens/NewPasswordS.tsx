@@ -37,9 +37,6 @@ const NewPasswordS = observer(({ navigation }: NewPasswordSProps) => {
 					navigation.navigate(routerConstants.LOGIN)
 				}
 			})
-			.catch((data) => {
-				console.log(data.response.data)
-			})
 			.finally(() => {
 				setIsLoading(LoadingEnum.success)
 			})

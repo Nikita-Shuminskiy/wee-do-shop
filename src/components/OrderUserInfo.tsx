@@ -12,7 +12,7 @@ type OrderUserInfoProps = {
 	order: OrderCourierType
 }
 const OrderUserInfo = ({ show, onClose, order }: OrderUserInfoProps) => {
-	const productTotalPrice = formatProductPrice(order.totalPrice)
+	const productTotalPrice = formatProductPrice(order?.totalPrice)
 
 	return (
 		<ModalPopup visible={show} onClose={onClose}>
@@ -34,11 +34,11 @@ const OrderUserInfo = ({ show, onClose, order }: OrderUserInfoProps) => {
 					<Text fontSize={22} fontWeight={'600'}>
 						Client address
 					</Text>
-					<Text fontSize={15}>Country: {order.user.address.fullAddress.country}</Text>
-					<Text fontSize={15}>City: {order.user.address.fullAddress.city}</Text>
-					<Text fontSize={15}>Street: {order.user.address.fullAddress.street}</Text>
-					<Text fontSize={15}>House: {order.user.address.fullAddress.house}</Text>
-					<Text fontSize={15}>Apartment: {order.user.address.fullAddress.apartment}</Text>
+					<Text fontSize={15}>Country: {order?.user?.address?.fullAddress?.country}</Text>
+					<Text fontSize={15}>City: {order?.user?.address?.fullAddress?.city}</Text>
+					<Text fontSize={15}>Street: {order?.user?.address?.fullAddress?.street}</Text>
+					<Text fontSize={15}>House: {order?.user?.address?.fullAddress?.house}</Text>
+					<Text fontSize={15}>Apartment: {order?.user?.address?.fullAddress?.apartment}</Text>
 				</Box>
 				{order.products.map((product, id) => {
 					// тут нету sub category - category

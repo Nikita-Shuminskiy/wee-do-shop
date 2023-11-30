@@ -29,7 +29,7 @@ export const getInfoAddressForCoords = async ({ latitude, longitude }) => {
 				street ?? ''
 			} ${streetNumber ?? ''} ${region ?? ''}`
 			return {
-				formatted_address,
+				formatted_address: formatted_address ?? '',
 				country: country ?? region,
 				city: city ? city : region ? region : district ? district : '',
 				street: street ?? district,
@@ -42,7 +42,6 @@ export const getInfoAddressForCoords = async ({ latitude, longitude }) => {
 	}
 }
 export const getFormattedAddress = (currentLocation: AddressType) => {
-	console.log(currentLocation);
 	const fullAddress = currentLocation?.fullAddress
 	return `${fullAddress?.city ?? ''} ${fullAddress?.street ?? ''} ${fullAddress?.house ?? ''} ${
 		fullAddress?.apartment ?? ''
