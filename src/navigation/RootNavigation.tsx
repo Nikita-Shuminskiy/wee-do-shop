@@ -10,7 +10,6 @@ import {createNativeStackNavigator} from "@react-navigation/native-stack"
 import RegisterS from "../screen/authScreens/RegisterS"
 import rootStore from "../store/RootStore"
 import AllowLocationS from "../screen/authScreens/AllowLocationS"
-import GoogleAutocompleteMapS from "../screen/authScreens/GoogleAutocompleteMapS"
 import MainNavigation from "./MainNavigation"
 import StoreS from "../screen/mainScreens/StoreS"
 import FavoriteS from "../screen/mainScreens/FavoriteS"
@@ -18,7 +17,6 @@ import UserProfileS from "../screen/mainScreens/UserProfileS"
 import OrderStatusesS from "../screen/mainScreens/OrderStatusesS"
 import OrdersS from "../screen/mainScreens/OrdersS"
 import AddressS from "../screen/mainScreens/AddressS"
-import {RoleType} from "../api/authApi"
 import CourierPickOrder from "../screen/courierScreens/CourierPickOrder"
 import PrivacyPolicyS from "../screen/commonScreens/PrivacyPolicyS"
 import TermServiceS from "../screen/commonScreens/TermServiceS"
@@ -33,6 +31,7 @@ import ForgotPasswordS from "../screen/authScreens/ForgotPasswordS"
 import NewPasswordS from "../screen/authScreens/NewPasswordS"
 import * as Updates from "expo-updates"
 import {useBackgroundTime} from "../utils/hook/useBackgroundTime"
+import {MapViews} from "../components/MapViews/MapViews"
 
 const RootStack = createNativeStackNavigator()
 
@@ -150,7 +149,7 @@ const RootNavigation = observer(() => {
 				<RootStack.Screen
 					options={{headerShown: false}}
 					name={routerConstants.AUTOCOMPLETE_MAP}
-					component={GoogleAutocompleteMapS}
+					component={MapViews}
 				/>
 
 				<RootStack.Screen

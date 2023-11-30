@@ -16,6 +16,7 @@ export const allowLocation = async () => {
 }
 export const getInfoAddressForCoords = async ({ latitude, longitude }) => {
 	try {
+		await Location.requestForegroundPermissionsAsync();
 		const reverseGeocode = await Location.reverseGeocodeAsync({
 			latitude,
 			longitude,
@@ -41,6 +42,7 @@ export const getInfoAddressForCoords = async ({ latitude, longitude }) => {
 	}
 }
 export const getFormattedAddress = (currentLocation: AddressType) => {
+	console.log(currentLocation);
 	const fullAddress = currentLocation?.fullAddress
 	return `${fullAddress?.city ?? ''} ${fullAddress?.street ?? ''} ${fullAddress?.house ?? ''} ${
 		fullAddress?.apartment ?? ''

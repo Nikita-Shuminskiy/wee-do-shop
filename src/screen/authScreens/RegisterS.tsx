@@ -61,7 +61,6 @@ export type UserRegisterDataType = {
 const RegisterS = observer(({navigation}: LoginSProps) => {
 	const {AuthStoreService} = rootStore
 	const {currentLocation, setLocation} = AuthStore
-	const [isValidPhone, setIsValidPhone] = useState(false)
 	const [checkAge, setAgeCheck] = useState(false)
 	const [isErrorCheckAge, setCheckError] = useState(false)
 	const [countryCode, setCountryCode] = useState<CountryData>(countryDataDefault)
@@ -93,7 +92,6 @@ const RegisterS = observer(({navigation}: LoginSProps) => {
 				navigation.navigate(routerConstants.MAIN)
 			}
 		})
-		setIsValidPhone(true)
 		setSubmitting(false)
 	}
 	const {
@@ -141,7 +139,6 @@ const RegisterS = observer(({navigation}: LoginSProps) => {
 	})
 
 	const onValidNumberHandler = (isValidNumber: boolean) => {
-		setIsValidPhone(isValidNumber)
 	}
 	const onPressGoBack = () => {
 		navigation.goBack()
@@ -153,7 +150,7 @@ const RegisterS = observer(({navigation}: LoginSProps) => {
 		!!(errors.password && values.password.length <= 5) ||
 		!!(errors.confirmPassword && !values.confirmPassword) ||
 		isSubmitting
-	/*!!(!isValidPhone && touched.phone)*/
+
 	const onPressNavigateToLocation = async () => {
 		//	await Linking.openSettings()
 		navigation.navigate(routerConstants.AUTOCOMPLETE_MAP)
@@ -161,7 +158,6 @@ const RegisterS = observer(({navigation}: LoginSProps) => {
 
 	const formatted_address = getFormattedAddress(currentLocation)
 	const onChangeCountry = (country) => {
-		setIsValidPhone(true)
 		setCountryCode(country)
 	}
 	return (
@@ -223,7 +219,7 @@ const RegisterS = observer(({navigation}: LoginSProps) => {
 							onValidNumber={onValidNumberHandler}
 							onChangeCountry={onChangeCountry}
 							errorMessage={"Incorrect phone number"}
-							isInvalid={!!(!isValidPhone && touched.phone)}
+							isInvalid={false}
 							isRequired={true}
 							defaultValue={values.phone}
 							onChangeText={handleChange("phone")}
@@ -286,7 +282,7 @@ const RegisterS = observer(({navigation}: LoginSProps) => {
 						keyboardType="numeric"
 						value={currentLocation?.fullAddress?.apartment}
 						onChangeText={(text) => {
-							if (text.length > 5) {
+							if (text?.length > 5) {
 								return
 							}
 							setLocation({
@@ -310,6 +306,7 @@ const RegisterS = observer(({navigation}: LoginSProps) => {
 							/>
 							<Text fontSize={14} fontWeight={"500"} ml={1}>
 								I'm over 20 years old.
+								https://docs.google.com/document/d/1s3-ieSgE-B0YvymMibCKNX1pwiueQcQgNn8X7baYjP4/edit
 							</Text>
 						</Box>
 					</TouchableOpacity>

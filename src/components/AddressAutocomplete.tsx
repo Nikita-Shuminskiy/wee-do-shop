@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet} from 'react-native';
+import { ImageStyle, StyleProp, StyleSheet, TextStyle, ViewStyle } from "react-native";
 import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
 import search from '../assets/images/search.png'
 import {Image} from "native-base";
@@ -44,14 +44,11 @@ const AddressAutocomplete = ({onSave}: AddressAutocompleteProps) => {
         />
     );
 };
-
 const styles = StyleSheet.create({
-    row: {
-        backgroundColor: 'transparent',
-    },
     textInputContainer:{
         padding: 10,
-        backgroundColor: colors.blueLight,
+        marginBottom: 3,
+        backgroundColor: colors.white,
         alignItems: 'center',
         justifyContent: 'center',
         borderRadius: 16,
@@ -62,31 +59,16 @@ const styles = StyleSheet.create({
     textInput: {
         marginTop: 5,
         height: 50,
-        color: colors.gray,
+        color: colors.black,
         fontSize: 16,
-        backgroundColor: 'transparent',
-        zIndex:999,
-    },
-    predefinedPlacesDescription: {
-        color: colors.gray,
-        backgroundColor:"transparent",
     },
     listView:{
         color: 'black',
-        backgroundColor:"transparent",
         width:'89%',
     },
-    separator:{
-        flex: 1,
-        height: StyleSheet.hairlineWidth,
-        backgroundColor: 'transparent',
-    },
     description:{
-        flexDirection:"row",
-        flexWrap:"wrap",
-        fontSize:18,
+        fontSize:15,
         fontWeight: '500',
-        maxWidth:'89%',
     },
 })
 export default AddressAutocomplete;

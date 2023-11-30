@@ -5,7 +5,7 @@ import {Box, Text} from "native-base"
 import arrowLeft from "../../assets/images/arrow-left-back.png"
 import myLocationImg from "../../assets/images/myLocation.png"
 import ArrowBack from "../ArrowBack"
-import {AutoCompleteDataType} from "../AddressAutocomplete"
+import AddressAutocomplete, {AutoCompleteDataType} from "../AddressAutocomplete"
 import Button from "../Button"
 import {colors} from "../../assets/colors/colors"
 import * as Location from "expo-location"
@@ -16,45 +16,47 @@ import NotificationStore from "../../store/NotificationStore/notification-store"
 import {LoadingEnum} from "../../store/types/types"
 import {allowLocation, getInfoAddressForCoords} from "./utils"
 import {fullAddressType} from "../../store/AuthStore/auth-store"
+import {BaseWrapperComponent} from "../baseWrapperComponent"
+import { da } from "date-fns/locale";
 
-type MapViewsProps = {
-	currentDataMap: AutoCompleteDataType
-	visible: boolean
-	from: "edit" | "register"
-	close: () => void
-}
-export const MapViews = ({visible, close, currentDataMap, from}: MapViewsProps) => {
-	const {setLocation} = AuthStore
-	const navigation = useNavigation<any>()
-	const [mapInteractionEnabled, setMapInteractionEnabled] = useState(true)
-	const onPressGoBack = () => {
-		close()
+type CoordinatesType = {latitude: number; longitude: number}
+const getCurrentInfo = async (location) => {
+	if (!location) return
+	const {latitude, longitude} = location
+	const data = await getInfoAddressForCoords({latitude, longitude})
+	return {
+		city: data?.city,
+		country: data?.country,
+		postalCode: data?.postalCode,
+		street: data?.street,
+		house: data?.house,
 	}
-	const [myLocation, setMyLocation] = useState<{latitude: number; longitude: number}>(
-		currentDataMap?.location
-	)
-	const [address, setAddress] = useState(null)
+}
+type MapViewsProps = {
+	navigation: any
+}
+export const MapViews = ({navigation}: MapViewsProps) => {
+	const {setLocation} = AuthStore
+	const [mapInteractionEnabled, setMapInteractionEnabled] = useState(true)
+	const [myLocation, setMyLocation] = useState<{latitude: number; longitude: number} | null>(null)
 	const [mapRef, setMapRef] = useState(null)
 	const [fullInfo, setFullInfo] = useState<fullAddressType>(null)
-
-	const getCurrentInfo = async () => {
-		const {latitude, longitude} = currentDataMap?.location
-		const {formatted_address, ...rest} = await getInfoAddressForCoords({latitude, longitude})
-		return {
-			formatted_address,
-			...rest,
-		}
+	const onPressGoBack = () => {
+		navigation.goBack()
 	}
 	useEffect(() => {
-		setAddress(currentDataMap?.address)
-		getCurrentInfo().then((data) => {
-			const {formatted_address, ...rest} = data
-			setFullInfo({...rest})
-		})
-	}, [])
-
-	const getCurrentPositionHandler = async (event) => {
-		event.stopPropagation()
+		getCurrentPositionHandler()
+	}, []);
+	useEffect(() => {
+		if (mapRef && myLocation?.latitude) {
+			mapRef.fitToCoordinates([{latitude: myLocation.latitude, longitude: myLocation.longitude}], {
+				edgePadding: {top: 50, right: 50, bottom: 50, left: 50},
+				animated: true,
+			})
+		}
+	}, [myLocation])
+	const getCurrentPositionHandler = async (event?: any) => {
+		event?.stopPropagation()
 		setMapInteractionEnabled(false) // Отключаем взаимодействие с картой
 		try {
 			const status = await allowLocation()
@@ -63,21 +65,12 @@ export const MapViews = ({visible, close, currentDataMap, from}: MapViewsProps) 
 					accuracy: Location.Accuracy.BestForNavigation,
 				})
 				const {latitude, longitude} = currentLocation.coords
+				setMyLocation({latitude, longitude})
 				const {formatted_address, ...rest} = await getInfoAddressForCoords({
 					latitude,
 					longitude,
 				})
-				setAddress({formatted_address})
-				setMyLocation({latitude, longitude})
 				setFullInfo({...rest})
-				if (mapRef) {
-					mapRef.animateToRegion({
-						latitude,
-						longitude,
-						latitudeDelta: 0.0922,
-						longitudeDelta: 0.0421,
-					})
-				}
 			}
 		} catch (e) {
 			console.log("err", e)
@@ -89,11 +82,11 @@ export const MapViews = ({visible, close, currentDataMap, from}: MapViewsProps) 
 		if (!mapInteractionEnabled) return
 		const {latitude, longitude} = event.nativeEvent.coordinate
 		const {formatted_address, ...rest} = await getInfoAddressForCoords({latitude, longitude})
-		setAddress({formatted_address})
 		setFullInfo({...rest})
 		setMyLocation({latitude, longitude})
 	}
 	const onPressSaveLocationHandler = () => {
+		if (!myLocation?.longitude) return
 		setLocation({
 			fullAddress: {...fullInfo},
 			location: {
@@ -101,32 +94,29 @@ export const MapViews = ({visible, close, currentDataMap, from}: MapViewsProps) 
 				coordinates: [myLocation.longitude, myLocation.latitude],
 			},
 		})
-		if (from === "edit") {
-			return onPressGoBack()
-		}
-		navigation.navigate(routerConstants.REGISTRATION)
+		onPressGoBack()
 	}
 	const initialRegion = {
-		latitude: myLocation?.latitude,
-		longitude: myLocation?.longitude,
+		latitude: 7.816786999999999,
+		longitude: 98.3403676,
 		latitudeDelta: 12,
 		longitudeDelta: 2,
 	}
+	const onSaveAutoCompleteHandler = async (data: AutoCompleteDataType) => {
+		setMyLocation(data.location)
+		getCurrentInfo(data?.location).then((data) => {
+			setFullInfo({
+				city: data?.city,
+				country: data?.country,
+				postalCode: data?.postalCode,
+				street: data?.street,
+				house: data?.house,
+			})
+		})
+	}
 	return (
-		<Modal visible={visible}>
-			<Box style={styles.container}>
-				<Box
-					zIndex={10}
-					position={"absolute"}
-					top={50}
-					justifyContent={"center"}
-					flex={1}
-					w={"100%"}
-				>
-					<Text textAlign={"center"} fontSize={24} fontWeight={"500"}>
-						{address?.formatted_address}
-					</Text>
-				</Box>
+		<BaseWrapperComponent>
+			<Box flex={1}>
 				<Box
 					mt={5}
 					zIndex={10}
@@ -138,6 +128,9 @@ export const MapViews = ({visible, close, currentDataMap, from}: MapViewsProps) 
 					<ArrowBack goBackPress={onPressGoBack} img={arrowLeft} />
 				</Box>
 
+				<Box alignItems={"center"} position={"absolute"} style={{top: "10%"}} zIndex={2} w={"100%"}>
+					<AddressAutocomplete onSave={onSaveAutoCompleteHandler} />
+				</Box>
 				<MapView
 					ref={(ref) => setMapRef(ref)}
 					style={styles.map}
@@ -151,17 +144,17 @@ export const MapViews = ({visible, close, currentDataMap, from}: MapViewsProps) 
 								latitude: myLocation?.latitude,
 								longitude: myLocation?.longitude,
 							}}
-							title={address?.formatted_address}
+							title={""}
 						/>
 					)}
 				</MapView>
 				<Box mt={5} zIndex={10} position={"absolute"} w={"100%"} bottom={5}>
 					<Box zIndex={100} position={"absolute"} bottom={100} right={0}>
 						<TouchableOpacity style={{pointerEvents: "auto"}} onPress={getCurrentPositionHandler}>
-							<Image style={{width: 120, height: 120}} source={myLocationImg} alt={"my-location"} />
+							<Image style={{width: 80, height: 80}} source={myLocationImg} alt={"my-location"} />
 						</TouchableOpacity>
 					</Box>
-					<Box w={"100%"} mt={5} flex={1}>
+					<Box w={"100%"} mb={3} flex={1}>
 						<Button
 							backgroundColor={colors.green}
 							styleContainer={styles.styleContainerBtn}
@@ -171,7 +164,7 @@ export const MapViews = ({visible, close, currentDataMap, from}: MapViewsProps) 
 					</Box>
 				</Box>
 			</Box>
-		</Modal>
+		</BaseWrapperComponent>
 	)
 }
 
@@ -183,9 +176,6 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 		marginRight: 10,
 		marginLeft: 10,
-	},
-	container: {
-		flex: 1,
 	},
 	map: {
 		width: "100%",

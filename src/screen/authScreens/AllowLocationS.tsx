@@ -20,7 +20,7 @@ const AllowLocationS = ({ navigation }) => {
 	const onPressEnterLocation = async () => {
 		await allowLocation().then((data) => {
 			if (data === 'granted') {
-				navigation.navigate(routerConstants.AUTOCOMPLETE_MAP)
+			//	navigation.navigate(routerConstants.AUTOCOMPLETE_MAP)
 			}
 		})
 	}
