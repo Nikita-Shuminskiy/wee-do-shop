@@ -28,12 +28,15 @@ type DataType = {
 const UpdateUserS = ({ navigation }: UpdateUserSProps) => {
 	const { user } = AuthStore
 	const { AuthStoreService } = rootStore
-	const [isValidPhone, setIsValidPhone] = useState(true)
 	const [countryCode, setCountryCode] = useState<CountryData>(countryDataDefault)
-
+	const onPressGoBack = () => {
+		navigation.goBack()
+	}
 	const onSubmit = (values: DataType) => {
-		if (!isValidPhone && values.phone) return
-
+		if(values?.phone?.length <= 3 && touched.phone) {
+			setFieldError('phone', 'true')
+			return
+		}
 		const formattedPhoneNumber = `+${countryCode.callingCode[0]}${values.phone}`
 		const dataToSend: OptionalUserType = {}
 		if (values.firstName && values.firstName !== '') {
@@ -48,17 +51,14 @@ const UpdateUserS = ({ navigation }: UpdateUserSProps) => {
 		if (values.phone && values.phone !== '') {
 			dataToSend.phone = formattedPhoneNumber
 		}
+
 		AuthStoreService.updateUser(user._id, dataToSend).then((data) => {
 			if (data) {
 				navigation.goBack()
 			}
 		})
 	}
-	const onPressGoBack = () => {
-		navigation.goBack()
-	}
-
-	const { handleChange, handleBlur, touched, handleSubmit, values, errors, setTouched } = useFormik(
+	const { handleChange, setFieldError, handleBlur, touched, handleSubmit, values, errors, setTouched } = useFormik(
 		{
 			initialValues: {
 				email: user.email,
@@ -73,7 +73,6 @@ const UpdateUserS = ({ navigation }: UpdateUserSProps) => {
 			validateOnBlur: false,
 			validate: (values) => {
 				const errors = {}
-
 				if (values.phone === '') {
 					setTouched({ phone: false })
 				}
@@ -85,17 +84,14 @@ const UpdateUserS = ({ navigation }: UpdateUserSProps) => {
 		}
 	)
 
-	const onValidNumberHandler = (isValidNumber: boolean) => {
-		setIsValidPhone(isValidNumber)
-	}
 	const onChangeCountry = (country) => {
-		setIsValidPhone(true)
 		setCountryCode(country)
 	}
 
 	const disabledBtnSignUp =
 		!!(errors.email && !validateEmail(values.email.trim())) ||
-		!!(touched.phone && !isValidPhone && values.phone !== '')
+		!!(touched.phone && values.phone.length <=3)
+	console.log(disabledBtnSignUp);
 	return (
 		<BaseWrapperComponent isKeyboardAwareScrollView={true}>
 			<Box paddingX={4} mt={2}>
@@ -121,13 +117,12 @@ const UpdateUserS = ({ navigation }: UpdateUserSProps) => {
 					</Box>
 					<Box mt={3}>
 						<Text mb={1} color={colors.gray} fontWeight={'500'}>
-							Current phone: <Text color={colors.blue}>{user.phone}</Text>
+							Current phone: <Text color={colors.blue}>{user?.phone}</Text>
 						</Text>
 						<PhoneNumberField
-							onValidNumber={onValidNumberHandler}
 							onChangeCountry={onChangeCountry}
 							errorMessage={'Incorrect phone number'}
-							isInvalid={touched.phone && !isValidPhone && values.phone !== ''}
+							isInvalid={(touched.phone && errors.phone) && values?.phone?.length <= 3}
 							isRequired={false}
 							defaultValue={values.phone}
 							onChangeText={handleChange('phone')}
