@@ -91,7 +91,7 @@ const UpdateUserS = ({ navigation }: UpdateUserSProps) => {
 	const disabledBtnSignUp =
 		!!(errors.email && !validateEmail(values.email.trim())) ||
 		!!(touched.phone && values.phone.length <=3)
-	console.log(disabledBtnSignUp);
+
 	return (
 		<BaseWrapperComponent isKeyboardAwareScrollView={true}>
 			<Box paddingX={4} mt={2}>

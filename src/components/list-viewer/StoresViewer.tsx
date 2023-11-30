@@ -8,13 +8,13 @@ import {StoreType} from "../../api/storesApi"
 import ImageDisplay from "../ImageDisplay"
 import DeliveryTime from "../DeliveryTime"
 import {getCurrentDayName, isCurrentTimeWorkStoreRange} from "../../utils/utils"
-import lockImg from "../../assets/images/lock.png"
+
 
 type StoresViewerType = {
 	stores: StoreType
 	isFavorite: boolean
 	isAuth: boolean
-	onPress: (store: StoreType, checkISLegalStore: boolean) => void
+	onPress: (store: StoreType) => void
 	onPressToggleFavoriteStore: (id: string) => void
 }
 
@@ -28,10 +28,9 @@ const StoresViewer = memo(
 		const onPressFavoriteStore = () => {
 			onPressToggleFavoriteStore(stores._id)
 		}
-		const checkISLegalStore = true
 		return (
 			<TouchableOpacity
-				onPress={() => onPress(stores, checkISLegalStore)}
+				onPress={() => onPress(stores)}
 				style={{
 					flex: 1,
 					borderRadius: 16,
@@ -48,21 +47,6 @@ const StoresViewer = memo(
 					justifyContent={"space-between"}
 					borderColor={colors.green}
 				>
-					{/*	{checkISLegalStore && (
-						<Box
-							position={"absolute"}
-							zIndex={2}
-							borderRadius={16}
-							backgroundColor={colors.grayLight}
-							opacity={0.7}
-							alignItems={'center'}
-							justifyContent={'center'}
-							w={"100%"}
-							h={"100%"}
-						>
-							<Image source={lockImg} />
-						</Box>
-					)}*/}
 					<Box>
 						<Box position={"absolute"} top={2} left={2} zIndex={10}>
 							<DeliveryTime time={stores?.deliveryTime} fontSizeText={13} />

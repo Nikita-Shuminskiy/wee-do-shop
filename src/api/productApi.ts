@@ -21,6 +21,7 @@ type ProductsResType = {
 }
 export type ProductType = {
 	isDeleted?: boolean
+	isNeedAuth: boolean,
 	_id: string
 	name: string
 	description: string

@@ -76,7 +76,7 @@ const HomeS = observer(({navigation, route}: HomeSProps) => {
 		({item}: {item: StoreType}) => {
 			return (
 				<StoresViewer
-					isFavorite={favoritesStores.some((storeId) => storeId === item._id)}
+					isFavorite={favoritesStores?.some((storeId) => storeId === item._id)}
 					isAuth={isAuth}
 					onPressToggleFavoriteStore={onPressToggleFavoriteStore}
 					onPress={onPress}
@@ -88,7 +88,7 @@ const HomeS = observer(({navigation, route}: HomeSProps) => {
 	)
 	const getFavoriteStores = () => {
 		StoresService.getFavoriteStores().then((data) => {
-			setFavoritesStores(data.map((el) => el._id))
+			setFavoritesStores(data?.map((el) => el._id))
 		})
 	}
 
@@ -150,7 +150,7 @@ const HomeS = observer(({navigation, route}: HomeSProps) => {
 							showsHorizontalScrollIndicator={false}
 							contentContainerStyle={{flexGrow: 1, flexDirection: "row"}}
 						>
-							{categories.map((el) => {
+							{categories?.map((el) => {
 								return (
 									<SubCategoriesViewer
 										key={el._id}

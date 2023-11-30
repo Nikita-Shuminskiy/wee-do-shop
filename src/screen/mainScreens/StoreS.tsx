@@ -131,6 +131,7 @@ const StoreS = observer(({navigation}: StoreSProps) => {
 			)
 			return (
 				<ProductViewer
+					isAuth={isAuth}
 					currentCartProductAmount={currentCartProduct?.amount}
 					key={item?._id}
 					saveProductToCart={saveProductToCart}
