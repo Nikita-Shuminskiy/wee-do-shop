@@ -36,7 +36,11 @@ export class AuthStore {
 	}
 	currentLocation: AddressType = {} as AddressType
 	banners: BannersType[] = [] as BannersType[]
-
+	setClearAuthStoreData = () => {
+		this.isAuth = false
+		this.currentLocation = {} as AddressType
+		this.user = {} as UserType
+	}
 	setUser(userData: UserType): void {
 		this.user = userData
 		this.setAuth(true)
@@ -130,6 +134,10 @@ export class AuthStore {
 			[key]: value,
 		}
 	}
+	deleteUser = async () => {
+		const { data } = await userApi.deleteUser(this.user._id)
+		return data
+	}
 	constructor() {
 		makeObservable(this, {
 			user: observable,
@@ -148,8 +156,10 @@ export class AuthStore {
 			setAuth: action,
 			getMe: action,
 			login: action,
+			deleteUser: action,
 			updateUser: action,
 			getBanners: action,
+			setClearAuthStoreData: action,
 			checkVerificationCode: action,
 		})
 		this.setAuth = this.setAuth.bind(this)

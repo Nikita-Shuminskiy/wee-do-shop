@@ -17,9 +17,11 @@ import logoutImg from '../../assets/images/courierImages/Log-out.png'
 import myOrdersImg from '../../assets/images/courierImages/my-orders.png'
 import arrowRightImg from '../../assets/images/courierImages/arrow-right.png'
 import locationImg from '../../assets/images/location.png'
+import deleleImg from '../../assets/images/delete.png'
 import { StatusType } from '../../api/ordersApi'
 import rootStore from '../../store/RootStore/root-store'
 import OrderStore from '../../store/OrderStore/order-store'
+import { createAlert } from "../../components/Alert";
 
 type UserProfileSProps = {
 	navigation: NavigationProp<ParamListBase>
@@ -32,7 +34,7 @@ const UserProfileS = observer(({ navigation }: UserProfileSProps) => {
 	const onPressGoBack = () => {
 		navigation.navigate(routerConstants.HOME)
 	}
-	const onPressLogOutHandler =()=> {
+	const onPressLogOutHandler = ()=> {
 		navigation.navigate(routerConstants.LOGIN)
 		AuthStoreService.logOut()
 	}
@@ -50,6 +52,18 @@ const UserProfileS = observer(({ navigation }: UserProfileSProps) => {
 	}
 	const onPressTermOfUse = () => {
 		navigation.navigate(routerConstants.TERM_SERVICE)
+	}
+	const onPressDeleteUser = () => {
+		const onPressDelete = () => {
+			navigation.navigate(routerConstants.LOGIN)
+			AuthStoreService.deleteUser()
+		}
+		createAlert({
+			title: 'Message',
+			message: "Do you really want to delete the account? The data will be lost forever.",
+			buttons: [{ text: 'Exit', style: 'default' },{ text: 'Delete', style: 'default', onPress:  onPressDelete}],
+		})
+
 	}
 	useEffect(() => {
 		OrderService.getOrders({
@@ -221,6 +235,19 @@ const UserProfileS = observer(({ navigation }: UserProfileSProps) => {
 						</Box>
 					</TouchableOpacity>
 				</Box>
+				<TouchableOpacity onPress={onPressDeleteUser}>
+					<Box
+						flexDirection={'row'}
+						alignItems={'center'}
+						justifyContent={'center'}
+						pb={4}
+						mt={0}
+						borderColor={colors.grayLight}
+					>
+						<Image w={5} h={5} alt={'img'} source={deleleImg} />
+						<Text style={{ ...styles.text, color: colors.red }}>Delete account</Text>
+					</Box>
+				</TouchableOpacity>
 			</Box>
 		</BaseWrapperComponent>
 	)

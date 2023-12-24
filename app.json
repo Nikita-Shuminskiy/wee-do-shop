@@ -2,7 +2,7 @@
   "expo": {
     "name": "Weedo",
     "slug": "weedo",
-    "version": "1.0.5",
+    "version": "1.0.6",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -21,9 +21,15 @@
       "userInterfaceStyle": "light",
       "supportsTablet": true,
       "bundleIdentifier": "com.weedo.ios",
-      "buildNumber": "1.0.12",
+      "buildNumber": "1.0.13",
       "config": {
         "googleMapsApiKey": "AIzaSyD-3PKe63YHjDDaxjVahTekuyvvOFfwKp4"
+      },
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "The Weedo app requests access to your location to search for nearby stores",
+        "NSLocationAlwaysUsageDescription": "The Weedo app requests access to your location to search for nearby stores",
+        "NSLocationAlwaysAndWhenInUseUsageDescription": "The Weedo app requests access to your location to search for nearby stores",
+        "NSLocationUsageDescription": "The Weedo app requests access to your location to search for nearby stores"
       }
     },
     "android": {
@@ -37,7 +43,7 @@
           "apiKey": "AIzaSyCDu3dMvEFIDgw_uqJWabVuauq0JVsu3NI"
         }
       },
-      "versionCode": 31,
+      "versionCode": 34,
       "permissions": [
         "CALL_PHONE"
       ],
@@ -53,12 +59,7 @@
     },
     "owner": "wee_do12345",
     "plugins": [
-      [
-        "expo-location",
-        {
-          "locationAlwaysAndWhenInUsePermission": "Allow your geolocation to be used to find nearby stores"
-        }
-      ],
+      "expo-location",
       "expo-localization",
       [
         "expo-updates",

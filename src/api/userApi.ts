@@ -18,6 +18,9 @@ export const userApi = {
 	async updateUser(idUser: string, data: OptionalUserType) {
 		return await instance.patch(`users/${idUser}`, data)
 	},
+	async deleteUser(idUser: string) {
+		return await instance.delete(`users/${idUser}`)
+	},
 	async getBanners() {
 		return await instance.get<ResponseBannersType>(`banners`)
 	},

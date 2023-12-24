@@ -44,9 +44,9 @@ export const MapViews = ({navigation}: MapViewsProps) => {
 	const onPressGoBack = () => {
 		navigation.goBack()
 	}
-	useEffect(() => {
+/*	useEffect(() => {
 		getCurrentPositionHandler()
-	}, []);
+	}, []);*/
 	useEffect(() => {
 		if (mapRef && myLocation?.latitude) {
 			mapRef.fitToCoordinates([{latitude: myLocation.latitude, longitude: myLocation.longitude}], {
