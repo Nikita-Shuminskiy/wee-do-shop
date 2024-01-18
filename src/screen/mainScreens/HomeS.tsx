@@ -21,6 +21,7 @@ import BannersViewer from "../../components/list-viewer/BannersViewer"
 import {createAlert} from "../../components/Alert"
 import NotificationStore from "../../store/NotificationStore/notification-store"
 import {LoadingEnum} from "../../store/types/types"
+import useGoBackNative from "../../utils/hook/useGoBackNative";
 
 type HomeSProps = {
 	navigation: NavigationProp<ParamListBase>
@@ -28,9 +29,12 @@ type HomeSProps = {
 }
 
 const HomeS = observer(({navigation, route}: HomeSProps) => {
-	const {user, banners, isAuth} = AuthStore
-	const {setIsLoading} = NotificationStore
+	const onPressGoBack = () => {
+		return true
+	}
 
+	useGoBackNative(onPressGoBack)
+	const {user, banners, isAuth} = AuthStore
 	const {StoresService, StoresStore, CategoriesService, CategoriesStore} = rootStore
 	const {stores, setStore, favoriteStores, search, setSearch, setSelectedSubCategoryId} =
 		StoresStore

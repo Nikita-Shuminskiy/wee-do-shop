@@ -46,7 +46,6 @@ const FavoriteS = observer(({ navigation }: FavoriteSType) => {
 	}, [isAuth])
 	const onPressGoBack = () => {
 		navigation.navigate(routerConstants.HOME, { from: 'favorite' })
-		// Возвращаем true, чтобы предотвратить стандартное поведение кнопки "Назад" (например, закрытие приложения)
 		return true
 	}
 

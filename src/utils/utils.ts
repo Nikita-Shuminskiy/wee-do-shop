@@ -4,6 +4,7 @@ import {addDays, format, getDay, getHours, getMinutes, parseISO} from "date-fns"
 import {ProductType} from "../api/productApi"
 
 export const PLAY_STORE_URL = "https://play.google.com/store/apps/details?id=com.wee_doo.th"
+export const APPLE_STORE_URL = "https://apps.apple.com/us/app/weedo-delivery/id6469359046"
 export const DELIVERY_PRICE = 70
 const daysOfWeek: (keyof WorkingHoursType)[] = [
 	"sunday",

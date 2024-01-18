@@ -1,12 +1,12 @@
-import { action, makeObservable, observable } from 'mobx'
-import { deviceStorage } from '../../utils/storage/storage'
-import { authApi, PayloadResetPasswordType, UserType } from '../../api/authApi'
-import { UserRegisterDataType } from 'screen/authScreens/RegisterS'
-import { BannersType, DiscountCodeType, OptionalUserType, userApi } from '../../api/userApi'
-import Constants from "expo-constants";
-import { Linking, Platform } from "react-native";
-import { PLAY_STORE_URL } from "../../utils/utils";
-import { createAlert } from "../../components/Alert";
+import {action, makeObservable, observable} from "mobx"
+import {deviceStorage} from "../../utils/storage/storage"
+import {authApi, PayloadResetPasswordType, UserType} from "../../api/authApi"
+import {UserRegisterDataType} from "screen/authScreens/RegisterS"
+import {BannersType, OptionalUserType, userApi} from "../../api/userApi"
+import Constants from "expo-constants"
+import {Linking, Platform} from "react-native"
+import {APPLE_STORE_URL, PLAY_STORE_URL} from "../../utils/utils"
+import {createAlert} from "../../components/Alert"
 
 export type fullAddressType = {
 	country: string
@@ -30,9 +30,9 @@ export class AuthStore {
 	} as UserType
 	isAuth: boolean = false
 	infoResetPassword: PayloadResetPasswordType = {
-		email: '',
-		password: '',
-		verificationCode: '',
+		email: "",
+		password: "",
+		verificationCode: "",
 	}
 	currentLocation: AddressType = {} as AddressType
 	banners: BannersType[] = [] as BannersType[]
@@ -41,6 +41,7 @@ export class AuthStore {
 		this.currentLocation = {} as AddressType
 		this.user = {} as UserType
 	}
+
 	setUser(userData: UserType): void {
 		this.user = userData
 		this.setAuth(true)
@@ -50,10 +51,10 @@ export class AuthStore {
 		this.isAuth = auth
 	}
 
-	async login(userData: { email: string; password: string }) {
-		const { data } = await authApi.login(userData.email, userData.password)
-		await deviceStorage.saveItem('accessToken', data.accessToken)
-		await deviceStorage.saveItem('refreshToken', data.refreshToken)
+	async login(userData: {email: string; password: string}) {
+		const {data} = await authApi.login(userData.email, userData.password)
+		await deviceStorage.saveItem("accessToken", data.accessToken)
+		await deviceStorage.saveItem("refreshToken", data.refreshToken)
 		return data
 	}
 
@@ -62,25 +63,25 @@ export class AuthStore {
 	}
 
 	async getMe() {
-		const { data } = await authApi.getMe()
+		const {data} = await authApi.getMe()
 		await this.getAppVersion()
 		this.setUser(data)
 		return data
 	}
 
 	async getUser(idUser: string): Promise<UserType> {
-		const { data } = await userApi.getUser(idUser)
+		const {data} = await userApi.getUser(idUser)
 		this.setUser(data)
 		return data
 	}
 
 	async updateUser(payload: OptionalUserType): Promise<UserType> {
-		const { data } = await userApi.updateUser(this.user._id, payload)
+		const {data} = await userApi.updateUser(this.user._id, payload)
 		return data
 	}
 
 	async getBanners(): Promise<any> {
-		const { data } = await userApi.getBanners()
+		const {data} = await userApi.getBanners()
 		this.setBanners(data.results)
 	}
 
@@ -90,40 +91,42 @@ export class AuthStore {
 
 	async logOut() {
 		this.isAuth = false
-		await deviceStorage.removeItem('refreshToken')
-		await deviceStorage.removeItem('accessToken')
+		await deviceStorage.removeItem("refreshToken")
+		await deviceStorage.removeItem("accessToken")
 		this.user = null
 	}
+
 	async forgotPassword(email: string) {
-		const { data } = await authApi.forgotPassword(email)
+		const {data} = await authApi.forgotPassword(email)
 		return data
 	}
+
 	async resetPassword(payloadResetPassword: PayloadResetPasswordType) {
-		const { data } = await authApi.resetPassword(payloadResetPassword)
+		const {data} = await authApi.resetPassword(payloadResetPassword)
 		return data
 	}
-	async checkVerificationCode(payloadResetPassword: { email: string; verificationCode: string }) {
-		const { data } = await authApi.checkVerificationCode(payloadResetPassword)
+
+	async checkVerificationCode(payloadResetPassword: {email: string; verificationCode: string}) {
+		const {data} = await authApi.checkVerificationCode(payloadResetPassword)
 		return data
 	}
+
 	async getAppVersion() {
-		const { data } = await authApi.getAppVersion()
-		if(Constants?.expoConfig?.version < data?.mobileAppVersion) { // version from app.json
-			if(Platform.OS !== 'ios') {
-				const onPressGoMarket = async () => {
-					await Linking.openURL(PLAY_STORE_URL);
-				}
-				createAlert({
-					title: 'Message',
-					message: 'Updates available',
-					buttons: [
-						{ text: 'Update', style: 'default', onPress: onPressGoMarket }
-					],
-				})
+		const {data} = await authApi.getAppVersion()
+		if (Constants?.expoConfig?.version < data?.mobileAppVersion) {
+			// version from app.json
+			const onPressGoMarket = async () => {
+				await Linking.openURL(Platform.OS === "ios" ? APPLE_STORE_URL : PLAY_STORE_URL)
 			}
+			createAlert({
+				title: "Message",
+				message: "Updates available",
+				buttons: [{text: "Update", style: "default", onPress: onPressGoMarket}],
+			})
 		}
 		return data
 	}
+
 	setLocation(data: AddressType) {
 		this.currentLocation = data
 	}
@@ -134,10 +137,12 @@ export class AuthStore {
 			[key]: value,
 		}
 	}
+
 	deleteUser = async () => {
-		const { data } = await userApi.deleteUser(this.user._id)
+		const {data} = await userApi.deleteUser(this.user._id)
 		return data
 	}
+
 	constructor() {
 		makeObservable(this, {
 			user: observable,
@@ -173,4 +178,4 @@ export class AuthStore {
 	}
 }
 
-export default new AuthStore()
+export default new AuthStore();
