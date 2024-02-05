@@ -1,3 +1,4 @@
+/*
 import React, { useEffect } from 'react'
 import { BaseWrapperComponent } from '../../components/baseWrapperComponent'
 import { Box, Image, Text } from 'native-base'
@@ -64,3 +65,4 @@ const styles = StyleSheet.create({})
 
 
 export default AllowLocationS;
+*/

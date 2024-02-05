@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { memo, useRef, useState } from "react";
 import { SafeAreaView, TouchableOpacity, View } from 'react-native'
 import PhoneInput, { PhoneInputProps } from 'react-native-phone-number-input'
 import { colors } from '../assets/colors/colors'
@@ -52,4 +52,4 @@ const PhoneNumberField: React.FC<PhoneNumberFieldProps> = ({ isRequired, isInval
 	)
 }
 
-export default PhoneNumberField
+export default memo(PhoneNumberField)

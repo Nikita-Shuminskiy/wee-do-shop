@@ -38,7 +38,7 @@ export const BaseWrapperComponent = ({
 			style={{
 				flex: 1,
 				width: '100%',
-				marginTop: Platform.OS === 'ios' ? 0 : 29,
+				paddingTop: Platform.OS === 'ios' ? 0 : 29,
 				backgroundColor: backgroundColor,
 				...styleSafeArea,
 			}}

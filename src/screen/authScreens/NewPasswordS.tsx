@@ -12,11 +12,13 @@ import { routerConstants } from '../../constants/routerConstants'
 import { observer } from 'mobx-react-lite'
 import { LoadingEnum } from '../../store/types/types'
 import NotificationStore from '../../store/NotificationStore'
+import { useTranslation } from "react-i18next";
 
 type NewPasswordSProps = {
 	navigation: NavigationProp<ParamListBase>
 }
 const NewPasswordS = observer(({ navigation }: NewPasswordSProps) => {
+	const {t} = useTranslation(['login', 'newPassword', 'errors']);
 	const [password, setPassword] = useState('')
 	const [error, setError] = useState(false)
 	const { resetPassword, infoResetPassword } = AuthStore
@@ -53,9 +55,9 @@ const NewPasswordS = observer(({ navigation }: NewPasswordSProps) => {
 						}}
 						value={password}
 						isInvalid={error}
-						errorMessage={!!error && 'The password must be at least 6 characters long'}
+						errorMessage={!!error && t('errors:passwordMustBe')}
 						isRequired={true}
-						placeholder={'Enter your password'}
+						placeholder={t('enterPassword')}
 						borderRadius={16}
 						type={'password'}
 					/>
@@ -65,7 +67,7 @@ const NewPasswordS = observer(({ navigation }: NewPasswordSProps) => {
 							backgroundColor={colors.green}
 							disabled={error}
 							onPress={handleSubmit}
-							title={'Reset'}
+							title={t('newPassword:reset')}
 						/>
 					</Box>
 				</Box>

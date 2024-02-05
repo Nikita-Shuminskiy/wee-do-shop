@@ -1,12 +1,14 @@
-import React from 'react';
+import React, { memo } from "react";
 import {Box} from "native-base";
 import Link from "./Link";
 import {StyleSheet} from "react-native";
 import {colors} from "../assets/colors/colors";
 import {useNavigation} from "@react-navigation/native";
 import {routerConstants} from "../constants/routerConstants";
+import { useTranslation } from "react-i18next";
 
 const PrivacyPolicy = () => {
+    const {t} = useTranslation(['privacyPolice']);
     const navigation = useNavigation<any>()
     const onPressTerms = () => {
         navigation.navigate(routerConstants.TERM_SERVICE)
@@ -19,32 +21,26 @@ const PrivacyPolicy = () => {
     }
     return (
         <Box justifyContent={'space-between'} w={'100%'}>
-            <Box flexDirection={'row'} mt={10} justifyContent={'space-between'}>
+            <Box flexDirection={'row'} mt={2} flexWrap={'wrap'} justifyContent={'space-between'}>
                 <Link styleText={styles.LinkText} styleLink={styles.link} onPress={onPressTerms}
-                      text={'Terms of service'}/>
+                      text={t('termsOfService')}/>
                 <Link styleText={styles.LinkText} styleLink={styles.link} onPress={onPressLegal}
-                      text={'Legal information'}/>
+                      text={t('legalInfo')}/>
                 <Link styleText={styles.LinkText} styleLink={styles.link} onPress={onPressPrivacy}
-                      text={'Privacy police'}/>
+                      text={t('privacyPolice')}/>
             </Box>
         </Box>
     );
 };
 const styles = StyleSheet.create({
-    text: {
-        fontSize: 17,
-        marginLeft: 10,
-        fontWeight: '500'
-    },
     LinkText: {
         color: colors.green,
-        fontSize: 14,
+        fontSize: 11,
         fontWeight: '500'
     },
     link: {
         borderColor: colors.green,
         borderBottomWidth: 1,
-
     }
 })
-export default PrivacyPolicy;
+export default memo(PrivacyPolicy);

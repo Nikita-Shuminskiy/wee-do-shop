@@ -7,7 +7,6 @@ import TermServiceS from "../screen/commonScreens/TermServiceS";
 import LegalInformationS from "../screen/commonScreens/LegalInformationS";
 import PrivacyPolicyS from "../screen/commonScreens/PrivacyPolicyS";
 import { MapViews } from "../components/MapViews/MapViews";
-import AllowLocationS from "../screen/authScreens/AllowLocationS";
 import NewPasswordS from "../screen/authScreens/NewPasswordS";
 import ForgotPasswordS from "../screen/authScreens/ForgotPasswordS";
 import ResetPasswordS from "../screen/authScreens/ResetPasswordS";
@@ -35,7 +34,7 @@ export const Routs = [
   { name: routerConstants.RESET_PASSWORD, component: ResetPasswordS },
   { name: routerConstants.FORGOT_PASSWORD, component: ForgotPasswordS },
   { name: routerConstants.NEW_PASSWORD, component: NewPasswordS },
-  { name: routerConstants.ALLOW_LOCATION, component: AllowLocationS },
+  //{ name: routerConstants.ALLOW_LOCATION, component: AllowLocationS },
   { name: routerConstants.AUTOCOMPLETE_MAP, component: MapViews },
   { name: routerConstants.PRIVACY_POLICE, component: PrivacyPolicyS },
   { name: routerConstants.LEGAL_INFORMATION, component: LegalInformationS },

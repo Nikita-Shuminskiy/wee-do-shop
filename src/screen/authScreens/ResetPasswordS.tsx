@@ -10,6 +10,7 @@ import PhoneVerificationCode from '../../components/PhoneVerificationCode'
 import Link from '../../components/Link'
 import NotificationStore from '../../store/NotificationStore/notification-store'
 import { LoadingEnum } from '../../store/types/types'
+import { useTranslation } from "react-i18next";
 
 type ForgotPasswordSProps = {
 	navigation: NavigationProp<ParamListBase>
@@ -18,7 +19,7 @@ type ForgotPasswordSProps = {
 const ResetPasswordS = observer(({ navigation, route }: ForgotPasswordSProps) => {
 	const { infoResetPassword, forgotPassword, setInfoResetPassword } = AuthStore
 	const { setIsLoading } = NotificationStore
-
+	const {t} = useTranslation(['newPassword', 'errors']);
 	const goBackPress = () => {
 		navigation.goBack()
 	}
@@ -38,9 +39,9 @@ const ResetPasswordS = observer(({ navigation, route }: ForgotPasswordSProps) =>
 				<Box mb={5} zIndex={10} mt={5}>
 					<ArrowBack goBackPress={goBackPress} />
 				</Box>
-				<Text fontSize={28}>Phone verification</Text>
+				<Text fontSize={28}>{t('phoneVerification')}</Text>
 				<Text fontSize={15} color={colors.gray}>
-					The code was sent to{' '}
+					{t('codeSent')}{' '}
 					<Text fontSize={15} color={colors.blue}>
 						{infoResetPassword.email}
 					</Text>
@@ -49,7 +50,7 @@ const ResetPasswordS = observer(({ navigation, route }: ForgotPasswordSProps) =>
 					<PhoneVerificationCode navigation={navigation} />
 				</Box>
 				<Box>
-					<Link onPress={onPressSendCode} styleText={{ fontSize: 15 }} text={'Re-send code'} />
+					<Link onPress={onPressSendCode} styleText={{ fontSize: 15 }} text={t('reSendCode')} />
 				</Box>
 			</Box>
 		</BaseWrapperComponent>

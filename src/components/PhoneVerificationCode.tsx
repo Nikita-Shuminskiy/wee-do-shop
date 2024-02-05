@@ -15,12 +15,14 @@ import { routerConstants } from '../constants/routerConstants'
 import AuthStore from '../store/AuthStore/auth-store'
 import NotificationStore from '../store/NotificationStore/notification-store'
 import { LoadingEnum } from '../store/types/types'
+import { useTranslation } from "react-i18next";
 
 const CELL_COUNT = 4
 type PhoneVerificationProps = {
 	navigation: NavigationProp<ParamListBase>
 }
 const PhoneVerificationCode = observer(({ navigation }: PhoneVerificationProps) => {
+	const {t} = useTranslation(['newPassword', 'errors']);
 	const { resetPassword, infoResetPassword, setInfoResetPassword, checkVerificationCode } =
 		AuthStore
 	const { setIsLoading } = NotificationStore
@@ -107,7 +109,7 @@ const PhoneVerificationCode = observer(({ navigation }: PhoneVerificationProps) 
 			/>
 			{!isValid && (
 				<Text mt={2} fontSize={15} color={colors.red}>
-					Incorrect confirmation code
+					{t('errors:incorrectConfirmationCode')}
 				</Text>
 			)}
 		</View>

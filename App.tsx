@@ -3,7 +3,7 @@ import RootNavigation from "./src/navigation/RootNavigation"
 import {NativeBaseProvider} from "native-base"
 import {LogBox} from "react-native"
 import {GestureHandlerRootView} from "react-native-gesture-handler"
-
+import './src/utils/i18n';
 LogBox.ignoreLogs([
 	"In React 18, SSRProvider is not necessary and is a noop. You can remove it from your app.",
 ])
@@ -16,7 +16,7 @@ export default function App() {
 			<NativeBaseProvider>
 				<StatusBar
 					hidden={false}
-					backgroundColor={"transparent"}
+					backgroundColor={'white'}
 					style={"auto"}
 					animated={true}
 					translucent={true}

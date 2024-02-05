@@ -1,4 +1,4 @@
-import React, {useState} from "react"
+import React, { useCallback, useState } from "react";
 import {Linking, StyleSheet, TextInput, TouchableOpacity} from "react-native"
 import {NavigationProp, ParamListBase} from "@react-navigation/native"
 import {BaseWrapperComponent} from "../../components/baseWrapperComponent"
@@ -24,6 +24,7 @@ import {createAlert} from "../../components/Alert"
 import {usePermissionsPushGeo} from "../../utils/hook/usePermissionsPushGeo"
 import {color} from "native-base/lib/typescript/theme/styled-system"
 import Link from "../../components/Link"
+import { useTranslation } from "react-i18next";
 
 export type CountryData = {
 	callingCode: string[]
@@ -60,6 +61,7 @@ export type UserRegisterDataType = {
 	role: RoleType
 }
 const RegisterS = observer(({navigation}: LoginSProps) => {
+	const {t} = useTranslation(['registration', 'login', 'errors', 'common']);
 	const {AuthStoreService} = rootStore
 	const {currentLocation, setLocation} = AuthStore
 	const [checkAge, setAgeCheck] = useState(false)
@@ -75,9 +77,9 @@ const RegisterS = observer(({navigation}: LoginSProps) => {
 		if ((!currentLocation?.fullAddress?.country && !currentLocation?.fullAddress?.city)
 			|| !currentLocation?.location.coordinates[0]) {
 			createAlert({
-				title: "Message",
-				message: "Enter a location",
-				buttons: [{text: "Ok", style: "cancel"}],
+				title: t('message'),
+				message: t('common:enterLocation'),
+				buttons: [{text: t('common:ok'), style: "cancel"}],
 			})
 			setSubmitting(false)
 			return
@@ -146,9 +148,9 @@ const RegisterS = observer(({navigation}: LoginSProps) => {
 			return errors
 		},
 	})
-	const onPressGoBack = () => {
+	const onPressGoBack = useCallback(() => {
 		navigation.goBack()
-	}
+	}, [])
 	const disabledBtnSignUp =
 		!!(errors.email && !validateEmail(values.email.trim())) ||
 		!!(errors.firstName && !values.firstName.trim()) ||
@@ -158,15 +160,15 @@ const RegisterS = observer(({navigation}: LoginSProps) => {
 		!!(errors.phone && values.phone.length <= 3) ||
 		isSubmitting
 
-	const onPressNavigateToLocation = async () => {
+	const onPressNavigateToLocation = useCallback( async () => {
 		//	await Linking.openSettings()
 		navigation.navigate(routerConstants.AUTOCOMPLETE_MAP)
-	}
+	}, [])
 
 	const formatted_address = getFormattedAddress(currentLocation)
-	const onChangeCountry = (country) => {
+	const onChangeCountry = useCallback( (country) => {
 		setCountryCode(country)
-	}
+	}, [])
 	const onChangeTextAddress = (text: string, key: keyof fullAddressType) => {
 		if(text?.length > 10) return
 		setLocation({
@@ -174,12 +176,11 @@ const RegisterS = observer(({navigation}: LoginSProps) => {
 			fullAddress: {...currentLocation?.fullAddress, [key]: text},
 		})
 	}
-	const onPressOpenLegalNotice = () => {
+	const onPressOpenLegalNotice = useCallback(() => {
 		Linking.openURL(
 			"https://docs.google.com/document/d/e/2PACX-1vT1f6tmdyx4tiXcwLdHDoZcTvtquB0jF__AFWFb1QuYYG7ERhqwaejgTa-VLYU7dE55LMs8KASbt8tl/pub"
 		)
-	}
-	console.log(currentLocation);
+	}, [])
 	return (
 		<BaseWrapperComponent isKeyboardAwareScrollView={true}>
 			<Box alignItems={"center"}>
@@ -192,10 +193,10 @@ const RegisterS = observer(({navigation}: LoginSProps) => {
 				<Box w={"100%"} mb={5}>
 					<CustomInput
 						onChangeText={handleChange("firstName")}
-						placeholder={"First name*"}
+						placeholder={t('firstName')}
 						value={values.firstName}
 						onBlur={handleBlur("firstName")}
-						errorMessage={!values.firstName.trim() && "Enter a name"}
+						errorMessage={!values.firstName.trim() && t('enterName')}
 						isInvalid={!!(errors.firstName && !values.firstName.trim())}
 						isRequired={true}
 						borderRadius={16}
@@ -205,10 +206,10 @@ const RegisterS = observer(({navigation}: LoginSProps) => {
 
 					<CustomInput
 						onChangeText={handleChange("lastName")}
-						placeholder={"Last name*"}
+						placeholder={t('lastName')}
 						value={values.lastName}
 						onBlur={handleBlur("lastName")}
-						errorMessage={!values.lastName.trim() && "Enter a name"}
+						errorMessage={!values.lastName.trim() && t('enterName')}
 						isInvalid={!!(errors.lastName && !values.lastName.trim())}
 						isRequired={true}
 						borderRadius={16}
@@ -223,11 +224,11 @@ const RegisterS = observer(({navigation}: LoginSProps) => {
 						errorMessage={
 							!validateEmail(values.email.trim()) &&
 							errors.email &&
-							"Incorrect email address entered"
+							t('errors:incorrectEmail')
 						}
 						isInvalid={!!(errors.email && !validateEmail(values.email.trim()))}
 						isRequired={true}
-						placeholder={"Email*"}
+						placeholder={t('email')}
 						borderRadius={16}
 						type={"text"}
 						iconRight={
@@ -237,7 +238,8 @@ const RegisterS = observer(({navigation}: LoginSProps) => {
 					<Box mt={2}>
 						<PhoneNumberField
 							onChangeCountry={onChangeCountry}
-							errorMessage={"Incorrect phone number"}
+							errorMessage={t('errors:incorrectPhone')}
+							placeholder={t('phone')}
 							isInvalid={!!(errors.phone && values.phone.length <= 3)}
 							isRequired={true}
 							defaultValue={values.phone}
@@ -246,13 +248,13 @@ const RegisterS = observer(({navigation}: LoginSProps) => {
 					</Box>
 					<CustomInput
 						onChangeText={handleChange("password")}
-						placeholder={"Password*"}
+						placeholder={t('login:password')}
 						onBlur={handleBlur("password")}
 						isInvalid={!!(errors.password && values.password.length <= 3)}
 						errorMessage={
 							!!errors.password &&
 							values.password.length <= 5 &&
-							"The password must be at least 6 characters long"
+							t('errors:passwordMustBe')
 						}
 						value={values.password}
 						isRequired={true}
@@ -262,13 +264,13 @@ const RegisterS = observer(({navigation}: LoginSProps) => {
 
 					<CustomInput
 						onChangeText={handleChange("confirmPassword")}
-						placeholder={"Confirm password*"}
+						placeholder={t('confirmPassword')}
 						onBlur={handleBlur("confirmPassword")}
 						value={values.confirmPassword}
 						errorMessage={
 							(touched.confirmPassword && errors.confirmPassword && !values.confirmPassword) ||
 							(values.confirmPassword !== values.password && touched.confirmPassword)
-								? "The passwords dont match"
+								? t('errors:passwordDontMatch')
 								: ""
 						}
 						isRequired={true}
@@ -281,11 +283,10 @@ const RegisterS = observer(({navigation}: LoginSProps) => {
 					/>
 				</Box>
 				<Box alignItems={"center"} mb={1}>
-					<TouchableOpacity onPress={onPressNavigateToLocation}>
+					<TouchableOpacity style={{ alignItems: 'center' }} onPress={onPressNavigateToLocation}>
 						<Image w={170} h={105} alt={"location"} source={location} />
 						<Text color={colors.gray} mt={2} fontWeight={"500"}>
-							{" "}
-							Add you location address*
+							{" "}{t('addLocationAddress')}
 						</Text>
 					</TouchableOpacity>
 					{formatted_address && (
@@ -297,7 +298,7 @@ const RegisterS = observer(({navigation}: LoginSProps) => {
 				<Box w={"100%"} flex={1} alignItems={"flex-start"}>
 					<Box mt={2} w={"100%"}>
 						<TextInput
-							placeholder={"Enter apartment"}
+							placeholder={t('enterApartment')}
 							style={styles.input}
 							keyboardType="numeric"
 							value={currentLocation?.fullAddress?.apartment}
@@ -319,19 +320,19 @@ const RegisterS = observer(({navigation}: LoginSProps) => {
 							/>
 							<Box flexDirection={"row"} justifyContent={"flex-start"} alignItems={"center"}>
 								<Text fontSize={13} alignItems={"center"} ml={1} mr={1}>
-									I agree with
+									{t('Iagree')}
 								</Text>
 								<Link
 									onPress={onPressOpenLegalNotice}
 									styleText={{color: colors.green, fontWeight: "500"}}
-									text={"Legal Notice"}
+									text={t('legalnotice')}
 								/>
 							</Box>
 						</Box>
 					</TouchableOpacity>
 					{isErrorCheckAge && (
 						<Text fontSize={14} color={colors.red} fontWeight={"500"} ml={1}>
-							You must confirm the Legal Notice
+							{t('youMustConfirmNotice')}
 						</Text>
 					)}
 				</Box>
@@ -340,7 +341,7 @@ const RegisterS = observer(({navigation}: LoginSProps) => {
 						styleContainer={styles.styleContainerBtnUp}
 						disabled={disabledBtnSignUp}
 						onPress={handleSubmit}
-						title={"Sign up"}
+						title={t('login:signUp')}
 					/>
 				</Box>
 			</Box>

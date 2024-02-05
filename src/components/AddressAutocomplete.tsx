@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { memo } from "react";
 import { ImageStyle, StyleProp, StyleSheet, TextStyle, ViewStyle } from "react-native";
 import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
 import search from '../assets/images/search.png'
 import {Image} from "native-base";
 import {colors} from "../assets/colors/colors";
+import { useTranslation } from "react-i18next";
 
 type AddressAutocompleteProps = {
     onSave: (data: AutoCompleteDataType) => void
@@ -14,13 +15,14 @@ export type AutoCompleteDataType = {
     address: {name: string, formatted_address: string}
 }
 const AddressAutocomplete = ({onSave}: AddressAutocompleteProps) => {
+    const {t} = useTranslation(['map']);
     return (
         <GooglePlacesAutocomplete
             enablePoweredByContainer={false}
             renderLeftButton={() => <Image w={17} h={17} ml={2} alt={'search'} source={search}/>}
             styles={styles}
             fetchDetails={true}
-            placeholder={'Enter an address'}
+            placeholder={t('enterAnAddress')}
             onPress={(data, details = null) => {
                 const { geometry, name, formatted_address  } = details;
                 if (geometry && geometry.location) {
@@ -68,4 +70,4 @@ const styles = StyleSheet.create({
         fontWeight: '500',
     },
 })
-export default AddressAutocomplete;
+export default memo(AddressAutocomplete);
