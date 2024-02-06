@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { memo, useEffect, useState } from "react";
 import { BaseWrapperComponent } from '../../components/baseWrapperComponent'
 import { NavigationProp, ParamListBase } from '@react-navigation/native'
 import ArrowBack from '../../components/ArrowBack'
@@ -14,6 +14,7 @@ import { CountryData, countryDataDefault, UserRegisterDataType } from '../authSc
 import PhoneNumberField from '../../components/PhoneField'
 import rootStore from '../../store/RootStore/root-store'
 import { OptionalUserType } from '../../api/userApi'
+import { useTranslation } from "react-i18next";
 
 type UpdateUserSProps = {
 	navigation: NavigationProp<ParamListBase>
@@ -26,6 +27,7 @@ type DataType = {
 	confirmPassword: string
 }
 const UpdateUserS = ({ navigation }: UpdateUserSProps) => {
+	const {t} = useTranslation(['update_profile', 'common', 'registration', 'errors']);
 	const { user } = AuthStore
 	const { AuthStoreService } = rootStore
 	const [countryCode, setCountryCode] = useState<CountryData>(countryDataDefault)
@@ -102,7 +104,7 @@ const UpdateUserS = ({ navigation }: UpdateUserSProps) => {
 							<TextInput
 								value={values.firstName}
 								onChangeText={handleChange('firstName')}
-								label={'First name'}
+								label={t('registration:firstName')}
 								borderRadius={16}
 							/>
 						</Box>
@@ -111,7 +113,7 @@ const UpdateUserS = ({ navigation }: UpdateUserSProps) => {
 								borderRadius={16}
 								value={values.lastName}
 								onChangeText={handleChange('lastName')}
-								label={'Last name'}
+								label={t('registration:lastName')}
 							/>
 						</Box>
 					</Box>
@@ -121,7 +123,7 @@ const UpdateUserS = ({ navigation }: UpdateUserSProps) => {
 						</Text>
 						<PhoneNumberField
 							onChangeCountry={onChangeCountry}
-							errorMessage={'Incorrect phone number'}
+							errorMessage={t('errors:incorrectPhone')}
 							isInvalid={(touched.phone && errors.phone) && values?.phone?.length <= 3}
 							isRequired={false}
 							defaultValue={values.phone}
@@ -135,11 +137,11 @@ const UpdateUserS = ({ navigation }: UpdateUserSProps) => {
 						errorMessage={
 							!validateEmail(values.email.trim()) &&
 							errors.email &&
-							'Incorrect email address entered'
+							t('errors:incorrectEmail')
 						}
 						borderRadius={16}
 						isInvalid={!!(errors.email && !validateEmail(values.email.trim()))}
-						label={'E-mail'}
+						label={t('registration:email')}
 					/>
 				</Box>
 				<Box mt={5}>
@@ -147,7 +149,7 @@ const UpdateUserS = ({ navigation }: UpdateUserSProps) => {
 						disabled={disabledBtnSignUp}
 						onPress={handleSubmit}
 						backgroundColor={disabledBtnSignUp ? colors.grayLight : colors.green}
-						title={'Save'}
+						title={t('common:save')}
 					/>
 				</Box>
 			</Box>
@@ -155,4 +157,4 @@ const UpdateUserS = ({ navigation }: UpdateUserSProps) => {
 	)
 }
 
-export default UpdateUserS
+export default memo(UpdateUserS)

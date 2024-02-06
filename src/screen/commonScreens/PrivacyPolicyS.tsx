@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { memo } from "react";
 import { BaseWrapperComponent } from '../../components/baseWrapperComponent'
 import { NavigationProp, ParamListBase } from '@react-navigation/native'
 import { Box, Image, Text } from 'native-base'
@@ -7,11 +7,13 @@ import arrowLeft from '../../assets/images/arrow-left.png'
 import logoImg from '../../assets/images/logoWeeDo.png'
 import { Linking, TouchableOpacity } from 'react-native'
 import Link from '../../components/Link'
+import { useTranslation } from "react-i18next";
 
 type PrivacyPolicySProps = {
 	navigation: NavigationProp<ParamListBase>
 }
 const PrivacyPolicyS = ({ navigation }: PrivacyPolicySProps) => {
+	const {t} = useTranslation(['privacyPolicy', 'common']);
 	const onPressGoBack = () => {
 		navigation.goBack()
 	}
@@ -27,116 +29,86 @@ const PrivacyPolicyS = ({ navigation }: PrivacyPolicySProps) => {
 				<Image w={123} h={158} alt={'logo'} source={logoImg} mt={5} mb={5} />
 			</Box>
 			<Box paddingX={5} mb={2} alignItems={'flex-start'}>
-				<Text fontSize={22} fontWeight={'600'}>
+				<Text fontSize={18} fontWeight={'600'}>
 					{' '}
-					Privacy Policy for Weedo Store
-				</Text>
-
-				<Text fontSize={22} fontWeight={'600'}>
-					{' '}
-					1. Introduction
-				</Text>
-
-				<Text>
-					This Privacy Policy describes how the Weedo Store (referred to as "store", "we", "our")
-					collects, uses, and protects your personal data when you use our store. We uphold high
-					standards of privacy and strive to provide robust protection for your personal
-					information.
-				</Text>
-
-				<Text fontSize={22} fontWeight={'600'}>
-					2. Collected Data
-				</Text>
-
-				<Text>
-					We only collect necessary data that helps us provide you with quality service and conduct
-					our operations. Your data may include the following:
-				</Text>
-
-				<Text>
-					Name and contact information (e.g., email address, phone number). Payment and delivery
-					information. Details of selected products and orders.
-				</Text>
-				<Text fontSize={22} fontWeight={'600'}>
-					{' '}
-					3. Data Usage
-				</Text>
-
-				<Text>
-					We use your personal data solely for purposes related to the functioning of the Weedo
-					Store:
-				</Text>
-
-				<Text>
-					Processing and fulfilling your orders. Arranging the delivery of ordered products.
-					Providing quality customer service. Sharing information about order status and promotions.
-					Enhancing store operations, analyzing trends, and preferences.
-				</Text>
-				<Text fontSize={22} fontWeight={'600'}>
-					4. Data Storage
-				</Text>
-
-				<Text>
-					We store your personal data for the duration necessary to achieve the aforementioned
-					purposes and to comply with applicable legal requirements. We take appropriate measures to
-					protect your data from unauthorized access, loss, or disclosure.
-				</Text>
-
-				<Text fontSize={22} fontWeight={'600'}>
-					5. Data Disclosure
-				</Text>
-
-				<Text>
-					We do not share your personal data with third parties except when necessary for order
-					fulfillment and servicing (e.g., delivery partners). We may also disclose information if
-					required by law or to protect our rights and interests.
-				</Text>
-
-				<Text fontSize={22} fontWeight={'600'}>
-					6. Your Rights
-				</Text>
-
-				<Text>
-					You have certain rights regarding your personal data: Right to access your data and obtain
-					a copy of the information. Right to rectify inaccurate data. Right to erase data (in
-					certain cases). Right to restrict data processing (in certain cases). Right to object to
-					processing based on legitimate grounds. Right to data portability (in certain cases).
-				</Text>
-				<Text fontSize={22} fontWeight={'600'}>
-					7. Contact Us
-				</Text>
-
-				<Text>
-					If you have any questions about our Privacy Policy or the processing of your data, please
-					contact us at{' '}
-					<Link
-						onPress={handleEmailLinkPress}
-						styleLink={{ borderBottomWidth: 1 }}
-						text={'weedoshop420@gmail.com'}
-					/>
-				</Text>
-
-				<Text fontSize={22} fontWeight={'600'}>
-					{' '}
-					8. Changes to Privacy Policy
-				</Text>
-
-				<Text>
-					We reserve the right to make changes to this Privacy Policy. Any changes will be posted on
-					this page, and we recommend checking for updates periodically.
-				</Text>
-
-				<Text>
-					We value your trust and are committed to protecting your personal data. Thank you for
-					choosing the Weedo Store!
+					{t('privacyPoliceFor')}
 				</Text>
 
 				<Text fontSize={18} fontWeight={'600'}>
-					Effective Date: August 14, 2023
+					{' '}
+					1. {t('introductionHeader')}
+				</Text>
+
+				<Text>
+					{t('introduction')}
+				</Text>
+
+				<Text fontSize={18} fontWeight={'600'}>
+					2. {t('collectedDataHeader')}
+				</Text>
+
+				<Text>
+					{t('collectedData')}
+				</Text>
+				<Text fontSize={18} fontWeight={'600'}>
+					{' '}
+					3. {t('dataUsageHeader')}
+				</Text>
+
+				<Text>
+					{t('dataUsage')}
+				</Text>
+				<Text fontSize={18} fontWeight={'600'}>
+					4. {t('dataStorageHeader')}
+				</Text>
+
+				<Text>
+					{t('dataStorage')}
+				</Text>
+
+				<Text fontSize={18} fontWeight={'600'}>
+					5. {t('dataDisclosureHeader')}
+				</Text>
+
+				<Text>
+					{t('dataDisclosure')}
+				</Text>
+
+				<Text fontSize={18} fontWeight={'600'}>
+					6. {t('YourRightsHeader')}
+				</Text>
+
+				<Text>
+					{t('yourRights')}
+				</Text>
+				<Text fontSize={18} fontWeight={'600'}>
+					7. {t('contactUseHeader')}
+				</Text>
+
+				<Text>
+					{t('contactUs')}{' '}
+					<Link
+						onPress={handleEmailLinkPress}
+						styleLink={{ borderBottomWidth: 1 }}
+						text={t('common:ownerMail')}
+					/>
+				</Text>
+
+				<Text fontSize={18} fontWeight={'600'}>
+					{' '}
+					8. {t('changesPrivacy')}
+				</Text>
+
+				<Text>
+					{t('changesToPrivacyPolicy')}
+				</Text>
+
+				<Text fontSize={15} fontWeight={'600'}>
+					{t('common:effectiveDate')}
 				</Text>
 			</Box>
 		</BaseWrapperComponent>
 	)
 }
 
-export default PrivacyPolicyS
+export default memo(PrivacyPolicyS)

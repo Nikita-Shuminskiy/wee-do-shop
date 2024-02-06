@@ -15,6 +15,7 @@ import rootStore from "../../store/RootStore/root-store"
 import {observer} from "mobx-react-lite"
 import {routerConstants} from "../../constants/routerConstants"
 import {fullAddressType} from "../../store/AuthStore/auth-store"
+import { useTranslation } from "react-i18next";
 
 type AddressSProps = {
 	navigation: NavigationProp<ParamListBase>
@@ -23,6 +24,7 @@ type AddressErrorState = {
 	[K in keyof fullAddressType]?: boolean
 }
 const AddressS = observer(({navigation}: AddressSProps) => {
+	const {t} = useTranslation(['address', 'common']);
 	const {user, currentLocation, setLocation} = AuthStore
 	const {AuthStoreService} = rootStore
 	const {address} = user
@@ -70,12 +72,12 @@ const AddressS = observer(({navigation}: AddressSProps) => {
 					</Box>
 					<Box flexDirection={"row"} mt={5} mb={10} justifyContent={"center"} alignItems={"center"}>
 						<Text fontSize={22} fontWeight={"bold"}>
-							Address
+							{t('address')}
 						</Text>
 					</Box>
 
 					<Text fontSize={14} color={colors.gray} fontWeight={"500"}>
-						Current address:
+						{t("currentAddress")}
 					</Text>
 					<Box
 						mt={2}
@@ -95,40 +97,40 @@ const AddressS = observer(({navigation}: AddressSProps) => {
 						<Box mt={5}>
 							<Box alignItems={"center"}>
 								<Text fontSize={22} color={colors.black} fontWeight={"500"}>
-									New Address
+									{t('newAddress')}
 								</Text>
 							</Box>
 							<Box>
 								<CustomInput
-									label={"Country"}
+									label={t("country")}
 									value={currentLocation?.fullAddress?.country}
 									onChangeText={(text) => onChangeText("country", text)}
 									borderRadius={16}
 									type={"text"}
 								/>
 								<CustomInput
-									label={"City"}
+									label={t("city")}
 									onChangeText={(text) => onChangeText("city", text)}
 									value={currentLocation?.fullAddress?.city}
 									borderRadius={16}
 									type={"text"}
 								/>
 								<CustomInput
-									label={"Street"}
+									label={t("street")}
 									onChangeText={(text) => onChangeText("street", text)}
 									value={currentLocation?.fullAddress?.street}
 									borderRadius={16}
 									type={"text"}
 								/>
 								<CustomInput
-									label={"House"}
+									label={t("house")}
 									onChangeText={(text) => onChangeText("house", text)}
 									value={currentLocation?.fullAddress?.house}
 									borderRadius={16}
 									type={"text"}
 								/>
 								<CustomInput
-									label={"Apartment"}
+									label={t("apartment")}
 									onChangeText={(text) => onChangeText("apartment", text)}
 									value={currentLocation?.fullAddress?.apartment}
 									borderRadius={16}
@@ -146,13 +148,13 @@ const AddressS = observer(({navigation}: AddressSProps) => {
 															fontSize={15}
 															fontWeight={"500"}
 															color={colors.red}
-														>{`Field '${field}' required`}</Text>
+														>{`${t('common:field')} '${field}' ${t('common:required')}`}</Text>
 													)
 											)}
 									</Box>
 									<Button
 										backgroundColor={colors.green}
-										title={"Save new address"}
+										title={t("saveNewAddress")}
 										onPress={onPressSaveNewAddress}
 									/>
 								</Box>

@@ -22,11 +22,13 @@ import { StatusType } from '../../api/ordersApi'
 import rootStore from '../../store/RootStore/root-store'
 import OrderStore from '../../store/OrderStore/order-store'
 import { createAlert } from "../../components/Alert";
-
+import { useTranslation } from "react-i18next";
+import Constants from "expo-constants"
 type UserProfileSProps = {
 	navigation: NavigationProp<ParamListBase>
 }
 const UserProfileS = observer(({ navigation }: UserProfileSProps) => {
+	const {t} = useTranslation(['profile', 'registration', 'common']);
 	const { user } = AuthStore
 	const { completedOrdersNum } = OrderStore
 	const { OrderService, AuthStoreService } = rootStore
@@ -59,9 +61,9 @@ const UserProfileS = observer(({ navigation }: UserProfileSProps) => {
 			AuthStoreService.deleteUser()
 		}
 		createAlert({
-			title: 'Message',
-			message: "Do you really want to delete the account? The data will be lost forever.",
-			buttons: [{ text: 'Exit', style: 'default' },{ text: 'Delete', style: 'default', onPress:  onPressDelete}],
+			title: t('common:Message'),
+			message: t('reallyDeleteAccount'),
+			buttons: [{ text: t('common:exit'), style: 'default' },{ text: t('common:delete'), style: 'default', onPress:  onPressDelete}],
 		})
 
 	}
@@ -108,10 +110,10 @@ const UserProfileS = observer(({ navigation }: UserProfileSProps) => {
 								>
 									<Box>
 										<Text color={colors.black} fontWeight={'700'} fontSize={12}>
-											History
+											{t('history')}
 										</Text>
 										<Text color={colors.gray} fontWeight={'500'} fontSize={12}>
-											In progress: {completedOrdersNum ?? 0}
+											{t('inProgress')}: {completedOrdersNum ?? 0}
 										</Text>
 									</Box>
 									<Image
@@ -142,7 +144,7 @@ const UserProfileS = observer(({ navigation }: UserProfileSProps) => {
 								w={'100%'}
 								ml={1}
 							>
-								<Text style={styles.text}>Edit profile</Text>
+								<Text style={styles.text}>{t('editProfile')}</Text>
 								<Image source={arrowRightImg} alt={'img-arrow'} style={{ width: 24, height: 24 }} />
 							</Box>
 						</Box>
@@ -164,7 +166,7 @@ const UserProfileS = observer(({ navigation }: UserProfileSProps) => {
 								w={'100%'}
 								ml={1}
 							>
-								<Text style={styles.text}>Address</Text>
+								<Text style={styles.text}>{t('address')}</Text>
 								<Image source={arrowRightImg} alt={'img-arrow'} style={{ width: 24, height: 24 }} />
 							</Box>
 						</Box>
@@ -186,7 +188,7 @@ const UserProfileS = observer(({ navigation }: UserProfileSProps) => {
 								w={'100%'}
 								ml={1}
 							>
-								<Text style={styles.text}>Privacy police</Text>
+								<Text style={styles.text}>{t('privacyPolice:privacyPolice')}</Text>
 								<Image source={arrowRightImg} alt={'img-arrow'} style={{ width: 24, height: 24 }} />
 							</Box>
 						</Box>
@@ -208,7 +210,7 @@ const UserProfileS = observer(({ navigation }: UserProfileSProps) => {
 								w={'100%'}
 								ml={1}
 							>
-								<Text style={styles.text}>Terms of service</Text>
+								<Text style={styles.text}>{t('privacyPolice:termsOfService')}</Text>
 								<Image source={arrowRightImg} alt={'img-arrow'} style={{ width: 24, height: 24 }} />
 							</Box>
 						</Box>
@@ -229,7 +231,7 @@ const UserProfileS = observer(({ navigation }: UserProfileSProps) => {
 								w={'100%'}
 								ml={1}
 							>
-								<Text style={{ ...styles.text, color: colors.red }}>Log out</Text>
+								<Text style={{ ...styles.text, color: colors.red }}>{t('logOut')}</Text>
 								<Image source={arrowRightImg} alt={'img-arrow'} style={{ width: 24, height: 24 }} />
 							</Box>
 						</Box>
@@ -245,9 +247,10 @@ const UserProfileS = observer(({ navigation }: UserProfileSProps) => {
 						borderColor={colors.grayLight}
 					>
 						<Image w={5} h={5} alt={'img'} source={deleleImg} />
-						<Text style={{ ...styles.text, color: colors.red }}>Delete account</Text>
+						<Text style={{ ...styles.text, color: colors.red }}>{t('deleteAccount')}</Text>
 					</Box>
 				</TouchableOpacity>
+				<Text textAlign={'center'} color={colors.gray}>{`${t('common:appVersion')} ${Constants?.expoConfig?.version}`}</Text>
 			</Box>
 		</BaseWrapperComponent>
 	)

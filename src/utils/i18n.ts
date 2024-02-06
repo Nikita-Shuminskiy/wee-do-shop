@@ -4,7 +4,6 @@ import {initReactI18next} from 'react-i18next';
 import en from './locales/en';
 import ru from './locales/ru';
 
-let lang = 'en';
 export const resources = {
   en: en,
   ru: ru,
@@ -20,10 +19,11 @@ i18n.use(initReactI18next).init({
     'main',
     'errors',
     'login',
-    'register',
+    'registration',
+    'common',
   ],
   defaultNS: 'main',
-  react: { useSuspense: false },//this line
+  react: { useSuspense: false }, //this line
   interpolation: {
     escapeValue: false // react already safes from xss
   }
