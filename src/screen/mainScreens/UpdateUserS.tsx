@@ -119,7 +119,7 @@ const UpdateUserS = ({ navigation }: UpdateUserSProps) => {
 					</Box>
 					<Box mt={3}>
 						<Text mb={1} color={colors.gray} fontWeight={'500'}>
-							Current phone: <Text color={colors.blue}>{user?.phone}</Text>
+							{t('currentPhone')}: <Text color={colors.blue}>{user?.phone}</Text>
 						</Text>
 						<PhoneNumberField
 							onChangeCountry={onChangeCountry}

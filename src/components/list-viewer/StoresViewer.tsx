@@ -8,6 +8,7 @@ import {StoreType} from "../../api/storesApi"
 import ImageDisplay from "../ImageDisplay"
 import DeliveryTime from "../DeliveryTime"
 import {getCurrentDayName, isCurrentTimeWorkStoreRange} from "../../utils/utils"
+import { useTranslation } from "react-i18next";
 
 
 type StoresViewerType = {
@@ -20,6 +21,7 @@ type StoresViewerType = {
 
 const StoresViewer = memo(
 	({stores, onPress, onPressToggleFavoriteStore, isFavorite, isAuth}: StoresViewerType) => {
+		const {t} = useTranslation(['main', 'common']);
 		const {width} = Dimensions.get("window")
 		const productWidth = width - 20
 		const isOpenStoreNow = isCurrentTimeWorkStoreRange(stores?.workingHours)
@@ -49,7 +51,7 @@ const StoresViewer = memo(
 				>
 					<Box>
 						<Box position={"absolute"} top={2} left={2} zIndex={10}>
-							<DeliveryTime time={stores?.deliveryTime} fontSizeText={13} />
+							<DeliveryTime t={t} time={stores?.deliveryTime} fontSizeText={13} />
 						</Box>
 						{isAuth && (
 							<Box position={"absolute"} p={1} zIndex={10} top={2} right={2}>
@@ -103,7 +105,7 @@ const StoresViewer = memo(
 										color={colors.gray}
 										fontSize={11}
 										fontWeight={"500"}
-									>{`${subCategory.name}${lastElem ? "" : ", "}`}</Text>
+									>{`${t(subCategory.name.trim())}${lastElem ? "" : ", "}`}</Text>
 								)
 							})}
 						</Box>

@@ -8,7 +8,7 @@ import { useTranslation } from "react-i18next";
 
 type InputCustomProps = {
     label?: string
-    errorMessage?: string
+    errorMessage?: any
     error?: boolean
     textErrorStyles?: StyleProp<TextStyle>
     iconRight?: JSX.Element,

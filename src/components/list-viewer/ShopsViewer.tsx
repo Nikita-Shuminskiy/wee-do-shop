@@ -9,6 +9,7 @@ import { StoreType } from '../../api/storesApi'
 import * as Animatable from 'react-native-animatable'
 import DeliveryTime from '../DeliveryTime'
 import { getInfoAboutStoreWorkTime } from './utils'
+import { useTranslation } from "react-i18next";
 
 type ShopsViewerType = {
 	stores: StoreType
@@ -17,7 +18,7 @@ type ShopsViewerType = {
 
 const ShopsViewer = ({ stores, onPress }: ShopsViewerType) => {
 	const [isLoaded, setIsLoaded] = useState(false)
-
+	const {t} = useTranslation(['shops', 'common']);
 	const { width } = Dimensions.get('window')
 	const productWidth = (width - 15) / 2 - 15
 	const isOpenStoreNow = isCurrentTimeWorkStoreRange(stores?.workingHours)
@@ -56,6 +57,7 @@ const ShopsViewer = ({ stores, onPress }: ShopsViewerType) => {
 				{
 					stores?.deliveryTime && <Box position={'absolute'} top={2} left={2} zIndex={10} w={66} h={19}>
 						<DeliveryTime
+							t={t}
 							styleGradient={{ paddingVertical: 1, paddingHorizontal: 2 }}
 							styleImg={{ width: 14, height: 9 }}
 							fontSizeText={8}

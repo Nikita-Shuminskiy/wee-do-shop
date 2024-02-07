@@ -10,12 +10,13 @@ import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons'
 import CartS from '../screen/mainScreens/Cart/CartS'
 import OrdersS from '../screen/mainScreens/OrdersS'
 import { Platform } from 'react-native'
+import { useTranslation } from "react-i18next";
 
 const TabMainStack = createBottomTabNavigator()
 
 const MainNavigation = ({ navigation, route }) => {
 	const { keyboardStatus } = useKeyBoardStatus()
-
+	const {t} = useTranslation(['bottomBar']);
 	return (
 		<TabMainStack.Navigator
 			initialRouteName={routerConstants.HOME}
@@ -27,6 +28,7 @@ const MainNavigation = ({ navigation, route }) => {
 					height: Platform.OS === 'ios' ? '10%' : '8%',
 					backgroundColor: colors.white,
 					display: keyboardStatus ? 'none' : 'flex',
+					paddingBottom: 10
 				},
 				tabBarActiveTintColor: colors.green,
 				tabBarInactiveTintColor: colors.gray,
@@ -56,22 +58,22 @@ const MainNavigation = ({ navigation, route }) => {
 			})}
 		>
 			<TabMainStack.Screen
-				options={{ tabBarLabel: 'Home', headerShown: false }}
+				options={{ tabBarLabel: t('home'), headerShown: false }}
 				name={routerConstants.HOME}
 				component={HomeS}
 			/>
 			<TabMainStack.Screen
-				options={{ tabBarLabel: 'Shops', headerShown: false }}
+				options={{ tabBarLabel: t('shops'), headerShown: false }}
 				name={routerConstants.SHOPS}
 				component={ShopsS}
 			/>
 			<TabMainStack.Screen
-				options={{ tabBarLabel: 'Orders', headerShown: false, unmountOnBlur: true }}
+				options={{ tabBarLabel: t('orders'), headerShown: false, unmountOnBlur: true }}
 				name={routerConstants.HISTORY}
 				component={OrdersS}
 			/>
 			<TabMainStack.Screen
-				options={{ tabBarLabel: 'Cart', headerShown: false, unmountOnBlur: true }}
+				options={{ tabBarLabel: t('cart'), headerShown: false, unmountOnBlur: true }}
 				name={routerConstants.CART}
 				component={CartS}
 			/>

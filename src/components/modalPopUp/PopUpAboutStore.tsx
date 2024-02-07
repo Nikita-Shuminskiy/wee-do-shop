@@ -10,6 +10,7 @@ import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps'
 import { capitalizeFirstLetter, getCurrentDayName, isCurrentTimeWorkStoreRange } from '../../utils/utils'
 import { getFormattedAddress } from '../MapViews/utils'
 import { PhoneNumberComponent } from '../PhoneNumberLink'
+import { useTranslation } from "react-i18next";
 
 type PopUpAboutStoreProps = {
 	show: boolean
@@ -18,7 +19,7 @@ type PopUpAboutStoreProps = {
 }
 const PopUpAboutStore = ({ show, onClose, currentStore }: PopUpAboutStoreProps) => {
 	const workingHoursArray = Object.entries(currentStore?.workingHours ?? {})
-
+	const {t} = useTranslation(['store', 'common']);
 	const isOpenStoreNow = isCurrentTimeWorkStoreRange(currentStore?.workingHours)
 	//const untilTimeStoreTo = getCurrentUntilTimeStoreTo(currentStore?.workingHours)
 	const currentDayOfWeek = getCurrentDayName()
@@ -62,7 +63,7 @@ const PopUpAboutStore = ({ show, onClose, currentStore }: PopUpAboutStoreProps) 
 							fontWeight={'600'}
 							color={isOpenStoreNow ? colors.green : colors.red}
 						>
-							{isOpenStoreNow ? 'Open' : 'Closed'}
+							{isOpenStoreNow ? t('open') : t('closed')}
 						</Text>
 						<Text color={colors.grayLight} fontSize={22}>
 							{' '}
@@ -78,7 +79,7 @@ const PopUpAboutStore = ({ show, onClose, currentStore }: PopUpAboutStoreProps) 
 							return (
 								<Box flexDirection={'row'} w={'60%'} justifyContent={'space-between'} key={day[0]}>
 									<Text fontWeight={checkCurrentWorkDay ? '700' : '400'} textAlign={'right'}>
-										{capitalizeFirstLetter(day[0])}:{' '}
+										{t(capitalizeFirstLetter(day[0]))}:{' '}
 									</Text>
 									<Text fontWeight={checkCurrentWorkDay ? '700' : '400'} textAlign={'right'}>
 										{day[1]}

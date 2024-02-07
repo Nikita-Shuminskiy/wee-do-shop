@@ -13,6 +13,7 @@ import { renderEmptyContainer } from '../../components/list-viewer/empty-list'
 import rootStore from '../../store/RootStore/root-store'
 import ShopsViewer from '../../components/list-viewer/ShopsViewer'
 import { observer } from 'mobx-react-lite'
+import { useTranslation } from "react-i18next";
 
 export type ShopsSType = {
 	navigation: NavigationProp<ParamListBase>
@@ -22,7 +23,7 @@ const ShopsS = observer(({ navigation }: ShopsSType) => {
 	const { user } = AuthStore
 	const { StoresStore } = rootStore
 	const { stores, setStore, favoriteStores, search, setSearch } = StoresStore
-
+	const {t} = useTranslation(['shops', 'common']);
 	const storesViews = useCallback(({ item }: { item: StoreType }) => {
 		const onPress = () => {
 			StoresService.getStore(item._id).then((data) => {
@@ -52,7 +53,7 @@ const ShopsS = observer(({ navigation }: ShopsSType) => {
 				>
 					<SearchStores selectCategory={''} setSearch={setSearch} search={search} />
 					<Text mt={2} mb={2} fontSize={24} fontWeight={'500'}>
-						Shops near you
+						{t('shopsNearYou')}
 					</Text>
 					<Box mb={20}>
 						<FlatList
@@ -66,7 +67,7 @@ const ShopsS = observer(({ navigation }: ShopsSType) => {
 							style={{ width: '100%' }}
 							horizontal={false}
 							ListEmptyComponent={() =>
-								renderEmptyContainer(Dimensions.get('window').height, 'List is empty')
+								renderEmptyContainer(Dimensions.get('window').height, t('common:listEmpty'))
 							}
 						/>
 					</Box>

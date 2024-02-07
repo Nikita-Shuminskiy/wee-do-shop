@@ -22,6 +22,7 @@ import {createAlert} from "../../components/Alert"
 import NotificationStore from "../../store/NotificationStore/notification-store"
 import {LoadingEnum} from "../../store/types/types"
 import useGoBackNative from "../../utils/hook/useGoBackNative";
+import { useTranslation } from "react-i18next";
 
 type HomeSProps = {
 	navigation: NavigationProp<ParamListBase>
@@ -29,6 +30,7 @@ type HomeSProps = {
 }
 
 const HomeS = observer(({navigation, route}: HomeSProps) => {
+	const {t} = useTranslation(['main', 'common']);
 	const onPressGoBack = () => {
 		return true
 	}
@@ -175,7 +177,7 @@ const HomeS = observer(({navigation, route}: HomeSProps) => {
 							renderItem={storesViews}
 							keyExtractor={(item, index) => item._id.toString()}
 							style={{width: "100%"}}
-							ListEmptyComponent={() => renderEmptyContainer(0, "List is empty")}
+							ListEmptyComponent={() => renderEmptyContainer(0, t('common:listEmpty'))}
 							contentContainerStyle={!stores?.length && styles.contentContainerStyle}
 						/>
 					</Box>

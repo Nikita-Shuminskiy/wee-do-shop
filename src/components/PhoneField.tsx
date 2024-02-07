@@ -4,16 +4,18 @@ import PhoneInput, { PhoneInputProps } from 'react-native-phone-number-input'
 import { colors } from '../assets/colors/colors'
 import { Box, FormControl, Text, WarningOutlineIcon } from 'native-base'
 import { EvilIcons } from '@expo/vector-icons'
+import { useTranslation } from "react-i18next";
 
 type PhoneNumberFieldProps = PhoneInputProps & {
 	isRequired: boolean
 	isInvalid: boolean
-	errorMessage?: string
+	errorMessage?: any
 	onChangeText?: any
 	onValidNumber?: (isValid: boolean) => void
 }
 const PhoneNumberField: React.FC<PhoneNumberFieldProps> = ({ isRequired, isInvalid,onChangeText, onValidNumber, errorMessage, ...rest }) => {
 	const phoneInput = useRef<PhoneInput>(null)
+	const {t} = useTranslation(['common']);
 	const onChangeTextHandler = (text) => {
 		onChangeText(text)
 		onValidNumber?.(phoneInput.current?.isValidNumber(text))
@@ -39,13 +41,13 @@ const PhoneNumberField: React.FC<PhoneNumberFieldProps> = ({ isRequired, isInval
 					codeTextStyle={{ color: colors.gray, height: 23, fontSize: 16 }}
 					textInputStyle={{ color: colors.gray, fontSize: 16 }}
 					defaultCode={'TH'}
-					placeholder={'Phone*'}
+					placeholder={t('phone')}
 					layout='first'
 					onChangeText={onChangeTextHandler}
 					{...rest}
 				/>
 				<FormControl.ErrorMessage leftIcon={<WarningOutlineIcon size='xs' />}>
-					{errorMessage ? errorMessage : 'Field is required'}
+					{errorMessage ? errorMessage : t('fieldIsRequired')}
 				</FormControl.ErrorMessage>
 			</FormControl>
 		</Box>

@@ -13,6 +13,7 @@ import { colors } from "../assets/colors/colors";
 import { observer } from "mobx-react-lite";
 import { validateEmail } from "../utils/utils";
 import Button from "./Button";
+import { useTranslation } from "react-i18next";
 
 export type HeaderUserType = {
 	navigation: NavigationProp<ParamListBase>
@@ -20,6 +21,7 @@ export type HeaderUserType = {
 	setFavoritesStores?: () => void
 }
 export const HeaderUser = observer(({ navigation, address, setFavoritesStores }: HeaderUserType) => {
+	const {t} = useTranslation(['login', 'common']);
 	const formatted_address = getFormattedAddress(address)
 	const {isAuth} = AuthStore
 	const onPressFavoriteHandler = () => {
@@ -62,13 +64,13 @@ export const HeaderUser = observer(({ navigation, address, setFavoritesStores }:
 							styleText={styles.textBtn}
 							backgroundColor={colors.green}
 							onPress={onPressSignIn}
-							title={"Sign in"}
+							title={t('signIn')}
 						/>
 						<Button
 							styleText={{ color: colors.black }}
 							styleContainer={styles.styleContainerBtn}
 							onPress={onPressSignUp}
-							title={"Sign up"}
+							title={t('signUp')}
 						/>
 					</Box>
 			}

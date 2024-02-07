@@ -1,5 +1,14 @@
 export default {
+  bottomBar: {
+    home: 'Home',
+    shops: 'Shops',
+    orders: 'Orders',
+    cart: 'Cart'
+  },
   profile: {
+    changeLanguage: 'Change language',
+    ru: 'Russian',
+    en: 'English',
     inProgress: 'In progress',
     history: 'History',
     editProfile: 'Edit profile',
@@ -24,6 +33,70 @@ export default {
   },
   main: {
     success: 'Success',
+    storeSearch: 'storeSearch',
+    favoriteStores: 'favoriteStores'
+  },
+  shops: {
+    shopsNearYou:'Shops near you'
+  },
+  store: {
+    min:'min',
+    youNeedRegister: 'You need to register to view the store.',
+    goLogin: 'Go to login',
+    aboutStore: 'About store',
+    allProduct: 'All products',
+  },
+  cart: {
+    deleteOrder:'Delete the order ?',
+    cart:'Cart',
+    delivery:'Delivery',
+    addComment:"Add comment",
+    promoCode:"Promo code",
+    checkout:"Checkout",
+    yorAddress:"Your address",
+    enterPromoCode:"Enter promo code",
+    min:"min",
+    orderFreeDelivery:'Order ฿ 1500 and get free delivery',
+  },
+  order_statuses: {
+    goHistory:'Go to history',
+    yourCourier:'Your courier',
+    backToHome:'Back to Home',
+    courierOnThe:'Courier on the way',
+    orderDelivered:'Order delivered',
+    Placed:'Placed',
+    Confirmed:'Confirmed',
+    WaitingForPickUp:'Waiting for pick up',
+    OnTheWay:'On the way',
+    Completed:'Completed',
+    Canceled:'Canceled',
+    storeComment:'Store comment',
+    orderLoading:'Order loading, wait for a call from the store',
+    courierPicks:'The courier picks up your order',
+    storeApproved:'The store approved the order',
+
+    storeReceived:'The Store received the order, confirmation',
+    weExpanding:'We are expanding our range of products every day',
+    readyToBring:'Ready to bring you joy in any weather and any time',
+    wePackGoods:'We pack the goods in environmentally friendly packaging',
+    willDeliver:'We will deliver the goods quickly and carefully',
+    thankYouBeing:'Thank you for being with Weedo, see you again',
+    orderCanceled:'Order canceled, wait for a call from the store',
+    order:'Order',
+  },
+  orders: {
+    loadMore: 'Load more',
+    repeatOrder: 'Repeat order',
+    noDetails: 'No details',
+    free: 'free',
+    delivery: 'Delivery',
+    productNotAviable: 'Product not available',
+    total: 'Total',
+    deliveryPayment: 'Delivery and Payment',
+    history: 'History',
+    orders: 'Orders',
+    reason: 'Reason',
+    youHaveNotOrders: 'You haven’t placed\n any orders yet.',
   },
   login: {
     email: 'Email',
@@ -45,6 +118,7 @@ export default {
     Iagree: 'I agree with',
     legalnotice: 'Legal notice',
     enterName: 'Enter a name',
+    enterLastName: 'Enter a last name',
     phone: 'Phone*',
     youMustConfirmNotice: 'You must confirm the Legal Notice',
   },
@@ -65,6 +139,7 @@ export default {
   },
   common: {
     save: 'Save',
+    remove: 'Remove',
     appVersion: 'App version',
     ok: 'ok',
     message: 'Message',
@@ -75,6 +150,10 @@ export default {
     required: 'required',
     ownerMail: 'weedoshop420@gmail.com',
     effectiveDate: 'Effective Date: August 14, 2023',
+    confirm:'Confirm',
+
+
+    listEmpty: 'List is empty'
   },
   privacyPolice: {
     termsOfService: 'Terms of service',
@@ -132,5 +211,5 @@ export default {
     yourRights: "You have certain rights regarding your personal data: Right to access your data and obtain a copy of the information. Right to rectify inaccurate data. Right to erase data (in certain cases). Right to restrict data processing (in certain cases). Right to object to processing based on legitimate grounds. Right to data portability (in certain cases).",
     contactUs: "If you have any questions about our Privacy Policy or the processing of your data, please contact us at",
     changesToPrivacyPolicy: "We reserve the right to make changes to this Privacy Policy. Any changes will be posted on this page, and we recommend checking for updates periodically. We value your trust and are committed to protecting your personal data. Thank you for choosing the Weedo Store!",
-  }
+  },
 };

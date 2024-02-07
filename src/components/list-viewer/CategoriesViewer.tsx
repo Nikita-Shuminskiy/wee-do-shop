@@ -6,6 +6,7 @@ import categoryIcoMock from "../../assets/images/categoryIcoMock.png"
 import ImageDisplay from "../ImageDisplay"
 import {observer} from "mobx-react-lite"
 import StoresStore from "../../store/StoresStore/stores-store"
+import { useTranslation } from "react-i18next";
 
 type CategoriesViewerType = {
 	subCategory: any
@@ -15,9 +16,10 @@ type CategoriesViewerType = {
 }
 const SubCategoriesViewer = memo(
 	({subCategory, onPress, isCategory, isChosen}: CategoriesViewerType) => {
+		const {t} = useTranslation(['main', 'common']);
 		return (
 			<TouchableOpacity onPress={() => onPress(subCategory)}>
-				<Box alignItems={"center"} mr={1} justifyContent={"center"}>
+				<Box alignItems={"center"} mr={2} justifyContent={"center"}>
 					{isCategory ? (
 						<>
 							<Image
@@ -26,7 +28,7 @@ const SubCategoriesViewer = memo(
 								source={{uri: subCategory.image}}
 							/>
 							<Text fontSize={13} fontWeight={"600"} color={isChosen ? colors.green : colors.black}>
-								{subCategory.name}
+								{t(subCategory?.name.trim())}
 							</Text>
 						</>
 					) : (
@@ -37,7 +39,7 @@ const SubCategoriesViewer = memo(
 							borderColor={isChosen ? colors.green : colors.gray}
 							color={isChosen ? colors.green : colors.gray}
 						>
-							{subCategory?.name}
+							{subCategory?.name.trim()}
 						</Text>
 					)}
 				</Box>

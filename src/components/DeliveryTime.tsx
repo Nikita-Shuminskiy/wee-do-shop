@@ -6,7 +6,7 @@ import { colors } from '../assets/colors/colors'
 import { LinearGradient } from 'expo-linear-gradient'
 import Svg, { Path } from 'react-native-svg'
 
-const DeliveryTime = ({ time, styleImg, styleGradient, fontSizeText }: any) => {
+const DeliveryTime = ({ time, styleImg, styleGradient, fontSizeText, t }: any) => {
 	return (
 		<LinearGradient
 			colors={['rgba(73,74,79,0.51)', '#699315']}
@@ -34,7 +34,7 @@ const DeliveryTime = ({ time, styleImg, styleGradient, fontSizeText }: any) => {
 				/>
 			</Svg>
 			<Text ml={1} color={colors.white} fontSize={fontSizeText ?? 13} fontWeight={'500'}>
-				{time} min
+				{time} {t('min')}
 			</Text>
 		</LinearGradient>
 	)

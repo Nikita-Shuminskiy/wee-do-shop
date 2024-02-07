@@ -23,6 +23,7 @@ import {createAlert} from "../../components/Alert"
 import {isCurrentTimeWorkStoreRange} from "../../utils/utils"
 import {alertStoreClosed} from "../../components/list-viewer/utils"
 import AuthStore from "../../store/AuthStore/auth-store"
+import { useTranslation } from "react-i18next";
 
 type StoreSProps = {
 	navigation: NavigationProp<ParamListBase>
@@ -36,7 +37,7 @@ const StoreS = observer(({navigation}: StoreSProps) => {
 	const isOpenStoreNow = isCurrentTimeWorkStoreRange(store?.workingHours)
 	const [isShowModalProduct, setIsShowModalProduct] = useState<boolean>(false)
 	const [isShowModalAboutStore, setIsShowModalAboutStore] = useState<boolean>(false)
-
+	const {t} = useTranslation(['store', 'common']);
 	const [selectedSubCategory, setSelectedSubCategory] = useState<SubCategoryType | null>()
 	const [selectedProduct, setSelectedProduct] = useState<ProductType>()
 	const [selectedSubCategoryId, setSelectedSubCategoryId] = useState<string>("")
@@ -54,11 +55,11 @@ const StoreS = observer(({navigation}: StoreSProps) => {
 			navigation.navigate(routerConstants.LOGIN)
 		}
 		createAlert({
-			title: "Message",
-			message: "You need to register to view the store.",
+			title: t('common:message'),
+			message: t('youNeedRegister'),
 			buttons: [
-				{text: "Go to login", style: "cancel", onPress: onPressGoLogin},
-				{text: "Exit", style: "cancel"},
+				{text: t('goLogin'), style: "cancel", onPress: onPressGoLogin},
+				{text: t('common:exit'), style: "cancel"},
 			],
 		})
 		return
@@ -213,7 +214,7 @@ const StoreS = observer(({navigation}: StoreSProps) => {
 										backgroundColor={"transparent"}
 										styleText={{fontSize: 14, color: colors.white, ...styles.textWithShadow}}
 										onPress={onPressAboutStore}
-										title={"About store"}
+										title={t('aboutStore')}
 									/>
 								</Box>
 							</Box>
@@ -255,7 +256,7 @@ const StoreS = observer(({navigation}: StoreSProps) => {
 								keyExtractor={(item, index) => item?._id.toString()}
 								style={{width: "100%"}}
 								ListEmptyComponent={() =>
-									renderEmptyContainer(Dimensions.get("window").height, "List is empty")
+									renderEmptyContainer(Dimensions.get("window").height, t('common:listEmpty'))
 								}
 								numColumns={2}
 								columnWrapperStyle={{justifyContent: "space-between"}}
@@ -295,9 +296,9 @@ const StoreS = observer(({navigation}: StoreSProps) => {
 							>
 								<Text style={styles.styleTextBtn}>฿ {formatProductPrice(cart?.totalSum)}</Text>
 								<Text color={colors.white} fontWeight={"700"} fontSize={16}>
-									Confirm
+									{t('common:confirm')}
 								</Text>
-								<Text style={styles.styleTextBtn}>{store?.deliveryTime} min</Text>
+								<Text style={styles.styleTextBtn}>{store?.deliveryTime} {t('min')}</Text>
 							</Box>
 						</Button>
 					</Box>

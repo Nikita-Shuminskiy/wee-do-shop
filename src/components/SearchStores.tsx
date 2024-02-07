@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useState } from 'react'
+import React, { memo, useCallback, useEffect, useState } from "react";
 import { colors } from '../assets/colors/colors'
 import { Box, Image } from 'native-base'
 import TextInput from './TextInput'
@@ -7,6 +7,7 @@ import settingImg from '../assets/images/setting.png'
 import rootStore from '../store/RootStore/root-store'
 import { AntDesign } from '@expo/vector-icons'
 import { TouchableOpacity } from 'react-native'
+import { useTranslation } from "react-i18next";
 
 type SearchStoresType = {
 	search: string
@@ -15,10 +16,10 @@ type SearchStoresType = {
 }
 const SearchStores = memo(({ search, setSearch, selectCategory }: SearchStoresType) => {
 	const { StoresService } = rootStore
-
-	const handleTextChange = (newText) => {
+	const {t} = useTranslation(['main', 'common']);
+	const handleTextChange = useCallback((newText) => {
 		setSearch(newText)
-	}
+	}, [])
 
 	const onSubmitEditing = () => {
 		StoresService.searchStores({ search, categoryId: selectCategory })
@@ -42,7 +43,7 @@ const SearchStores = memo(({ search, setSearch, selectCategory }: SearchStoresTy
 				}
 				returnKeyType={'search'}
 				h={50}
-				placeholder={'Store search'}
+				placeholder={t('storeSearch')}
 				borderRadius={16}
 				backgroundColor={'transparent'}
 				borderColor={colors.grayLight}

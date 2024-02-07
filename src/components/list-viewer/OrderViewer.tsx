@@ -10,6 +10,7 @@ import { useNavigation } from "@react-navigation/native";
 import { routerConstants } from "../../constants/routerConstants";
 import orderStore from "../../store/OrderStore/order-store";
 import rootStore from "../../store/RootStore/root-store";
+import { useTranslation } from "react-i18next";
 
 type OrderViewerProps = {
 	order: ApiOrderType
@@ -17,7 +18,8 @@ type OrderViewerProps = {
 	onPressRepeat: (order: ApiOrderType) => void
 }
 const OrderViewer = memo(({ order, onPressDetails, onPressRepeat }: OrderViewerProps) => {
-	const { setOrderData, setStatus } = orderStore
+	const {t} = useTranslation(['orders', 'common', 'order_statuses']);
+	const { setStatus } = orderStore
 	const { OrderService } = rootStore
 	const isStatusCanceled = order.status === StatusType.Canceled
 	//const { status } = useOrderDataStatus({ orderId: order._id })
@@ -55,7 +57,7 @@ const OrderViewer = memo(({ order, onPressDetails, onPressRepeat }: OrderViewerP
 							: '#556c60'
 					}
 				>
-					{splittingWord(order.status)}
+					{t(`order_statuses:${order.status}`)}
 				</Text>
 			</Box>
 			<Box flexDirection={'row'} mt={2} justifyContent={'space-between'}>
@@ -67,14 +69,14 @@ const OrderViewer = memo(({ order, onPressDetails, onPressRepeat }: OrderViewerP
 						width: '100%',
 					}}
 					onPress={() => onPressDetails(order)}
-					title={`Order details (${order.products?.length}+)`}
+					title={`${t('orderDetails')} (${order.products?.length}+)`}
 				/>
 				{isCompletedStatuses && !isStatusCanceled && (
 					<Button
 						backgroundColor={colors.green}
 						styleContainer={styles.containerBtn}
 						onPress={() => onPressRepeat(order)}
-						title={'Repeat order'}
+						title={t('repeatOrder')}
 					/>
 				)}
 				{!isCompletedStatuses && !isStatusCanceled && (
@@ -82,7 +84,7 @@ const OrderViewer = memo(({ order, onPressDetails, onPressRepeat }: OrderViewerP
 						backgroundColor={colors.green}
 						styleContainer={styles.containerBtn}
 						onPress={onPressCheckStatus}
-						title={'Check status'}
+						title={t('checkStatus')}
 					/>
 				)}
 			</Box>
@@ -94,7 +96,7 @@ const styles = StyleSheet.create({
 		color: colors.black,
 	},
 	containerBtn: {
-		maxWidth: 130,
+		maxWidth: 140,
 		flex: 1,
 		width: '100%',
 	},

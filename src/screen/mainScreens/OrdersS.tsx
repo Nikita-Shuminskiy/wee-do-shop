@@ -20,6 +20,7 @@ import Loading from '../../components/Loading'
 import { isCurrentTimeWorkStoreRange } from "../../utils/utils";
 import { alertStoreClosed } from "../../components/list-viewer/utils";
 import AuthStore from "../../store/AuthStore/auth-store";
+import { useTranslation } from "react-i18next";
 
 type OrdersSProps = {
 	navigation: NavigationProp<ParamListBase>
@@ -28,7 +29,7 @@ type OrdersSProps = {
 const OrdersS = observer(({ navigation, route }: OrdersSProps) => {
 	const isRoutHistory = route.name === routerConstants.HISTORY
 	const isFromStatusesScreen = route?.params?.from === 'statuses'
-
+	const {t} = useTranslation(['orders', 'common']);
 	const { setToCartStore } = cartStore
 	const { orders, setClearOrders, totalOrders } = orderStore
 	const { isAuth } = AuthStore
@@ -112,7 +113,7 @@ const OrdersS = observer(({ navigation, route }: OrdersSProps) => {
 		return (
 			<OrderViewer onPressRepeat={onPressRepeat} onPressDetails={onPressDetails} order={item} />
 		)
-	}, [])
+	}, [isRoutHistory])
 
 	const renderFooter = () => (
 		<Box style={styles.footerText}>
@@ -126,7 +127,7 @@ const OrdersS = observer(({ navigation, route }: OrdersSProps) => {
 				: !isLoadingData && (
 						<TouchableOpacity onPress={requestAPI}>
 							<Text color={colors.green} fontSize={20} fontWeight={'500'}>
-								Load more
+								{t('loadMore')}
 							</Text>
 						</TouchableOpacity>
 				  )}
@@ -152,7 +153,7 @@ const OrdersS = observer(({ navigation, route }: OrdersSProps) => {
 					<Box w={'100%'} alignItems={'center'}>
 						<Text fontSize={28} fontWeight={'700'}>
 							{' '}
-							{!isRoutHistory ? 'History' : 'Orders'}
+							{!isRoutHistory ? t('history') : t('orders')}
 						</Text>
 					</Box>
 				</Box>
@@ -166,7 +167,7 @@ const OrdersS = observer(({ navigation, route }: OrdersSProps) => {
 						contentContainerStyle={!ordersLength && styles.contentContainerOrder}
 						ListFooterComponent={orders.length ? renderFooter : null}
 						ListEmptyComponent={() =>
-							renderEmptyContainer(0, 'You haven’t placed\n any orders yet.')
+							renderEmptyContainer(0, t('youHaveNotOrders'))
 						}
 					/>
 				</Box>

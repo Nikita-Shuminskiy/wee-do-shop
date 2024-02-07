@@ -1,30 +1,31 @@
-import React, { useCallback, useState } from "react";
-import {Linking, StyleSheet, TextInput, TouchableOpacity} from "react-native"
-import {NavigationProp, ParamListBase} from "@react-navigation/native"
-import {BaseWrapperComponent} from "../../components/baseWrapperComponent"
-import {Box, Checkbox, Image, Text} from "native-base"
-import CustomInput from "../../components/TextInput"
-import {AntDesign, MaterialCommunityIcons} from "@expo/vector-icons"
-import logoImg from "../../assets/images/logoWeeDo.png"
-import {useFormik} from "formik"
-import {validateEmail} from "../../utils/utils"
-import {colors} from "../../assets/colors/colors"
-import Button from "../../components/Button"
-import PhoneNumberField from "../../components/PhoneField"
-import location from "../../assets/images/location-register.png"
-import arrowLeft from "../../assets/images/arrow-left.png"
-import rootStore from "../../store/RootStore"
-import {RoleType} from "../../api/authApi"
-import {routerConstants} from "../../constants/routerConstants"
-import ArrowBack from "../../components/ArrowBack"
-import {observer} from "mobx-react-lite"
-import AuthStore, {AddressType, fullAddressType} from "../../store/AuthStore/auth-store"
-import {getFormattedAddress} from "../../components/MapViews/utils"
-import {createAlert} from "../../components/Alert"
-import {usePermissionsPushGeo} from "../../utils/hook/usePermissionsPushGeo"
-import {color} from "native-base/lib/typescript/theme/styled-system"
-import Link from "../../components/Link"
+import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { Linking, StyleSheet, TextInput, TouchableOpacity } from "react-native";
+import { NavigationProp, ParamListBase } from "@react-navigation/native";
+import { BaseWrapperComponent } from "../../components/baseWrapperComponent";
+import { Box, Checkbox, Image, Text } from "native-base";
+import CustomInput from "../../components/TextInput";
+import { AntDesign, MaterialCommunityIcons } from "@expo/vector-icons";
+import logoImg from "../../assets/images/logoWeeDo.png";
+import { FormikHelpers, useFormik } from "formik";
+import { validateEmail } from "../../utils/utils";
+import { colors } from "../../assets/colors/colors";
+import Button from "../../components/Button";
+import PhoneNumberField from "../../components/PhoneField";
+import location from "../../assets/images/location-register.png";
+import arrowLeft from "../../assets/images/arrow-left.png";
+import rootStore from "../../store/RootStore";
+import { RoleType } from "../../api/authApi";
+import { routerConstants } from "../../constants/routerConstants";
+import ArrowBack from "../../components/ArrowBack";
+import { observer } from "mobx-react-lite";
+import AuthStore, { AddressType, fullAddressType } from "../../store/AuthStore/auth-store";
+import { getFormattedAddress } from "../../components/MapViews/utils";
+import { createAlert } from "../../components/Alert";
+import Link from "../../components/Link";
 import { useTranslation } from "react-i18next";
+import * as Yup from "yup";
+import "yup-phone-lite";
+import { schema } from "./helpers";
 
 export type CountryData = {
 	callingCode: string[]
@@ -67,13 +68,13 @@ const RegisterS = observer(({navigation}: LoginSProps) => {
 	const [checkAge, setAgeCheck] = useState(false)
 	const [isErrorCheckAge, setCheckError] = useState(false)
 	const [countryCode, setCountryCode] = useState<CountryData>(countryDataDefault)
-	const onSubmit = (values: UserRegisterDataType) => {
+
+	const onSubmit = (values: UserRegisterDataType, helpers: FormikHelpers<any>) => {
 		if (!checkAge) {
 			setCheckError(true)
 			setSubmitting(false)
 			return
 		}
-
 		if ((!currentLocation?.fullAddress?.country && !currentLocation?.fullAddress?.city)
 			|| !currentLocation?.location.coordinates[0]) {
 			createAlert({
@@ -96,6 +97,13 @@ const RegisterS = observer(({navigation}: LoginSProps) => {
         navigation.navigate(routerConstants.MAIN)
       }
     })
+/*		console.log('ok', {
+			...values,
+			role: RoleType.Customer,
+			email: values.email.trim(),
+			phone: formattedPhoneNumber,
+			address: currentLocation,
+		});*/
 		setSubmitting(false)
 	}
 	const {
@@ -107,7 +115,6 @@ const RegisterS = observer(({navigation}: LoginSProps) => {
 		errors,
 		isSubmitting,
 		setSubmitting,
-		setValues,
 	} = useFormik({
 		initialValues: {
 			email: "",
@@ -121,61 +128,30 @@ const RegisterS = observer(({navigation}: LoginSProps) => {
 			privacyPolicyIsVerified: true,
 		},
 		onSubmit: onSubmit,
-		validateOnChange: false,
+		validateOnChange: true,
 		validateOnMount: false,
-		validateOnBlur: false,
-		validate: (values) => {
-			const errors = {}
-			if (!validateEmail(values.email)) {
-				errors["email"] = true
-			}
-			if (values.password.length <= 5) {
-				errors["password"] = true
-			}
-			if (!values.firstName.trim()) {
-				errors["firstName"] = true
-			}
-			if (!values.lastName.trim()) {
-				errors["lastName"] = true
-			}
-			if (values.phone.length <= 3) {
-				errors["phone"] = true
-			}
-			if (values.password !== values.confirmPassword) {
-				errors["confirmPassword"] = true
-			}
-
-			return errors
-		},
+		validateOnBlur: true,
+		validationSchema: schema(t, countryCode)
 	})
 	const onPressGoBack = useCallback(() => {
 		navigation.goBack()
 	}, [])
-	const disabledBtnSignUp =
-		!!(errors.email && !validateEmail(values.email.trim())) ||
-		!!(errors.firstName && !values.firstName.trim()) ||
-		!!(errors.lastName && !values.lastName.trim()) ||
-		!!(errors.password && values.password.length <= 5) ||
-		!!(errors.confirmPassword && !values.confirmPassword) ||
-		!!(errors.phone && values.phone.length <= 3) ||
-		isSubmitting
-
+	console.log(errors);
 	const onPressNavigateToLocation = useCallback( async () => {
-		//	await Linking.openSettings()
 		navigation.navigate(routerConstants.AUTOCOMPLETE_MAP)
 	}, [])
 
-	const formatted_address = getFormattedAddress(currentLocation)
+	const formatted_address = useMemo(() => getFormattedAddress(currentLocation), [currentLocation])
 	const onChangeCountry = useCallback( (country) => {
 		setCountryCode(country)
 	}, [])
-	const onChangeTextAddress = (text: string, key: keyof fullAddressType) => {
+	const onChangeTextAddress = useCallback((text: string, key: keyof fullAddressType) => {
 		if(text?.length > 10) return
 		setLocation({
 			...currentLocation,
 			fullAddress: {...currentLocation?.fullAddress, [key]: text},
 		})
-	}
+	}, [currentLocation])
 	const onPressOpenLegalNotice = useCallback(() => {
 		Linking.openURL(
 			"https://docs.google.com/document/d/e/2PACX-1vT1f6tmdyx4tiXcwLdHDoZcTvtquB0jF__AFWFb1QuYYG7ERhqwaejgTa-VLYU7dE55LMs8KASbt8tl/pub"
@@ -196,8 +172,8 @@ const RegisterS = observer(({navigation}: LoginSProps) => {
 						placeholder={t('firstName')}
 						value={values.firstName}
 						onBlur={handleBlur("firstName")}
-						errorMessage={!values.firstName.trim() && t('enterName')}
-						isInvalid={!!(errors.firstName && !values.firstName.trim())}
+						errorMessage={errors['firstName']}
+						isInvalid={touched['firstName'] && Boolean(errors['firstName'])}
 						isRequired={true}
 						borderRadius={16}
 						iconRight={<AntDesign name="user" size={24} color={colors.gray} />}
@@ -209,8 +185,8 @@ const RegisterS = observer(({navigation}: LoginSProps) => {
 						placeholder={t('lastName')}
 						value={values.lastName}
 						onBlur={handleBlur("lastName")}
-						errorMessage={!values.lastName.trim() && t('enterName')}
-						isInvalid={!!(errors.lastName && !values.lastName.trim())}
+						errorMessage={errors['lastName']}
+						isInvalid={touched['lastName'] && Boolean(errors['lastName'])}
 						isRequired={true}
 						borderRadius={16}
 						iconRight={<AntDesign name="user" size={24} color={colors.gray} />}
@@ -221,12 +197,8 @@ const RegisterS = observer(({navigation}: LoginSProps) => {
 						onChangeText={handleChange("email")}
 						value={values.email}
 						onBlur={handleBlur("email")}
-						errorMessage={
-							!validateEmail(values.email.trim()) &&
-							errors.email &&
-							t('errors:incorrectEmail')
-						}
-						isInvalid={!!(errors.email && !validateEmail(values.email.trim()))}
+						errorMessage={errors['email']}
+						isInvalid={touched['email'] && Boolean(errors['email'])}
 						isRequired={true}
 						placeholder={t('email')}
 						borderRadius={16}
@@ -238,9 +210,10 @@ const RegisterS = observer(({navigation}: LoginSProps) => {
 					<Box mt={2}>
 						<PhoneNumberField
 							onChangeCountry={onChangeCountry}
-							errorMessage={t('errors:incorrectPhone')}
+							errorMessage={errors['phone']}
 							placeholder={t('phone')}
-							isInvalid={!!(errors.phone && values.phone.length <= 3)}
+						//	onBlur={handleBlur("phone")}
+							isInvalid={touched['phone'] && Boolean(errors['phone'])}
 							isRequired={true}
 							defaultValue={values.phone}
 							onChangeText={handleChange("phone")}
@@ -250,12 +223,8 @@ const RegisterS = observer(({navigation}: LoginSProps) => {
 						onChangeText={handleChange("password")}
 						placeholder={t('login:password')}
 						onBlur={handleBlur("password")}
-						isInvalid={!!(errors.password && values.password.length <= 3)}
-						errorMessage={
-							!!errors.password &&
-							values.password.length <= 5 &&
-							t('errors:passwordMustBe')
-						}
+						isInvalid={touched['password'] && Boolean(errors['password'])}
+						errorMessage={t('errors:passwordMustBe')}
 						value={values.password}
 						isRequired={true}
 						type={"password"}
@@ -267,17 +236,9 @@ const RegisterS = observer(({navigation}: LoginSProps) => {
 						placeholder={t('confirmPassword')}
 						onBlur={handleBlur("confirmPassword")}
 						value={values.confirmPassword}
-						errorMessage={
-							(touched.confirmPassword && errors.confirmPassword && !values.confirmPassword) ||
-							(values.confirmPassword !== values.password && touched.confirmPassword)
-								? t('errors:passwordDontMatch')
-								: ""
-						}
+						errorMessage={errors['confirmPassword']}
+						isInvalid={touched['confirmPassword'] && Boolean(errors['confirmPassword'])}
 						isRequired={true}
-						isInvalid={
-							!!(touched.confirmPassword && errors.confirmPassword && !values.confirmPassword) ||
-							!!(values.confirmPassword !== values.password && touched.confirmPassword)
-						}
 						type={"password"}
 						borderRadius={16}
 					/>
@@ -339,7 +300,7 @@ const RegisterS = observer(({navigation}: LoginSProps) => {
 				<Box w={"100%"} mt={5} mb={5}>
 					<Button
 						styleContainer={styles.styleContainerBtnUp}
-						disabled={disabledBtnSignUp}
+						disabled={isSubmitting}
 						onPress={handleSubmit}
 						title={t('login:signUp')}
 					/>

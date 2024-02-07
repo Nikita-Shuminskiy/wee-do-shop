@@ -1,34 +1,35 @@
-import React, { useEffect } from 'react'
-import { BaseWrapperComponent } from '../../components/baseWrapperComponent'
-import { NavigationProp, ParamListBase } from '@react-navigation/native'
-import { Box, Image, Text } from 'native-base'
-import AuthStore from '../../store/AuthStore/auth-store'
-import { StyleSheet, TouchableOpacity } from 'react-native'
-import { colors } from '../../assets/colors/colors'
-import ArrowBack from '../../components/ArrowBack'
-import arrowLeftBack from '../../assets/images/arrow-left.png'
-import { routerConstants } from '../../constants/routerConstants'
-import userImg from '../../assets/images/userMockAvatar.png'
-import { observer } from 'mobx-react-lite'
-import settingImg from '../../assets/images/setting.png'
-import privacyImg from '../../assets/images/courierImages/privacy.png'
-import termsImg from '../../assets/images/courierImages/terms.png'
-import logoutImg from '../../assets/images/courierImages/Log-out.png'
-import myOrdersImg from '../../assets/images/courierImages/my-orders.png'
-import arrowRightImg from '../../assets/images/courierImages/arrow-right.png'
-import locationImg from '../../assets/images/location.png'
-import deleleImg from '../../assets/images/delete.png'
-import { StatusType } from '../../api/ordersApi'
-import rootStore from '../../store/RootStore/root-store'
-import OrderStore from '../../store/OrderStore/order-store'
-import { createAlert } from "../../components/Alert";
-import { useTranslation } from "react-i18next";
+import React, {useEffect} from "react"
+import {BaseWrapperComponent} from "../../components/baseWrapperComponent"
+import {NavigationProp, ParamListBase} from "@react-navigation/native"
+import {Box, Image, Text} from "native-base"
+import AuthStore from "../../store/AuthStore/auth-store"
+import { NativeModules, StyleSheet, TouchableOpacity } from "react-native";
+import {colors} from "../../assets/colors/colors"
+import ArrowBack from "../../components/ArrowBack"
+import arrowLeftBack from "../../assets/images/arrow-left.png"
+import {routerConstants} from "../../constants/routerConstants"
+import userImg from "../../assets/images/userMockAvatar.png"
+import {observer} from "mobx-react-lite"
+import settingImg from "../../assets/images/setting.png"
+import privacyImg from "../../assets/images/courierImages/privacy.png"
+import termsImg from "../../assets/images/courierImages/terms.png"
+import logoutImg from "../../assets/images/courierImages/Log-out.png"
+import myOrdersImg from "../../assets/images/courierImages/my-orders.png"
+import arrowRightImg from "../../assets/images/courierImages/arrow-right.png"
+import locationImg from "../../assets/images/location.png"
+import deleleImg from "../../assets/images/delete.png"
+import rootStore from "../../store/RootStore/root-store"
+import OrderStore from "../../store/OrderStore/order-store"
+import {createAlert} from "../../components/Alert"
+import {useTranslation} from "react-i18next"
 import Constants from "expo-constants"
+import SelectPicker from "../../components/select-picker"
+
 type UserProfileSProps = {
 	navigation: NavigationProp<ParamListBase>
 }
 const UserProfileS = observer(({ navigation }: UserProfileSProps) => {
-	const {t} = useTranslation(['profile', 'registration', 'common']);
+	const {t, i18n} = useTranslation(['profile', 'registration', 'common']);
 	const { user } = AuthStore
 	const { completedOrdersNum } = OrderStore
 	const { OrderService, AuthStoreService } = rootStore
@@ -74,14 +75,13 @@ const UserProfileS = observer(({ navigation }: UserProfileSProps) => {
 	}, [])
 	return (
 		<BaseWrapperComponent isKeyboardAwareScrollView={true}>
-			<Box paddingX={5} mt={12} justifyContent={'space-between'} w={'100%'} flex={1}>
+			<Box paddingX={5} mt={5} justifyContent={'space-between'} w={'100%'} flex={1}>
 				<Box>
 					<ArrowBack goBackPress={onPressGoBack} img={arrowLeftBack} />
 				</Box>
 				<Box alignItems={'center'}>
-					<Image mb={2} w={109} h={109} alt={'logo-we-do'} source={userImg} />
-
-					<Text fontSize={24} mt={2} fontWeight={'500'}>
+					<Image mb={1} w={90} h={90} alt={'logo-we-do'} source={userImg} />
+					<Text fontSize={24} mt={1} fontWeight={'500'}>
 						{user?.firstName} {user?.lastName}
 					</Text>
 					{user?.address?.fullAddress?.country && (
@@ -90,7 +90,7 @@ const UserProfileS = observer(({ navigation }: UserProfileSProps) => {
 						</Text>
 					)}
 					<Box
-						mt={5}
+						mt={2}
 						flexDirection={'row'}
 						alignItems={'center'}
 						backgroundColor={colors.grayLightWhite}
@@ -126,7 +126,24 @@ const UserProfileS = observer(({ navigation }: UserProfileSProps) => {
 						</Box>
 					</Box>
 				</Box>
-				<Box flex={1} mt={7} justifyContent={'flex-start'}>
+				<Box maxWidth={200}>
+					<SelectPicker
+						arrItem={[
+							{value: 'ru', name: t('ru')},
+							{value: 'en', name: t('en')},
+						]}
+						onValueChange={(val) => {
+							i18n.changeLanguage(val, (err, t) => {
+								if (err) return console.log('something went wrong loading', err);
+								//NativeModules.DevSettings.reload();
+							})
+						}}
+						values={i18n.language.slice(0,2)}
+						label={t('changeLanguage')}
+						onReturnValueId={true}
+					/>
+				</Box>
+				<Box flex={1} mt={2} justifyContent={'flex-start'}>
 					<TouchableOpacity onPress={onPressEditProfile}>
 						<Box
 							flexDirection={'row'}
@@ -219,7 +236,6 @@ const UserProfileS = observer(({ navigation }: UserProfileSProps) => {
 						<Box
 							flexDirection={'row'}
 							alignItems={'center'}
-							pb={4}
 							mt={4}
 							borderColor={colors.grayLight}
 						>

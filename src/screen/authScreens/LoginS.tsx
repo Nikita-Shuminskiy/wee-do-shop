@@ -74,7 +74,7 @@ const LoginS = memo(({navigation}: LoginSProps) => {
 			isKeyboardAwareScrollView={true}
 		>
 			<Box w={"100%"} alignItems={"center"} justifyContent={"space-evenly"} flex={1} paddingX={4}>
-				<Image w={247} h={318} alt={"logo"} source={logoImg} mt={5} />
+				<Image w={212} h={278} alt={"logo"} source={logoImg} mt={5} />
 				<Box w={"100%"} mb={5}>
 					<TextInput
 						onChangeText={handleChange("email")}

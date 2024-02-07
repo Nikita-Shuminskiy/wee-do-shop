@@ -13,6 +13,7 @@ import ImageDisplay from "../ImageDisplay";
 import { BaseWrapperComponent } from "../baseWrapperComponent";
 import { observer } from "mobx-react-lite";
 import AuthStore from "../../store/AuthStore/auth-store";
+import { useTranslation } from "react-i18next";
 
 type PopUpProductProps = {
   show: boolean
@@ -34,6 +35,7 @@ const PopUpProduct = observer(
     const { cart } = CartStore;
     const { isAuth } = AuthStore;
     const totalSumCart = formatProductPrice(cart?.totalSum ?? 0);
+    const {t} = useTranslation(['store', 'common']);
     const saveInputNumberValue = (productValue: number) => {
       saveProductValueToCart(productValue);
     };
@@ -69,7 +71,7 @@ const PopUpProduct = observer(
                   w={"100%"}
                   justifyContent={"space-between"}
                 >
-                  <Text>Price: 1x</Text>
+                  <Text>{t('price')}: 1x</Text>
                   <Text>฿ {formatProductPrice(product?.price)}</Text>
                 </Box>
                 {
@@ -104,7 +106,7 @@ const PopUpProduct = observer(
                   styleContainer={styles.styleContainerBtn}
                   styleText={styles.styleTextBtn}
                   onPress={onPressGoToCardHandler}
-                  title={`Go to cart ${totalSumCart ? ` ฿${totalSumCart}`: ""}`}
+                  title={`${t('goToCart')} ${totalSumCart ? `฿${totalSumCart}`: ""}`}
                 />
               </Box>
             }
