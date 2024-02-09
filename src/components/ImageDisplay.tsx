@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { memo, useCallback, useState } from "react";
 import * as Animatable from 'react-native-animatable'
 import { colors } from '../assets/colors/colors'
 import { Image } from 'react-native'
@@ -6,12 +6,12 @@ const ImageDisplay = ({ source, style, ...restProps }: any) => {
 	const [isLoaded, setIsLoaded] = useState(false)
 	const [errorLoaded, setErrorLoaded] = useState(false)
 
-	const handleImageLoad = () => {
+	const handleImageLoad = useCallback(() => {
 		setIsLoaded(true)
-	}
-	const onError = () => {
+	}, [])
+	const onError = useCallback(() => {
 		setErrorLoaded(true)
-	}
+	}, [])
 	return (
 		<>
 			{!isLoaded && (
@@ -42,4 +42,4 @@ const ImageDisplay = ({ source, style, ...restProps }: any) => {
 	)
 }
 
-export default ImageDisplay
+export default memo(ImageDisplay)

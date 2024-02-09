@@ -1,4 +1,4 @@
-import React, {ReactNode} from 'react'
+import React, { memo, ReactNode } from "react";
 import {StyleProp, Text, TouchableOpacity} from 'react-native'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import {Box} from 'native-base'
@@ -61,4 +61,4 @@ const Button = ({
         </TouchableOpacity>
     )
 }
-export default Button
+export default memo(Button)

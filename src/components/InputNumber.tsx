@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { memo, useState } from "react";
 import {View, TextInput, TouchableOpacity, Text, StyleSheet, StyleProp, ViewStyle} from 'react-native';
 import {Ionicons} from '@expo/vector-icons';
 import {colors} from "../assets/colors/colors";
@@ -72,4 +72,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default InputNumber;
+export default memo(InputNumber);

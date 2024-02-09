@@ -42,7 +42,7 @@ const ShopsS = observer(({ navigation }: ShopsSType) => {
 	}, [])
 	return (
 		<BaseWrapperComponent backgroundColor={colors.white} isKeyboardAwareScrollView={true}>
-			<Box paddingX={4}>
+			<Box paddingX={2}>
 				<HeaderUser address={user?.address} navigation={navigation} />
 				<Box
 					mt={2}
