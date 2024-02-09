@@ -1,7 +1,6 @@
 import {action, makeObservable, observable} from "mobx"
 import {deviceStorage} from "../../utils/storage/storage"
-import {authApi, PayloadResetPasswordType, UserType} from "../../api/authApi"
-import {UserRegisterDataType} from "screen/authScreens/RegisterS"
+import { authApi, PayloadResetPasswordType, UserRegisterDataType, UserType } from "../../api/authApi";
 import {BannersType, OptionalUserType, userApi} from "../../api/userApi"
 import Constants from "expo-constants"
 import {Linking, Platform} from "react-native"

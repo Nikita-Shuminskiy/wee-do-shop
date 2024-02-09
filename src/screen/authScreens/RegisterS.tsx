@@ -1,66 +1,34 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { Linking, StyleSheet, TextInput, TouchableOpacity } from "react-native";
+import React, { useCallback, useMemo, useState } from "react";
+import { Linking, StyleSheet, TouchableOpacity } from "react-native";
 import { NavigationProp, ParamListBase } from "@react-navigation/native";
 import { BaseWrapperComponent } from "../../components/baseWrapperComponent";
 import { Box, Checkbox, Image, Text } from "native-base";
 import CustomInput from "../../components/TextInput";
 import { AntDesign, MaterialCommunityIcons } from "@expo/vector-icons";
 import logoImg from "../../assets/images/logoWeeDo.png";
-import { FormikHelpers, useFormik } from "formik";
-import { validateEmail } from "../../utils/utils";
+import { FastField, FormikHelpers, useFormik } from "formik";
 import { colors } from "../../assets/colors/colors";
-import Button from "../../components/Button";
-import PhoneNumberField from "../../components/PhoneField";
 import location from "../../assets/images/location-register.png";
 import arrowLeft from "../../assets/images/arrow-left.png";
-import rootStore from "../../store/RootStore";
-import { RoleType } from "../../api/authApi";
+import { RoleType, UserRegisterDataType } from "../../api/authApi";
 import { routerConstants } from "../../constants/routerConstants";
 import ArrowBack from "../../components/ArrowBack";
 import { observer } from "mobx-react-lite";
-import AuthStore, { AddressType, fullAddressType } from "../../store/AuthStore/auth-store";
 import { getFormattedAddress } from "../../components/MapViews/utils";
 import { createAlert } from "../../components/Alert";
-import Link from "../../components/Link";
 import { useTranslation } from "react-i18next";
-import * as Yup from "yup";
 import "yup-phone-lite";
-import { schema } from "./helpers";
-
-export type CountryData = {
-	callingCode: string[]
-	cca2: string
-	currency: string[]
-	flag: string
-	name: string
-	region: string
-	subregion: string
-}
-export const countryDataDefault = {
-	callingCode: ["66"],
-	cca2: "TH",
-	currency: ["THB"],
-	flag: "flag-th",
-	name: "Thailand",
-	region: "Asia",
-	subregion: "South-Eastern Asia",
-}
+import { CountryData, countryDataDefault, schema } from "./helpers";
+import AuthStore, { AddressType, fullAddressType } from "../../store/AuthStore/auth-store";
+import rootStore from "../../store/RootStore/root-store";
+import Link from "../../components/Link";
+import Button from "../../components/Button";
+import PhoneNumberField from "../../components/PhoneField";
 
 type LoginSProps = {
-	navigation: NavigationProp<ParamListBase>
-}
+	navigation: NavigationProp<ParamListBase>;
+};
 
-export type UserRegisterDataType = {
-	email: string
-	password: string
-	confirmPassword: string
-	firstName: string
-	lastName: string
-	phone: string
-	privacyPolicyIsVerified: boolean
-	address: AddressType
-	role: RoleType
-}
 const RegisterS = observer(({navigation}: LoginSProps) => {
 	const {t} = useTranslation(['registration', 'login', 'errors', 'common']);
 	const {AuthStoreService} = rootStore
@@ -96,15 +64,9 @@ const RegisterS = observer(({navigation}: LoginSProps) => {
       if(data) {
         navigation.navigate(routerConstants.MAIN)
       }
-    })
-/*		console.log('ok', {
-			...values,
-			role: RoleType.Customer,
-			email: values.email.trim(),
-			phone: formattedPhoneNumber,
-			address: currentLocation,
-		});*/
-		setSubmitting(false)
+    }).finally(() => {
+			setSubmitting(false)
+		})
 	}
 	const {
 		handleChange,
@@ -127,36 +89,48 @@ const RegisterS = observer(({navigation}: LoginSProps) => {
 			role: RoleType.Customer,
 			privacyPolicyIsVerified: true,
 		},
-		onSubmit: onSubmit,
+		onSubmit,
 		validateOnChange: true,
 		validateOnMount: false,
 		validateOnBlur: true,
-		validationSchema: schema(t, countryCode)
-	})
-	const onPressGoBack = useCallback(() => {
-		navigation.goBack()
-	}, [])
-	console.log(errors);
-	const onPressNavigateToLocation = useCallback( async () => {
-		navigation.navigate(routerConstants.AUTOCOMPLETE_MAP)
-	}, [])
+		validationSchema: schema(t, countryCode),
+	});
 
-	const formatted_address = useMemo(() => getFormattedAddress(currentLocation), [currentLocation])
-	const onChangeCountry = useCallback( (country) => {
-		setCountryCode(country)
-	}, [])
-	const onChangeTextAddress = useCallback((text: string, key: keyof fullAddressType) => {
-		if(text?.length > 10) return
-		setLocation({
-			...currentLocation,
-			fullAddress: {...currentLocation?.fullAddress, [key]: text},
-		})
-	}, [currentLocation])
+	const onPressGoBack = useCallback(() => {
+		navigation.goBack();
+	}, [navigation]);
+
+	const onPressNavigateToLocation = useCallback(async () => {
+		navigation.navigate(routerConstants.AUTOCOMPLETE_MAP);
+	}, [navigation]);
+	console.log(currentLocation.location);
+	const formatted_address = useMemo(() => getFormattedAddress(currentLocation), [currentLocation]);
+
+	const onChangeCountry = useCallback((country) => {
+		setCountryCode(country);
+	}, []);
+
+	const onChangeTextAddress = useCallback(
+		(text: string, key: keyof fullAddressType) => {
+			if (text?.length > 10) return;
+			setLocation({
+				...currentLocation,
+				fullAddress: { ...currentLocation?.fullAddress, [key]: text },
+			});
+		},
+		[currentLocation]
+	);
+
 	const onPressOpenLegalNotice = useCallback(() => {
 		Linking.openURL(
 			"https://docs.google.com/document/d/e/2PACX-1vT1f6tmdyx4tiXcwLdHDoZcTvtquB0jF__AFWFb1QuYYG7ERhqwaejgTa-VLYU7dE55LMs8KASbt8tl/pub"
-		)
-	}, [])
+		);
+	}, []);
+
+	const onChangeChecked = useCallback((e) => {
+		setCheckError(!e);
+		setAgeCheck(e);
+	}, []);
 	return (
 		<BaseWrapperComponent isKeyboardAwareScrollView={true}>
 			<Box alignItems={"center"}>
@@ -216,6 +190,7 @@ const RegisterS = observer(({navigation}: LoginSProps) => {
 							isInvalid={touched['phone'] && Boolean(errors['phone'])}
 							isRequired={true}
 							defaultValue={values.phone}
+							value={values.phone}
 							onChangeText={handleChange("phone")}
 						/>
 					</Box>
@@ -244,23 +219,20 @@ const RegisterS = observer(({navigation}: LoginSProps) => {
 					/>
 				</Box>
 				<Box alignItems={"center"} mb={1}>
-					<TouchableOpacity style={{ alignItems: 'center' }} onPress={onPressNavigateToLocation}>
+					<TouchableOpacity style={{ alignItems: "center" }} onPress={onPressNavigateToLocation}>
 						<Image w={170} h={105} alt={"location"} source={location} />
 						<Text color={colors.gray} mt={2} fontWeight={"500"}>
-							{" "}{t('addLocationAddress')}
+							{" "}
+							{t("addLocationAddress")}
 						</Text>
 					</TouchableOpacity>
-					{formatted_address && (
-						<Text fontSize={16} fontWeight={"600"}>
-							{formatted_address}
-						</Text>
-					)}
+					{formatted_address && <Text fontSize={16} fontWeight={"600"}>{formatted_address}</Text>}
 				</Box>
 				<Box w={"100%"} flex={1} alignItems={"flex-start"}>
 					<Box mt={2} w={"100%"}>
-						<TextInput
-							placeholder={t('enterApartment')}
-							style={styles.input}
+						<CustomInput
+							borderRadius={16}
+							placeholder={t("enterApartment")}
 							keyboardType="numeric"
 							value={currentLocation?.fullAddress?.apartment}
 							onChangeText={(text) => onChangeTextAddress(text, "apartment")}
@@ -270,30 +242,22 @@ const RegisterS = observer(({navigation}: LoginSProps) => {
 				<Box mt={5} w={"100%"} alignItems={"flex-start"}>
 					<TouchableOpacity>
 						<Box flexDirection={"row"} alignItems={"center"}>
-							<Checkbox
-								accessibilityLabel={"111"}
-								value="info"
-								onChange={(e) => {
-									setCheckError(!e)
-									setAgeCheck(e)
-								}}
-								colorScheme="info"
-							/>
+							<Checkbox accessibilityLabel={"111"} value="info" onChange={onChangeChecked} colorScheme="info" />
 							<Box flexDirection={"row"} justifyContent={"flex-start"} alignItems={"center"}>
 								<Text fontSize={13} alignItems={"center"} ml={1} mr={1}>
-									{t('Iagree')}
+									{t("Iagree")}
 								</Text>
 								<Link
 									onPress={onPressOpenLegalNotice}
-									styleText={{color: colors.green, fontWeight: "500"}}
-									text={t('legalnotice')}
+									styleText={{ color: colors.green, fontWeight: "500" }}
+									text={t("legalnotice")}
 								/>
 							</Box>
 						</Box>
 					</TouchableOpacity>
 					{isErrorCheckAge && (
 						<Text fontSize={14} color={colors.red} fontWeight={"500"} ml={1}>
-							{t('youMustConfirmNotice')}
+							{t("youMustConfirmNotice")}
 						</Text>
 					)}
 				</Box>
@@ -307,27 +271,14 @@ const RegisterS = observer(({navigation}: LoginSProps) => {
 				</Box>
 			</Box>
 		</BaseWrapperComponent>
-	)
-})
+	);
+});
+
 const styles = StyleSheet.create({
-	input: {
-		width: "100%",
-		paddingVertical: 5,
-		paddingLeft: 20,
-		borderRadius: 16,
-		borderWidth: 1,
-		borderColor: colors.grayLight,
-		color: colors.gray,
-	},
-	styleContainerBtn: {
-		borderWidth: 1,
-		backgroundColor: "transparent",
-		borderColor: colors.gray,
-	},
 	styleContainerBtnUp: {
 		marginTop: 10,
 		backgroundColor: colors.green,
 	},
-})
+});
 
 export default RegisterS;

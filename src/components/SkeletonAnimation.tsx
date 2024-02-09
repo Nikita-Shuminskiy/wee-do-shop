@@ -28,11 +28,6 @@ export default function SkeletonAnimation() {
 		animateLine()
 	}, [])
 
-	const translateXInterpolate = translateX.interpolate({
-		inputRange: [0, 1],
-		outputRange: [0, 100], // Преобразуем строковое значение в числовое
-	})
-
 	return (
 		<View style={{ flex: 1 }}>
 			<Svg height="100%" width="100%">

@@ -1,10 +1,8 @@
-import React, { memo, useRef, useState } from "react";
-import { SafeAreaView, TouchableOpacity, View } from 'react-native'
-import PhoneInput, { PhoneInputProps } from 'react-native-phone-number-input'
-import { colors } from '../assets/colors/colors'
-import { Box, FormControl, Text, WarningOutlineIcon } from 'native-base'
-import { EvilIcons } from '@expo/vector-icons'
-import { useTranslation } from "react-i18next";
+import React, { memo, useCallback, useRef } from "react";
+import PhoneInput, {PhoneInputProps} from "react-native-phone-number-input"
+import {colors} from "../assets/colors/colors"
+import {Box, FormControl, WarningOutlineIcon} from "native-base"
+import {useTranslation} from "react-i18next"
 
 type PhoneNumberFieldProps = PhoneInputProps & {
 	isRequired: boolean
@@ -14,17 +12,17 @@ type PhoneNumberFieldProps = PhoneInputProps & {
 	onValidNumber?: (isValid: boolean) => void
 }
 const PhoneNumberField: React.FC<PhoneNumberFieldProps> = ({ isRequired, isInvalid,onChangeText, onValidNumber, errorMessage, ...rest }) => {
-	const phoneInput = useRef<PhoneInput>(null)
+	//const phoneInput = useRef<PhoneInput>(null)
 	const {t} = useTranslation(['common']);
-	const onChangeTextHandler = (text) => {
+
+	const onChangeTextHandler = useCallback( (text) => {
 		onChangeText(text)
-		onValidNumber?.(phoneInput.current?.isValidNumber(text))
-	}
+		//onValidNumber?.(phoneInput.current?.isValidNumber(text))
+	}, [])
 	return (
 		<Box w={'100%'}>
-			<FormControl isInvalid={isInvalid} isRequired={isRequired}>
+			<FormControl  isInvalid={isInvalid} isRequired={isRequired}>
 				<PhoneInput
-					ref={phoneInput}
 					textInputProps={{
 						keyboardType: 'numeric'
 					}}
@@ -49,7 +47,7 @@ const PhoneNumberField: React.FC<PhoneNumberFieldProps> = ({ isRequired, isInval
 				<FormControl.ErrorMessage leftIcon={<WarningOutlineIcon size='xs' />}>
 					{errorMessage ? errorMessage : t('fieldIsRequired')}
 				</FormControl.ErrorMessage>
-			</FormControl>
+			</FormControl >
 		</Box>
 	)
 }

@@ -65,9 +65,6 @@ const LoginS = memo(({navigation}: LoginSProps) => {
 	const onPressSignUpHandler = () => {
 		navigation.navigate(routerConstants.REGISTRATION)
 	}
-	/*	useEffect(() => {
-    AuthStoreService.getMe()
-  }, [])*/
 	return (
 		<BaseWrapperComponent
 			onRefreshHandler={() => AuthStoreService.getMe()}

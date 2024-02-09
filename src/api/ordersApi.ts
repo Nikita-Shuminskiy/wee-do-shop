@@ -1,10 +1,8 @@
-import { instance } from './config'
-import AsyncStorage from '@react-native-async-storage/async-storage'
-import { UserRegisterDataType } from 'screen/authScreens/RegisterS'
-import { StoreType } from './storesApi'
-import { AddressType } from '../store/AuthStore/auth-store'
-import { RoleType, UserType } from './authApi'
-import { ProductType } from './productApi'
+import {instance} from "./config"
+import {StoreType} from "./storesApi"
+import {AddressType} from "../store/AuthStore/auth-store"
+import {RoleType, UserType} from "./authApi"
+import {ProductType} from "./productApi"
 
 export const ordersApi = {
 	async postOrders(data: SendDataOrderType) {

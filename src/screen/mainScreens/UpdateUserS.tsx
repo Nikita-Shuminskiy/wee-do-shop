@@ -10,11 +10,11 @@ import Button from '../../components/Button'
 import { colors } from '../../assets/colors/colors'
 import { validateEmail } from '../../utils/utils'
 import { useFormik } from 'formik'
-import { CountryData, countryDataDefault, UserRegisterDataType } from '../authScreens/RegisterS'
 import PhoneNumberField from '../../components/PhoneField'
 import rootStore from '../../store/RootStore/root-store'
 import { OptionalUserType } from '../../api/userApi'
 import { useTranslation } from "react-i18next";
+import { CountryData, countryDataDefault } from "../authScreens/helpers";
 
 type UpdateUserSProps = {
 	navigation: NavigationProp<ParamListBase>
