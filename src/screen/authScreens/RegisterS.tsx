@@ -24,6 +24,7 @@ import rootStore from "../../store/RootStore/root-store";
 import Link from "../../components/Link";
 import Button from "../../components/Button";
 import PhoneNumberField from "../../components/PhoneField";
+import { validateEmail } from "../../utils/utils";
 
 type LoginSProps = {
 	navigation: NavigationProp<ParamListBase>;
@@ -103,7 +104,6 @@ const RegisterS = observer(({navigation}: LoginSProps) => {
 	const onPressNavigateToLocation = useCallback(async () => {
 		navigation.navigate(routerConstants.AUTOCOMPLETE_MAP);
 	}, [navigation]);
-	console.log(currentLocation.location);
 	const formatted_address = useMemo(() => getFormattedAddress(currentLocation), [currentLocation]);
 
 	const onChangeCountry = useCallback((country) => {

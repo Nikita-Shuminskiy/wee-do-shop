@@ -1,4 +1,5 @@
 import * as Yup from "yup";
+import regex from "../../utils/helpers/regex";
 
 
 type CountryData = {
@@ -21,7 +22,7 @@ type CountryData = {
 }
 const schema = (t, countryCode) => {
   return Yup.object().shape({
-    email: Yup.string().email(t('errors:incorrectEmail')).required(t('errors:incorrectEmail')),
+    email: Yup.string().matches(regex.email, t('errors:incorrectEmail')).required(t('errors:incorrectEmail')),
     password: Yup.string()
       .min(4, t('errors:passwordMustBe'))
       .required(t('errors:passwordMustBe')),
