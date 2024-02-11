@@ -1,0 +1,114 @@
+import React, {memo} from "react"
+import {Box, Text} from "native-base"
+import {colors} from "../../../assets/colors/colors"
+import like from "../../../assets/images/like.png"
+import likeActive from "../../../assets/images/likeActive.png"
+import {Dimensions, TouchableOpacity} from "react-native"
+import {StoreType} from "../../../api/storesApi"
+import ImageDisplay from "../../ImageDisplay"
+import DeliveryTime from "../../DeliveryTime"
+import {getCurrentDayName, isCurrentTimeWorkStoreRange} from "../../../utils/utils"
+import { useTranslation } from "react-i18next";
+import { Skeleton } from 'moti/skeleton';
+import Animated, { FadeIn, Layout } from 'react-native-reanimated';
+import { SkeletonCommonProps } from "../../../utils/common";
+import { MotiView } from "moti";
+import Spacer from "../../Specer";
+import SubCategoriesStore from "./SubCategoriesStore";
+
+type StoresViewerType = {
+	stores: StoreType
+	isFavorite: boolean
+	isAuth: boolean
+	isLoadData?: boolean
+	onPress: (store: StoreType) => void
+	onPressToggleFavoriteStore: (id: string) => void
+}
+
+
+const StoresViewer = ({stores, onPress, onPressToggleFavoriteStore, isFavorite, isAuth}: StoresViewerType) => {
+	const {t} = useTranslation(['main', 'common']);
+	const {width} = Dimensions.get("window")
+	const productWidth = width - 20
+	const isOpenStoreNow =  isCurrentTimeWorkStoreRange(stores?.workingHours)
+
+	const getTimeWorkStore =  stores?.workingHours[getCurrentDayName()]
+	const onPressFavoriteStore = () => {
+		onPressToggleFavoriteStore(stores._id)
+	}
+	return (
+		<TouchableOpacity
+			onPress={() => onPress(stores)}
+			style={{
+				flex: 1,
+				height: 223,
+				minWidth: productWidth,
+				maxWidth: productWidth,
+				marginBottom: 10,
+			}}
+		>
+			<Box
+				backgroundColor={"rgba(203,203,203,0.27)"}
+				borderRadius={16}
+				alignItems={"flex-start"}
+				justifyContent={"space-between"}
+				borderColor={colors.green}
+			>
+				<Box>
+					<Box position={"absolute"} top={2} left={2} zIndex={10}>
+						<DeliveryTime t={t} time={stores?.deliveryTime} fontSizeText={13} />
+					</Box>
+					{isAuth && (
+						<Box position={"absolute"} p={1} zIndex={10} top={2} right={2}>
+							<TouchableOpacity onPress={onPressFavoriteStore}>
+								<ImageDisplay
+									style={{width: 34, height: 34}}
+									source={isFavorite ? likeActive : like}
+									alt={"like"}
+								/>
+							</TouchableOpacity>
+						</Box>
+					)}
+					<Box width={productWidth} h={170}>
+						<ImageDisplay
+							alt={"image-store"}
+							style={{
+								flex: 1,
+								width: "100%",
+								height: "100%",
+								borderTopRightRadius: 16,
+								borderTopLeftRadius: 16
+							}}
+							source={{uri: stores.image}}/>
+					</Box>
+					<Box
+						position={"absolute"}
+						bottom={0}
+						right={0}
+						backgroundColor={!isOpenStoreNow ? colors.red : colors.green}
+						borderRadius={16}
+						borderRightRadius={0}
+						paddingY={1}
+						paddingX={3}
+					>
+						<Text color={colors.white} fontWeight={"600"} fontSize={14}>
+							{getTimeWorkStore}
+						</Text>
+					</Box>
+				</Box>
+				<Box paddingY={1} w={"100%"} borderBottomRightRadius={16} borderBottomLeftRadius={16}>
+					<Text ml={3} fontSize={18} fontWeight={"700"} color={colors.balck}>
+						{stores?.name}
+					</Text>
+					<Box ml={3} flexDirection={"row"} flexWrap={"wrap"} w={"90%"} alignItems={"center"}>
+						{stores?.categories?.map((subCategory, key) => {
+							const lastElem = stores?.categories?.length - 1 === key
+							return <SubCategoriesStore t={t} key={subCategory._id} lastElem={lastElem} subCategory={subCategory}/>
+						})}
+					</Box>
+				</Box>
+			</Box>
+		</TouchableOpacity>
+	)
+}
+export default memo(StoresViewer)

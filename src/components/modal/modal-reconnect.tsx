@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from "react";
 import logo from '../../assets/images/logoWeeDo.png'
 import {Modal} from "react-native";
 import {Box, Text, Image} from "native-base";
@@ -26,4 +26,4 @@ const ModalReconnect = ({visible, checkInternetConnection}: ModalReconnectProps)
     );
 };
 
-export default ModalReconnect;
+export default memo(ModalReconnect)

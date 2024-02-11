@@ -1,4 +1,4 @@
-import React, {memo} from "react"
+import React, { memo, useCallback } from "react";
 import {StyleSheet} from "react-native"
 import {NavigationProp, ParamListBase} from "@react-navigation/native"
 import {BaseWrapperComponent} from "../../components/baseWrapperComponent"
@@ -65,9 +65,10 @@ const LoginS = memo(({navigation}: LoginSProps) => {
 	const onPressSignUpHandler = () => {
 		navigation.navigate(routerConstants.REGISTRATION)
 	}
+	const onRefreshHandler = useCallback(() => AuthStoreService.getMe(), [])
 	return (
 		<BaseWrapperComponent
-			onRefreshHandler={() => AuthStoreService.getMe()}
+			onRefreshHandler={ onRefreshHandler}
 			isKeyboardAwareScrollView={true}
 		>
 			<Box w={"100%"} alignItems={"center"} justifyContent={"space-evenly"} flex={1} paddingX={4}>

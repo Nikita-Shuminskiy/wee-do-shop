@@ -12,19 +12,29 @@ import { useTranslation } from "react-i18next";
 type SearchStoresType = {
 	search: string
 	setSearch: (text: string) => void
+	setIsLoadStores: (val: boolean) => void
 	selectCategory: string
 }
-const SearchStores = memo(({ search, setSearch, selectCategory }: SearchStoresType) => {
+const SearchStores = memo(({ search, setSearch, selectCategory, setIsLoadStores }: SearchStoresType) => {
 	const { StoresService } = rootStore
 	const {t} = useTranslation(['main', 'common']);
-	const handleTextChange = useCallback((newText) => {
+	const handleTextChange = (newText) => {
 		setSearch(newText)
-	}, [])
-
-	const onSubmitEditing = () => {
-		StoresService.searchStores({ search, categoryId: selectCategory })
 	}
 
+	const onSubmitEditing = () => {
+		setIsLoadStores(false)
+		StoresService.searchStores({ search, categoryId: selectCategory }).finally(() => {
+			setIsLoadStores(true)
+		})
+	}
+	const onPressClearSearch = () => {
+		setIsLoadStores(false)
+		StoresService.searchStores({ search: '', categoryId: selectCategory }).finally(() => {
+			setIsLoadStores(true)
+		})
+		setSearch('')
+	}
 	return (
 		<Box w={'100%'}>
 			<TextInput
@@ -32,10 +42,7 @@ const SearchStores = memo(({ search, setSearch, selectCategory }: SearchStoresTy
 				iconRight={
 					search && (
 						<TouchableOpacity
-							onPress={() => {
-								StoresService.searchStores({ search: '', categoryId: selectCategory })
-								setSearch('')
-							}}
+							onPress={onPressClearSearch}
 						>
 							<AntDesign name="closecircleo" size={24} color={`#9095A4`} />
 						</TouchableOpacity>

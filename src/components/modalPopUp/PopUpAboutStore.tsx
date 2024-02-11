@@ -14,13 +14,13 @@ import { useTranslation } from "react-i18next";
 
 type PopUpAboutStoreProps = {
 	show: boolean
+	isOpenStoreNow: boolean
 	currentStore: StoreType
 	onClose: () => void
 }
-const PopUpAboutStore = ({ show, onClose, currentStore }: PopUpAboutStoreProps) => {
+const PopUpAboutStore = ({ show, onClose, currentStore, isOpenStoreNow }: PopUpAboutStoreProps) => {
 	const workingHoursArray = Object.entries(currentStore?.workingHours ?? {})
 	const {t} = useTranslation(['store', 'common']);
-	const isOpenStoreNow = isCurrentTimeWorkStoreRange(currentStore?.workingHours)
 	//const untilTimeStoreTo = getCurrentUntilTimeStoreTo(currentStore?.workingHours)
 	const currentDayOfWeek = getCurrentDayName()
 

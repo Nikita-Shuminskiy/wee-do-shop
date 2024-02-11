@@ -1,4 +1,4 @@
-import React, {useEffect} from "react"
+import React, {useCallback, useEffect} from "react"
 import {BaseWrapperComponent} from "../../components/baseWrapperComponent"
 import {NavigationProp, ParamListBase} from "@react-navigation/native"
 import {Box, Image, Text} from "native-base"
@@ -24,6 +24,7 @@ import {createAlert} from "../../components/Alert"
 import {useTranslation} from "react-i18next"
 import Constants from "expo-constants"
 import SelectPicker from "../../components/select-picker"
+import * as Updates from "expo-updates"
 
 type UserProfileSProps = {
 	navigation: NavigationProp<ParamListBase>
@@ -71,6 +72,12 @@ const UserProfileS = observer(({ navigation }: UserProfileSProps) => {
 	useEffect(() => {
 		OrderService.getOrders({
 			inProgressOrdersNum: true,
+		})
+	}, [])
+	const onChangeLang = useCallback( async (lang: string) => {
+		await i18n.changeLanguage(lang, (err, t) => {
+			if (err) return console.log('something went wrong loading', err);
+			//Updates.reloadAsync()
 		})
 	}, [])
 	return (
@@ -132,12 +139,7 @@ const UserProfileS = observer(({ navigation }: UserProfileSProps) => {
 							{value: 'ru', name: t('ru')},
 							{value: 'en', name: t('en')},
 						]}
-						onValueChange={(val) => {
-							i18n.changeLanguage(val, (err, t) => {
-								if (err) return console.log('something went wrong loading', err);
-								//NativeModules.DevSettings.reload();
-							})
-						}}
+						onValueChange={onChangeLang}
 						values={i18n.language.slice(0,2)}
 						label={t('changeLanguage')}
 						onReturnValueId={true}

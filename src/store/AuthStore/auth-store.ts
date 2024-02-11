@@ -34,7 +34,6 @@ export class AuthStore {
 		verificationCode: "",
 	}
 	currentLocation: AddressType = {} as AddressType
-	banners: BannersType[] = [] as BannersType[]
 	setClearAuthStoreData = () => {
 		this.isAuth = false
 		this.currentLocation = {} as AddressType
@@ -77,15 +76,6 @@ export class AuthStore {
 	async updateUser(payload: OptionalUserType): Promise<UserType> {
 		const {data} = await userApi.updateUser(this.user._id, payload)
 		return data
-	}
-
-	async getBanners(): Promise<any> {
-		const {data} = await userApi.getBanners()
-		this.setBanners(data.results)
-	}
-
-	setBanners(banners: BannersType[]) {
-		this.banners = banners
 	}
 
 	async logOut() {
@@ -145,7 +135,6 @@ export class AuthStore {
 	constructor() {
 		makeObservable(this, {
 			user: observable,
-			banners: observable,
 			isAuth: observable,
 			infoResetPassword: observable,
 			currentLocation: observable,
@@ -154,7 +143,6 @@ export class AuthStore {
 			forgotPassword: action,
 			resetPassword: action,
 			getUser: action,
-			setBanners: action,
 			setLocation: action,
 			logOut: action,
 			setAuth: action,
@@ -162,13 +150,11 @@ export class AuthStore {
 			login: action,
 			deleteUser: action,
 			updateUser: action,
-			getBanners: action,
 			setClearAuthStoreData: action,
 			checkVerificationCode: action,
 		})
 		this.setAuth = this.setAuth.bind(this)
 		this.setInfoResetPassword = this.setInfoResetPassword.bind(this)
-		this.setBanners = this.setBanners.bind(this)
 		this.updateUser = this.updateUser.bind(this)
 		this.getMe = this.getMe.bind(this)
 		this.getUser = this.getUser.bind(this)

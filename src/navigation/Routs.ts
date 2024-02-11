@@ -19,8 +19,10 @@ import UserProfileS from "../screen/mainScreens/UserProfileS";
 import OrdersS from "../screen/mainScreens/OrdersS";
 import RegisterS from "../screen/authScreens/RegisterS";
 import MainNavigation from "./MainNavigation";
+import SplashScreen from "../screen/authScreens/SplashScreen";
 
 export const Routs = [
+  { name: routerConstants.SPLASH_SCREEN, component: SplashScreen },
   { name: routerConstants.MAIN, component: MainNavigation },
   { name: routerConstants.LOGIN, component: LoginS },
   { name: routerConstants.REGISTRATION, component: RegisterS },

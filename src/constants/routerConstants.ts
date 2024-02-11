@@ -2,6 +2,7 @@ export const routerConstants = {
 	REGISTRATION: 'registration',
 	ALLOW_LOCATION: 'allow-location',
 	AUTOCOMPLETE_MAP: 'autocomplete-map',
+	SPLASH_SCREEN: 'splash-screen',
 
 	LOGIN: 'login',
 	MAIN: 'main',

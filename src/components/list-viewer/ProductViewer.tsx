@@ -17,7 +17,7 @@ type StoreViewerProps = {
 	currentCartProductAmount: number
 	isAuth: boolean
 }
-const ProductViewer = memo(
+const ProductViewer =
 	({
 		product,
 		onPressProduct,
@@ -27,9 +27,7 @@ const ProductViewer = memo(
 	}: StoreViewerProps) => {
 		const {width} = Dimensions.get("window")
 		const productWidth = useMemo(() => (width - 10) / 2, [width])
-
 		const productTotalPrice = useMemo(() => formatProductPrice(product.price), [product.price])
-
 		const onPressProductHandler = useCallback(() => {
 			saveProductToCart(1, product)
 		}, [product])
@@ -53,7 +51,7 @@ const ProductViewer = memo(
 				<Box style={styles.shadow} borderRadius={16} alignItems={"center"} w={"100%"} mb={5}>
 					<Box>
 						{!!product.effect && (
-							<Box maxWidth={'85%'} minWidth={15} w={'auto'} position={"absolute"} p={1} top={2} left={0} zIndex={10}>
+							<Box maxWidth={'100%'} minWidth={15} w={'auto'} position={"absolute"} p={1} top={2} left={0} zIndex={10}>
 								<LinearGradient
 									colors={["#5AB0FF", "#BF38FF"]}
 									start={[0, 0.5]}
@@ -135,7 +133,6 @@ const ProductViewer = memo(
 			</Pressable>
 		)
 	}
-)
 const styles = StyleSheet.create({
 	textWithShadow: {
 		fontWeight: "bold",
@@ -161,4 +158,4 @@ const styles = StyleSheet.create({
 		elevation: 7,
 	},
 })
-export default ProductViewer;
+export default memo(ProductViewer)

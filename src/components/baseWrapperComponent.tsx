@@ -1,4 +1,4 @@
-import React, { forwardRef, useState } from 'react'
+import React, { forwardRef, memo, useState } from "react";
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { GestureResponderEvent, Platform, RefreshControl, SafeAreaView } from 'react-native'
 import { VirtualizedList } from './virtualized-list'
@@ -14,16 +14,16 @@ type BaseWrapperComponentType = {
 	extraScrollHeight?: number
 	onRefreshHandler?: () => void
 }
-export const BaseWrapperComponent = ({
-	children,
-	onTouchEnd,
-	onTouchStart,
-	isKeyboardAwareScrollView = false,
-	styleSafeArea,
-	backgroundColor = 'white',
-	extraScrollHeight,
-	onRefreshHandler,
-}: BaseWrapperComponentType) => {
+export const BaseWrapperComponent = memo(({
+																						children,
+																						onTouchEnd,
+																						onTouchStart,
+																						isKeyboardAwareScrollView = false,
+																						styleSafeArea,
+																						backgroundColor = 'white',
+																						extraScrollHeight,
+																						onRefreshHandler,
+																					}: BaseWrapperComponentType) => {
 	const [refreshing, setRefreshing] = useState(false)
 
 	const onRefresh = () => {
@@ -72,4 +72,4 @@ export const BaseWrapperComponent = ({
 			)}
 		</SafeAreaView>
 	)
-}
+})
