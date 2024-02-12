@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { memo } from "react";
 import { StyleProp, StyleSheet, Text, TextStyle, TouchableOpacity } from 'react-native'
 import { colors } from '../assets/colors/colors'
 
@@ -29,4 +29,4 @@ const styles = StyleSheet.create({
 	},
 })
 
-export default Link
+export default memo(Link)

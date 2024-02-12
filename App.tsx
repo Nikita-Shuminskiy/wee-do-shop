@@ -4,6 +4,8 @@ import {NativeBaseProvider} from "native-base"
 import {LogBox} from "react-native"
 import {GestureHandlerRootView} from "react-native-gesture-handler"
 import './src/utils/i18n';
+import NotificationStore from "./src/store/NotificationStore/notification-store";
+import { NavigationContainer } from "@react-navigation/native";
 LogBox.ignoreLogs([
 	"In React 18, SSRProvider is not necessary and is a noop. You can remove it from your app.",
 ])
@@ -11,6 +13,7 @@ LogBox.ignoreLogs([
 // https://github.com/GeekyAnts/NativeBase/issues/5758
 
 export default function App() {
+	const {setNavigation} = NotificationStore
 	return (
 		<GestureHandlerRootView style={{flex: 1}}>
 			<NativeBaseProvider>
@@ -21,7 +24,13 @@ export default function App() {
 					animated={true}
 					translucent={true}
 				/>
+				<NavigationContainer
+					ref={(navigationRef) => {
+						setNavigation(navigationRef)
+					}}
+				>
 				<RootNavigation />
+				</NavigationContainer>
 			</NativeBaseProvider>
 		</GestureHandlerRootView>
 	)

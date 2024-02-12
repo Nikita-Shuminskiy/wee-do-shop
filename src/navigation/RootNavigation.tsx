@@ -1,7 +1,6 @@
-import React, {useCallback, useMemo} from "react"
+import React, {useMemo} from "react"
 import {observer} from "mobx-react-lite"
 import NotificationStore from "../store/NotificationStore/notification-store"
-import {NavigationContainer} from "@react-navigation/native"
 import {routerConstants} from "../constants/routerConstants"
 import {createNativeStackNavigator} from "@react-navigation/native-stack"
 import ModalReconnect from "../components/modal/modal-reconnect"
@@ -20,34 +19,30 @@ const backgroundHandler = async (time: number) => {
 const RootStack = createNativeStackNavigator()
 
 const RootNavigation = observer(() => {
-	const {setNavigation, isLoading} = NotificationStore
+	const { isLoading} = NotificationStore
 	const {checkInternetConnection, isConnected} = useInternetConnection()
 	useBackgroundTime({backgroundHandler})
 
-	const onSetRefHandler = useCallback((navigationRef) => {
-		setNavigation(navigationRef)
-	}, []);
-	const memoizedRoutes = useMemo(() => Routs.map((route) => (
-		<RootStack.Screen
+
+	const memoizedRoutes = useMemo(() => Routs.map((route) => {
+		return 	<RootStack.Screen
 			key={route.name}
 			options={{headerShown: false, gestureEnabled: false}}
 			name={route.name}
 			component={route.component}
 		/>
-	)), []);
+	}), []);
 
 	return (
-		<NavigationContainer
-			ref={onSetRefHandler}
-		>
-			{isLoading === LoadingEnum.fetching && (
-				<Loading visible={true} />
-			)}
-			<ModalReconnect checkInternetConnection={checkInternetConnection} visible={!isConnected} />
-			<RootStack.Navigator initialRouteName={routerConstants.SPLASH_SCREEN}>
-				{memoizedRoutes}
-			</RootStack.Navigator>
-		</NavigationContainer>
+			<>
+					{isLoading === LoadingEnum.fetching && (
+						<Loading visible={true} />
+					)}
+				<ModalReconnect checkInternetConnection={checkInternetConnection} visible={!isConnected} />
+				<RootStack.Navigator initialRouteName={routerConstants.SPLASH_SCREEN}>
+					{memoizedRoutes}
+				</RootStack.Navigator>
+			</>
 	)
 })
 

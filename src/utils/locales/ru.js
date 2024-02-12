@@ -86,7 +86,7 @@ export default {
     orderDelivered:'Заказ доставлен',
     Placed:'Размещен',
     Confirmed:'Подтвержден',
-    WaitingForPickUp:'Ожидание забора',
+    WaitingForPickUp:'Ждёт, когда его заберут',
     OnTheWay:'В пути',
     Completed:'Завершен',
     Canceled:'Отменен',
@@ -146,7 +146,7 @@ export default {
   },
   errors: {
     incorrectEmail: 'Введен неверный адрес электронной почты',
-    passwordMustBe: 'Пароль должен содержать не менее 6 символов',
+    passwordMustBe: 'Пароль должен содержать не менее 4 символов',
     emailNotExist: 'Такой адрес электронной почты не существует.',
     incorrectPhone: 'Неверный номер телефона',
     passwordDontMatch: 'Пароли не совпадают',

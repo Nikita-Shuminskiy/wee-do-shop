@@ -79,7 +79,7 @@ const UserProfileS = observer(({ navigation }: UserProfileSProps) => {
 			if (err) return console.log('something went wrong loading', err);
 			//Updates.reloadAsync()
 		})
-	}, [])
+	}, [i18n])
 	return (
 		<BaseWrapperComponent isKeyboardAwareScrollView={true}>
 			<Box paddingX={5} mt={5} justifyContent={'space-between'} w={'100%'} flex={1}>

@@ -21,6 +21,10 @@ import { isCurrentTimeWorkStoreRange } from "../../utils/utils";
 import { alertStoreClosed } from "../../components/list-viewer/utils";
 import AuthStore from "../../store/AuthStore/auth-store";
 import { useTranslation } from "react-i18next";
+import { Skeleton } from "moti/skeleton";
+import { SkeletonCommonProps } from "../../utils/common";
+import SkeletonExpo from "moti/build/skeleton/expo";
+import Spacer from "../../components/Specer";
 
 type OrdersSProps = {
 	navigation: NavigationProp<ParamListBase>
@@ -39,6 +43,7 @@ const OrdersS = observer(({ navigation, route }: OrdersSProps) => {
 
 	const [page, setPage] = useState(1)
 	const [isLoadingData, setLoadingData] = useState(false)
+	const [isLoadDataOrders, setIsLoadDataOrders] = useState(false)
 	const isLastOrders = !!(totalOrders && orders.length) && totalOrders <= orders.length
 	const ordersLength = orders?.length
 
@@ -68,6 +73,7 @@ const OrdersS = observer(({ navigation, route }: OrdersSProps) => {
 			})
 			.finally(() => {
 				setLoadingData(false)
+				setIsLoadDataOrders(true)
 			})
 	}
 
@@ -158,18 +164,51 @@ const OrdersS = observer(({ navigation, route }: OrdersSProps) => {
 					</Box>
 				</Box>
 				<Box mt={5} alignItems={'center'} flex={1} w={'100%'}>
-					<FlatList
-						scrollEnabled={false}
-						data={orders}
-						renderItem={orderViews}
-						keyExtractor={(item, index) => item._id?.toString()}
-						style={{ width: '100%' }}
-						contentContainerStyle={!ordersLength && styles.contentContainerOrder}
-						ListFooterComponent={orders.length ? renderFooter : null}
-						ListEmptyComponent={() =>
-							renderEmptyContainer(0, t('youHaveNotOrders'))
-						}
-					/>
+					{
+						isLoadDataOrders ? 	<FlatList
+							scrollEnabled={false}
+							data={orders}
+							renderItem={orderViews}
+							keyExtractor={(item, index) => item._id?.toString()}
+							style={{ width: '100%' }}
+							contentContainerStyle={!ordersLength && styles.contentContainerOrder}
+							ListFooterComponent={orders.length ? renderFooter : null}
+							ListEmptyComponent={() =>
+								renderEmptyContainer(0, t('youHaveNotOrders'))
+							}
+						/> : (
+							<Box paddingX={4}>
+								<Skeleton.Group show={true}>
+									<Skeleton height={90} width={'100%'} show={true} { ...SkeletonCommonProps }>
+										<Box alignItems={'flex-end'} height={85} flexDirection={'row'} justifyContent={'space-evenly'}>
+											<Skeleton height={30} width={150} {...SkeletonCommonProps} />
+											<Skeleton height={30} width={150} {...SkeletonCommonProps} />
+										</Box>
+									</Skeleton>
+								</Skeleton.Group>
+								<Spacer height={8} />
+								<Skeleton.Group show={true}>
+									<Skeleton height={90} width={'100%'} show={true} { ...SkeletonCommonProps }>
+										<Box alignItems={'flex-end'} height={85} flexDirection={'row'} justifyContent={'space-evenly'}>
+											<Skeleton height={30} width={150} {...SkeletonCommonProps} />
+											<Skeleton height={30} width={150} {...SkeletonCommonProps} />
+										</Box>
+									</Skeleton>
+								</Skeleton.Group>
+								<Spacer height={8} />
+								<Skeleton.Group show={true}>
+									<Skeleton height={90} width={'100%'} show={true} { ...SkeletonCommonProps }>
+										<Box alignItems={'flex-end'} height={85} flexDirection={'row'} justifyContent={'space-evenly'}>
+											<Skeleton height={30} width={150} {...SkeletonCommonProps} />
+											<Skeleton height={30} width={150} {...SkeletonCommonProps} />
+										</Box>
+									</Skeleton>
+								</Skeleton.Group>
+								<Spacer height={8} />
+							</Box>
+						)
+					}
+
 				</Box>
 			</BaseWrapperComponent>
 			{isShowPopupDetails && (

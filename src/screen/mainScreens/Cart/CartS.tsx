@@ -40,11 +40,13 @@ const CartS = observer(({ navigation }: CartSProps) => {
 	const { OrderService } = rootStore
 	const cartProducts = cart?.products
 	const [textComment, setTextComment] = useState('')
+	const [loading, setLoading] = useState(false)
 
 	const onChangeTextCommentHandler = (text: string) => {
 		setTextComment(text)
 	}
 	const onPressCheckout = () => {
+		setLoading(true)
 		const getProductsForOrder = cart.products.map((product) => {
 			return { amount: product.amount, productId: product._id }
 		})
@@ -61,6 +63,8 @@ const CartS = observer(({ navigation }: CartSProps) => {
 					removeCart()
 				}, 2000)
 			}
+		}).finally(() => {
+			setLoading(false)
 		})
 	}
 	const onPressRemoveProduct = useCallback((idProduct: string) => {
@@ -207,6 +211,7 @@ const CartS = observer(({ navigation }: CartSProps) => {
 					<Button
 						styleContainer={styles.styleBtnContainer}
 						styleText={styles.styleTextBtn}
+						loading={loading}
 						onPress={onPressCheckout}
 						title={t('checkout')}
 					/>

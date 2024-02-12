@@ -29,7 +29,7 @@ const CourierPickOrder = observer(({ route, navigation }: CourierPickOrderProps)
 	const { selectedOrder } = CourierOrderStore
 	const { CourierOrderService } = rootStore
 	const [showUserInfoModal, setShowUserInfoModal] = useState(false)
-	const [myPosition, setMyPosition] = useState<Coordinates>()
+	//const [myPosition, setMyPosition] = useState<Coordinates>()
 	const {status} = useOrderDataStatus({orderId: selectedOrder?._id})
 	const isStatusConfirmed = !!(!status && selectedOrder?.status === StatusType.Confirmed) || status === StatusType.Confirmed
 
@@ -41,15 +41,13 @@ const CourierPickOrder = observer(({ route, navigation }: CourierPickOrderProps)
 	})
 	const isStatusOnTheWay = selectedOrder?.status === StatusType.OnTheWay
 	const onPressNavigate = async () => {
-		if (!myPosition?.latitude) return
 		const endLocation = [coords.latitude, coords.longitude]
-		const startLocation = [myPosition?.latitude, myPosition.longitude]
 
-		const googleMapsUrl = `https://www.google.com/maps/dir/?api=1&origin=${startLocation}&destination=${endLocation}`
+		const googleMapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${endLocation}`
 		Linking.openURL(googleMapsUrl).catch((err) => console.error('Error opening Google Maps: ', err))
 	}
 
-	const getCurrentPosition = async () => {
+/*	const getCurrentPosition = async () => {
 		try {
 			const { latitude, longitude } = await getCurrentPositionHandler()
 			setMyPosition({ latitude, longitude })
@@ -57,7 +55,7 @@ const CourierPickOrder = observer(({ route, navigation }: CourierPickOrderProps)
 	}
 	useEffect(() => {
 		getCurrentPosition()
-	}, [])
+	}, [])*/
 	const onPressPickOrder = (status: StatusType) => {
 		CourierOrderService.updateOrderStatus(status)
 		if (status === StatusType.Completed) {
@@ -150,7 +148,7 @@ const CourierPickOrder = observer(({ route, navigation }: CourierPickOrderProps)
 					</Box>
 
 					<Box w={'100%'}>
-						{selectedOrder?.status !== StatusType.Completed && myPosition?.longitude && (
+						{selectedOrder?.status !== StatusType.Completed &&(
 							<TouchableOpacity onPress={onPressNavigate}>
 								<Box
 									borderWidth={1}

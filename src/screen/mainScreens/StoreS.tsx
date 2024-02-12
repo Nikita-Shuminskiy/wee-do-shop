@@ -50,7 +50,7 @@ const StoreS = observer(({navigation, route}: StoreSProps) => {
 
 	useEffect(() => {
 /*		if(route?.params?.storeId) {
-			StoresService.getStore(route?.params?.storeId).finally(() => {
+			CategoriessService.getStore(route?.params?.storeId).finally(() => {
 				setIsLoadStore(true)
 			})
 		}*/

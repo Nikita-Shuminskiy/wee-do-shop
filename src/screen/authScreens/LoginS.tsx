@@ -26,6 +26,7 @@ const LoginS = memo(({navigation}: LoginSProps) => {
 	const {AuthStoreService} = rootStore
 	const {t} = useTranslation(['login', 'errors']);
 	const onSubmit = (values) => {
+		setSubmitting(true)
 		AuthStoreService.login({
 			email: values.email.trim(),
 			password: values.password,
@@ -38,8 +39,10 @@ const LoginS = memo(({navigation}: LoginSProps) => {
 				navigation.navigate(routerConstants.MAIN)
 				return
 			}
+		}).finally(() => {
+			setSubmitting(false)
 		})
-		setSubmitting(false)
+
 	}
 	const {handleChange, handleBlur, handleSubmit, values, errors, isSubmitting, setSubmitting} =
 		useFormik({
@@ -115,11 +118,7 @@ const LoginS = memo(({navigation}: LoginSProps) => {
 					<Button
 						styleText={styles.textBtn}
 						backgroundColor={colors.green}
-						disabled={
-							!!(errors.email && !validateEmail(values.email.trim())) ||
-							!!(errors.password && values.password.length <= 3) ||
-							isSubmitting
-						}
+						loading={isSubmitting}
 						onPress={handleSubmit}
 						title={t('signIn')}
 					/>

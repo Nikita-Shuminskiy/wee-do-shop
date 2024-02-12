@@ -1,30 +1,29 @@
-import React, { useCallback, useMemo, useState } from "react";
-import { Linking, StyleSheet, TouchableOpacity } from "react-native";
-import { NavigationProp, ParamListBase } from "@react-navigation/native";
-import { BaseWrapperComponent } from "../../components/baseWrapperComponent";
-import { Box, Checkbox, Image, Text } from "native-base";
-import CustomInput from "../../components/TextInput";
-import { AntDesign, MaterialCommunityIcons } from "@expo/vector-icons";
-import logoImg from "../../assets/images/logoWeeDo.png";
-import { FastField, FormikHelpers, useFormik } from "formik";
-import { colors } from "../../assets/colors/colors";
-import location from "../../assets/images/location-register.png";
-import arrowLeft from "../../assets/images/arrow-left.png";
-import { RoleType, UserRegisterDataType } from "../../api/authApi";
-import { routerConstants } from "../../constants/routerConstants";
-import ArrowBack from "../../components/ArrowBack";
-import { observer } from "mobx-react-lite";
-import { getFormattedAddress } from "../../components/MapViews/utils";
-import { createAlert } from "../../components/Alert";
-import { useTranslation } from "react-i18next";
-import "yup-phone-lite";
-import { CountryData, countryDataDefault, schema } from "./helpers";
-import AuthStore, { AddressType, fullAddressType } from "../../store/AuthStore/auth-store";
-import rootStore from "../../store/RootStore/root-store";
-import Link from "../../components/Link";
-import Button from "../../components/Button";
-import PhoneNumberField from "../../components/PhoneField";
-import { validateEmail } from "../../utils/utils";
+import React, {useCallback, useMemo, useState} from "react"
+import {Linking, StyleSheet, TouchableOpacity} from "react-native"
+import {NavigationProp, ParamListBase} from "@react-navigation/native"
+import {BaseWrapperComponent} from "../../components/baseWrapperComponent"
+import {Box, Checkbox, Image, Text} from "native-base"
+import CustomInput from "../../components/TextInput"
+import {AntDesign, MaterialCommunityIcons} from "@expo/vector-icons"
+import logoImg from "../../assets/images/logoWeeDo.png"
+import {FormikHelpers, useFormik} from "formik"
+import {colors} from "../../assets/colors/colors"
+import location from "../../assets/images/location-register.png"
+import arrowLeft from "../../assets/images/arrow-left.png"
+import {RoleType, UserRegisterDataType} from "../../api/authApi"
+import {routerConstants} from "../../constants/routerConstants"
+import ArrowBack from "../../components/ArrowBack"
+import {observer} from "mobx-react-lite"
+import {getFormattedAddress} from "../../components/MapViews/utils"
+import {createAlert} from "../../components/Alert"
+import {useTranslation} from "react-i18next"
+import "yup-phone-lite"
+import {CountryData, countryDataDefault, schema} from "./helpers"
+import AuthStore, {AddressType, fullAddressType} from "../../store/AuthStore/auth-store"
+import rootStore from "../../store/RootStore/root-store"
+import Link from "../../components/Link"
+import Button from "../../components/Button"
+import PhoneNumberField from "../../components/PhoneField"
 
 type LoginSProps = {
 	navigation: NavigationProp<ParamListBase>;
@@ -39,6 +38,7 @@ const RegisterS = observer(({navigation}: LoginSProps) => {
 	const [countryCode, setCountryCode] = useState<CountryData>(countryDataDefault)
 
 	const onSubmit = (values: UserRegisterDataType, helpers: FormikHelpers<any>) => {
+		setSubmitting(true)
 		if (!checkAge) {
 			setCheckError(true)
 			setSubmitting(false)
@@ -264,7 +264,7 @@ const RegisterS = observer(({navigation}: LoginSProps) => {
 				<Box w={"100%"} mt={5} mb={5}>
 					<Button
 						styleContainer={styles.styleContainerBtnUp}
-						disabled={isSubmitting}
+						loading={isSubmitting}
 						onPress={handleSubmit}
 						title={t('login:signUp')}
 					/>

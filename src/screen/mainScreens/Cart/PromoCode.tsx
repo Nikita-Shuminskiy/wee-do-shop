@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { memo, useCallback, useState } from "react";
 import { Box, Image, Text, Input, Spinner } from 'native-base'
 import promoCodeImg from '../../../assets/images/promoCode.png'
 import arrowRightImg from '../../../assets/images/courierImages/arrow-right.png'
@@ -11,8 +11,12 @@ import { Feather } from '@expo/vector-icons'
 import AuthStore from '../../../store/AuthStore/auth-store'
 import CartStore from '../../../store/CartStore/cart-store'
 import { useTranslation } from "react-i18next";
-
-const PromoCode = ({ onPress, namePromoCode, t }) => {
+type PromoCodeProps = {
+	onPress: () => void
+	namePromoCode: string
+	t: any
+}
+const PromoCode = memo(({ onPress, namePromoCode, t }: PromoCodeProps) => {
 	return (
 		<TouchableOpacity onPress={onPress}>
 			<Box
@@ -39,9 +43,12 @@ const PromoCode = ({ onPress, namePromoCode, t }) => {
 			</Box>
 		</TouchableOpacity>
 	)
+})
+type AccordionsProps = {
+	userId: string
+	addedPromoCode: any
 }
-
-export const Accordions = ({ userId, addedPromoCode }) => {
+export const Accordions = memo(({ userId, addedPromoCode }: AccordionsProps) => {
 	const { sendPromoCode, setPromoCode: setAddedPromo } = CartStore
 	const [isCollapsed, setIsCollapsed] = useState(true)
 	const [loading, setLoading] = useState(false)
@@ -111,4 +118,4 @@ export const Accordions = ({ userId, addedPromoCode }) => {
 			</Collapsible>
 		</Box>
 	)
-}
+})
