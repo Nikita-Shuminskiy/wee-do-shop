@@ -169,13 +169,16 @@ const StoreS = observer(({navigation, route}: StoreSProps) => {
 	return (
 		<>
 			<BaseWrapperComponent
+				styleSafeArea={{
+					paddingTop: 0
+				}}
 				onRefreshHandler={onRefreshHandler}
 				backgroundColor={"white"}
 				isKeyboardAwareScrollView={!!store?.subCategories}
 			>
 				<Box>
 					<Box w={"100%"} minHeight={239} flex={1}>
-						<Box mt={5} mb={5} zIndex={30} position={"absolute"} left={5}>
+						<Box zIndex={30} position={"absolute"} top={'15%'} left={5}>
 							<ArrowBack goBackPress={onPressGoBack} img={arrowLeftBack} />
 						</Box>
 						{

@@ -10,6 +10,7 @@ import {Routs} from "./Routs"
 import useInternetConnection from "../utils/hook/useInternetConnection"
 import {LoadingEnum} from "../store/types/types"
 import Loading from "../components/Loading"
+import { SafeAreaView } from "react-native";
 
 const backgroundHandler = async (time: number) => {
 	if (time >= 20) {
@@ -34,15 +35,17 @@ const RootNavigation = observer(() => {
 	}), []);
 
 	return (
-			<>
-					{isLoading === LoadingEnum.fetching && (
-						<Loading visible={true} />
-					)}
-				<ModalReconnect checkInternetConnection={checkInternetConnection} visible={!isConnected} />
-				<RootStack.Navigator initialRouteName={routerConstants.SPLASH_SCREEN}>
-					{memoizedRoutes}
-				</RootStack.Navigator>
-			</>
+		<>
+
+			{isLoading === LoadingEnum.fetching && (
+				<Loading visible={true} />
+			)}
+			<ModalReconnect checkInternetConnection={checkInternetConnection} visible={!isConnected} />
+			<RootStack.Navigator initialRouteName={routerConstants.SPLASH_SCREEN}>
+				{memoizedRoutes}
+			</RootStack.Navigator>
+		</>
+
 	)
 })
 

@@ -19,7 +19,7 @@ export default function App() {
 			<NativeBaseProvider>
 				<StatusBar
 					hidden={false}
-					backgroundColor={'white'}
+					backgroundColor={'transparent'}
 					style={"auto"}
 					animated={true}
 					translucent={true}

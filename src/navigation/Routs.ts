@@ -12,7 +12,7 @@ import ForgotPasswordS from "../screen/authScreens/ForgotPasswordS";
 import ResetPasswordS from "../screen/authScreens/ResetPasswordS";
 import AddressS from "../screen/mainScreens/AddressS";
 import UpdateUserS from "../screen/mainScreens/UpdateUser/UpdateUserS";
-import OrderStatusesS from "../screen/mainScreens/OrderStatusesS";
+import OrderStatusesS from "../screen/mainScreens/OrderStatuses/OrderStatusesS";
 import FavoriteS from "../screen/mainScreens/FavoriteS";
 import StoreS from "../screen/mainScreens/StoreS";
 import UserProfileS from "../screen/mainScreens/UserProfileS";

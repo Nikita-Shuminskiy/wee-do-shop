@@ -49,7 +49,7 @@ export const HeaderUser = memo(({isAuth,  address, setFavoritesStores }: HeaderU
 							style={{ alignItems: 'center', width: '70%' }}
 							onPress={onPressUserAddressHandler}
 						>
-							<Text fontSize={14} w={'60%'} textAlign={'center'} fontWeight={'600'}>
+							<Text fontSize={13} w={'60%'} textAlign={'center'} fontWeight={'600'}>
 								{formatted_address}
 							</Text>
 						</TouchableOpacity>

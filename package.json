@@ -2,7 +2,7 @@
   "name": "weedo",
   "version": "1.0.3",
   "scripts": {
-    "start": "expo start --dev-client",
+    "start": "expo start",
     "start_ofline": "expo start --offline",
     "android": "expo run:android",
     "prepack": "",

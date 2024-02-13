@@ -25,6 +25,7 @@ import {useTranslation} from "react-i18next"
 import Constants from "expo-constants"
 import SelectPicker from "../../components/select-picker"
 import * as Updates from "expo-updates"
+import { deviceStorage } from "../../utils/storage/storage";
 
 type UserProfileSProps = {
 	navigation: NavigationProp<ParamListBase>
@@ -77,7 +78,7 @@ const UserProfileS = observer(({ navigation }: UserProfileSProps) => {
 	const onChangeLang = useCallback( async (lang: string) => {
 		await i18n.changeLanguage(lang, (err, t) => {
 			if (err) return console.log('something went wrong loading', err);
-			//Updates.reloadAsync()
+			deviceStorage.saveItem('selectedLanguage', lang)
 		})
 	}, [i18n])
 	return (

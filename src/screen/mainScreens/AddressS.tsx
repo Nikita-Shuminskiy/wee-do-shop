@@ -82,14 +82,15 @@ const AddressS = observer(({navigation}: AddressSProps) => {
 					<Box
 						mt={2}
 						flexDirection={"row"}
+						flexWrap={'wrap'}
 						justifyContent={"space-between"}
 						borderBottomWidth={1}
 						pb={1}
 						borderColor={colors.grayLight}
 					>
-						<Text fontSize={15}>{formatted_address}</Text>
+						<Text fontSize={13}>{formatted_address}</Text>
 						<TouchableOpacity onPress={onPressEditAddress}>
-							<AntDesign name="edit" size={24} color={colors.black} />
+							<AntDesign name="edit" size={24} color={colors.gray} />
 						</TouchableOpacity>
 					</Box>
 

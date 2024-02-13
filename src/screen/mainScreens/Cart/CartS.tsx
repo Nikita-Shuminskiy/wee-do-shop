@@ -128,7 +128,7 @@ const CartS = observer(({ navigation }: CartSProps) => {
 							alignItems={"center"}
 							justifyContent={"space-between"}
 						>
-							<Text fontSize={28} fontWeight={"800"}>
+							<Text fontSize={23} fontWeight={"800"}>
 								{cart?.storeName}
 							</Text>
 							<TouchableOpacity onPress={onPressRemoveStoreFromCart}>

@@ -1,30 +1,28 @@
-import React, { useCallback, useEffect, useState } from 'react'
-import { BaseWrapperComponent } from '../../components/baseWrapperComponent'
-import orderStore from '../../store/OrderStore/order-store'
-import rootStore from '../../store/RootStore/root-store'
-import { Box, Text } from 'native-base'
-import ArrowBack from '../../components/ArrowBack'
-import arrowLeftBack from '../../assets/images/arrow-left.png'
-import { NavigationProp, ParamListBase } from '@react-navigation/native'
-import { colors } from '../../assets/colors/colors'
-import { ActivityIndicator, FlatList, StyleSheet, TouchableOpacity } from 'react-native'
-import { ApiOrderType, StatusType } from '../../api/ordersApi'
-import OrderViewer from '../../components/list-viewer/OrderViewer'
-import { observer } from 'mobx-react-lite'
-import PopUpOrderDetails from '../../components/modalPopUp/PopUpOrderDetails'
-import { routerConstants } from '../../constants/routerConstants'
-import cartStore from '../../store/CartStore/cart-store'
-import { renderEmptyContainer } from '../../components/list-viewer/empty-list'
-import { getTotalSumProductsCart } from '../../utils/utilsCart'
-import Loading from '../../components/Loading'
-import { isCurrentTimeWorkStoreRange } from "../../utils/utils";
-import { alertStoreClosed } from "../../components/list-viewer/utils";
-import AuthStore from "../../store/AuthStore/auth-store";
-import { useTranslation } from "react-i18next";
-import { Skeleton } from "moti/skeleton";
-import { SkeletonCommonProps } from "../../utils/common";
-import SkeletonExpo from "moti/build/skeleton/expo";
-import Spacer from "../../components/Specer";
+import React, {useCallback, useEffect, useState} from "react"
+import {BaseWrapperComponent} from "../../components/baseWrapperComponent"
+import orderStore from "../../store/OrderStore/order-store"
+import rootStore from "../../store/RootStore/root-store"
+import {Box, Text} from "native-base"
+import ArrowBack from "../../components/ArrowBack"
+import arrowLeftBack from "../../assets/images/arrow-left.png"
+import {NavigationProp, ParamListBase} from "@react-navigation/native"
+import {colors} from "../../assets/colors/colors"
+import {ActivityIndicator, FlatList, StyleSheet, TouchableOpacity} from "react-native"
+import {ApiOrderType, StatusType} from "../../api/ordersApi"
+import OrderViewer from "../../components/list-viewer/OrderViewer"
+import {observer} from "mobx-react-lite"
+import PopUpOrderDetails from "../../components/modalPopUp/PopUpOrderDetails"
+import {routerConstants} from "../../constants/routerConstants"
+import cartStore from "../../store/CartStore/cart-store"
+import {renderEmptyContainer} from "../../components/list-viewer/empty-list"
+import {getTotalSumProductsCart} from "../../utils/utilsCart"
+import {isCurrentTimeWorkStoreRange} from "../../utils/utils"
+import {alertStoreClosed} from "../../components/list-viewer/utils"
+import AuthStore from "../../store/AuthStore/auth-store"
+import {useTranslation} from "react-i18next"
+import {Skeleton} from "moti/skeleton"
+import {SkeletonCommonProps} from "../../utils/common"
+import Spacer from "../../components/Specer"
 
 type OrdersSProps = {
 	navigation: NavigationProp<ParamListBase>
@@ -60,7 +58,7 @@ const OrdersS = observer(({ navigation, route }: OrdersSProps) => {
 			})
 	}
 	const requestAPI = () => {
-		if(!isAuth) return
+		if(!isAuth) return setIsLoadDataOrders(true)
 		setLoadingData(true)
 		OrderService.getOrders({
 			limit,

@@ -9,7 +9,7 @@ import ShopsS from '../screen/mainScreens/ShopsS'
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons'
 import CartS from '../screen/mainScreens/Cart/CartS'
 import OrdersS from '../screen/mainScreens/OrdersS'
-import { Platform } from 'react-native'
+import { Platform, SafeAreaView } from "react-native";
 import { useTranslation } from "react-i18next";
 
 const TabMainStack = createBottomTabNavigator()
@@ -25,10 +25,10 @@ const MainNavigation = ({ navigation, route }) => {
 					width: '100%',
 					borderWidth: 0,
 					elevation: 0,
-					height: Platform.OS === 'ios' ? '10%' : '8%',
+					height: 60,
 					backgroundColor: colors.white,
 					display: keyboardStatus ? 'none' : 'flex',
-					paddingBottom: 10
+					paddingBottom: Platform.OS === 'ios' ? 0 : 5
 				},
 				tabBarActiveTintColor: colors.green,
 				tabBarInactiveTintColor: colors.gray,

@@ -33,13 +33,14 @@ export default {
   },
   main: {
     success: 'Success',
-    storeSearch: 'storeSearch',
-    favoriteStores: 'favoriteStores'
+    storeSearch: 'store search',
+    favoriteStores: 'Favorite stores'
   },
   shops: {
     shopsNearYou:'Shops near you'
   },
   store: {
+    goToCart: 'Go to cart',
     min:'min',
     youNeedRegister: 'You need to register to view the store.',
     goLogin: 'Go to login',
@@ -47,6 +48,7 @@ export default {
     allProduct: 'All products',
   },
   cart: {
+    addPromoCode: 'Add promo code',
     deleteOrder:'Delete the order ?',
     cart:'Cart',
     delivery:'Delivery',
@@ -64,18 +66,18 @@ export default {
     backToHome:'Back to Home',
     courierOnThe:'Courier on the way',
     orderDelivered:'Order delivered',
-    Placed:'Placed',
-    Confirmed:'Confirmed',
-    WaitingForPickUp:'Waiting for pick up',
-    OnTheWay:'On the way',
-    Completed:'Completed',
-    Canceled:'Canceled',
+    Placed:'placed',
+    Confirmed:'confirmed',
+    WaitingForPickUp:'waiting for pick up',
+    OnTheWay:'on the way',
+    Completed:'completed',
+    Canceled:'canceled',
     storeComment:'Store comment',
     orderLoading:'Order loading, wait for a call from the store',
     courierPicks:'The courier picks up your order',
     storeApproved:'The store approved the order',
 
-    storeReceived:'The Store received the order, confirmation',
+    storeReceived:'The store received the order, confirmation',
     weExpanding:'We are expanding our range of products every day',
     readyToBring:'Ready to bring you joy in any weather and any time',
     wePackGoods:'We pack the goods in environmentally friendly packaging',
@@ -85,6 +87,7 @@ export default {
     order:'Order',
   },
   orders: {
+    orderDetails: 'Order details',
     loadMore: 'Load more',
     repeatOrder: 'Repeat order',
     noDetails: 'No details',

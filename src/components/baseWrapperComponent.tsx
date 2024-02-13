@@ -1,7 +1,6 @@
 import React, { forwardRef, memo, useState } from "react";
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { GestureResponderEvent, Platform, RefreshControl, SafeAreaView } from 'react-native'
-import { VirtualizedList } from './virtualized-list'
 
 type BaseWrapperComponentType = {
 	children: JSX.Element | JSX.Element[]

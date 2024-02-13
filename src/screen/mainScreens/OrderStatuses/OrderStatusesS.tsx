@@ -1,30 +1,30 @@
 import React, { memo, useCallback, useEffect } from "react";
 import { Box, Text } from 'native-base'
 import { observer } from 'mobx-react-lite'
-import orderStore from '../../store/OrderStore/order-store'
-import { BaseWrapperComponent } from '../../components/baseWrapperComponent'
-import placedImg from '../../assets/images/orderImg/placed.png'
-import preparedImg from '../../assets/images/orderImg/prepared.png'
-import waitingForPickImg from '../../assets/images/orderImg/waitingForPick.png'
-import courierImg from '../../assets/images/orderImg/courier.png'
-import arrivedImg from '../../assets/images/orderImg/arrived.png'
-import confirmed from '../../assets/images/orderImg/confirmed.png'
+import orderStore from '../../../store/OrderStore/order-store'
+import { BaseWrapperComponent } from '../../../components/baseWrapperComponent'
+import placedImg from '../../../assets/images/orderImg/placed.png'
+import preparedImg from '../../../assets/images/orderImg/prepared.png'
+import waitingForPickImg from '../../../assets/images/orderImg/waitingForPick.png'
+import courierImg from '../../../assets/images/orderImg/courier.png'
+import arrivedImg from '../../../assets/images/orderImg/arrived.png'
+import confirmed from '../../../assets/images/orderImg/confirmed.png'
 import { Image, Linking, Platform, StyleSheet, TouchableOpacity } from 'react-native'
-import { colors } from '../../assets/colors/colors'
-import { CourierType, StatusType } from '../../api/ordersApi'
+import { colors } from '../../../assets/colors/colors'
+import { CourierType, StatusType } from '../../../api/ordersApi'
 import io from 'socket.io-client'
-import OrderStatusBar from '../../components/OrderStatusBar'
-import Button from '../../components/Button'
+import OrderStatusBar from '../../../components/OrderStatusBar'
+import Button from '../../../components/Button'
 import { NavigationProp, ParamListBase } from '@react-navigation/native'
-import { routerConstants } from '../../constants/routerConstants'
-import { BASE_URL } from '../../api/config'
-import { splittingWord } from '../../utils/utils'
+import { routerConstants } from '../../../constants/routerConstants'
+import { BASE_URL } from '../../../api/config'
+import { splittingWord } from '../../../utils/utils'
 import { Feather } from '@expo/vector-icons'
-import airplaneImg from '../../assets/images/statuses/airplane.png'
-import bagImg from '../../assets/images/statuses/bag.png'
-import testImg from '../../assets/images/statuses/test.png'
-import heartImg from '../../assets/images/statuses/heart.png'
-import stormImg from '../../assets/images/statuses/storm.png'
+import airplaneImg from '../../../assets/images/statuses/airplane.png'
+import bagImg from '../../../assets/images/statuses/bag.png'
+import testImg from '../../../assets/images/statuses/test.png'
+import heartImg from '../../../assets/images/statuses/heart.png'
+import stormImg from '../../../assets/images/statuses/storm.png'
 import { useTranslation } from "react-i18next";
 
 const renderImgForStatuses = (status: StatusType) => {
@@ -51,7 +51,7 @@ const renderHeaderDescriptionForStatuses = (status: StatusType, translate: any) 
 			return (
 				<>
 					<Image source={bagImg} style={{ width: 20, height: 20 }} />
-					<Text ml={1} fontSize={13} fontWeight={500}>
+					<Text ml={1} fontSize={13} flex={1}  fontWeight={500}>
 						{translate('weExpanding')}
 					</Text>
 				</>
@@ -60,7 +60,7 @@ const renderHeaderDescriptionForStatuses = (status: StatusType, translate: any) 
 			return (
 				<>
 					<Image source={stormImg} style={{ width: 20, height: 20 }} />
-					<Text ml={1} fontSize={13} fontWeight={500}>
+					<Text ml={1}  fontSize={13} flex={1}  fontWeight={500}>
 						{translate('readyToBring')}
 					</Text>
 				</>
@@ -69,7 +69,7 @@ const renderHeaderDescriptionForStatuses = (status: StatusType, translate: any) 
 			return (
 				<>
 					<Image source={testImg} style={{ width: 20, height: 20 }} />
-					<Text ml={1} fontSize={13} fontWeight={500}>
+					<Text ml={1} fontSize={13} flex={1} fontWeight={500}>
 						{translate('wePackGoods')}
 					</Text>
 				</>
@@ -78,7 +78,7 @@ const renderHeaderDescriptionForStatuses = (status: StatusType, translate: any) 
 			return (
 				<>
 					<Image source={airplaneImg} style={{ width: 20, height: 20 }} />
-					<Text ml={1} fontSize={13} fontWeight={500}>
+					<Text ml={1} fontSize={13} flex={1}  fontWeight={500}>
 						{translate('willDeliver')}
 					</Text>
 				</>
@@ -87,7 +87,7 @@ const renderHeaderDescriptionForStatuses = (status: StatusType, translate: any) 
 			return (
 				<>
 					<Image source={heartImg} style={{ width: 20, height: 20 }} />
-					<Text ml={1} fontSize={13} fontWeight={500}>
+					<Text ml={1} fontSize={13} flex={1}  fontWeight={500}>
 						{translate('thankYouBeing')}
 					</Text>
 				</>
@@ -96,7 +96,7 @@ const renderHeaderDescriptionForStatuses = (status: StatusType, translate: any) 
 			return (
 				<>
 					<Image source={stormImg} style={{ width: 20, height: 20 }} />
-					<Text ml={1} fontSize={13} fontWeight={500}>
+					<Text ml={1} fontSize={13} flex={1}  fontWeight={500}>
 						{translate('orderCanceled')}
 					</Text>
 				</>
@@ -106,8 +106,6 @@ const renderHeaderDescriptionForStatuses = (status: StatusType, translate: any) 
 	}
 }
 const renderDescriptionForStatuses = (status: StatusType, textReason?: string, translate?: any) => {
-	//Placed, Confirmed, WaitingForPickUp, OnTheWay, Completed, Canceled
-	console.log(splittingWord(status), 'status');
 	switch (status) {
 		case StatusType.Placed:
 			return (
@@ -241,7 +239,8 @@ const OrderStatusesS = observer(({ navigation }: OrderStatusesSProps) => {
 				{!isCanceled && (
 					<Box
 						mt={5}
-						p={4}
+						paddingY={4}
+						paddingX={2}
 						backgroundColor={`rgba(237, 248, 216, 1)`}
 						borderRadius={16}
 						flexDirection={'row'}
