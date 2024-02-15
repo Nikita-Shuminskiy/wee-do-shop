@@ -82,36 +82,38 @@ const PopUpProduct = observer(
                 }
               </Box>
             </Box>
-          </BaseWrapperComponent>
-        </ModalPopup>
-        {show  && isAuth && (
-          <Box
-            justifyContent={"space-evenly"}
-            style={styles.shadow}
-            zIndex={9999}
-            height={91}
-            flexDirection={"row"}
-            alignItems={"center"}
-          >
-            <Box w={"40%"}>
-              <InputNumber
-                values={currentValueToCartProduct?.amount ?? 0}
-                onChangeValue={saveInputNumberValue}
-              />
-            </Box>
-            {
-               <Box minWidth={150}>
-                <Button
-                  backgroundColor={colors.green}
-                  styleContainer={styles.styleContainerBtn}
-                  styleText={styles.styleTextBtn}
-                  onPress={onPressGoToCardHandler}
-                  title={`${t('goToCart')} ${totalSumCart ? `฿${totalSumCart}`: ""}`}
-                />
+            {show && isAuth && (
+              <Box
+                justifyContent={"space-evenly"}
+                zIndex={10000}
+                w={'100%'}
+                position={'absolute'}
+                bottom={0}
+                height={50}
+                flexDirection={"row"}
+
+                alignItems={"center"}
+              >
+                <Box w={"40%"}>
+                  <InputNumber
+                    values={currentValueToCartProduct?.amount ?? 0}
+                    onChangeValue={saveInputNumberValue}
+                  />
+                </Box>
+                <Box minWidth={150}>
+                  <Button
+                    backgroundColor={colors.green}
+                    styleContainer={styles.styleContainerBtn}
+                    styleText={styles.styleTextBtn}
+                    onPress={onPressGoToCardHandler}
+                    title={`${t('goToCart')} ${totalSumCart ? `฿${totalSumCart}`: ""}`}
+                  />
+                </Box>
               </Box>
-            }
-          </Box>
-        )}
+            )}
+          </BaseWrapperComponent>
+
+        </ModalPopup>
       </>
     );
   }

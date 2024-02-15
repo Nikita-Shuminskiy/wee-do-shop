@@ -1,29 +1,39 @@
-import React, { forwardRef, memo, useState } from "react";
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import React, { forwardRef, memo, useCallback, useState, useRef } from "react";
 import { GestureResponderEvent, Platform, RefreshControl, SafeAreaView } from 'react-native'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
-type BaseWrapperComponentType = {
+type BaseWrapperComponentProps = {
 	children: JSX.Element | JSX.Element[]
 	onTouchStart?: (event: GestureResponderEvent) => void
 	onTouchEnd?: (event: GestureResponderEvent) => void
 	isKeyboardAwareScrollView?: boolean
 	styleSafeArea?: any
-	isBackdrop?: boolean
 	backgroundColor?: string
 	extraScrollHeight?: number
 	onRefreshHandler?: () => void
+	setIsScroll?: (val: boolean) => void
 }
-export const BaseWrapperComponent = memo(({
-																						children,
-																						onTouchEnd,
-																						onTouchStart,
-																						isKeyboardAwareScrollView = false,
-																						styleSafeArea,
-																						backgroundColor = 'white',
-																						extraScrollHeight,
-																						onRefreshHandler,
-																					}: BaseWrapperComponentType) => {
+
+export const BaseWrapperComponent = forwardRef<any, BaseWrapperComponentProps>(({
+																																					 children,
+																																					 onTouchEnd,
+																																					 onTouchStart,
+																																					 isKeyboardAwareScrollView = false,
+																																					 styleSafeArea,
+																																					 backgroundColor = 'white',
+																																					 extraScrollHeight,
+																																									setIsScroll,
+																																					 onRefreshHandler,
+																																				 }, ref) => {
 	const [refreshing, setRefreshing] = useState(false)
+	const handleScroll = useCallback((event: any) => {
+		const offsetY = event.nativeEvent.contentOffset.y;
+		if (offsetY >= 400) {
+			setIsScroll?.(true);
+		} else {
+			setIsScroll?.(false);
+		}
+	}, []);
 
 	const onRefresh = () => {
 		setRefreshing(true)
@@ -32,6 +42,7 @@ export const BaseWrapperComponent = memo(({
 			setRefreshing(false)
 		}, 1000)
 	}
+
 	return (
 		<SafeAreaView
 			style={{
@@ -44,6 +55,8 @@ export const BaseWrapperComponent = memo(({
 		>
 			{isKeyboardAwareScrollView ? (
 				<KeyboardAwareScrollView
+					ref={ref}
+					onScroll={handleScroll}
 					enableOnAndroid={true}
 					extraScrollHeight={extraScrollHeight}
 					keyboardShouldPersistTaps={'handled'}

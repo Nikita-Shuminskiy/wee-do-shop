@@ -25,10 +25,10 @@ const MainNavigation = ({ navigation, route }) => {
 					width: '100%',
 					borderWidth: 0,
 					elevation: 0,
-					height: 60,
+					height: 70,
 					backgroundColor: colors.white,
 					display: keyboardStatus ? 'none' : 'flex',
-					paddingBottom: Platform.OS === 'ios' ? 0 : 5
+					paddingBottom: Platform.OS === 'ios' ? 20 : 5
 				},
 				tabBarActiveTintColor: colors.green,
 				tabBarInactiveTintColor: colors.gray,
@@ -58,7 +58,7 @@ const MainNavigation = ({ navigation, route }) => {
 			})}
 		>
 			<TabMainStack.Screen
-				options={{ tabBarLabel: t('home'), headerShown: false }}
+				options={{ tabBarLabel: t('home'), headerShown: false, unmountOnBlur: true  }}
 				name={routerConstants.HOME}
 				component={HomeS}
 			/>

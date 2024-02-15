@@ -1,5 +1,5 @@
 import React, { memo, useCallback } from "react";
-import {StyleSheet} from "react-native"
+import { StyleSheet, View, Text} from "react-native";
 import {NavigationProp, ParamListBase} from "@react-navigation/native"
 import {BaseWrapperComponent} from "../../components/baseWrapperComponent"
 import {Box, Image} from "native-base"

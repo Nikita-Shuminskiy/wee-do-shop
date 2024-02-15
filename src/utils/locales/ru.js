@@ -37,6 +37,7 @@ export default {
     Flowers: 'Цветы',
     Edibles: 'Съедобные',
     Accessories: 'Аксессуары',
+    Acessories: 'Аксессуары',
     Equipment: 'Оборудование',
     "Health&Beauty":'Здоровье и Красота',
     success: 'Успех',

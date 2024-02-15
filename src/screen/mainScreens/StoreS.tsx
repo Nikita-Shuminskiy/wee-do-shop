@@ -28,12 +28,16 @@ import { Skeleton } from "moti/skeleton";
 import { SkeletonCommonProps } from "../../utils/common";
 import Spacer from "../../components/Specer";
 import ShopsSkeleton from "../../components/list-viewer/ShopsViewer/ShopsSkeleton";
+import useScroll from "../../utils/hook/useScroll";
+import Link from "../../components/Link";
+import arrowUp from "../../assets/images/arrowUp.png";
 
 type StoreSProps = {
 	navigation: NavigationProp<ParamListBase>
 	route: any
 }
 const StoreS = observer(({navigation, route}: StoreSProps) => {
+	const {scrollRef, setIsScrollHandler, isScroll, scrollTo} = useScroll()
 	const {t} = useTranslation(['store', 'common']);
 	const {StoresStore, CartStore, StoresService, CartService} = rootStore
 	const {cart, setPromoCode, removeCart} = CartStore
@@ -172,6 +176,8 @@ const StoreS = observer(({navigation, route}: StoreSProps) => {
 				styleSafeArea={{
 					paddingTop: 0
 				}}
+				ref={scrollRef}
+				setIsScroll={setIsScrollHandler}
 				onRefreshHandler={onRefreshHandler}
 				backgroundColor={"white"}
 				isKeyboardAwareScrollView={!!store?.subCategories}
@@ -308,13 +314,18 @@ const StoreS = observer(({navigation, route}: StoreSProps) => {
 					</Box>
 				</Box>
 			</BaseWrapperComponent>
+			{isScroll && (
+				<Box position={"absolute"} bottom={"15%"} right={5}>
+					<Link onPress={scrollTo} img={arrowUp} styleImg={{width: 42, height: 42}} />
+				</Box>
+			)}
 			{!!cart?.totalSum && (
 				<Box
 					style={styles.shadow}
 					position={"absolute"}
 					borderTopRightRadius={16}
 					borderTopLeftRadius={16}
-					height={100}
+					height={130}
 					justifyContent={"center"}
 					w={"100%"}
 					bottom={0}

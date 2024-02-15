@@ -9,7 +9,7 @@ const SplashScreen = () => {
   useEffect(() => {
     AuthStoreService.getMe()
   }, []);
-  const [bounceValue] = useState(new Animated.Value(0));
+  const [bounceValue] = useState(new Animated.Value(1));
 
 
   useEffect(() => {
@@ -54,7 +54,7 @@ const SplashScreen = () => {
   );
 }
 const styles = StyleSheet.create({
- 
+
 });
 
 export default memo(SplashScreen)

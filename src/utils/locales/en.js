@@ -87,6 +87,7 @@ export default {
     order:'Order',
   },
   orders: {
+    checkStatus: 'Check status',
     orderDetails: 'Order details',
     loadMore: 'Load more',
     repeatOrder: 'Repeat order',

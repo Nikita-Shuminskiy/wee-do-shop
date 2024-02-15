@@ -34,7 +34,7 @@ const SubCategoriesViewer = ({subCategory, onPress, isCategory, isChosen}: Categ
 							ml={2}
 							color={isChosen ? colors.green : colors.gray}
 						>
-							{subCategory?.name.trim()}
+							{t(subCategory?.name.trim())}
 						</Text>
 					)}
 				</Box>
