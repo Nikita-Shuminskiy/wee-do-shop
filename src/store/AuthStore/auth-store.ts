@@ -1,4 +1,4 @@
-import {action, makeObservable, observable} from "mobx"
+import { action, makeObservable, observable, runInAction } from "mobx";
 import {deviceStorage} from "../../utils/storage/storage"
 import { authApi, PayloadResetPasswordType, UserRegisterDataType, UserType } from "../../api/authApi";
 import {BannersType, OptionalUserType, userApi} from "../../api/userApi"
@@ -37,7 +37,9 @@ export class AuthStore {
 	setClearAuthStoreData = () => {
 		this.isAuth = false
 		this.currentLocation = {} as AddressType
-		this.user = {} as UserType
+		runInAction(() => {
+			this.user = null
+		})
 	}
 
 	setUser(userData: UserType): void {
@@ -82,7 +84,10 @@ export class AuthStore {
 		this.isAuth = false
 		await deviceStorage.removeItem("refreshToken")
 		await deviceStorage.removeItem("accessToken")
-		this.user = null
+		runInAction(() => {
+			this.user = null
+		})
+
 	}
 
 	async forgotPassword(email: string) {

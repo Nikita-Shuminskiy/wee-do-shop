@@ -21,8 +21,7 @@ type LoginSProps = {
 	navigation: NavigationProp<ParamListBase>
 }
 
-const LoginS = memo(({navigation}: LoginSProps) => {
-
+const LoginS = ({navigation}: LoginSProps) => {
 	const {AuthStoreService} = rootStore
 	const {t} = useTranslation(['login', 'errors']);
 	const onSubmit = (values) => {
@@ -148,7 +147,7 @@ const LoginS = memo(({navigation}: LoginSProps) => {
 			</Box>
 		</BaseWrapperComponent>
 	)
-})
+}
 const styles = StyleSheet.create({
 	linkCourierText: {
 		fontSize: 18,

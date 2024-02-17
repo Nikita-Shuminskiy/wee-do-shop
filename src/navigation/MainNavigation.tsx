@@ -58,7 +58,7 @@ const MainNavigation = ({ navigation, route }) => {
 			})}
 		>
 			<TabMainStack.Screen
-				options={{ tabBarLabel: t('home'), headerShown: false, unmountOnBlur: true  }}
+				options={{ tabBarLabel: t('home'), headerShown: false }}
 				name={routerConstants.HOME}
 				component={HomeS}
 			/>

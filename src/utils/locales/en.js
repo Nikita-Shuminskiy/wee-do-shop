@@ -34,7 +34,9 @@ export default {
   main: {
     success: 'Success',
     storeSearch: 'store search',
-    favoriteStores: 'Favorite stores'
+    favoriteStores: 'Favorite stores',
+    allProduct: 'All products',
+    "Fish-Products": 'Fish Products',
   },
   shops: {
     shopsNearYou:'Shops near you'
@@ -155,6 +157,8 @@ export default {
     ownerMail: 'weedoshop420@gmail.com',
     effectiveDate: 'Effective Date: August 14, 2023',
     confirm:'Confirm',
+    backToStore: 'Back to store',
+    TheresNothingHere:"There's nothing\n here yet...",
 
 
     listEmpty: 'List is empty'

@@ -43,7 +43,7 @@ const HomeS = observer(({navigation, route}: HomeSProps) => {
 	useGoBackNative(onPressGoBack)
 	const {user, isAuth} = AuthStore
 	const {StoresService, StoresStore, CategoriesService, CategoriesStore} = rootStore
-	const {stores, setStore, favoriteStores, search, setSearch, setSelectedSubCategoryId} =
+	const {stores, search, setSearch, setSelectedSubCategoryId} =
 		StoresStore
 	const {categories, banners} = CategoriesStore
 	const carouselRef = useRef<any>(null)
@@ -99,6 +99,7 @@ const HomeS = observer(({navigation, route}: HomeSProps) => {
 	}
 
 	const getHomeData = useCallback(async () => {
+		console.log('getHomeData');
 		setIsLoadCategories(false)
 		setIsLoadBanners(false)
 		setIsLoadStores(false)
@@ -116,6 +117,7 @@ const HomeS = observer(({navigation, route}: HomeSProps) => {
 	useLayoutEffect(() => {
 		getHomeData()
 		return () => {
+			console.log('return');
 			clearFavoriteStoresHandler()
 		}
 	}, [])
@@ -230,7 +232,7 @@ const HomeS = observer(({navigation, route}: HomeSProps) => {
 				</Box>
 			</BaseWrapperComponent>
 			{isScroll && (
-				<Box position={"absolute"} bottom={"15%"} right={5}>
+				<Box position={"absolute"} bottom={"10%"} right={5}>
 					<Link onPress={scrollTo} img={arrowUp} styleImg={{width: 42, height: 42}} />
 				</Box>
 			)}

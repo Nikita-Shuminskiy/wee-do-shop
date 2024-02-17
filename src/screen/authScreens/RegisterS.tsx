@@ -1,4 +1,4 @@
-import React, {useCallback, useMemo, useState} from "react"
+import React, { memo, useCallback, useMemo, useState } from "react";
 import {Linking, StyleSheet, TouchableOpacity} from "react-native"
 import {NavigationProp, ParamListBase} from "@react-navigation/native"
 import {BaseWrapperComponent} from "../../components/baseWrapperComponent"
@@ -36,7 +36,6 @@ const RegisterS = observer(({navigation}: LoginSProps) => {
 	const [checkAge, setAgeCheck] = useState(false)
 	const [isErrorCheckAge, setCheckError] = useState(false)
 	const [countryCode, setCountryCode] = useState<CountryData>(countryDataDefault)
-
 	const onSubmit = (values: UserRegisterDataType, helpers: FormikHelpers<any>) => {
 		setSubmitting(true)
 		if (!checkAge) {
@@ -64,6 +63,7 @@ const RegisterS = observer(({navigation}: LoginSProps) => {
     }).then((data) => {
       if(data) {
         navigation.navigate(routerConstants.MAIN)
+				return
       }
     }).finally(() => {
 			setSubmitting(false)
@@ -97,13 +97,13 @@ const RegisterS = observer(({navigation}: LoginSProps) => {
 		validationSchema: schema(t, countryCode),
 	});
 
-	const onPressGoBack = useCallback(() => {
+	const onPressGoBack = () => {
 		navigation.goBack();
-	}, [navigation]);
+	}
 
-	const onPressNavigateToLocation = useCallback(async () => {
+	const onPressNavigateToLocation = async () => {
 		navigation.navigate(routerConstants.AUTOCOMPLETE_MAP);
-	}, [navigation]);
+	}
 	const formatted_address = useMemo(() => getFormattedAddress(currentLocation), [currentLocation]);
 
 	const onChangeCountry = useCallback((country) => {
@@ -121,11 +121,11 @@ const RegisterS = observer(({navigation}: LoginSProps) => {
 		[currentLocation]
 	);
 
-	const onPressOpenLegalNotice = useCallback(() => {
+	const onPressOpenLegalNotice = () => {
 		Linking.openURL(
 			"https://docs.google.com/document/d/e/2PACX-1vT1f6tmdyx4tiXcwLdHDoZcTvtquB0jF__AFWFb1QuYYG7ERhqwaejgTa-VLYU7dE55LMs8KASbt8tl/pub"
 		);
-	}, []);
+	}
 
 	const onChangeChecked = useCallback((e) => {
 		setCheckError(!e);
@@ -242,7 +242,7 @@ const RegisterS = observer(({navigation}: LoginSProps) => {
 				<Box mt={5} w={"100%"} alignItems={"flex-start"}>
 					<TouchableOpacity>
 						<Box flexDirection={"row"} alignItems={"center"}>
-							<Checkbox accessibilityLabel={"111"} value="info" onChange={onChangeChecked} colorScheme="info" />
+							<Checkbox aria-label={"info-confirm-politic"} value="info" onChange={onChangeChecked} colorScheme="info" />
 							<Box flexDirection={"row"} justifyContent={"flex-start"} alignItems={"center"}>
 								<Text fontSize={13} alignItems={"center"} ml={1} mr={1}>
 									{t("Iagree")}
@@ -281,4 +281,4 @@ const styles = StyleSheet.create({
 	},
 });
 
-export default RegisterS;
+export default RegisterS

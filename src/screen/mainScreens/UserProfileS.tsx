@@ -87,6 +87,7 @@ const UserProfileS = observer(({ navigation }: UserProfileSProps) => {
 				<Box>
 					<ArrowBack goBackPress={onPressGoBack} img={arrowLeftBack} />
 				</Box>
+
 				<Box alignItems={'center'}>
 					<Image mb={1} w={90} h={90} alt={'logo-we-do'} source={userImg} />
 					<Text fontSize={24} mt={1} fontWeight={'500'}>
@@ -146,7 +147,7 @@ const UserProfileS = observer(({ navigation }: UserProfileSProps) => {
 						onReturnValueId={true}
 					/>
 				</Box>
-				<Box flex={1} mt={2} justifyContent={'flex-start'}>
+				<Box flex={1} mt={2} mb={2} justifyContent={'flex-start'}>
 					<TouchableOpacity onPress={onPressEditProfile}>
 						<Box
 							flexDirection={'row'}

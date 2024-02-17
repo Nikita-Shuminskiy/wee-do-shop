@@ -10,7 +10,6 @@ import {Routs} from "./Routs"
 import useInternetConnection from "../utils/hook/useInternetConnection"
 import {LoadingEnum} from "../store/types/types"
 import Loading from "../components/Loading"
-import { SafeAreaView } from "react-native";
 
 const backgroundHandler = async (time: number) => {
 	if (time >= 20) {
@@ -28,7 +27,7 @@ const RootNavigation = observer(() => {
 	const memoizedRoutes = useMemo(() => Routs.map((route) => {
 		return 	<RootStack.Screen
 			key={route.name}
-			options={{headerShown: false, gestureEnabled: false}}
+			options={{headerShown: false, gestureEnabled: false, animation: 'slide_from_right'}}
 			name={route.name}
 			component={route.component}
 		/>

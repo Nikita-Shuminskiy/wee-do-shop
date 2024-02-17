@@ -6,7 +6,7 @@ import ArrowBack from "../../components/ArrowBack"
 import {NavigationProp, ParamListBase, useNavigation} from "@react-navigation/native"
 import {colors} from "../../assets/colors/colors"
 import Button from "../../components/Button"
-import {Dimensions, FlatList, ImageBackground, StyleSheet} from "react-native"
+import { Dimensions, FlatList, ImageBackground, Platform, StyleSheet } from "react-native";
 import SubCategoriesViewer from "../../components/list-viewer/CategoriesViewer/CategoriesViewer"
 import {renderEmptyContainer} from "../../components/list-viewer/empty-list"
 import {observer} from "mobx-react-lite"
@@ -38,7 +38,7 @@ type StoreSProps = {
 }
 const StoreS = observer(({navigation, route}: StoreSProps) => {
 	const {scrollRef, setIsScrollHandler, isScroll, scrollTo} = useScroll()
-	const {t} = useTranslation(['store', 'common']);
+	const {t} = useTranslation(['store', 'common', 'main']);
 	const {StoresStore, CartStore, StoresService, CartService} = rootStore
 	const {cart, setPromoCode, removeCart} = CartStore
 	const {store, allProductStore, chosenSubCategory, setStore, isOpenStoreNow} = StoresStore
@@ -169,7 +169,6 @@ const StoreS = observer(({navigation, route}: StoreSProps) => {
 			setIsLoadStore(true)
 		})
 	}, [store?._id])
-
 	return (
 		<>
 			<BaseWrapperComponent
@@ -284,7 +283,7 @@ const StoreS = observer(({navigation, route}: StoreSProps) => {
 						</Box>
 						<Box ml={3} mb={4}>
 							<Text fontSize={24} fontWeight={"700"}>
-								{selectedSubCategory?.name ?? "All products"}
+								{selectedSubCategory?.name.trim() ? t(`main:${selectedSubCategory?.name.trim()}`) : t('main:allProduct')}
 							</Text>
 						</Box>
 						<Box mb={20} h={"100%"}>
@@ -315,7 +314,7 @@ const StoreS = observer(({navigation, route}: StoreSProps) => {
 				</Box>
 			</BaseWrapperComponent>
 			{isScroll && (
-				<Box position={"absolute"} bottom={"15%"} right={5}>
+				<Box position={"absolute"} bottom={"17%"} right={5}>
 					<Link onPress={scrollTo} img={arrowUp} styleImg={{width: 42, height: 42}} />
 				</Box>
 			)}
@@ -325,7 +324,7 @@ const StoreS = observer(({navigation, route}: StoreSProps) => {
 					position={"absolute"}
 					borderTopRightRadius={16}
 					borderTopLeftRadius={16}
-					height={130}
+					height={Platform.OS === 'ios' ? 130 : 110}
 					justifyContent={"center"}
 					w={"100%"}
 					bottom={0}
