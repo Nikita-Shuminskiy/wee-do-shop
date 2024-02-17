@@ -9,11 +9,6 @@ import ImageDisplay from "../../ImageDisplay"
 import DeliveryTime from "../../DeliveryTime"
 import {getCurrentDayName, isCurrentTimeWorkStoreRange} from "../../../utils/utils"
 import { useTranslation } from "react-i18next";
-import { Skeleton } from 'moti/skeleton';
-import Animated, { FadeIn, Layout } from 'react-native-reanimated';
-import { SkeletonCommonProps } from "../../../utils/common";
-import { MotiView } from "moti";
-import Spacer from "../../Specer";
 import SubCategoriesStore from "./SubCategoriesStore";
 
 type StoresViewerType = {

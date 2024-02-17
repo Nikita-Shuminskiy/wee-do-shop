@@ -1,9 +1,6 @@
 import React, { memo } from 'react'
 import { Box } from 'native-base'
 import { Image } from 'react-native'
-import Animated, { FadeIn, Layout } from "react-native-reanimated";
-import { Skeleton } from "moti/skeleton";
-import { SkeletonCommonProps } from "../../../utils/common";
 
 const BannersViewer = memo(({ image }: any) => {
 	return (

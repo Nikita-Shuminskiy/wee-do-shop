@@ -66,6 +66,20 @@
         {
           "username": "wee_do12345"
         }
+      ],
+      [
+        "expo-build-properties",
+        {
+          "ios": {
+            "supportsTablet": true,
+            "minimumSupport": {
+              "ios": "13.0"
+            }
+          },
+          "dependencies": {
+            "react-native-reanimated": "~3.3.0"
+          }
+        }
       ]
     ]
   }

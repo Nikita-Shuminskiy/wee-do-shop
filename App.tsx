@@ -6,6 +6,7 @@ import {GestureHandlerRootView} from "react-native-gesture-handler"
 import './src/utils/i18n';
 import NotificationStore from "./src/store/NotificationStore/notification-store";
 import { NavigationContainer } from "@react-navigation/native";
+import 'react-native-reanimated'
 LogBox.ignoreLogs([
 	"In React 18, SSRProvider is not necessary and is a noop. You can remove it from your app.",
 ])
