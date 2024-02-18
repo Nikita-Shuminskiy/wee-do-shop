@@ -125,7 +125,7 @@ const OrdersS = observer(({ navigation, route }: OrdersSProps) => {
 			{isLastOrders && orders.length >= totalOrders
 				? orders.length > 20 && (
 						<Text color={colors.gray} fontWeight={'500'} fontSize={13}>
-							No more orders at the moment
+							{t('common:noOrderAtMoment')}
 						</Text>
 				  )
 				: !isLoadingData && (

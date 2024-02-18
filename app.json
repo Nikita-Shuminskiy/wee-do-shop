@@ -21,7 +21,7 @@
       "userInterfaceStyle": "light",
       "supportsTablet": true,
       "bundleIdentifier": "com.weedo.ios",
-      "buildNumber": "1.0.13",
+      "buildNumber": "1.0.15",
       "config": {
         "googleMapsApiKey": "AIzaSyD-3PKe63YHjDDaxjVahTekuyvvOFfwKp4"
       },
@@ -65,20 +65,6 @@
         "expo-updates",
         {
           "username": "wee_do12345"
-        }
-      ],
-      [
-        "expo-build-properties",
-        {
-          "ios": {
-            "supportsTablet": true,
-            "minimumSupport": {
-              "ios": "13.0"
-            }
-          },
-          "dependencies": {
-            "react-native-reanimated": "~3.3.0"
-          }
         }
       ]
     ]

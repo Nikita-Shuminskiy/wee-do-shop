@@ -8,6 +8,7 @@ import { isCurrentTimeWorkStoreRange } from "../../utils/utils";
 
 export class StoresStore {
 	stores: StoreType[] = []
+	shops: StoreType[] = []
 	store: StoreType | null = null
 	favoriteStores: StoreType[] = [] as StoreType[]
 	allProductStore: ProductType[] = [] as ProductType[]
@@ -60,11 +61,18 @@ export class StoresStore {
 		this.favoriteStores = stores
 	}
 
+	setShops = (shops: StoreType[]) => {
+		this.shops = shops
+	}
 	async getStores(): Promise<void> {
 		const { data } = await storesApi.getStories()
 		this.setStores(data.results)
+		this.setShops(data.results)
 	}
-
+	async getShops(): Promise<void> {
+		const { data } = await storesApi.getStories()
+		this.setShops(data.results)
+	}
 	async getStore(id: string): Promise<void> {
 		const { data } = await storesApi.getStores(id)
 		this.setStore(data)
@@ -103,6 +111,7 @@ export class StoresStore {
 		makeObservable(this, {
 			stores: observable,
 			search: observable,
+			shops: observable,
 			allProductStore: observable,
 			chosenSubCategory: observable,
 			isOpenStoreNow: observable,
@@ -117,6 +126,8 @@ export class StoresStore {
 			getFavoriteStores: action,
 			deleteFavoriteStore: action,
 			saveFavoriteStore: action,
+			setShops: action,
+			getShops: action,
 			searchStores: action,
 			setChosenSubCategory: action,
 			setStores: action,
@@ -125,6 +136,8 @@ export class StoresStore {
 			setOpenStoreNow: action,
 		})
 		this.setFavoriteStore = this.setFavoriteStore.bind(this)
+		this.getShops = this.getShops.bind(this)
+		this.setShops = this.setShops.bind(this)
 		this.setChosenSubCategory = this.setChosenSubCategory.bind(this)
 		this.setSearch = this.setSearch.bind(this)
 		this.getAndSetAllProduct = this.getAndSetAllProduct.bind(this)

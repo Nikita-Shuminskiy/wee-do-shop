@@ -21,7 +21,7 @@ export type ShopsSType = {
 const ShopsS = observer(({ navigation }: ShopsSType) => {
 	const { user, isAuth } = AuthStore
 	const { StoresStore, StoresService } = rootStore
-	const { stores, store} = StoresStore
+	const { shops} = StoresStore
 	const {t} = useTranslation(['shops', 'common']);
 	const onPress = useCallback((id) => {
 		//navigation.navigate(routerConstants.STORE, { storeId: id })
@@ -34,9 +34,11 @@ const ShopsS = observer(({ navigation }: ShopsSType) => {
 	const storesViews = useCallback(({ item }: { item: StoreType }) => {
 		return <ShopsViewer onPress={onPress} stores={item} />
 	}, [])
-
+	const getHomeData = useCallback(async () => {
+		StoresService.getShops()
+	}, [])
 	return (
-		<BaseWrapperComponent backgroundColor={colors.white} isKeyboardAwareScrollView={true}>
+		<BaseWrapperComponent 	onRefreshHandler={getHomeData} backgroundColor={colors.white} isKeyboardAwareScrollView={true}>
 			<Box paddingX={2}>
 				<HeaderUser isAuth={isAuth} address={user?.address}  />
 				<Box
@@ -53,9 +55,9 @@ const ShopsS = observer(({ navigation }: ShopsSType) => {
 						<FlatList
 							scrollEnabled={false}
 							numColumns={2}
-							contentContainerStyle={!stores?.length && styles.contentContainerStyleProducts}
+							contentContainerStyle={!shops?.length && styles.contentContainerStyleProducts}
 							columnWrapperStyle={{ justifyContent: 'space-between' }}
-							data={stores}
+							data={shops}
 							renderItem={storesViews}
 							keyExtractor={(item, index) => item._id.toString()}
 							style={{ width: '100%' }}

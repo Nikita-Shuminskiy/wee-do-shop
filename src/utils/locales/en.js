@@ -145,6 +145,7 @@ export default {
   },
   common: {
     save: 'Save',
+    noOrderAtMoment: 'No more orders at the moment',
     remove: 'Remove',
     appVersion: 'App version',
     ok: 'ok',

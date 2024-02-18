@@ -17,13 +17,13 @@ const SplashScreen = () => {
       Animated.sequence([
         Animated.timing(bounceValue, {
           toValue: 1,
-          duration: 2000,
+          duration: 0,
           easing: Easing.out(Easing.ease),
           useNativeDriver: true,
         }),
         Animated.timing(bounceValue, {
           toValue: 0,
-          duration: 2000,
+          duration: 1500,
           easing: Easing.in(Easing.ease),
           useNativeDriver: true,
         }),
@@ -53,8 +53,5 @@ const SplashScreen = () => {
     </Animated.View>
   );
 }
-const styles = StyleSheet.create({
-
-});
 
 export default memo(SplashScreen)
