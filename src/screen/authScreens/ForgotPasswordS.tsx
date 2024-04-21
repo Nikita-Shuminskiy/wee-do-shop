@@ -17,11 +17,13 @@ import logoImg from '../../assets/images/logoWeeDo.png'
 import { createAlert } from '../../components/Alert'
 import { LoadingEnum } from '../../store/types/types'
 import NotificationStore from '../../store/NotificationStore/notification-store'
+import { useTranslation } from "react-i18next";
 
 type ForgotPasswordSProps = {
 	navigation: NavigationProp<ParamListBase>
 }
 const ForgotPasswordS = observer(({ navigation }: ForgotPasswordSProps) => {
+	const {t} = useTranslation(['login', 'common', 'errors']);
 	const { forgotPassword, setInfoResetPassword, infoResetPassword } = AuthStore
 	const [error, setError] = useState(false)
 	const { setIsLoading } = NotificationStore
@@ -42,9 +44,9 @@ const ForgotPasswordS = observer(({ navigation }: ForgotPasswordSProps) => {
 			})
 			.catch((data) => {
 				createAlert({
-					title: 'Message',
-					message: "That email doesn't exist.",
-					buttons: [{ text: 'Ok', style: 'default' }],
+					title: t('common:message'),
+					message: t('errors:emailNotExist'),
+					buttons: [{ text: t('common:ok'), style: 'default' }],
 				})
 			})
 			.finally(() => {
@@ -64,12 +66,11 @@ const ForgotPasswordS = observer(({ navigation }: ForgotPasswordSProps) => {
 						value={infoResetPassword?.email}
 						errorMessage={
 							!validateEmail(infoResetPassword?.email?.trim()) &&
-							error &&
-							'Incorrect email address entered'
+							error && t('errors:incorrectEmail')
 						}
 						isInvalid={error && !validateEmail(infoResetPassword?.email?.trim())}
 						isRequired={true}
-						placeholder={'Enter your email'}
+						placeholder={t('enterEmail')}
 						borderRadius={16}
 						type={'text'}
 						iconRight={
@@ -82,7 +83,7 @@ const ForgotPasswordS = observer(({ navigation }: ForgotPasswordSProps) => {
 							backgroundColor={colors.green}
 							disabled={error && !validateEmail(infoResetPassword?.email.trim())}
 							onPress={handleSubmit}
-							title={'Sign in'}
+							title={t('signIn')}
 						/>
 					</Box>
 				</Box>

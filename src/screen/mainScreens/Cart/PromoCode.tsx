@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { memo, useCallback, useState } from "react";
 import { Box, Image, Text, Input, Spinner } from 'native-base'
 import promoCodeImg from '../../../assets/images/promoCode.png'
 import arrowRightImg from '../../../assets/images/courierImages/arrow-right.png'
@@ -10,8 +10,13 @@ import TextInput from '../../../components/TextInput'
 import { Feather } from '@expo/vector-icons'
 import AuthStore from '../../../store/AuthStore/auth-store'
 import CartStore from '../../../store/CartStore/cart-store'
-
-const PromoCode = ({ onPress, namePromoCode }) => {
+import { useTranslation } from "react-i18next";
+type PromoCodeProps = {
+	onPress: () => void
+	namePromoCode: string
+	t: any
+}
+const PromoCode = memo(({ onPress, namePromoCode, t }: PromoCodeProps) => {
 	return (
 		<TouchableOpacity onPress={onPress}>
 			<Box
@@ -31,35 +36,38 @@ const PromoCode = ({ onPress, namePromoCode }) => {
 					justifyContent={'space-between'}
 				>
 					<Text fontSize={12} fontWeight={'500'}>
-						{namePromoCode !== '' ? namePromoCode : 'Add promo code'}
+						{namePromoCode !== '' ? namePromoCode : t('addPromoCode')}
 					</Text>
 					<Image source={arrowRightImg} alt={'promo-img'} style={{ width: 6, height: 12 }} />
 				</Box>
 			</Box>
 		</TouchableOpacity>
 	)
+})
+type AccordionsProps = {
+	userId: string
+	addedPromoCode: any
 }
-
-export const Accordions = ({ userId, addedPromoCode }) => {
+export const Accordions = memo(({ userId, addedPromoCode }: AccordionsProps) => {
 	const { sendPromoCode, setPromoCode: setAddedPromo } = CartStore
 	const [isCollapsed, setIsCollapsed] = useState(true)
 	const [loading, setLoading] = useState(false)
 	const [promoCode, setPromoCode] = useState('')
 	const [promoCodeFromServer, setPromoFromServer] = useState('')
 	const [errorText, setErrorText] = useState('')
+	const {t} = useTranslation(['cart', 'common']);
+	const toggleAccordion = useCallback(() => {
+		setIsCollapsed(prevState => !prevState)
+	}, [])
 
-	const toggleAccordion = () => {
-		setIsCollapsed(!isCollapsed)
-	}
-
-	const handlePromoCodeChange = (text) => {
+	const handlePromoCodeChange = useCallback((text) => {
 		if (addedPromoCode?.key) {
 			setAddedPromo(null)
 			setPromoFromServer('')
 		}
 		setErrorText('')
 		setPromoCode(text)
-	}
+	}, [addedPromoCode])
 
 	const savePromoCode = () => {
 		if (!promoCode.trim()) return
@@ -80,11 +88,11 @@ export const Accordions = ({ userId, addedPromoCode }) => {
 
 	return (
 		<Box>
-			<PromoCode namePromoCode={promoCodeFromServer} onPress={toggleAccordion} />
+			<PromoCode t={t} namePromoCode={promoCodeFromServer} onPress={toggleAccordion} />
 			<Collapsible collapsed={isCollapsed}>
 				<Box mt={2}>
 					<Text mb={2} fontSize={13}>
-						Enter promo code:
+						{t('enterPromoCode')}:
 					</Text>
 					<Input
 						borderRadius={16}
@@ -102,7 +110,7 @@ export const Accordions = ({ userId, addedPromoCode }) => {
 							</Box>
 						}
 						type={'text'}
-						placeholder={'Promo code'}
+						placeholder={t('promoCode')}
 						value={promoCode}
 						onChangeText={handlePromoCodeChange}
 					/>
@@ -110,4 +118,4 @@ export const Accordions = ({ userId, addedPromoCode }) => {
 			</Collapsible>
 		</Box>
 	)
-}
+})

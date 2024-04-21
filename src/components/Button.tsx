@@ -1,7 +1,7 @@
-import React, {ReactNode} from 'react'
+import React, { memo, ReactNode } from "react";
 import {StyleProp, Text, TouchableOpacity} from 'react-native'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
-import {Box} from 'native-base'
+import { Box, Spinner } from "native-base";
 import {colors} from '../assets/colors/colors'
 
 type ButtonProps = {
@@ -10,6 +10,7 @@ type ButtonProps = {
     styleContainer?: StyleProp<any>
     styleText?: StyleProp<any>
     disabled?: boolean
+  loading?: boolean
     backgroundColor?: string
     children?: ReactNode
 }
@@ -18,11 +19,13 @@ const Button = ({
                     title,
                     styleContainer,
                     disabled,
+                    loading,
                     styleText,
                     backgroundColor,
                     children,
                     ...rest
                 }: ButtonProps) => {
+
     return (
         <TouchableOpacity
             style={{
@@ -35,7 +38,7 @@ const Button = ({
                 ...styleContainer,
             }}
             disabled={disabled}
-            onPress={!disabled ? onPress : null}
+            onPress={disabled || loading ? null : onPress}
             {...rest}
         >
             {
@@ -50,6 +53,7 @@ const Button = ({
                     >
                         {title}
                     </Text>
+                  {loading && <Spinner ml={2} size="sm" color={colors.gray}  />}
                     {disabled && (
                         <Box ml={2}>
                             <MaterialIcons name="error-outline" size={24} color={colors.red}/>
@@ -61,4 +65,4 @@ const Button = ({
         </TouchableOpacity>
     )
 }
-export default Button
+export default memo(Button)

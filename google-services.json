@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "168759732843",
+    "project_id": "weedoo-393018",
+    "storage_bucket": "weedoo-393018.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:168759732843:android:7262c5379f8d2a14969f2e",
+        "android_client_info": {
+          "package_name": "com.wee_doo.th"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCpoOZm36cjPSYMBmIGpMojDFp9jKGJzAI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

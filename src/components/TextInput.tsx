@@ -1,13 +1,14 @@
-import React, {forwardRef, useState} from 'react'
+import React, { forwardRef, memo, useState } from "react";
 import {Box, FormControl, Input, Text, WarningOutlineIcon} from 'native-base'
 import {StyleProp, TextStyle, TouchableOpacity} from 'react-native'
 import {Feather} from '@expo/vector-icons'
 import {InterfaceInputProps} from 'native-base/lib/typescript/components/primitives/Input/types'
 import {colors} from '../assets/colors/colors'
+import { useTranslation } from "react-i18next";
 
 type InputCustomProps = {
     label?: string
-    errorMessage?: string
+    errorMessage?: any
     error?: boolean
     textErrorStyles?: StyleProp<TextStyle>
     iconRight?: JSX.Element,
@@ -35,7 +36,7 @@ const InputCustom = forwardRef(({
                                     ...rest
                                 }: InputCustomProps, ref) => {
     const [showPassword, setShowPassword] = useState(false)
-
+    const {t} = useTranslation(['errors']);
     return (
         <Box pt={2} width={'100%'}>
             <FormControl isInvalid={isInvalid} isRequired={isRequired}>
@@ -68,11 +69,11 @@ const InputCustom = forwardRef(({
                     {...rest}
                 />
                 <FormControl.ErrorMessage leftIcon={<WarningOutlineIcon size='xs'/>}>
-                    {errorMessage ? errorMessage : 'Field is required'}
+                    {errorMessage ? errorMessage : t('fieldRequired')}
                 </FormControl.ErrorMessage>
             </FormControl>
         </Box>
     )
 })
 
-export default InputCustom
+export default memo(InputCustom)

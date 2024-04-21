@@ -6,8 +6,8 @@ import ArrowBack from "../../components/ArrowBack"
 import {NavigationProp, ParamListBase, useNavigation} from "@react-navigation/native"
 import {colors} from "../../assets/colors/colors"
 import Button from "../../components/Button"
-import {Dimensions, FlatList, ImageBackground, StyleSheet} from "react-native"
-import SubCategoriesViewer from "../../components/list-viewer/CategoriesViewer"
+import { Dimensions, FlatList, ImageBackground, Platform, StyleSheet } from "react-native";
+import SubCategoriesViewer from "../../components/list-viewer/CategoriesViewer/CategoriesViewer"
 import {renderEmptyContainer} from "../../components/list-viewer/empty-list"
 import {observer} from "mobx-react-lite"
 import rootStore from "../../store/RootStore/root-store"
@@ -23,24 +23,45 @@ import {createAlert} from "../../components/Alert"
 import {isCurrentTimeWorkStoreRange} from "../../utils/utils"
 import {alertStoreClosed} from "../../components/list-viewer/utils"
 import AuthStore from "../../store/AuthStore/auth-store"
+import { useTranslation } from "react-i18next";
+import { Skeleton } from "moti/skeleton";
+import { SkeletonCommonProps } from "../../utils/common";
+import Spacer from "../../components/Specer";
+import ShopsSkeleton from "../../components/list-viewer/ShopsViewer/ShopsSkeleton";
+import useScroll from "../../utils/hook/useScroll";
+import Link from "../../components/Link";
+import arrowUp from "../../assets/images/arrowUp.png";
 
 type StoreSProps = {
 	navigation: NavigationProp<ParamListBase>
+	route: any
 }
-const StoreS = observer(({navigation}: StoreSProps) => {
+const StoreS = observer(({navigation, route}: StoreSProps) => {
+	const {scrollRef, setIsScrollHandler, isScroll, scrollTo} = useScroll()
+	const {t} = useTranslation(['store', 'common', 'main']);
 	const {StoresStore, CartStore, StoresService, CartService} = rootStore
 	const {cart, setPromoCode, removeCart} = CartStore
-	const {store, allProductStore, getAndSetAllProduct, chosenSubCategory} = StoresStore
+	const {store, allProductStore, chosenSubCategory, setStore, isOpenStoreNow} = StoresStore
 	const {isAuth} = AuthStore
-	const navigate = useNavigation()
-	const isOpenStoreNow = isCurrentTimeWorkStoreRange(store?.workingHours)
+
+
 	const [isShowModalProduct, setIsShowModalProduct] = useState<boolean>(false)
 	const [isShowModalAboutStore, setIsShowModalAboutStore] = useState<boolean>(false)
-
 	const [selectedSubCategory, setSelectedSubCategory] = useState<SubCategoryType | null>()
 	const [selectedProduct, setSelectedProduct] = useState<ProductType>()
 	const [selectedSubCategoryId, setSelectedSubCategoryId] = useState<string>("")
-	const [isLoaded, setIsLoaded] = useState(false)
+	const [isLoadStore, setIsLoadStore] = useState<boolean>(true)
+
+	useEffect(() => {
+/*		if(route?.params?.storeId) {
+			CategoriessService.getStore(route?.params?.storeId).finally(() => {
+				setIsLoadStore(true)
+			})
+		}*/
+		return () => {
+			setStore(null)
+		}
+	}, []);
 
 	useEffect(() => {
 		if (chosenSubCategory) {
@@ -54,39 +75,38 @@ const StoreS = observer(({navigation}: StoreSProps) => {
 			navigation.navigate(routerConstants.LOGIN)
 		}
 		createAlert({
-			title: "Message",
-			message: "You need to register to view the store.",
+			title: t('common:message'),
+			message: t('youNeedRegister'),
 			buttons: [
-				{text: "Go to login", style: "cancel", onPress: onPressGoLogin},
-				{text: "Exit", style: "cancel"},
+				{text: t('goLogin'), style: "cancel", onPress: onPressGoLogin},
+				{text: t('common:exit'), style: "cancel"},
 			],
 		})
 		return
 	}
 	const onPressGoBack = () => {
-		navigate.goBack()
+		navigation.goBack()
 	}
-	const onPressAboutStore = () => {
+	const onPressAboutStore = useCallback(() => {
 		setIsShowModalAboutStore(true)
-	}
-	const onClosePopUpAboutStore = () => {
+	}, [])
+	const onClosePopUpAboutStore = useCallback( () => {
 		setIsShowModalAboutStore(false)
-	}
-	const onPressConfirmButton = () => {
+	}, [])
+	const onPressConfirmButton =  useCallback(() => {
 		if (!cart?.products?.length) {
 			return
 		}
 		navigation.navigate(routerConstants.CART)
-	}
-	const onClosePopUpProduct = () => {
+	}, [cart?.products?.length])
+	const onClosePopUpProduct = useCallback(() => {
 		setIsShowModalProduct(false)
-	}
+	}, [])
 
 	const onPressSelectedSubCategory = useCallback((item) => {
-		setSelectedSubCategoryId((prevState) => {
-			prevState === item._id ? setSelectedSubCategory(null) : setSelectedSubCategory(item)
-			return prevState === item._id ? "" : item._id
-		})
+		if(item._id === selectedSubCategoryId) return
+		setSelectedSubCategory(item)
+		setSelectedSubCategoryId(item._id)
 	}, [])
 	const sebCategoriesViews = useCallback(
 		({item}: {item: SubCategoryType}) => {
@@ -121,6 +141,7 @@ const StoreS = observer(({navigation}: StoreSProps) => {
 			return
 		}
 		if (productValue > 100) return
+
 		CartService.saveProductToCart(product, productValue, store)
 	}, [])
 
@@ -142,82 +163,88 @@ const StoreS = observer(({navigation}: StoreSProps) => {
 		},
 		[cart]
 	)
-	const onRefreshHandler = () => {
-		StoresService.getStore(store._id, false)
-	}
-
+	const onRefreshHandler = useCallback(() => {
+		setIsLoadStore(false)
+		StoresService.getStore(store._id, false).finally(() => {
+			setIsLoadStore(true)
+		})
+	}, [store?._id])
 	return (
 		<>
 			<BaseWrapperComponent
+				styleSafeArea={{
+					paddingTop: 0
+				}}
+				ref={scrollRef}
+				setIsScroll={setIsScrollHandler}
 				onRefreshHandler={onRefreshHandler}
 				backgroundColor={"white"}
-				isKeyboardAwareScrollView={true}
+				isKeyboardAwareScrollView={!!store?.subCategories}
 			>
 				<Box>
 					<Box w={"100%"} minHeight={239} flex={1}>
-						{!isLoaded && (
-							<Animatable.View
-								animation="pulse"
-								iterationCount="infinite"
-								style={{
-									position: "absolute",
-									zIndex: 2,
-									width: "100%",
-									aspectRatio: 351 / 225,
-									backgroundColor: colors.grayWhite,
-								}}
-							/>
-						)}
-						<Box mt={5} mb={5} zIndex={3} position={"absolute"} left={5}>
+						<Box zIndex={30} position={"absolute"} top={'15%'} left={5}>
 							<ArrowBack goBackPress={onPressGoBack} img={arrowLeftBack} />
 						</Box>
-						<ImageBackground
-							onLoad={() => setIsLoaded(true)}
-							alt={"shop-image"}
-							source={{uri: store.image}}
-							style={{
-								width: "100%",
-								aspectRatio: 351 / 239,
-								borderRadius: 16,
-							}}
-						>
-							<Box
-								flex={1}
-								w={"100%"}
-								position={"absolute"}
-								bottom={10}
-								alignItems={"center"}
-								flexDirection={"row"}
-								justifyContent={"space-between"}
+						{
+							isLoadStore ?  	<ImageBackground
+								alt={"shop-image"}
+								source={{uri: store?.image}}
+								style={{
+									width: "100%",
+									aspectRatio: 351 / 239,
+									borderRadius: 16,
+								}}
 							>
 								<Box
-									ml={2}
-									borderRadius={10}
-									maxWidth={200}
-									paddingY={2}
-									paddingX={3}
-									backgroundColor={`rgba(192, 188, 188, 0.44)`}
-									justifyContent={"flex-start"}
+									flex={1}
+									w={"100%"}
+									position={"absolute"}
+									bottom={10}
+									alignItems={"center"}
+									flexDirection={"row"}
+									justifyContent={"space-between"}
 								>
-									<Text
-										color={colors.grayLightWhite}
-										style={{fontSize: 20, ...styles.textWithShadow}}
-										fontWeight={"700"}
+									<Box
+										ml={2}
+										borderRadius={10}
+										maxWidth={200}
+										paddingY={2}
+										paddingX={3}
+										backgroundColor={`rgba(192, 188, 188, 0.44)`}
+										justifyContent={"flex-start"}
 									>
-										{store?.name}
-									</Text>
-								</Box>
+										<Text
+											color={colors.grayLightWhite}
+											style={{fontSize: 20, ...styles.textWithShadow}}
+											fontWeight={"700"}
+										>
+											{store?.name}
+										</Text>
+									</Box>
 
-								<Box mr={2}>
-									<Button
-										backgroundColor={"transparent"}
-										styleText={{fontSize: 14, color: colors.white, ...styles.textWithShadow}}
-										onPress={onPressAboutStore}
-										title={"About store"}
-									/>
+									<Box mr={2}>
+										<Button
+											backgroundColor={"transparent"}
+											styleText={{fontSize: 14, color: colors.white, ...styles.textWithShadow}}
+											onPress={onPressAboutStore}
+											title={t('aboutStore')}
+										/>
+									</Box>
 								</Box>
-							</Box>
-						</ImageBackground>
+							</ImageBackground> :
+								<Skeleton height={190} width={'100%'} show={true} { ...SkeletonCommonProps } >
+									<Box justifyContent={'space-between'} mb={2} flexDirection={'row'} alignItems={'flex-end'} flex={1} w={'100%'}>
+										<Box pl={2}>
+											<Skeleton height={20} width={100} {...SkeletonCommonProps} />
+										</Box>
+										<Box pr={2} >
+											<Skeleton height={20} width={80} {...SkeletonCommonProps}  />
+										</Box>
+									</Box>
+								</Skeleton>
+						}
+
 					</Box>
 					<Box
 						w={"100%"}
@@ -228,54 +255,76 @@ const StoreS = observer(({navigation}: StoreSProps) => {
 						borderTopRightRadius={16}
 					>
 						<Box paddingX={2} mt={3} mb={3}>
-							<FlatList
-								extraData={selectedSubCategoryId}
-								data={store.subCategories}
-								renderItem={sebCategoriesViews}
-								keyExtractor={(item, index) => item?._id.toString()}
-								style={{width: "100%"}}
-								contentContainerStyle={!store.subCategories?.length && styles.contentContainerOrder}
-								ListEmptyComponent={() => renderEmptyContainer(0, "")}
-								horizontal={true}
-								showsHorizontalScrollIndicator={false}
-								showsVerticalScrollIndicator={false}
-							/>
+							{
+								isLoadStore ?	<FlatList
+									extraData={selectedSubCategoryId}
+									data={store?.subCategories}
+									renderItem={sebCategoriesViews}
+									keyExtractor={(item, index) => item?._id.toString()}
+									style={{width: "100%"}}
+									contentContainerStyle={!store?.subCategories?.length && styles.contentContainerOrder}
+									ListEmptyComponent={() => renderEmptyContainer(0, "")}
+									horizontal={true}
+									showsHorizontalScrollIndicator={false}
+									showsVerticalScrollIndicator={false}
+								/> :
+									<Box flexDirection={'row'}>
+										<Box mr={2}>
+											<Skeleton height={20} width={50} show={true} { ...SkeletonCommonProps } />
+										</Box>
+										<Box mr={2}>
+											<Skeleton height={20} width={50} show={true} { ...SkeletonCommonProps } />
+										</Box>
+										<Box mr={2}>
+											<Skeleton height={20} width={50} show={true} { ...SkeletonCommonProps } />
+										</Box>
+									</Box>
+							}
 						</Box>
 						<Box ml={3} mb={4}>
 							<Text fontSize={24} fontWeight={"700"}>
-								{selectedSubCategory?.name ?? "All products"}
+								{selectedSubCategory?.name.trim() ? t(`main:${selectedSubCategory?.name.trim()}`) : t('main:allProduct')}
 							</Text>
 						</Box>
 						<Box mb={20} h={"100%"}>
-							<FlatList
-								scrollEnabled={false}
-								data={selectedSubCategory?.products ?? allProductStore}
-								horizontal={false}
-								renderItem={productViews}
-								keyExtractor={(item, index) => item?._id.toString()}
-								style={{width: "100%"}}
-								ListEmptyComponent={() =>
-									renderEmptyContainer(Dimensions.get("window").height, "List is empty")
-								}
-								numColumns={2}
-								columnWrapperStyle={{justifyContent: "space-between"}}
-								contentContainerStyle={
-									!selectedSubCategory?.products.length &&
-									!allProductStore.length &&
-									styles.contentContainerStyleProducts
-								}
-							/>
+							{
+								isLoadStore && !!store ?
+									<FlatList
+									scrollEnabled={false}
+									data={selectedSubCategory?.products ?? allProductStore}
+									horizontal={false}
+									renderItem={productViews}
+									keyExtractor={(item, index) => item?._id}
+									style={{width: "100%"}}
+									ListEmptyComponent={() =>
+										renderEmptyContainer(Dimensions.get("window").height, t('common:listEmpty'))
+									}
+									numColumns={2}
+									columnWrapperStyle={{justifyContent: "space-between"}}
+									contentContainerStyle={
+										!selectedSubCategory?.products?.length &&
+										!allProductStore.length &&
+										styles.contentContainerStyleProducts
+									}
+								/> :
+								<ShopsSkeleton/>
+							}
 						</Box>
 					</Box>
 				</Box>
 			</BaseWrapperComponent>
+			{isScroll && (
+				<Box position={"absolute"} bottom={"17%"} right={5}>
+					<Link onPress={scrollTo} img={arrowUp} styleImg={{width: 42, height: 42}} />
+				</Box>
+			)}
 			{!!cart?.totalSum && (
 				<Box
 					style={styles.shadow}
 					position={"absolute"}
 					borderTopRightRadius={16}
 					borderTopLeftRadius={16}
-					height={100}
+					height={Platform.OS === 'ios' ? 130 : 110}
 					justifyContent={"center"}
 					w={"100%"}
 					bottom={0}
@@ -295,9 +344,9 @@ const StoreS = observer(({navigation}: StoreSProps) => {
 							>
 								<Text style={styles.styleTextBtn}>฿ {formatProductPrice(cart?.totalSum)}</Text>
 								<Text color={colors.white} fontWeight={"700"} fontSize={16}>
-									Confirm
+									{t('common:confirm')}
 								</Text>
-								<Text style={styles.styleTextBtn}>{store?.deliveryTime} min</Text>
+								<Text style={styles.styleTextBtn}>{store?.deliveryTime} {t('min')}</Text>
 							</Box>
 						</Button>
 					</Box>
@@ -314,6 +363,7 @@ const StoreS = observer(({navigation}: StoreSProps) => {
 			/>
 			<PopUpAboutStore
 				currentStore={store}
+				isOpenStoreNow={isOpenStoreNow}
 				show={isShowModalAboutStore}
 				onClose={onClosePopUpAboutStore}
 			/>

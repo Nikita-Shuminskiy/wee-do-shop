@@ -1,15 +1,17 @@
-import React from 'react'
+import React, { memo } from "react";
 import { BaseWrapperComponent } from '../../components/baseWrapperComponent'
 import { NavigationProp, ParamListBase } from '@react-navigation/native'
 import { Box, Image, Text } from 'native-base'
 import ArrowBack from '../../components/ArrowBack'
 import arrowLeft from '../../assets/images/arrow-left.png'
 import logoImg from '../../assets/images/logoWeeDo.png'
+import { useTranslation } from "react-i18next";
 
 type LegalInformationSProps = {
 	navigation: NavigationProp<ParamListBase>
 }
 const LegalInformationS = ({ navigation }: LegalInformationSProps) => {
+	const {t} = useTranslation(['legalInformation', 'common']);
 	const onPressGoBack = () => {
 		navigation.goBack()
 	}
@@ -23,37 +25,24 @@ const LegalInformationS = ({ navigation }: LegalInformationSProps) => {
 			</Box>
 			<Box paddingX={5} mb={2} alignItems={'center'}>
 				<Text>
-					Welcome to weeDoo Delivery Team - your trusted partner in the world of quality services
-					and pleasures! We are a team of enthusiasts dedicated to providing you with the best
-					experience in the realm of delivery and service.
+					{t('welcomeMessage')}
+				</Text>
+				<Text>
+					{t('servicesOffered')}
+				</Text>
+				<Text>
+					{t('uniqueSolutions')}
 				</Text>
 
 				<Text>
-					If you value top-notch service, our team is thrilled to offer you a wide range of
-					services. From swift delivery to providing practical solutions, our services will make
-					your experience truly unforgettable. We meticulously adhere to quality standards to ensure
-					only the best for you.
+					{t('exceptionalService')}
 				</Text>
 				<Text>
-					Additionally, we also offer unique solutions for everyday tasks. solutions to practical
-					tools - we're here to make your life more convenient and fulfilling.
-				</Text>
-
-				<Text>
-					We value our customers and aim to provide you with exceptional service. Our friendly team
-					is always ready to help you choose the best solution and answer any questions you might
-					have.
-				</Text>
-
-				<Text>
-					The weeDoo Delivery Team is more than a delivery service; we're dedicated to creating
-					exceptional experiences. We take immense pride in our work and are excited to provide you
-					with a service experience you won't forget. Join us and let us add an extraordinary touch
-					to your day!
+					{t('dedicationToExcellence')}
 				</Text>
 			</Box>
 		</BaseWrapperComponent>
 	)
 }
 
-export default LegalInformationS;
+export default memo(LegalInformationS)

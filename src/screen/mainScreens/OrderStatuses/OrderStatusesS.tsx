@@ -1,31 +1,31 @@
-import React, { useEffect } from 'react'
+import React, { memo, useCallback, useEffect } from "react";
 import { Box, Text } from 'native-base'
 import { observer } from 'mobx-react-lite'
-import orderStore from '../../store/OrderStore/order-store'
-import { BaseWrapperComponent } from '../../components/baseWrapperComponent'
-import closeImg from '../../assets/images/close.png'
-import placedImg from '../../assets/images/orderImg/placed.png'
-import preparedImg from '../../assets/images/orderImg/prepared.png'
-import waitingForPickImg from '../../assets/images/orderImg/waitingForPick.png'
-import courierImg from '../../assets/images/orderImg/courier.png'
-import arrivedImg from '../../assets/images/orderImg/arrived.png'
-import confirmed from '../../assets/images/orderImg/confirmed.png'
+import orderStore from '../../../store/OrderStore/order-store'
+import { BaseWrapperComponent } from '../../../components/baseWrapperComponent'
+import placedImg from '../../../assets/images/orderImg/placed.png'
+import preparedImg from '../../../assets/images/orderImg/prepared.png'
+import waitingForPickImg from '../../../assets/images/orderImg/waitingForPick.png'
+import courierImg from '../../../assets/images/orderImg/courier.png'
+import arrivedImg from '../../../assets/images/orderImg/arrived.png'
+import confirmed from '../../../assets/images/orderImg/confirmed.png'
 import { Image, Linking, Platform, StyleSheet, TouchableOpacity } from 'react-native'
-import { colors } from '../../assets/colors/colors'
-import { CourierType, StatusType } from '../../api/ordersApi'
+import { colors } from '../../../assets/colors/colors'
+import { CourierType, StatusType } from '../../../api/ordersApi'
 import io from 'socket.io-client'
-import OrderStatusBar from '../../components/OrderStatusBar'
-import Button from '../../components/Button'
+import OrderStatusBar from '../../../components/OrderStatusBar'
+import Button from '../../../components/Button'
 import { NavigationProp, ParamListBase } from '@react-navigation/native'
-import { routerConstants } from '../../constants/routerConstants'
-import { BASE_URL } from '../../api/config'
-import { splittingWord } from '../../utils/utils'
+import { routerConstants } from '../../../constants/routerConstants'
+import { BASE_URL } from '../../../api/config'
+import { splittingWord } from '../../../utils/utils'
 import { Feather } from '@expo/vector-icons'
-import airplaneImg from '../../assets/images/statuses/airplane.png'
-import bagImg from '../../assets/images/statuses/bag.png'
-import testImg from '../../assets/images/statuses/test.png'
-import heartImg from '../../assets/images/statuses/heart.png'
-import stormImg from '../../assets/images/statuses/storm.png'
+import airplaneImg from '../../../assets/images/statuses/airplane.png'
+import bagImg from '../../../assets/images/statuses/bag.png'
+import testImg from '../../../assets/images/statuses/test.png'
+import heartImg from '../../../assets/images/statuses/heart.png'
+import stormImg from '../../../assets/images/statuses/storm.png'
+import { useTranslation } from "react-i18next";
 
 const renderImgForStatuses = (status: StatusType) => {
 	switch (status) {
@@ -45,14 +45,14 @@ const renderImgForStatuses = (status: StatusType) => {
 			return placedImg
 	}
 }
-const renderHeaderDescriptionForStatuses = (status: StatusType) => {
+const renderHeaderDescriptionForStatuses = (status: StatusType, translate: any) => {
 	switch (status) {
 		case StatusType.Placed:
 			return (
 				<>
 					<Image source={bagImg} style={{ width: 20, height: 20 }} />
-					<Text ml={1} fontSize={13} fontWeight={500}>
-						We are expanding our range of products every day
+					<Text ml={1} fontSize={13} flex={1}  fontWeight={500}>
+						{translate('weExpanding')}
 					</Text>
 				</>
 			)
@@ -60,8 +60,8 @@ const renderHeaderDescriptionForStatuses = (status: StatusType) => {
 			return (
 				<>
 					<Image source={stormImg} style={{ width: 20, height: 20 }} />
-					<Text ml={1} fontSize={13} fontWeight={500}>
-						Ready to bring you joy in any weather and any time
+					<Text ml={1}  fontSize={13} flex={1}  fontWeight={500}>
+						{translate('readyToBring')}
 					</Text>
 				</>
 			)
@@ -69,8 +69,8 @@ const renderHeaderDescriptionForStatuses = (status: StatusType) => {
 			return (
 				<>
 					<Image source={testImg} style={{ width: 20, height: 20 }} />
-					<Text ml={1} fontSize={13} fontWeight={500}>
-						We pack the goods in environmentally friendly packaging
+					<Text ml={1} fontSize={13} flex={1} fontWeight={500}>
+						{translate('wePackGoods')}
 					</Text>
 				</>
 			)
@@ -78,8 +78,8 @@ const renderHeaderDescriptionForStatuses = (status: StatusType) => {
 			return (
 				<>
 					<Image source={airplaneImg} style={{ width: 20, height: 20 }} />
-					<Text ml={1} fontSize={13} fontWeight={500}>
-						We will deliver the goods quickly and carefully
+					<Text ml={1} fontSize={13} flex={1}  fontWeight={500}>
+						{translate('willDeliver')}
 					</Text>
 				</>
 			)
@@ -87,8 +87,8 @@ const renderHeaderDescriptionForStatuses = (status: StatusType) => {
 			return (
 				<>
 					<Image source={heartImg} style={{ width: 20, height: 20 }} />
-					<Text ml={1} fontSize={13} fontWeight={500}>
-						Thank you for being with Weedo, see you again
+					<Text ml={1} fontSize={13} flex={1}  fontWeight={500}>
+						{translate('thankYouBeing')}
 					</Text>
 				</>
 			)
@@ -96,8 +96,8 @@ const renderHeaderDescriptionForStatuses = (status: StatusType) => {
 			return (
 				<>
 					<Image source={stormImg} style={{ width: 20, height: 20 }} />
-					<Text ml={1} fontSize={13} fontWeight={500}>
-						Order canceled, wait for a call from the store
+					<Text ml={1} fontSize={13} flex={1}  fontWeight={500}>
+						{translate('orderCanceled')}
 					</Text>
 				</>
 			)
@@ -105,69 +105,70 @@ const renderHeaderDescriptionForStatuses = (status: StatusType) => {
 			return null
 	}
 }
-const renderDescriptionForStatuses = (status: StatusType, textReason?: string) => {
+const renderDescriptionForStatuses = (status: StatusType, textReason?: string, translate?: any) => {
 	switch (status) {
 		case StatusType.Placed:
 			return (
 				<>
 					<Text fontSize={24} fontWeight={'600'}>
-						Order {splittingWord(status)}
+						{translate('order')} {translate(status)}
 					</Text>
-					<Text color={colors.gray}>The Store received the order, confirmation</Text>
+					<Text color={colors.gray}>{translate('storeReceived')}</Text>
 				</>
 			)
 		case StatusType.Confirmed:
 			return (
 				<>
 					<Text fontSize={24} fontWeight={'600'}>
-						Order {splittingWord(status)}
+						{translate('order')} {translate(status)}
 					</Text>
-					<Text color={colors.gray}>The store approved the order</Text>
+					<Text color={colors.gray}>{translate('storeApproved')}</Text>
 				</>
 			)
 		case StatusType.WaitingForPickUp:
 			return (
 				<>
 					<Text fontSize={24} fontWeight={'600'}>
-						Order {splittingWord(status)}
+						{translate('order')} {translate(status)}
 					</Text>
-					<Text color={colors.gray}>The courier picks up your order</Text>
+					<Text color={colors.gray}>{translate('courierPicks')}</Text>
 				</>
 			)
 		case StatusType.OnTheWay:
 			return (
 				<>
 					<Text fontSize={24} fontWeight={'600'}>
-						Order {splittingWord(status)}
+						{translate('order')} {translate(status)}
 					</Text>
-					<Text color={colors.gray}>Courier on the way</Text>
+					<Text color={colors.gray}>{translate('courierOnThe')}</Text>
 				</>
 			)
 		case StatusType.Completed:
 			return (
 				<>
 					<Text fontSize={24} fontWeight={'600'}>
-						Order {splittingWord(status)}
+						{translate('order')} {translate(status)}
 					</Text>
-					<Text color={colors.gray}>Order delivered</Text>
+					<Text color={colors.gray}>{translate('orderDelivered')}</Text>
 				</>
 			)
 		case StatusType.Canceled:
 			return (
 				<>
 					<Text fontSize={24} color={colors.red} fontWeight={'600'}>
-						{splittingWord(status)}
+						{translate(status)}
 					</Text>
-					<Text color={colors.gray}>Store comment: {textReason}</Text>
+					<Text color={colors.gray}>{translate('storeComment')}: {textReason}</Text>
 				</>
 			)
 		default:
+			console.log(splittingWord(status), 'default');
 			return (
 				<>
 					<Text fontSize={24} fontWeight={'600'}>
 						{splittingWord(status)}
 					</Text>
-					<Text color={colors.gray}>Order loading, wait for a call from the store</Text>
+					<Text color={colors.gray}>{translate('orderLoading')}</Text>
 				</>
 			)
 	}
@@ -177,6 +178,7 @@ type OrderStatusesSProps = {
 	navigation: NavigationProp<ParamListBase>
 }
 const OrderStatusesS = observer(({ navigation }: OrderStatusesSProps) => {
+	const {t} = useTranslation(['order_statuses', 'common']);
 	const { order, statusOrder, setStatus, setCourierToOrder, setRejectReason, rejectReason } =
 		orderStore
 	useEffect(() => {
@@ -213,9 +215,9 @@ const OrderStatusesS = observer(({ navigation }: OrderStatusesSProps) => {
 			console.log('error open tel book')
 		}
 	}
-	const onPressGoToStores = () => {
+	const onPressGoToStores = useCallback(() => {
 		navigation.navigate(routerConstants.HOME)
-	}
+	}, [])
 	return (
 		<BaseWrapperComponent backgroundColor={colors.white} isKeyboardAwareScrollView={true}>
 			<Box paddingX={5} mt={5} justifyContent={'space-evenly'} flex={1}>
@@ -229,7 +231,7 @@ const OrderStatusesS = observer(({ navigation }: OrderStatusesSProps) => {
 					<Box alignItems={'center'}>
 						<TouchableOpacity onPress={onPressClose}>
 							<Text fontSize={16} fontWeight={'500'}>
-								Go to history
+								{t('goHistory')}
 							</Text>
 						</TouchableOpacity>
 					</Box>
@@ -237,18 +239,19 @@ const OrderStatusesS = observer(({ navigation }: OrderStatusesSProps) => {
 				{!isCanceled && (
 					<Box
 						mt={5}
-						p={4}
+						paddingY={4}
+						paddingX={2}
 						backgroundColor={`rgba(237, 248, 216, 1)`}
 						borderRadius={16}
 						flexDirection={'row'}
 						alignItems={'flex-start'}
 						justifyContent={'flex-start'}
 					>
-						{renderHeaderDescriptionForStatuses(statusOrder)}
+						{renderHeaderDescriptionForStatuses(statusOrder, t)}
 					</Box>
 				)}
 				<Box mt={3} alignItems={'center'}>
-					{renderDescriptionForStatuses(statusOrder, rejectReason)}
+					{renderDescriptionForStatuses(statusOrder, rejectReason, t)}
 				</Box>
 				<Box mt={2} alignItems={'center'} justifyContent={'center'}>
 					<Image
@@ -264,20 +267,20 @@ const OrderStatusesS = observer(({ navigation }: OrderStatusesSProps) => {
 					</Box>
 				)}
 
-				{!isCanceled && order.courier && (
+				{!isCanceled && order?.courier && (
 					<Box mt={2}>
 						<Text fontSize={18} color={colors.black} fontWeight={'600'}>
-							Your courier
+							{t('yourCourier')}
 						</Text>
 
 						<Box flexDirection={'row'} alignItems={'center'} justifyContent={'space-between'}>
 							<Box>
 								<Text fontSize={15} color={colors.gray}>
-									{order.courier.firstName} {order.courier.lastName}
+									{order.courier?.firstName} {order.courier?.lastName}
 								</Text>
 								<TouchableOpacity onPress={handlePhonePress}>
 									<Text fontSize={15} color={colors.blueLightMedium}>
-										{order.courier.phone}
+										{order.courier?.phone}
 									</Text>
 								</TouchableOpacity>
 							</Box>
@@ -300,7 +303,7 @@ const OrderStatusesS = observer(({ navigation }: OrderStatusesSProps) => {
 			>
 				<Box w={'100%'} height={54} paddingX={5}>
 					<Button
-						title={'Back to Home'}
+						title={t('backToHome')}
 						styleText={{ color: colors.black, fontSize: 14, fontWeight: 600 }}
 						backgroundColor={colors.grayLightWhite}
 						styleContainer={styles.styleContainer}

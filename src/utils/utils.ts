@@ -62,6 +62,7 @@ export const getTotalPriceOrder = (
 		return acc + product?.amount * product?.product?.price
 	}, 0)
 }
+export const getRandomId = () => +Math.random().toString(10).slice(10)
 export const test = {
 	sunday: "Closed",
 	monday: "Closed",
@@ -75,6 +76,7 @@ export function isCurrentTimeWorkStoreRange(
 	workingHoursStores: WorkingHoursType,
 	isInfo = false
 ): any {
+	if(!workingHoursStores) return false
 	const date = new Date()
 	const prevDayName = daysOfWeek[addDays(date, -1).getDay()]
 	const currentDayName = getCurrentDayName()

@@ -1,70 +1,65 @@
-import React, {useEffect, useState} from "react"
+import React, { useEffect, useMemo } from "react";
 import {observer} from "mobx-react-lite"
 import NotificationStore from "../store/NotificationStore/notification-store"
-import {NavigationContainer} from "@react-navigation/native"
-import {LoadingEnum} from "../store/types/types"
-import Loading from "../components/Loading"
 import {routerConstants} from "../constants/routerConstants"
 import {createNativeStackNavigator} from "@react-navigation/native-stack"
-import rootStore from "../store/RootStore"
 import ModalReconnect from "../components/modal/modal-reconnect"
-import NetInfo from "@react-native-community/netinfo"
 import * as Updates from "expo-updates"
 import {useBackgroundTime} from "../utils/hook/useBackgroundTime"
 import {Routs} from "./Routs"
+import useInternetConnection from "../utils/hook/useInternetConnection"
+import {LoadingEnum} from "../store/types/types"
+import Loading from "../components/Loading"
+import { usePermissionsPushGeo } from "../utils/hook/usePermissionsPushGeo";
+import { useNotification } from "../utils/hook/useNotification";
 
+const backgroundHandler = async (time: number) => {
+	if (time >= 20) {
+		await Updates.reloadAsync()
+	}
+}
 const RootStack = createNativeStackNavigator()
 
 const RootNavigation = observer(() => {
-	const {isLoading, setIsLoading, setNavigation} = NotificationStore
-	const {AuthStoreService} = rootStore
-	const [isConnected, setIsConnected] = useState(true)
-	const backgroundHandler = async (time: number) => {
-		if (time >= 20) {
-			await Updates.reloadAsync()
-		}
-	}
+	const { isLoading} = NotificationStore
+	const {} = usePermissionsPushGeo()
+	useNotification(true)
+	const {checkInternetConnection, isConnected} = useInternetConnection()
 	useBackgroundTime({backgroundHandler})
-	const checkInternetConnection = async () => {
-		setIsLoading(LoadingEnum.fetching)
-		try {
-			const netInfoState = await NetInfo.fetch()
-			setIsConnected(netInfoState.isConnected)
-		} catch (e) {
-		} finally {
-			setIsLoading(LoadingEnum.success)
+
+
+	const memoizedRoutes = useMemo(() => Routs.map((route) => {
+		return 	<RootStack.Screen
+			key={route.name}
+			options={{headerShown: false, gestureEnabled: false, animation: 'slide_from_right'}}
+			name={route.name}
+			component={route.component}
+		/>
+	}), []);
+	const checkUpdate = async () => {
+		const update = await Updates.checkForUpdateAsync();
+		if (update.isAvailable) {
+			await Updates.fetchUpdateAsync();
+			await this.getAppVersion()
+			await Updates.reloadAsync();
+			return
 		}
 	}
 	useEffect(() => {
-		const unsubscribe = NetInfo.addEventListener((state) => {
-			setIsConnected(state.isConnected)
-		})
-		AuthStoreService.getMe()
-		return () => {
-			unsubscribe()
-		}
+		checkUpdate()
 	}, [])
 	return (
-		<NavigationContainer
-			ref={(navigationRef) => {
-				setNavigation(navigationRef)
-			}}
-		>
+		<>
+
 			{isLoading === LoadingEnum.fetching && (
-				<Loading visible={isLoading === LoadingEnum.fetching} />
+				<Loading visible={true} />
 			)}
 			<ModalReconnect checkInternetConnection={checkInternetConnection} visible={!isConnected} />
-			<RootStack.Navigator initialRouteName={routerConstants.LOGIN}>
-				{Routs.map((route) => (
-					<RootStack.Screen
-						key={route.name}
-						options={{headerShown: false, gestureEnabled: false}}
-						name={route.name}
-						component={route.component}
-					/>
-				))}
+			<RootStack.Navigator initialRouteName={routerConstants.SPLASH_SCREEN}>
+				{memoizedRoutes}
 			</RootStack.Navigator>
-		</NavigationContainer>
+		</>
+
 	)
 })
 

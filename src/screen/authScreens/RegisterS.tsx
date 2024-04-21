@@ -1,83 +1,54 @@
-import React, {useState} from "react"
-import {Linking, StyleSheet, TextInput, TouchableOpacity} from "react-native"
+import React, { memo, useCallback, useMemo, useState } from "react";
+import {Linking, StyleSheet, TouchableOpacity} from "react-native"
 import {NavigationProp, ParamListBase} from "@react-navigation/native"
 import {BaseWrapperComponent} from "../../components/baseWrapperComponent"
 import {Box, Checkbox, Image, Text} from "native-base"
 import CustomInput from "../../components/TextInput"
 import {AntDesign, MaterialCommunityIcons} from "@expo/vector-icons"
 import logoImg from "../../assets/images/logoWeeDo.png"
-import {useFormik} from "formik"
-import {validateEmail} from "../../utils/utils"
+import {FormikHelpers, useFormik} from "formik"
 import {colors} from "../../assets/colors/colors"
-import Button from "../../components/Button"
-import PhoneNumberField from "../../components/PhoneField"
 import location from "../../assets/images/location-register.png"
 import arrowLeft from "../../assets/images/arrow-left.png"
-import rootStore from "../../store/RootStore"
-import {RoleType} from "../../api/authApi"
+import {RoleType, UserRegisterDataType} from "../../api/authApi"
 import {routerConstants} from "../../constants/routerConstants"
 import ArrowBack from "../../components/ArrowBack"
 import {observer} from "mobx-react-lite"
-import AuthStore, {AddressType, fullAddressType} from "../../store/AuthStore/auth-store"
 import {getFormattedAddress} from "../../components/MapViews/utils"
 import {createAlert} from "../../components/Alert"
-import {usePermissionsPushGeo} from "../../utils/hook/usePermissionsPushGeo"
-import {color} from "native-base/lib/typescript/theme/styled-system"
+import {useTranslation} from "react-i18next"
+import "yup-phone-lite"
+import {CountryData, countryDataDefault, schema} from "./helpers"
+import AuthStore, {AddressType, fullAddressType} from "../../store/AuthStore/auth-store"
+import rootStore from "../../store/RootStore/root-store"
 import Link from "../../components/Link"
-
-export type CountryData = {
-	callingCode: string[]
-	cca2: string
-	currency: string[]
-	flag: string
-	name: string
-	region: string
-	subregion: string
-}
-export const countryDataDefault = {
-	callingCode: ["66"],
-	cca2: "TH",
-	currency: ["THB"],
-	flag: "flag-th",
-	name: "Thailand",
-	region: "Asia",
-	subregion: "South-Eastern Asia",
-}
+import Button from "../../components/Button"
+import PhoneNumberField from "../../components/PhoneField"
 
 type LoginSProps = {
-	navigation: NavigationProp<ParamListBase>
-}
+	navigation: NavigationProp<ParamListBase>;
+};
 
-export type UserRegisterDataType = {
-	email: string
-	password: string
-	confirmPassword: string
-	firstName: string
-	lastName: string
-	phone: string
-	privacyPolicyIsVerified: boolean
-	address: AddressType
-	role: RoleType
-}
 const RegisterS = observer(({navigation}: LoginSProps) => {
+	const {t} = useTranslation(['registration', 'login', 'errors', 'common']);
 	const {AuthStoreService} = rootStore
 	const {currentLocation, setLocation} = AuthStore
 	const [checkAge, setAgeCheck] = useState(false)
 	const [isErrorCheckAge, setCheckError] = useState(false)
 	const [countryCode, setCountryCode] = useState<CountryData>(countryDataDefault)
-	const onSubmit = (values: UserRegisterDataType) => {
+	const onSubmit = (values: UserRegisterDataType, helpers: FormikHelpers<any>) => {
+		setSubmitting(true)
 		if (!checkAge) {
 			setCheckError(true)
 			setSubmitting(false)
 			return
 		}
-
 		if ((!currentLocation?.fullAddress?.country && !currentLocation?.fullAddress?.city)
 			|| !currentLocation?.location.coordinates[0]) {
 			createAlert({
-				title: "Message",
-				message: "Enter a location",
-				buttons: [{text: "Ok", style: "cancel"}],
+				title: t('message'),
+				message: t('common:enterLocation'),
+				buttons: [{text: t('common:ok'), style: "cancel"}],
 			})
 			setSubmitting(false)
 			return
@@ -92,9 +63,11 @@ const RegisterS = observer(({navigation}: LoginSProps) => {
     }).then((data) => {
       if(data) {
         navigation.navigate(routerConstants.MAIN)
+				return
       }
-    })
-		setSubmitting(false)
+    }).finally(() => {
+			setSubmitting(false)
+		})
 	}
 	const {
 		handleChange,
@@ -105,7 +78,6 @@ const RegisterS = observer(({navigation}: LoginSProps) => {
 		errors,
 		isSubmitting,
 		setSubmitting,
-		setValues,
 	} = useFormik({
 		initialValues: {
 			email: "",
@@ -118,68 +90,47 @@ const RegisterS = observer(({navigation}: LoginSProps) => {
 			role: RoleType.Customer,
 			privacyPolicyIsVerified: true,
 		},
-		onSubmit: onSubmit,
-		validateOnChange: false,
+		onSubmit,
+		validateOnChange: true,
 		validateOnMount: false,
-		validateOnBlur: false,
-		validate: (values) => {
-			const errors = {}
-			if (!validateEmail(values.email)) {
-				errors["email"] = true
-			}
-			if (values.password.length <= 5) {
-				errors["password"] = true
-			}
-			if (!values.firstName.trim()) {
-				errors["firstName"] = true
-			}
-			if (!values.lastName.trim()) {
-				errors["lastName"] = true
-			}
-			if (values.phone.length <= 3) {
-				errors["phone"] = true
-			}
-			if (values.password !== values.confirmPassword) {
-				errors["confirmPassword"] = true
-			}
+		validateOnBlur: true,
+		validationSchema: schema(t, countryCode),
+	});
 
-			return errors
-		},
-	})
 	const onPressGoBack = () => {
-		navigation.goBack()
+		navigation.goBack();
 	}
-	const disabledBtnSignUp =
-		!!(errors.email && !validateEmail(values.email.trim())) ||
-		!!(errors.firstName && !values.firstName.trim()) ||
-		!!(errors.lastName && !values.lastName.trim()) ||
-		!!(errors.password && values.password.length <= 5) ||
-		!!(errors.confirmPassword && !values.confirmPassword) ||
-		!!(errors.phone && values.phone.length <= 3) ||
-		isSubmitting
 
 	const onPressNavigateToLocation = async () => {
-		//	await Linking.openSettings()
-		navigation.navigate(routerConstants.AUTOCOMPLETE_MAP)
+		navigation.navigate(routerConstants.AUTOCOMPLETE_MAP);
 	}
+	const formatted_address = useMemo(() => getFormattedAddress(currentLocation), [currentLocation]);
 
-	const formatted_address = getFormattedAddress(currentLocation)
-	const onChangeCountry = (country) => {
-		setCountryCode(country)
-	}
-	const onChangeTextAddress = (text: string, key: keyof fullAddressType) => {
-		if(text?.length > 10) return
-		setLocation({
-			...currentLocation,
-			fullAddress: {...currentLocation?.fullAddress, [key]: text},
-		})
-	}
+	const onChangeCountry = useCallback((country) => {
+		setCountryCode(country);
+	}, []);
+
+	const onChangeTextAddress = useCallback(
+		(text: string, key: keyof fullAddressType) => {
+			if (text?.length > 10) return;
+			setLocation({
+				...currentLocation,
+				fullAddress: { ...currentLocation?.fullAddress, [key]: text },
+			});
+		},
+		[currentLocation]
+	);
+
 	const onPressOpenLegalNotice = () => {
 		Linking.openURL(
 			"https://docs.google.com/document/d/e/2PACX-1vT1f6tmdyx4tiXcwLdHDoZcTvtquB0jF__AFWFb1QuYYG7ERhqwaejgTa-VLYU7dE55LMs8KASbt8tl/pub"
-		)
+		);
 	}
-	console.log(currentLocation);
+
+	const onChangeChecked = useCallback((e) => {
+		setCheckError(!e);
+		setAgeCheck(e);
+	}, []);
 	return (
 		<BaseWrapperComponent isKeyboardAwareScrollView={true}>
 			<Box alignItems={"center"}>
@@ -192,11 +143,11 @@ const RegisterS = observer(({navigation}: LoginSProps) => {
 				<Box w={"100%"} mb={5}>
 					<CustomInput
 						onChangeText={handleChange("firstName")}
-						placeholder={"First name*"}
+						placeholder={t('firstName')}
 						value={values.firstName}
 						onBlur={handleBlur("firstName")}
-						errorMessage={!values.firstName.trim() && "Enter a name"}
-						isInvalid={!!(errors.firstName && !values.firstName.trim())}
+						errorMessage={errors['firstName']}
+						isInvalid={touched['firstName'] && Boolean(errors['firstName'])}
 						isRequired={true}
 						borderRadius={16}
 						iconRight={<AntDesign name="user" size={24} color={colors.gray} />}
@@ -205,11 +156,11 @@ const RegisterS = observer(({navigation}: LoginSProps) => {
 
 					<CustomInput
 						onChangeText={handleChange("lastName")}
-						placeholder={"Last name*"}
+						placeholder={t('lastName')}
 						value={values.lastName}
 						onBlur={handleBlur("lastName")}
-						errorMessage={!values.lastName.trim() && "Enter a name"}
-						isInvalid={!!(errors.lastName && !values.lastName.trim())}
+						errorMessage={errors['lastName']}
+						isInvalid={touched['lastName'] && Boolean(errors['lastName'])}
 						isRequired={true}
 						borderRadius={16}
 						iconRight={<AntDesign name="user" size={24} color={colors.gray} />}
@@ -220,14 +171,10 @@ const RegisterS = observer(({navigation}: LoginSProps) => {
 						onChangeText={handleChange("email")}
 						value={values.email}
 						onBlur={handleBlur("email")}
-						errorMessage={
-							!validateEmail(values.email.trim()) &&
-							errors.email &&
-							"Incorrect email address entered"
-						}
-						isInvalid={!!(errors.email && !validateEmail(values.email.trim()))}
+						errorMessage={errors['email']}
+						isInvalid={touched['email'] && Boolean(errors['email'])}
 						isRequired={true}
-						placeholder={"Email*"}
+						placeholder={t('email')}
 						borderRadius={16}
 						type={"text"}
 						iconRight={
@@ -237,23 +184,22 @@ const RegisterS = observer(({navigation}: LoginSProps) => {
 					<Box mt={2}>
 						<PhoneNumberField
 							onChangeCountry={onChangeCountry}
-							errorMessage={"Incorrect phone number"}
-							isInvalid={!!(errors.phone && values.phone.length <= 3)}
+							errorMessage={errors['phone']}
+							placeholder={t('phone')}
+						//	onBlur={handleBlur("phone")}
+							isInvalid={touched['phone'] && Boolean(errors['phone'])}
 							isRequired={true}
 							defaultValue={values.phone}
+							value={values.phone}
 							onChangeText={handleChange("phone")}
 						/>
 					</Box>
 					<CustomInput
 						onChangeText={handleChange("password")}
-						placeholder={"Password*"}
+						placeholder={t('login:password')}
 						onBlur={handleBlur("password")}
-						isInvalid={!!(errors.password && values.password.length <= 3)}
-						errorMessage={
-							!!errors.password &&
-							values.password.length <= 5 &&
-							"The password must be at least 6 characters long"
-						}
+						isInvalid={touched['password'] && Boolean(errors['password'])}
+						errorMessage={t('errors:passwordMustBe')}
 						value={values.password}
 						isRequired={true}
 						type={"password"}
@@ -262,43 +208,31 @@ const RegisterS = observer(({navigation}: LoginSProps) => {
 
 					<CustomInput
 						onChangeText={handleChange("confirmPassword")}
-						placeholder={"Confirm password*"}
+						placeholder={t('confirmPassword')}
 						onBlur={handleBlur("confirmPassword")}
 						value={values.confirmPassword}
-						errorMessage={
-							(touched.confirmPassword && errors.confirmPassword && !values.confirmPassword) ||
-							(values.confirmPassword !== values.password && touched.confirmPassword)
-								? "The passwords dont match"
-								: ""
-						}
+						errorMessage={errors['confirmPassword']}
+						isInvalid={touched['confirmPassword'] && Boolean(errors['confirmPassword'])}
 						isRequired={true}
-						isInvalid={
-							!!(touched.confirmPassword && errors.confirmPassword && !values.confirmPassword) ||
-							!!(values.confirmPassword !== values.password && touched.confirmPassword)
-						}
 						type={"password"}
 						borderRadius={16}
 					/>
 				</Box>
 				<Box alignItems={"center"} mb={1}>
-					<TouchableOpacity onPress={onPressNavigateToLocation}>
+					<TouchableOpacity style={{ alignItems: "center" }} onPress={onPressNavigateToLocation}>
 						<Image w={170} h={105} alt={"location"} source={location} />
 						<Text color={colors.gray} mt={2} fontWeight={"500"}>
 							{" "}
-							Add you location address*
+							{t("addLocationAddress")}
 						</Text>
 					</TouchableOpacity>
-					{formatted_address && (
-						<Text fontSize={16} fontWeight={"600"}>
-							{formatted_address}
-						</Text>
-					)}
+					{formatted_address && <Text fontSize={16} fontWeight={"600"}>{formatted_address}</Text>}
 				</Box>
 				<Box w={"100%"} flex={1} alignItems={"flex-start"}>
 					<Box mt={2} w={"100%"}>
-						<TextInput
-							placeholder={"Enter apartment"}
-							style={styles.input}
+						<CustomInput
+							borderRadius={16}
+							placeholder={t("enterApartment")}
 							keyboardType="numeric"
 							value={currentLocation?.fullAddress?.apartment}
 							onChangeText={(text) => onChangeTextAddress(text, "apartment")}
@@ -308,64 +242,43 @@ const RegisterS = observer(({navigation}: LoginSProps) => {
 				<Box mt={5} w={"100%"} alignItems={"flex-start"}>
 					<TouchableOpacity>
 						<Box flexDirection={"row"} alignItems={"center"}>
-							<Checkbox
-								accessibilityLabel={"111"}
-								value="info"
-								onChange={(e) => {
-									setCheckError(!e)
-									setAgeCheck(e)
-								}}
-								colorScheme="info"
-							/>
+							<Checkbox aria-label={"info-confirm-politic"} value="info" onChange={onChangeChecked} colorScheme="info" />
 							<Box flexDirection={"row"} justifyContent={"flex-start"} alignItems={"center"}>
 								<Text fontSize={13} alignItems={"center"} ml={1} mr={1}>
-									I agree with
+									{t("Iagree")}
 								</Text>
 								<Link
 									onPress={onPressOpenLegalNotice}
-									styleText={{color: colors.green, fontWeight: "500"}}
-									text={"Legal Notice"}
+									styleText={{ color: colors.green, fontWeight: "500" }}
+									text={t("legalnotice")}
 								/>
 							</Box>
 						</Box>
 					</TouchableOpacity>
 					{isErrorCheckAge && (
 						<Text fontSize={14} color={colors.red} fontWeight={"500"} ml={1}>
-							You must confirm the Legal Notice
+							{t("youMustConfirmNotice")}
 						</Text>
 					)}
 				</Box>
 				<Box w={"100%"} mt={5} mb={5}>
 					<Button
 						styleContainer={styles.styleContainerBtnUp}
-						disabled={disabledBtnSignUp}
+						loading={isSubmitting}
 						onPress={handleSubmit}
-						title={"Sign up"}
+						title={t('login:signUp')}
 					/>
 				</Box>
 			</Box>
 		</BaseWrapperComponent>
-	)
-})
+	);
+});
+
 const styles = StyleSheet.create({
-	input: {
-		width: "100%",
-		paddingVertical: 5,
-		paddingLeft: 20,
-		borderRadius: 16,
-		borderWidth: 1,
-		borderColor: colors.grayLight,
-		color: colors.gray,
-	},
-	styleContainerBtn: {
-		borderWidth: 1,
-		backgroundColor: "transparent",
-		borderColor: colors.gray,
-	},
 	styleContainerBtnUp: {
 		marginTop: 10,
 		backgroundColor: colors.green,
 	},
-})
+});
 
-export default RegisterS;
+export default RegisterS

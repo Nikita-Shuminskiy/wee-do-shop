@@ -13,6 +13,7 @@ import ImageDisplay from "../ImageDisplay";
 import { BaseWrapperComponent } from "../baseWrapperComponent";
 import { observer } from "mobx-react-lite";
 import AuthStore from "../../store/AuthStore/auth-store";
+import { useTranslation } from "react-i18next";
 
 type PopUpProductProps = {
   show: boolean
@@ -34,6 +35,7 @@ const PopUpProduct = observer(
     const { cart } = CartStore;
     const { isAuth } = AuthStore;
     const totalSumCart = formatProductPrice(cart?.totalSum ?? 0);
+    const {t} = useTranslation(['store', 'common']);
     const saveInputNumberValue = (productValue: number) => {
       saveProductValueToCart(productValue);
     };
@@ -69,7 +71,7 @@ const PopUpProduct = observer(
                   w={"100%"}
                   justifyContent={"space-between"}
                 >
-                  <Text>Price: 1x</Text>
+                  <Text>{t('price')}: 1x</Text>
                   <Text>฿ {formatProductPrice(product?.price)}</Text>
                 </Box>
                 {
@@ -80,36 +82,38 @@ const PopUpProduct = observer(
                 }
               </Box>
             </Box>
-          </BaseWrapperComponent>
-        </ModalPopup>
-        {show  && isAuth && (
-          <Box
-            justifyContent={"space-evenly"}
-            style={styles.shadow}
-            zIndex={9999}
-            height={91}
-            flexDirection={"row"}
-            alignItems={"center"}
-          >
-            <Box w={"40%"}>
-              <InputNumber
-                values={currentValueToCartProduct?.amount ?? 0}
-                onChangeValue={saveInputNumberValue}
-              />
-            </Box>
-            {
-               <Box minWidth={150}>
-                <Button
-                  backgroundColor={colors.green}
-                  styleContainer={styles.styleContainerBtn}
-                  styleText={styles.styleTextBtn}
-                  onPress={onPressGoToCardHandler}
-                  title={`Go to cart ${totalSumCart ? ` ฿${totalSumCart}`: ""}`}
-                />
+            {show && isAuth && (
+              <Box
+                justifyContent={"space-evenly"}
+                zIndex={10000}
+                w={'100%'}
+                position={'absolute'}
+                bottom={0}
+                height={50}
+                flexDirection={"row"}
+
+                alignItems={"center"}
+              >
+                <Box w={"40%"}>
+                  <InputNumber
+                    values={currentValueToCartProduct?.amount ?? 0}
+                    onChangeValue={saveInputNumberValue}
+                  />
+                </Box>
+                <Box minWidth={150}>
+                  <Button
+                    backgroundColor={colors.green}
+                    styleContainer={styles.styleContainerBtn}
+                    styleText={styles.styleTextBtn}
+                    onPress={onPressGoToCardHandler}
+                    title={`${t('goToCart')} ${totalSumCart ? `฿${totalSumCart}`: ""}`}
+                  />
+                </Box>
               </Box>
-            }
-          </Box>
-        )}
+            )}
+          </BaseWrapperComponent>
+
+        </ModalPopup>
       </>
     );
   }

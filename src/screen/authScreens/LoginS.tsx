@@ -1,5 +1,5 @@
-import React, {memo} from "react"
-import {StyleSheet} from "react-native"
+import React, { memo, useCallback } from "react";
+import { StyleSheet, View, Text} from "react-native";
 import {NavigationProp, ParamListBase} from "@react-navigation/native"
 import {BaseWrapperComponent} from "../../components/baseWrapperComponent"
 import {Box, Image} from "native-base"
@@ -7,7 +7,7 @@ import TextInput from "../../components/TextInput"
 import {MaterialCommunityIcons} from "@expo/vector-icons"
 import logoImg from "../../assets/images/logoWeeDo.png"
 import {useFormik} from "formik"
-import {isCurrentTimeWorkStoreRange, test, validateEmail} from "../../utils/utils"
+import {validateEmail} from "../../utils/utils"
 import {colors} from "../../assets/colors/colors"
 import Button from "../../components/Button"
 import {routerConstants} from "../../constants/routerConstants"
@@ -15,14 +15,17 @@ import rootStore from "../../store/RootStore"
 import PrivacyPolicy from "../../components/PrivacyPolicy"
 import Link from "../../components/Link"
 import {RoleType} from "../../api/authApi"
+import { useTranslation } from "react-i18next";
 
 type LoginSProps = {
 	navigation: NavigationProp<ParamListBase>
 }
 
-const LoginS = memo(({navigation}: LoginSProps) => {
+const LoginS = ({navigation}: LoginSProps) => {
 	const {AuthStoreService} = rootStore
+	const {t} = useTranslation(['login', 'errors']);
 	const onSubmit = (values) => {
+		setSubmitting(true)
 		AuthStoreService.login({
 			email: values.email.trim(),
 			password: values.password,
@@ -35,8 +38,10 @@ const LoginS = memo(({navigation}: LoginSProps) => {
 				navigation.navigate(routerConstants.MAIN)
 				return
 			}
+		}).finally(() => {
+			setSubmitting(false)
 		})
-		setSubmitting(false)
+
 	}
 	const {handleChange, handleBlur, handleSubmit, values, errors, isSubmitting, setSubmitting} =
 		useFormik({
@@ -62,31 +67,28 @@ const LoginS = memo(({navigation}: LoginSProps) => {
 	const onPressSignUpHandler = () => {
 		navigation.navigate(routerConstants.REGISTRATION)
 	}
-	/*	useEffect(() => {
-    AuthStoreService.getMe()
-  }, [])*/
-
+	const onRefreshHandler = useCallback(() => AuthStoreService.getMe(), [])
 	return (
 		<BaseWrapperComponent
-			onRefreshHandler={() => AuthStoreService.getMe()}
+			onRefreshHandler={ onRefreshHandler}
 			isKeyboardAwareScrollView={true}
 		>
 			<Box w={"100%"} alignItems={"center"} justifyContent={"space-evenly"} flex={1} paddingX={4}>
-				<Image w={247} h={318} alt={"logo"} source={logoImg} mt={5} />
+				<Image w={212} h={278} alt={"logo"} source={logoImg} mt={5} />
 				<Box w={"100%"} mb={5}>
 					<TextInput
 						onChangeText={handleChange("email")}
-						placeholder={"Enter e-mail"}
+						placeholder={t('enterEmail')}
 						value={values.email}
 						onBlur={handleBlur("email")}
 						errorMessage={
 							!validateEmail(values.email.trim()) &&
 							errors.email &&
-							"Incorrect email address entered"
+							t('errors:incorrectEmail')
 						}
 						isInvalid={!!(errors.email && !validateEmail(values.email.trim()))}
 						isRequired={true}
-						label={"Email"}
+						label={	t('email')}
 						borderRadius={16}
 						type={"text"}
 						iconRight={
@@ -96,16 +98,16 @@ const LoginS = memo(({navigation}: LoginSProps) => {
 
 					<TextInput
 						onChangeText={handleChange("password")}
-						placeholder={"Enter password"}
+						placeholder={t('enterPassword')}
 						onBlur={handleBlur("password")}
 						isInvalid={!!(errors.password && values.password.length <= 3)}
 						errorMessage={
 							!!errors.password &&
 							values.password.length <= 3 &&
-							"The password must be at least 4 characters long"
+							t('errors:passwordMustBe')
 						}
 						value={values.password}
-						label={"Password"}
+						label={t('password')}
 						isRequired={true}
 						type={"password"}
 						borderRadius={16}
@@ -115,33 +117,29 @@ const LoginS = memo(({navigation}: LoginSProps) => {
 					<Button
 						styleText={styles.textBtn}
 						backgroundColor={colors.green}
-						disabled={
-							!!(errors.email && !validateEmail(values.email.trim())) ||
-							!!(errors.password && values.password.length <= 3) ||
-							isSubmitting
-						}
+						loading={isSubmitting}
 						onPress={handleSubmit}
-						title={"Sign in"}
+						title={t('signIn')}
 					/>
 					<Button
 						styleContainer={styles.styleContainerBtn}
 						styleText={{color: colors.black}}
 						backgroundColor={"transparent"}
 						onPress={onPressSignUpHandler}
-						title={"Sign up"}
+						title={t('signUp')}
 					/>
 					<Box mt={3}>
 						<Link
 							onPress={() => navigation.navigate(routerConstants.FORGOT_PASSWORD)}
 							styleText={styles.linkCourierText}
-							text={"Forgot your password ?"}
+							text={t('forgotYorPassword')}
 						/>
 					</Box>
 					<Box mt={3}>
 						<Link
 							onPress={() => navigation.navigate(routerConstants.MAIN)}
 							styleText={{fontSize: 18, color: colors.green}}
-							text={"Continue without registration"}
+							text={t('continueWithoutRegistration')}
 						/>
 					</Box>
 				</Box>
@@ -149,7 +147,7 @@ const LoginS = memo(({navigation}: LoginSProps) => {
 			</Box>
 		</BaseWrapperComponent>
 	)
-})
+}
 const styles = StyleSheet.create({
 	linkCourierText: {
 		fontSize: 18,

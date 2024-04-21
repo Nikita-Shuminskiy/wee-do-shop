@@ -1,19 +1,22 @@
-import React, { useEffect, useState } from 'react'
-import { BaseWrapperComponent } from '../../components/baseWrapperComponent'
+import React, { memo, useCallback, useEffect, useState } from "react";
+import { BaseWrapperComponent } from '../../../components/baseWrapperComponent'
 import { NavigationProp, ParamListBase } from '@react-navigation/native'
-import ArrowBack from '../../components/ArrowBack'
-import arrowLeftBack from '../../assets/images/arrow-left.png'
+import ArrowBack from '../../../components/ArrowBack'
+import arrowLeftBack from '../../../assets/images/arrow-left.png'
 import { Box, Text } from 'native-base'
-import AuthStore, { AddressType } from '../../store/AuthStore/auth-store'
-import TextInput from '../../components/TextInput'
-import Button from '../../components/Button'
-import { colors } from '../../assets/colors/colors'
-import { validateEmail } from '../../utils/utils'
+import AuthStore from '../../../store/AuthStore/auth-store'
+import TextInput from '../../../components/TextInput'
+import Button from '../../../components/Button'
+import { colors } from '../../../assets/colors/colors'
+import { validateEmail } from '../../../utils/utils'
 import { useFormik } from 'formik'
-import { CountryData, countryDataDefault, UserRegisterDataType } from '../authScreens/RegisterS'
-import PhoneNumberField from '../../components/PhoneField'
-import rootStore from '../../store/RootStore/root-store'
-import { OptionalUserType } from '../../api/userApi'
+import PhoneNumberField from '../../../components/PhoneField'
+import rootStore from '../../../store/RootStore/root-store'
+import { OptionalUserType } from '../../../api/userApi'
+import { useTranslation } from "react-i18next";
+import { CountryData, countryDataDefault } from "../../authScreens/helpers";
+import { schema } from "./helpers";
+import { observer } from "mobx-react-lite";
 
 type UpdateUserSProps = {
 	navigation: NavigationProp<ParamListBase>
@@ -25,18 +28,16 @@ type DataType = {
 	phone: string
 	confirmPassword: string
 }
-const UpdateUserS = ({ navigation }: UpdateUserSProps) => {
+const UpdateUserS = observer(({ navigation }: UpdateUserSProps) => {
+	const {t} = useTranslation(['update_profile', 'common', 'registration', 'errors']);
 	const { user } = AuthStore
 	const { AuthStoreService } = rootStore
 	const [countryCode, setCountryCode] = useState<CountryData>(countryDataDefault)
-	const onPressGoBack = () => {
+	const onPressGoBack = useCallback(() => {
 		navigation.goBack()
-	}
+	}, [])
 	const onSubmit = (values: DataType) => {
-		if(values?.phone?.length <= 3 && touched.phone) {
-			setFieldError('phone', 'true')
-			return
-		}
+		setSubmitting(true)
 		const formattedPhoneNumber = `+${countryCode.callingCode[0]}${values.phone}`
 		const dataToSend: OptionalUserType = {}
 		if (values.firstName && values.firstName !== '') {
@@ -56,9 +57,11 @@ const UpdateUserS = ({ navigation }: UpdateUserSProps) => {
 			if (data) {
 				navigation.goBack()
 			}
+		}).finally(() => {
+			setSubmitting(false)
 		})
 	}
-	const { handleChange, setFieldError, handleBlur, touched, handleSubmit, values, errors, setTouched } = useFormik(
+	const { handleChange, isSubmitting, setFieldError, setSubmitting, handleBlur, touched, handleSubmit, values, errors, setTouched } = useFormik(
 		{
 			initialValues: {
 				email: user.email,
@@ -71,26 +74,20 @@ const UpdateUserS = ({ navigation }: UpdateUserSProps) => {
 			validateOnChange: true,
 			validateOnMount: false,
 			validateOnBlur: false,
+			validationSchema: schema(t, countryCode),
 			validate: (values) => {
 				const errors = {}
 				if (values.phone === '') {
 					setTouched({ phone: false })
-				}
-				if (!!(user.email !== values.email && !validateEmail(values.email))) {
-					errors['email'] = true
 				}
 				return errors
 			},
 		}
 	)
 
-	const onChangeCountry = (country) => {
+	const onChangeCountry = useCallback((country) => {
 		setCountryCode(country)
-	}
-
-	const disabledBtnSignUp =
-		!!(errors.email && !validateEmail(values.email.trim())) ||
-		!!(touched.phone && values.phone.length <=3)
+	}, [])
 
 	return (
 		<BaseWrapperComponent isKeyboardAwareScrollView={true}>
@@ -102,7 +99,8 @@ const UpdateUserS = ({ navigation }: UpdateUserSProps) => {
 							<TextInput
 								value={values.firstName}
 								onChangeText={handleChange('firstName')}
-								label={'First name'}
+								isRequired={false}
+								label={t('registration:firstName')}
 								borderRadius={16}
 							/>
 						</Box>
@@ -110,21 +108,23 @@ const UpdateUserS = ({ navigation }: UpdateUserSProps) => {
 							<TextInput
 								borderRadius={16}
 								value={values.lastName}
+								isRequired={false}
 								onChangeText={handleChange('lastName')}
-								label={'Last name'}
+								label={t('registration:lastName')}
 							/>
 						</Box>
 					</Box>
 					<Box mt={3}>
 						<Text mb={1} color={colors.gray} fontWeight={'500'}>
-							Current phone: <Text color={colors.blue}>{user?.phone}</Text>
+							{t('currentPhone')}: <Text color={colors.blue}>{user?.phone}</Text>
 						</Text>
 						<PhoneNumberField
 							onChangeCountry={onChangeCountry}
-							errorMessage={'Incorrect phone number'}
-							isInvalid={(touched.phone && errors.phone) && values?.phone?.length <= 3}
+							errorMessage={errors['phone']}
+							isInvalid={touched['phone'] && Boolean(errors['phone'])}
 							isRequired={false}
 							defaultValue={values.phone}
+							value={values.phone}
 							onChangeText={handleChange('phone')}
 						/>
 					</Box>
@@ -132,27 +132,24 @@ const UpdateUserS = ({ navigation }: UpdateUserSProps) => {
 						onChangeText={handleChange('email')}
 						value={values.email}
 						onBlur={handleBlur('email')}
-						errorMessage={
-							!validateEmail(values.email.trim()) &&
-							errors.email &&
-							'Incorrect email address entered'
-						}
+						errorMessage={errors['email']}
+						isRequired={false}
 						borderRadius={16}
-						isInvalid={!!(errors.email && !validateEmail(values.email.trim()))}
-						label={'E-mail'}
+						isInvalid={touched['email'] && Boolean(errors['email'])}
+						label={t('registration:email')}
 					/>
 				</Box>
 				<Box mt={5}>
 					<Button
-						disabled={disabledBtnSignUp}
+						disabled={isSubmitting}
 						onPress={handleSubmit}
-						backgroundColor={disabledBtnSignUp ? colors.grayLight : colors.green}
-						title={'Save'}
+						backgroundColor={isSubmitting ? colors.grayLight : colors.green}
+						title={t('common:save')}
 					/>
 				</Box>
 			</Box>
 		</BaseWrapperComponent>
 	)
-}
+})
 
 export default UpdateUserS

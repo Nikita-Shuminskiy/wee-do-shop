@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react"
+import React, { useCallback, useEffect, useState } from "react";
 import MapView, {Marker} from "react-native-maps"
 import {Image, Modal, Platform, StyleSheet, TouchableOpacity, View} from "react-native"
 import {Box, Text} from "native-base"
@@ -18,6 +18,7 @@ import {allowLocation, getInfoAddressForCoords} from "./utils"
 import {fullAddressType} from "../../store/AuthStore/auth-store"
 import {BaseWrapperComponent} from "../baseWrapperComponent"
 import { da } from "date-fns/locale";
+import { useTranslation } from "react-i18next";
 
 type CoordinatesType = {latitude: number; longitude: number}
 const getCurrentInfo = async (location) => {
@@ -37,13 +38,14 @@ type MapViewsProps = {
 }
 export const MapViews = ({navigation}: MapViewsProps) => {
 	const {setLocation} = AuthStore
+	const {t} = useTranslation(['map','common']);
 	const [mapInteractionEnabled, setMapInteractionEnabled] = useState(true)
 	const [myLocation, setMyLocation] = useState<{latitude: number; longitude: number} | null>(null)
 	const [mapRef, setMapRef] = useState(null)
 	const [fullInfo, setFullInfo] = useState<fullAddressType>(null)
-	const onPressGoBack = () => {
+	const onPressGoBack = useCallback(() => {
 		navigation.goBack()
-	}
+	}, [])
 /*	useEffect(() => {
 		getCurrentPositionHandler()
 	}, []);*/
@@ -102,8 +104,8 @@ export const MapViews = ({navigation}: MapViewsProps) => {
 		latitudeDelta: 12,
 		longitudeDelta: 2,
 	}
-	const onSaveAutoCompleteHandler = async (data: AutoCompleteDataType) => {
-		setMyLocation(data.location)
+	const onSaveAutoCompleteHandler = useCallback(async (data: AutoCompleteDataType) => {
+		setMyLocation(data?.location)
 		getCurrentInfo(data?.location).then((data) => {
 			setFullInfo({
 				city: data?.city,
@@ -113,7 +115,7 @@ export const MapViews = ({navigation}: MapViewsProps) => {
 				house: data?.house,
 			})
 		})
-	}
+	}, [])
 	return (
 		<BaseWrapperComponent>
 			<Box flex={1}>
@@ -159,7 +161,7 @@ export const MapViews = ({navigation}: MapViewsProps) => {
 							backgroundColor={colors.green}
 							styleContainer={styles.styleContainerBtn}
 							onPress={onPressSaveLocationHandler}
-							title={"I'm here"}
+							title={t('imHere')}
 						/>
 					</Box>
 				</Box>

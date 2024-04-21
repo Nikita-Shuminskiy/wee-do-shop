@@ -19,12 +19,14 @@ import authStore from '../../../store/AuthStore/auth-store'
 import { NavigationProp, ParamListBase } from '@react-navigation/native'
 import { routerConstants } from '../../../constants/routerConstants'
 import { Accordions } from './PromoCode'
+import { useTranslation } from "react-i18next";
 
 type CartSProps = {
 	navigation: NavigationProp<ParamListBase>
 }
 
 const CartS = observer(({ navigation }: CartSProps) => {
+	const {t} = useTranslation(['cart', 'common']);
 	const {
 		cart,
 		currDeliveryPrice,
@@ -38,11 +40,13 @@ const CartS = observer(({ navigation }: CartSProps) => {
 	const { OrderService } = rootStore
 	const cartProducts = cart?.products
 	const [textComment, setTextComment] = useState('')
+	const [loading, setLoading] = useState(false)
 
 	const onChangeTextCommentHandler = (text: string) => {
 		setTextComment(text)
 	}
 	const onPressCheckout = () => {
+		setLoading(true)
 		const getProductsForOrder = cart.products.map((product) => {
 			return { amount: product.amount, productId: product._id }
 		})
@@ -59,6 +63,8 @@ const CartS = observer(({ navigation }: CartSProps) => {
 					removeCart()
 				}, 2000)
 			}
+		}).finally(() => {
+			setLoading(false)
 		})
 	}
 	const onPressRemoveProduct = useCallback((idProduct: string) => {
@@ -72,7 +78,7 @@ const CartS = observer(({ navigation }: CartSProps) => {
 		}
 		updateProductToCart(idProduct, productValue)
 	}, [])
-	const productCartViews = ({ item }: { item: ProductCartType }) => {
+	const productCartViews = useCallback(({ item }: { item: ProductCartType }) => {
 		return (
 			<ProductCartViewer
 				onPressRemoveProduct={onPressRemoveProduct}
@@ -80,20 +86,20 @@ const CartS = observer(({ navigation }: CartSProps) => {
 				onChangeValueNumber={onChangeValueNumber}
 			/>
 		)
-	}
-	const onPressRemoveStoreFromCart = () => {
+	}, [])
+	const onPressRemoveStoreFromCart = useCallback(() => {
 		const onPressRemove = () => {
 			removeCart()
 		}
 		createAlert({
-			title: 'Message',
-			message: 'Delete the order ?',
+			title: t('common:message'),
+			message: t('deleteOrder'),
 			buttons: [
-				{ text: 'Remove', style: 'cancel', onPress: onPressRemove },
-				{ text: 'Exit', style: 'cancel' },
+				{ text: t('common:remove'), style: 'cancel', onPress: onPressRemove },
+				{ text: t('common:exit'), style: 'cancel' },
 			],
 		})
-	}
+	}, [])
 
 	const productTotalPrice = Number(formatProductPrice(cart?.totalSum ?? 0))
 	const isFreeDelivery = productTotalPrice >= 1500
@@ -104,25 +110,25 @@ const CartS = observer(({ navigation }: CartSProps) => {
 		<>
 			<BaseWrapperComponent
 				extraScrollHeight={50}
-				backgroundColor={'white'}
+				backgroundColor={"white"}
 				isKeyboardAwareScrollView={!!cartProducts}
 			>
 				{!cartProducts?.length ? (
 					<EmptyCart />
 				) : (
 					<Box paddingX={4} mt={2}>
-						<Box alignItems={'center'}>
-							<Text fontSize={20} fontWeight={'500'}>
-								Cart
+						<Box alignItems={"center"}>
+							<Text fontSize={20} fontWeight={"500"}>
+								{t("cart")}
 							</Text>
 						</Box>
 						<Box
 							mt={2}
-							flexDirection={'row'}
-							alignItems={'center'}
-							justifyContent={'space-between'}
+							flexDirection={"row"}
+							alignItems={"center"}
+							justifyContent={"space-between"}
 						>
-							<Text fontSize={28} fontWeight={'800'}>
+							<Text fontSize={23} fontWeight={"800"}>
 								{cart?.storeName}
 							</Text>
 							<TouchableOpacity onPress={onPressRemoveStoreFromCart}>
@@ -135,29 +141,29 @@ const CartS = observer(({ navigation }: CartSProps) => {
 							horizontal={false}
 							renderItem={productCartViews}
 							keyExtractor={(item, index) => item?._id?.toString()}
-							style={{ width: '100%' }}
+							style={{width: "100%"}}
 							ListEmptyComponent={() =>
-								renderEmptyContainer(Dimensions.get('window').height, 'List is empty')
+								renderEmptyContainer(Dimensions.get("window").height, t("common:listEmpty"))
 							}
 							contentContainerStyle={!cartProducts && styles.contentContainerStyleProducts}
 						/>
 						<Box
-							flexDirection={'row'}
-							alignItems={'center'}
-							justifyContent={'space-between'}
+							flexDirection={"row"}
+							alignItems={"center"}
+							justifyContent={"space-between"}
 							borderBottomWidth={1}
 							pb={2}
 							borderColor={colors.grayDarkLight}
 						>
-							<Text>Delivery</Text>
-							<Text>{`฿ ${isFreeDelivery ? '0' : currDeliveryPrice}`}</Text>
+							<Text>{t("delivery")}</Text>
+							<Text>{`฿ ${isFreeDelivery ? "0" : currDeliveryPrice}`}</Text>
 						</Box>
 						<Box>
-							<Text color={colors.gray}>{`Order ฿ 1500 and get free delivery`}</Text>
+							<Text color={colors.gray}>{t("orderFreeDelivery")}</Text>
 						</Box>
 						<Box>
-							<Text>Your Address</Text>
-							<Text ml={3} fontSize={14} color={colors.gray} fontWeight={'500'}>
+							<Text>{t('yorAddress')}</Text>
+							<Text ml={3} fontSize={14} color={colors.gray} fontWeight={"500"}>
 								{formatted_address}
 							</Text>
 						</Box>
@@ -169,8 +175,8 @@ const CartS = observer(({ navigation }: CartSProps) => {
 								onChangeText={onChangeTextCommentHandler}
 								heightInput={40}
 								borderRadius={16}
-								placeholder={'Add comment'}
-								textAlignVertical={'top'}
+								placeholder={t("addComment")}
+								textAlignVertical={"top"}
 								multiline={true}
 								numberOfLines={4}
 							/>
@@ -183,30 +189,31 @@ const CartS = observer(({ navigation }: CartSProps) => {
 			</BaseWrapperComponent>
 			{!!cartProducts?.length && (
 				<Box
-					flexDirection={'row'}
-					shadow={'black'}
+					flexDirection={"row"}
+					shadow={"black"}
 					borderTopRightRadius={16}
 					borderTopLeftRadius={16}
 					height={99}
-					alignItems={'center'}
-					justifyContent={'center'}
+					alignItems={"center"}
+					justifyContent={"center"}
 					paddingX={5}
 					style={styles.shadow}
 					backgroundColor={colors.white}
 				>
 					<Box mr={2}>
-						<Text fontSize={18} fontWeight={'500'}>
+						<Text fontSize={18} fontWeight={"500"}>
 							฿ {isFreeDelivery ? productTotalPrice : productTotalPrice + currDeliveryPrice}
 						</Text>
 						<Text fontSize={13} color={colors.gray}>
-							{cart.deliviryTime} min
+							{cart.deliviryTime} {t('min')}
 						</Text>
 					</Box>
 					<Button
 						styleContainer={styles.styleBtnContainer}
 						styleText={styles.styleTextBtn}
+						loading={loading}
 						onPress={onPressCheckout}
-						title={'Checkout'}
+						title={t('checkout')}
 					/>
 				</Box>
 			)}

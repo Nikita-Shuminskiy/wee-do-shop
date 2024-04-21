@@ -2,10 +2,15 @@
   "expo": {
     "name": "Weedo",
     "slug": "weedo",
-    "version": "1.0.6",
+    "version": "1.0.7",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
+    "notification": {
+      "iosDisplayInForeground": true,
+      "color": "#ffffff",
+      "icon": "./assets/icon.png"
+    },
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
@@ -18,10 +23,11 @@
       "**/*"
     ],
     "ios": {
+      "googleServicesFile": "./GoogleService-Info.plist",
       "userInterfaceStyle": "light",
       "supportsTablet": true,
       "bundleIdentifier": "com.weedo.ios",
-      "buildNumber": "1.0.13",
+      "buildNumber": "1.0.15",
       "config": {
         "googleMapsApiKey": "AIzaSyD-3PKe63YHjDDaxjVahTekuyvvOFfwKp4"
       },
@@ -33,6 +39,7 @@
       }
     },
     "android": {
+      "googleServicesFile": "./google-services.json",
       "userInterfaceStyle": "light",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
@@ -45,7 +52,10 @@
       },
       "versionCode": 34,
       "permissions": [
-        "CALL_PHONE"
+        "CALL_PHONE",
+        "android.permission.ACCESS_COARSE_LOCATION",
+        "android.permission.ACCESS_FINE_LOCATION",
+        "android.permission.FOREGROUND_SERVICE"
       ],
       "package": "com.wee_doo.th"
     },
@@ -59,14 +69,28 @@
     },
     "owner": "wee_do12345",
     "plugins": [
-      "expo-location",
+      "@react-native-firebase/app",
       "expo-localization",
+      "@react-native-google-signin/google-signin",
+      "expo-notifications",
+      "expo-location",
       [
         "expo-updates",
         {
           "username": "wee_do12345"
         }
+      ],
+      [
+        "expo-build-properties",
+        {
+          "ios": {
+            "useFrameworks": "static"
+          }
+        }
       ]
-    ]
+    ],
+    "updates": {
+      "url": "https://u.expo.dev/e788e2ed-368d-4561-9f10-7f4ef763701c"
+    }
   }
 }

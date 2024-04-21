@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useState } from 'react'
+import React, { memo, useCallback, useEffect, useState } from "react";
 import { colors } from '../assets/colors/colors'
 import { Box, Image } from 'native-base'
 import TextInput from './TextInput'
@@ -7,23 +7,34 @@ import settingImg from '../assets/images/setting.png'
 import rootStore from '../store/RootStore/root-store'
 import { AntDesign } from '@expo/vector-icons'
 import { TouchableOpacity } from 'react-native'
+import { useTranslation } from "react-i18next";
 
 type SearchStoresType = {
 	search: string
 	setSearch: (text: string) => void
+	setIsLoadStores: (val: boolean) => void
 	selectCategory: string
 }
-const SearchStores = memo(({ search, setSearch, selectCategory }: SearchStoresType) => {
+const SearchStores = memo(({ search, setSearch, selectCategory, setIsLoadStores }: SearchStoresType) => {
 	const { StoresService } = rootStore
-
+	const {t} = useTranslation(['main', 'common']);
 	const handleTextChange = (newText) => {
 		setSearch(newText)
 	}
 
 	const onSubmitEditing = () => {
-		StoresService.searchStores({ search, categoryId: selectCategory })
+		setIsLoadStores(false)
+		StoresService.searchStores({ search, categoryId: selectCategory }).finally(() => {
+			setIsLoadStores(true)
+		})
 	}
-
+	const onPressClearSearch = () => {
+		setIsLoadStores(false)
+		StoresService.searchStores({ search: '', categoryId: selectCategory }).finally(() => {
+			setIsLoadStores(true)
+		})
+		setSearch('')
+	}
 	return (
 		<Box w={'100%'}>
 			<TextInput
@@ -31,10 +42,7 @@ const SearchStores = memo(({ search, setSearch, selectCategory }: SearchStoresTy
 				iconRight={
 					search && (
 						<TouchableOpacity
-							onPress={() => {
-								StoresService.searchStores({ search: '', categoryId: selectCategory })
-								setSearch('')
-							}}
+							onPress={onPressClearSearch}
 						>
 							<AntDesign name="closecircleo" size={24} color={`#9095A4`} />
 						</TouchableOpacity>
@@ -42,7 +50,7 @@ const SearchStores = memo(({ search, setSearch, selectCategory }: SearchStoresTy
 				}
 				returnKeyType={'search'}
 				h={50}
-				placeholder={'Store search'}
+				placeholder={t('storeSearch')}
 				borderRadius={16}
 				backgroundColor={'transparent'}
 				borderColor={colors.grayLight}

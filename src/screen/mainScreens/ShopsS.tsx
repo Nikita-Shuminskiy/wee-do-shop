@@ -11,38 +11,36 @@ import { StoreType } from '../../api/storesApi'
 import { routerConstants } from '../../constants/routerConstants'
 import { renderEmptyContainer } from '../../components/list-viewer/empty-list'
 import rootStore from '../../store/RootStore/root-store'
-import ShopsViewer from '../../components/list-viewer/ShopsViewer'
+import ShopsViewer from '../../components/list-viewer/ShopsViewer/ShopsViewer'
 import { observer } from 'mobx-react-lite'
+import { useTranslation } from "react-i18next";
 
 export type ShopsSType = {
 	navigation: NavigationProp<ParamListBase>
 }
 const ShopsS = observer(({ navigation }: ShopsSType) => {
-	const { StoresService } = rootStore
-	const { user } = AuthStore
-	const { StoresStore } = rootStore
-	const { stores, setStore, favoriteStores, search, setSearch } = StoresStore
-
+	const { user, isAuth } = AuthStore
+	const { StoresStore, StoresService } = rootStore
+	const { shops} = StoresStore
+	const {t} = useTranslation(['shops', 'common']);
+	const onPress = useCallback((id) => {
+		//navigation.navigate(routerConstants.STORE, { storeId: id })
+		StoresService.getStore(id).then((data) => {
+			if (data) {
+				navigation.navigate(routerConstants.STORE)
+			}
+		})
+	}, [])
 	const storesViews = useCallback(({ item }: { item: StoreType }) => {
-		const onPress = () => {
-			StoresService.getStore(item._id).then((data) => {
-				if (data) {
-					navigation.navigate(routerConstants.STORE)
-				}
-			})
-		}
 		return <ShopsViewer onPress={onPress} stores={item} />
 	}, [])
-	useEffect(() => {
-		//StoresService.getStores()
-		return () => {
-			setSearch('')
-		}
+	const getHomeData = useCallback(async () => {
+		StoresService.getShops()
 	}, [])
 	return (
-		<BaseWrapperComponent backgroundColor={colors.white} isKeyboardAwareScrollView={true}>
-			<Box paddingX={4}>
-				<HeaderUser address={user?.address} navigation={navigation} />
+		<BaseWrapperComponent 	onRefreshHandler={getHomeData} backgroundColor={colors.white} isKeyboardAwareScrollView={true}>
+			<Box paddingX={2}>
+				<HeaderUser isAuth={isAuth} address={user?.address}  />
 				<Box
 					mt={2}
 					w={'100%'}
@@ -50,23 +48,22 @@ const ShopsS = observer(({ navigation }: ShopsSType) => {
 					borderTopLeftRadius={16}
 					borderTopRightRadius={16}
 				>
-					<SearchStores selectCategory={''} setSearch={setSearch} search={search} />
 					<Text mt={2} mb={2} fontSize={24} fontWeight={'500'}>
-						Shops near you
+						{t('shopsNearYou')}
 					</Text>
 					<Box mb={20}>
 						<FlatList
 							scrollEnabled={false}
 							numColumns={2}
-							contentContainerStyle={!stores?.length && styles.contentContainerStyleProducts}
+							contentContainerStyle={!shops?.length && styles.contentContainerStyleProducts}
 							columnWrapperStyle={{ justifyContent: 'space-between' }}
-							data={stores}
+							data={shops}
 							renderItem={storesViews}
 							keyExtractor={(item, index) => item._id.toString()}
 							style={{ width: '100%' }}
 							horizontal={false}
 							ListEmptyComponent={() =>
-								renderEmptyContainer(Dimensions.get('window').height, 'List is empty')
+								renderEmptyContainer(Dimensions.get('window').height, t('common:listEmpty'))
 							}
 						/>
 					</Box>

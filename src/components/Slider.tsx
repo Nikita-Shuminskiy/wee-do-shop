@@ -8,7 +8,7 @@ type SliderComponentProps = {
     valueSlider: number
 }
 const SliderComponent = ({onChangeValue, valueSlider}: SliderComponentProps) => {
-    const [sliderValue, setSliderValue] = useState(() => valueSlider);
+    const [sliderValue, setSliderValue] = useState(valueSlider);
 
     const handleSliderChange = (value) => {
         setSliderValue(value);

@@ -1,25 +1,28 @@
-import React, { useCallback, useEffect, useState } from 'react'
-import { BaseWrapperComponent } from '../../components/baseWrapperComponent'
-import orderStore from '../../store/OrderStore/order-store'
-import rootStore from '../../store/RootStore/root-store'
-import { Box, Text } from 'native-base'
-import ArrowBack from '../../components/ArrowBack'
-import arrowLeftBack from '../../assets/images/arrow-left.png'
-import { NavigationProp, ParamListBase } from '@react-navigation/native'
-import { colors } from '../../assets/colors/colors'
-import { ActivityIndicator, FlatList, StyleSheet, TouchableOpacity } from 'react-native'
-import { ApiOrderType, StatusType } from '../../api/ordersApi'
-import OrderViewer from '../../components/list-viewer/OrderViewer'
-import { observer } from 'mobx-react-lite'
-import PopUpOrderDetails from '../../components/modalPopUp/PopUpOrderDetails'
-import { routerConstants } from '../../constants/routerConstants'
-import cartStore from '../../store/CartStore/cart-store'
-import { renderEmptyContainer } from '../../components/list-viewer/empty-list'
-import { getTotalSumProductsCart } from '../../utils/utilsCart'
-import Loading from '../../components/Loading'
-import { isCurrentTimeWorkStoreRange } from "../../utils/utils";
-import { alertStoreClosed } from "../../components/list-viewer/utils";
-import AuthStore from "../../store/AuthStore/auth-store";
+import React, {useCallback, useEffect, useState} from "react"
+import {BaseWrapperComponent} from "../../components/baseWrapperComponent"
+import orderStore from "../../store/OrderStore/order-store"
+import rootStore from "../../store/RootStore/root-store"
+import {Box, Text} from "native-base"
+import ArrowBack from "../../components/ArrowBack"
+import arrowLeftBack from "../../assets/images/arrow-left.png"
+import {NavigationProp, ParamListBase} from "@react-navigation/native"
+import {colors} from "../../assets/colors/colors"
+import {ActivityIndicator, FlatList, StyleSheet, TouchableOpacity} from "react-native"
+import {ApiOrderType, StatusType} from "../../api/ordersApi"
+import OrderViewer from "../../components/list-viewer/OrderViewer"
+import {observer} from "mobx-react-lite"
+import PopUpOrderDetails from "../../components/modalPopUp/PopUpOrderDetails"
+import {routerConstants} from "../../constants/routerConstants"
+import cartStore from "../../store/CartStore/cart-store"
+import {renderEmptyContainer} from "../../components/list-viewer/empty-list"
+import {getTotalSumProductsCart} from "../../utils/utilsCart"
+import {isCurrentTimeWorkStoreRange} from "../../utils/utils"
+import {alertStoreClosed} from "../../components/list-viewer/utils"
+import AuthStore from "../../store/AuthStore/auth-store"
+import {useTranslation} from "react-i18next"
+import {Skeleton} from "moti/skeleton"
+import {SkeletonCommonProps} from "../../utils/common"
+import Spacer from "../../components/Specer"
 
 type OrdersSProps = {
 	navigation: NavigationProp<ParamListBase>
@@ -28,7 +31,7 @@ type OrdersSProps = {
 const OrdersS = observer(({ navigation, route }: OrdersSProps) => {
 	const isRoutHistory = route.name === routerConstants.HISTORY
 	const isFromStatusesScreen = route?.params?.from === 'statuses'
-
+	const {t} = useTranslation(['orders', 'common']);
 	const { setToCartStore } = cartStore
 	const { orders, setClearOrders, totalOrders } = orderStore
 	const { isAuth } = AuthStore
@@ -38,6 +41,7 @@ const OrdersS = observer(({ navigation, route }: OrdersSProps) => {
 
 	const [page, setPage] = useState(1)
 	const [isLoadingData, setLoadingData] = useState(false)
+	const [isLoadDataOrders, setIsLoadDataOrders] = useState(false)
 	const isLastOrders = !!(totalOrders && orders.length) && totalOrders <= orders.length
 	const ordersLength = orders?.length
 
@@ -54,7 +58,7 @@ const OrdersS = observer(({ navigation, route }: OrdersSProps) => {
 			})
 	}
 	const requestAPI = () => {
-		if(!isAuth) return
+		if(!isAuth) return setIsLoadDataOrders(true)
 		setLoadingData(true)
 		OrderService.getOrders({
 			limit,
@@ -67,6 +71,7 @@ const OrdersS = observer(({ navigation, route }: OrdersSProps) => {
 			})
 			.finally(() => {
 				setLoadingData(false)
+				setIsLoadDataOrders(true)
 			})
 	}
 
@@ -112,7 +117,7 @@ const OrdersS = observer(({ navigation, route }: OrdersSProps) => {
 		return (
 			<OrderViewer onPressRepeat={onPressRepeat} onPressDetails={onPressDetails} order={item} />
 		)
-	}, [])
+	}, [isRoutHistory])
 
 	const renderFooter = () => (
 		<Box style={styles.footerText}>
@@ -120,13 +125,13 @@ const OrdersS = observer(({ navigation, route }: OrdersSProps) => {
 			{isLastOrders && orders.length >= totalOrders
 				? orders.length > 20 && (
 						<Text color={colors.gray} fontWeight={'500'} fontSize={13}>
-							No more orders at the moment
+							{t('common:noOrderAtMoment')}
 						</Text>
 				  )
 				: !isLoadingData && (
 						<TouchableOpacity onPress={requestAPI}>
 							<Text color={colors.green} fontSize={20} fontWeight={'500'}>
-								Load more
+								{t('loadMore')}
 							</Text>
 						</TouchableOpacity>
 				  )}
@@ -152,23 +157,56 @@ const OrdersS = observer(({ navigation, route }: OrdersSProps) => {
 					<Box w={'100%'} alignItems={'center'}>
 						<Text fontSize={28} fontWeight={'700'}>
 							{' '}
-							{!isRoutHistory ? 'History' : 'Orders'}
+							{!isRoutHistory ? t('history') : t('orders')}
 						</Text>
 					</Box>
 				</Box>
 				<Box mt={5} alignItems={'center'} flex={1} w={'100%'}>
-					<FlatList
-						scrollEnabled={false}
-						data={orders}
-						renderItem={orderViews}
-						keyExtractor={(item, index) => item._id?.toString()}
-						style={{ width: '100%' }}
-						contentContainerStyle={!ordersLength && styles.contentContainerOrder}
-						ListFooterComponent={orders.length ? renderFooter : null}
-						ListEmptyComponent={() =>
-							renderEmptyContainer(0, 'You haven’t placed\n any orders yet.')
-						}
-					/>
+					{
+						isLoadDataOrders ? 	<FlatList
+							scrollEnabled={false}
+							data={orders}
+							renderItem={orderViews}
+							keyExtractor={(item, index) => item._id?.toString()}
+							style={{ width: '100%' }}
+							contentContainerStyle={!ordersLength && styles.contentContainerOrder}
+							ListFooterComponent={orders.length ? renderFooter : null}
+							ListEmptyComponent={() =>
+								renderEmptyContainer(0, t('youHaveNotOrders'))
+							}
+						/> : (
+							<Box paddingX={4}>
+								<Skeleton.Group show={true}>
+									<Skeleton height={90} width={'100%'} show={true} { ...SkeletonCommonProps }>
+										<Box alignItems={'flex-end'} height={85} flexDirection={'row'} justifyContent={'space-evenly'}>
+											<Skeleton height={30} width={150} {...SkeletonCommonProps} />
+											<Skeleton height={30} width={150} {...SkeletonCommonProps} />
+										</Box>
+									</Skeleton>
+								</Skeleton.Group>
+								<Spacer height={8} />
+								<Skeleton.Group show={true}>
+									<Skeleton height={90} width={'100%'} show={true} { ...SkeletonCommonProps }>
+										<Box alignItems={'flex-end'} height={85} flexDirection={'row'} justifyContent={'space-evenly'}>
+											<Skeleton height={30} width={150} {...SkeletonCommonProps} />
+											<Skeleton height={30} width={150} {...SkeletonCommonProps} />
+										</Box>
+									</Skeleton>
+								</Skeleton.Group>
+								<Spacer height={8} />
+								<Skeleton.Group show={true}>
+									<Skeleton height={90} width={'100%'} show={true} { ...SkeletonCommonProps }>
+										<Box alignItems={'flex-end'} height={85} flexDirection={'row'} justifyContent={'space-evenly'}>
+											<Skeleton height={30} width={150} {...SkeletonCommonProps} />
+											<Skeleton height={30} width={150} {...SkeletonCommonProps} />
+										</Box>
+									</Skeleton>
+								</Skeleton.Group>
+								<Spacer height={8} />
+							</Box>
+						)
+					}
+
 				</Box>
 			</BaseWrapperComponent>
 			{isShowPopupDetails && (

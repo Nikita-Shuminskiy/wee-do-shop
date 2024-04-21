@@ -1,7 +1,6 @@
-import {action, makeObservable, observable} from "mobx"
+import { action, makeObservable, observable, runInAction } from "mobx";
 import {deviceStorage} from "../../utils/storage/storage"
-import {authApi, PayloadResetPasswordType, UserType} from "../../api/authApi"
-import {UserRegisterDataType} from "screen/authScreens/RegisterS"
+import { authApi, PayloadResetPasswordType, UserRegisterDataType, UserType } from "../../api/authApi";
 import {BannersType, OptionalUserType, userApi} from "../../api/userApi"
 import Constants from "expo-constants"
 import {Linking, Platform} from "react-native"
@@ -35,11 +34,12 @@ export class AuthStore {
 		verificationCode: "",
 	}
 	currentLocation: AddressType = {} as AddressType
-	banners: BannersType[] = [] as BannersType[]
 	setClearAuthStoreData = () => {
 		this.isAuth = false
 		this.currentLocation = {} as AddressType
-		this.user = {} as UserType
+		runInAction(() => {
+			this.user = null
+		})
 	}
 
 	setUser(userData: UserType): void {
@@ -80,20 +80,14 @@ export class AuthStore {
 		return data
 	}
 
-	async getBanners(): Promise<any> {
-		const {data} = await userApi.getBanners()
-		this.setBanners(data.results)
-	}
-
-	setBanners(banners: BannersType[]) {
-		this.banners = banners
-	}
-
 	async logOut() {
 		this.isAuth = false
 		await deviceStorage.removeItem("refreshToken")
 		await deviceStorage.removeItem("accessToken")
-		this.user = null
+		runInAction(() => {
+			this.user = null
+		})
+
 	}
 
 	async forgotPassword(email: string) {
@@ -146,7 +140,6 @@ export class AuthStore {
 	constructor() {
 		makeObservable(this, {
 			user: observable,
-			banners: observable,
 			isAuth: observable,
 			infoResetPassword: observable,
 			currentLocation: observable,
@@ -155,7 +148,6 @@ export class AuthStore {
 			forgotPassword: action,
 			resetPassword: action,
 			getUser: action,
-			setBanners: action,
 			setLocation: action,
 			logOut: action,
 			setAuth: action,
@@ -163,13 +155,11 @@ export class AuthStore {
 			login: action,
 			deleteUser: action,
 			updateUser: action,
-			getBanners: action,
 			setClearAuthStoreData: action,
 			checkVerificationCode: action,
 		})
 		this.setAuth = this.setAuth.bind(this)
 		this.setInfoResetPassword = this.setInfoResetPassword.bind(this)
-		this.setBanners = this.setBanners.bind(this)
 		this.updateUser = this.updateUser.bind(this)
 		this.getMe = this.getMe.bind(this)
 		this.getUser = this.getUser.bind(this)

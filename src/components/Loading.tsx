@@ -23,12 +23,11 @@ const Loading = memo(({ visible }: any) => {
 	})
 	return (
 		<Box
-			flex={1}
 			position={'absolute'}
-			top={'50%'}
 			zIndex={10}
+			height={'100%'}
 			w={'100%'}
-			backgroundColor={'transparent'}
+			backgroundColor={'rgba(121,116,116,0.1)'}
 			justifyContent={'center'}
 			alignItems={'center'}
 		>
