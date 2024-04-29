@@ -9,7 +9,7 @@
     "notification": {
       "iosDisplayInForeground": true,
       "color": "#ffffff",
-      "icon": "./assets/icon.png"
+      "icon": "./assets/notification-icon.png"
     },
     "splash": {
       "image": "./assets/splash.png",
@@ -70,6 +70,7 @@
     "owner": "wee_do12345",
     "plugins": [
       "@react-native-firebase/app",
+      "@react-native-firebase/messaging",
       "expo-localization",
       "@react-native-google-signin/google-signin",
       "expo-notifications",

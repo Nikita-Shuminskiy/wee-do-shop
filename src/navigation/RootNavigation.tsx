@@ -12,6 +12,7 @@ import {LoadingEnum} from "../store/types/types"
 import Loading from "../components/Loading"
 import { usePermissionsPushGeo } from "../utils/hook/usePermissionsPushGeo";
 import { useNotification } from "../utils/hook/useNotification";
+import AuthStore from "../store/AuthStore/auth-store";
 
 const backgroundHandler = async (time: number) => {
 	if (time >= 20) {
@@ -22,17 +23,17 @@ const RootStack = createNativeStackNavigator()
 
 const RootNavigation = observer(() => {
 	const { isLoading} = NotificationStore
-	const {} = usePermissionsPushGeo()
-	useNotification(true)
+	const { isAuth } = AuthStore
+	const {locationStatus} = usePermissionsPushGeo()
+	useNotification(isAuth)
 	const {checkInternetConnection, isConnected} = useInternetConnection()
 	useBackgroundTime({backgroundHandler})
-
 
 	const memoizedRoutes = useMemo(() => Routs.map((route) => {
 		return 	<RootStack.Screen
 			key={route.name}
 			options={{headerShown: false, gestureEnabled: false, animation: 'slide_from_right'}}
-			name={route.name}
+			name={route.name as any}
 			component={route.component}
 		/>
 	}), []);

@@ -9,6 +9,7 @@ import { OrderCourierType } from '../../api/couierApi'
 import { observer } from 'mobx-react-lite'
 import { routerConstants } from '../../constants/routerConstants'
 import { NavigationProp, ParamListBase } from '@react-navigation/native'
+import useGoBackNative from "../../utils/hook/useGoBackNative";
 
 type CourierOrdersProps = {
 	navigation: NavigationProp<ParamListBase>
@@ -55,7 +56,11 @@ const CourierOrders = observer(({ navigation }: CourierOrdersProps) => {
 			clearInterval(id)
 		}
 	}, [])
+	const onPressGoBack = () => {
+		return true
+	}
 
+	useGoBackNative(onPressGoBack)
 	return (
 		<BaseWrapperComponent>
 			<Box w={'100%'} flex={1}>
