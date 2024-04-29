@@ -23,7 +23,7 @@ const RootStack = createNativeStackNavigator()
 
 const RootNavigation = observer(() => {
 	const { isLoading} = NotificationStore
-	const { isAuth } = AuthStore
+	const { isAuth, getAppVersion } = AuthStore
 	const {locationStatus} = usePermissionsPushGeo()
 	useNotification(isAuth)
 	const {checkInternetConnection, isConnected} = useInternetConnection()
@@ -41,7 +41,7 @@ const RootNavigation = observer(() => {
 		const update = await Updates.checkForUpdateAsync();
 		if (update.isAvailable) {
 			await Updates.fetchUpdateAsync();
-			await this.getAppVersion()
+			await getAppVersion()
 			await Updates.reloadAsync();
 			return
 		}
