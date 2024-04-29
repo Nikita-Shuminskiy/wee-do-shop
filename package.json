@@ -14,7 +14,8 @@
     "uplad_ios": "eas submit -p ios --latest",
     "build_ios": "eas build -p ios",
     "uplad_android": "eas submit -p android",
-    "eas_update": "eas update --branch production --message \"fix\""
+    "eas_update": "eas update --branch production --message \"fix\"",
+    "ios_dev": "eas build --profile development-simulator --platform ios"
   },
   "dependencies": {
     "@expo/webpack-config": "^19.0.0",
@@ -51,7 +52,7 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-i18next": "^11.18.4",
-    "react-native": "0.72.10",
+    "react-native": "0.72.12",
     "react-native-collapsible": "^1.6.1",
     "react-native-confirmation-code-field": "^7.3.1",
     "react-native-gesture-handler": "~2.12.0",

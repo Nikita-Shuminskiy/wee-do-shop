@@ -9,6 +9,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import 'react-native-reanimated'
 import { onDisplayNotification } from "./src/utils/hook/useNotification";
 import messaging from "@react-native-firebase/messaging";
+import React from "react"
 LogBox.ignoreLogs([
 	"In React 18, SSRProvider is not necessary and is a noop. You can remove it from your app.",
 ])
