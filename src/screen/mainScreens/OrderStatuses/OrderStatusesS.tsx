@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useEffect } from "react";
+import React, { useEffect } from "react";
 import { Box, Text } from 'native-base'
 import { observer } from 'mobx-react-lite'
 import orderStore from '../../../store/OrderStore/order-store'
@@ -181,6 +181,7 @@ const OrderStatusesS = observer(({ navigation }: OrderStatusesSProps) => {
 	const {t} = useTranslation(['order_statuses', 'common']);
 	const { order, statusOrder, setStatus, setCourierToOrder, setRejectReason, rejectReason } =
 		orderStore
+	console.log(order._id, 'OrderStatusesS');
 	useEffect(() => {
 		const socket = io(BASE_URL)
 		socket.on('connect', () => {})
@@ -215,9 +216,11 @@ const OrderStatusesS = observer(({ navigation }: OrderStatusesSProps) => {
 			console.log('error open tel book')
 		}
 	}
-	const onPressGoToStores = useCallback(() => {
-		navigation.navigate(routerConstants.HOME)
-	}, [])
+
+	const onPressGoToStores = () => {
+		navigation.navigate(routerConstants.MAIN)
+	}
+
 	return (
 		<BaseWrapperComponent backgroundColor={colors.white} isKeyboardAwareScrollView={true}>
 			<Box paddingX={5} mt={5} justifyContent={'space-evenly'} flex={1}>
@@ -314,6 +317,7 @@ const OrderStatusesS = observer(({ navigation }: OrderStatusesSProps) => {
 		</BaseWrapperComponent>
 	)
 })
+
 
 const styles = StyleSheet.create({
 	styleContainerBtn: {

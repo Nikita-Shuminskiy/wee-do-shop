@@ -222,7 +222,7 @@ export default {
     confirm:'Подтвердить',
     listEmpty: 'Список пуст',
     backToStore: 'Вернуться в каталог',
-    TheresNothingHere: 'Кажеться тут\n еще не чего нет...'
+    TheresNothingHere: 'Кажется тут\n еще не чего нет...'
   },
   privacyPolice: {
     termsOfService: 'Условия обслуживания',

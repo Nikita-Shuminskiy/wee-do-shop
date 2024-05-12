@@ -21,12 +21,12 @@ const createChannel = async () => {
   }); // return channelId
 };
 export const onDisplayNotification = async (data) => {
-   const dataAndroid = data?.data?.android
-   const dataIos = data?.data?.ios
-  const channelId = await createChannel();
+  const dataAndroid = JSON.parse(data.data.android)
+  const dataIos = JSON.parse(data.data.ios)
+  const channelId = await createChannel()
   await notifee.displayNotification({
-    title: data.notification?.title,
-    body: data.notification?.body,
+    title: data.data?.title,
+    body: data.data?.body,
     data: { ...data.data },
     ios: {
       categoryId: "iosDefault",
@@ -49,10 +49,12 @@ export const onDisplayNotification = async (data) => {
       channelId,
       lightUpScreen: true,
       smallIcon: "notification_icon",
+      color: 'green',
       ...dataAndroid
     }
-  });
+  })
 };
+
 export const useNotification = (isAuth: boolean) => {
   const { AuthStoreService } = rootStore;
   const { user } = AuthStore;
@@ -63,12 +65,14 @@ export const useNotification = (isAuth: boolean) => {
           messaging()
             .getToken()
             .then((token) => {
-              console.log(user._id);
+           //   console.log(token);
               sendToken(token, user._id)
             });
         }
       });
     }
+    // simulator c1rUiDoTQVuE4o1uhRplfu:APA91bEz5Ld0LfmhuaRxirI66VqHvHOOmBL8J2lrSQnPSzM964E21WinWdkUvDyBU8SXmNcYpwgGC9iY5SVffvGiNp32levmYATn9nisgMirUVY7cs5etQtK5mdAYQpKDSQ7Hah-eemh
+    // xiaomi cvzKTXkrQXOvlv4Pj6s2eu:APA91bEKnPrgSJJ0axNsNcgtjLStrowH9wr1k8LXWkfFy4I3QMhqPlh6rBAayv4PPsAVCUB_cdXStkmNnMoU6YwFK3nXRGVamW6iwHSdlqp773sWmLaCe7j4BP4PI_JKndXup_7ljsEP
     ;(async () => {
       //for ios
       await notifee.requestPermission({
@@ -82,9 +86,9 @@ export const useNotification = (isAuth: boolean) => {
   }, [isAuth]);
   useEffect(() => {
     // дергается при открытом приложении
-    const unsubscribeForegroundEvent = notifee.onForegroundEvent(notificationHandler);
+    const unsubscribeForegroundEvent = notifee.onForegroundEvent(notificationHandler)
     // дергается при фоновом и убитом стейте
-    notifee.onBackgroundEvent(notificationHandler);
+    notifee.onBackgroundEvent(notificationHandler)
     let unsubscribeOnMessage: () => void = () => {}
     ;(async () => {
       unsubscribeOnMessage = messaging().onMessage(onDisplayNotification);
@@ -106,7 +110,6 @@ export const useNotification = (isAuth: boolean) => {
     }
   }
 };
-
 
 const requestUserPermission = async () => {
   try {

@@ -1,6 +1,6 @@
 {
   "name": "weedo",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "scripts": {
     "start": "expo start",
     "start_ofline": "expo start --offline",
@@ -14,7 +14,7 @@
     "uplad_ios": "eas submit -p ios --latest",
     "build_ios": "eas build -p ios",
     "uplad_android": "eas submit -p android",
-    "eas_update": "eas update --branch production --message \"fix\"",
+    "eas_update": "eas update --branch preview --message \"fix\"",
     "ios_dev": "eas build --profile development-simulator --platform ios"
   },
   "dependencies": {

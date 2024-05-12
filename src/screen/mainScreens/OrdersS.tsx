@@ -82,7 +82,7 @@ const OrdersS = observer(({ navigation, route }: OrdersSProps) => {
 		}
 	}, [])
 	const onPressGoBack = () => {
-		navigation.navigate(isFromStatusesScreen ? routerConstants.HOME : routerConstants.PROFILE_USER)
+		navigation.navigate(isFromStatusesScreen ? routerConstants.MAIN : routerConstants.PROFILE_USER)
 	}
 	const onPressRepeat = useCallback((item: ApiOrderType) => {
 		const isOpenStoreNow = isCurrentTimeWorkStoreRange(item?.store?.workingHours)

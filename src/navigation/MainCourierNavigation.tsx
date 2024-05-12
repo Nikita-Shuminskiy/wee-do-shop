@@ -27,7 +27,7 @@ const MainCourierNavigation = ({ navigation, route }) => {
 
 	return (
 		<TabMainStack.Navigator
-			initialRouteName={routerConstants.HOME}
+			initialRouteName={routerConstants.COURIER_ORDERS}
 			screenOptions={({ route }) => ({
 				tabBarStyle: {
 					width: '100%',

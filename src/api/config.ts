@@ -5,7 +5,7 @@ import AuthStore from '../store/AuthStore/auth-store'
 import { createAlert } from '../components/Alert'
 import { deviceStorage } from '../utils/storage/storage'
 
-export const BASE_URL = 'https://core-develop.up.railway.app/'
+export const BASE_URL = 'https://core-production-cd57.up.railway.app/'
 //https://core-develop.up.railway.app/   dev
 //https://core-production-cd57.up.railway.app/   prod
 export const instance = axios.create({

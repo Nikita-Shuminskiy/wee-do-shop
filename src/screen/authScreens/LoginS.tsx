@@ -16,6 +16,7 @@ import PrivacyPolicy from "../../components/PrivacyPolicy"
 import Link from "../../components/Link"
 import {RoleType} from "../../api/authApi"
 import { useTranslation } from "react-i18next";
+import useGoBackNative from "../../utils/hook/useGoBackNative";
 
 type LoginSProps = {
 	navigation: NavigationProp<ParamListBase>
@@ -68,6 +69,10 @@ const LoginS = ({navigation}: LoginSProps) => {
 		navigation.navigate(routerConstants.REGISTRATION)
 	}
 	const onRefreshHandler = useCallback(() => AuthStoreService.getMe(), [])
+	const goBack = () => {
+		return true
+	}
+	useGoBackNative(goBack)
 	return (
 		<BaseWrapperComponent
 			onRefreshHandler={ onRefreshHandler}

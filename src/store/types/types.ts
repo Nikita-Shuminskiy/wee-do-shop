@@ -10,4 +10,5 @@ export type NotificationType = 'success' | 'info' | 'warning' | 'error';
 
 export type NotificationResponse = {
     orderId: string
+    route: string
 }
