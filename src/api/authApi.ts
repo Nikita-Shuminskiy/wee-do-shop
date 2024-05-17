@@ -50,6 +50,7 @@ export type UserType = {
 	role: RoleType
 	createdAt: string
 	updatedAt: string
+	platform: "ios" | "android"
 }
 export enum RoleType {
 	Customer = 'customer',

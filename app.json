@@ -28,9 +28,6 @@
       "supportsTablet": true,
       "bundleIdentifier": "com.weedo.ios",
       "buildNumber": "1.0.19",
-      "config": {
-        "googleMapsApiKey": "AIzaSyD-3PKe63YHjDDaxjVahTekuyvvOFfwKp4"
-      },
       "infoPlist": {
         "NSLocationWhenInUseUsageDescription": "The Weedo app requests access to your location to search for nearby stores",
         "NSLocationAlwaysUsageDescription": "The Weedo app requests access to your location to search for nearby stores",
@@ -45,12 +42,7 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "config": {
-        "googleMaps": {
-          "apiKey": "AIzaSyCDu3dMvEFIDgw_uqJWabVuauq0JVsu3NI"
-        }
-      },
-      "versionCode": 34,
+      "versionCode": 36,
       "permissions": [
         "CALL_PHONE",
         "android.permission.ACCESS_COARSE_LOCATION",

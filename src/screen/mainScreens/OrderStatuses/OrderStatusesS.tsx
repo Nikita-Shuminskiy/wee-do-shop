@@ -15,7 +15,7 @@ import { CourierType, StatusType } from '../../../api/ordersApi'
 import io from 'socket.io-client'
 import OrderStatusBar from '../../../components/OrderStatusBar'
 import Button from '../../../components/Button'
-import { NavigationProp, ParamListBase } from '@react-navigation/native'
+import { NavigationProp, ParamListBase, useIsFocused } from "@react-navigation/native";
 import { routerConstants } from '../../../constants/routerConstants'
 import { BASE_URL } from '../../../api/config'
 import { splittingWord } from '../../../utils/utils'

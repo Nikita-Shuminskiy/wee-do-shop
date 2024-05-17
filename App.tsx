@@ -10,12 +10,14 @@ import 'react-native-reanimated'
 import { onDisplayNotification } from "./src/utils/hook/useNotification";
 import messaging from "@react-native-firebase/messaging";
 import React from "react"
+import notifee from "@notifee/react-native";
 LogBox.ignoreLogs([
 	"In React 18, SSRProvider is not necessary and is a noop. You can remove it from your app.",
 ])
 // Temporary solution until the problem is officially fixed
 // https://github.com/GeekyAnts/NativeBase/issues/5758
 messaging().setBackgroundMessageHandler(onDisplayNotification)
+notifee.onBackgroundEvent(onDisplayNotification)
 export default function App() {
 	const {setNavigation} = NotificationStore
 	return (

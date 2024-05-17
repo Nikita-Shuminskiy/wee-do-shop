@@ -361,12 +361,12 @@ const StoreS = observer(({navigation, route}: StoreSProps) => {
 				onClose={onClosePopUpProduct}
 				show={isShowModalProduct}
 			/>
-			<PopUpAboutStore
+	{/*		<PopUpAboutStore
 				currentStore={store}
 				isOpenStoreNow={isOpenStoreNow}
 				show={isShowModalAboutStore}
 				onClose={onClosePopUpAboutStore}
-			/>
+			/>*/}
 		</>
 	)
 })
