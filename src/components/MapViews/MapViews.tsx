@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import MapView, {Marker} from "react-native-maps"
+//import MapView, {Marker} from "react-native-maps"
 import {Image, Modal, Platform, StyleSheet, TouchableOpacity, View} from "react-native"
 import {Box, Text} from "native-base"
 import arrowLeft from "../../assets/images/arrow-left-back.png"
@@ -133,7 +133,7 @@ export const MapViews = ({navigation}: MapViewsProps) => {
 				<Box alignItems={"center"} position={"absolute"} style={{top: "10%"}} zIndex={2} w={"100%"}>
 					<AddressAutocomplete onSave={onSaveAutoCompleteHandler} />
 				</Box>
-				<MapView
+{/*				<MapView
 					ref={(ref) => setMapRef(ref)}
 					style={styles.map}
 					initialRegion={initialRegion}
@@ -149,7 +149,7 @@ export const MapViews = ({navigation}: MapViewsProps) => {
 							title={""}
 						/>
 					)}
-				</MapView>
+				</MapView>*/}
 				<Box mt={5} zIndex={10} position={"absolute"} w={"100%"} bottom={5}>
 					<Box zIndex={100} position={"absolute"} bottom={100} right={0}>
 						<TouchableOpacity style={{pointerEvents: "auto"}} onPress={getCurrentPositionHandler}>

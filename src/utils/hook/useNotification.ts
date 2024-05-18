@@ -44,7 +44,7 @@ const createChannel = async () => {
   }); // return channelId
 };
 export const onDisplayNotification = async (data) => {
-  console.log(data, '111');
+  //console.log(data, '111');
  /* if(!!data?.notification) return*/
 
   const dataAndroid = JSON.parse(data.data.android)
@@ -195,7 +195,10 @@ export const useNotification = (isAuth: boolean) => {
 const requestUserPermission = async () => {
   try {
     const authStatus = await messaging().requestPermission();
-     await messaging().registerDeviceForRemoteMessages();
+    await notifee.requestPermission();
+     if(Platform.OS === 'android') {
+       await messaging().registerDeviceForRemoteMessages();
+     }
     return authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
       authStatus === messaging.AuthorizationStatus.PROVISIONAL;
   } catch (e) {

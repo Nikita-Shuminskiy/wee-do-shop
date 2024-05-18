@@ -16,8 +16,11 @@ LogBox.ignoreLogs([
 ])
 // Temporary solution until the problem is officially fixed
 // https://github.com/GeekyAnts/NativeBase/issues/5758
-messaging().setBackgroundMessageHandler(onDisplayNotification)
-notifee.onBackgroundEvent(onDisplayNotification)
+messaging().setBackgroundMessageHandler((data) => {
+	console.log('setBackgroundMessageHandler');
+	return onDisplayNotification(data)
+})
+
 export default function App() {
 	const {setNavigation} = NotificationStore
 	return (

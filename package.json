@@ -15,7 +15,7 @@
     "build_ios": "eas build --profile preview --platform ios",
     "uplad_android": "eas submit -p android",
     "eas_update": "eas update --platform ios --branch production --message \"fix push\"",
-    "ios_dev": "eas build --profile development-simulator --platform ios"
+    "ios_dev": "npx eas build --profile development --platform ios"
   },
   "dependencies": {
     "@expo/webpack-config": "~19.0.1",
@@ -72,6 +72,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.24.0",
+    "@babel/plugin-proposal-export-namespace-from": "^7.18.9",
     "@react-navigation/native": "^6.1.7",
     "@react-navigation/native-stack": "^6.9.13",
     "@types/axios": "^0.14.0",

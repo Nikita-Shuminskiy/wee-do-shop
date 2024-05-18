@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react"
 import {BaseWrapperComponent} from "../../components/baseWrapperComponent"
 import {Box, Text} from "native-base"
 import {Linking, StyleSheet, TouchableOpacity, View} from "react-native"
-import MapView, {Marker, PROVIDER_GOOGLE} from "react-native-maps"
+//import MapView, {Marker, PROVIDER_GOOGLE} from "react-native-maps"
 import Button from "../../components/Button"
 import {colors} from "../../assets/colors/colors"
 import {getCurrentPositionHandler, getFormattedAddress} from "../../components/MapViews/utils"
@@ -126,7 +126,7 @@ const CourierPickOrder = observer(({ route, navigation }: CourierPickOrderProps)
 						</TouchableOpacity>
 					</Box>
 					<Box w={'100%'} borderRadius={16} mt={2} mb={2} flexGrow={1} h={300}>
-						<MapView
+{/*						<MapView
 							style={{
 								width: '100%',
 								height: '100%',
@@ -144,7 +144,7 @@ const CourierPickOrder = observer(({ route, navigation }: CourierPickOrderProps)
 								focusable={true}
 								title={isStatusOnTheWay ? formattedAddressUser : selectedOrder.store?.name}
 							/>
-						</MapView>
+						</MapView>*/}
 					</Box>
 
 					<Box w={'100%'}>

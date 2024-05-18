@@ -37,7 +37,7 @@ export const Routs = [
   { name: routerConstants.FORGOT_PASSWORD, component: ForgotPasswordS },
   { name: routerConstants.NEW_PASSWORD, component: NewPasswordS },
   //{ name: routerConstants.ALLOW_LOCATION, component: AllowLocationS },
-  { name: routerConstants.AUTOCOMPLETE_MAP, component: MapViews },
+   { name: routerConstants.AUTOCOMPLETE_MAP, component: MapViews },
   { name: routerConstants.PRIVACY_POLICE, component: PrivacyPolicyS },
   { name: routerConstants.LEGAL_INFORMATION, component: LegalInformationS },
   { name: routerConstants.TERM_SERVICE, component: TermServiceS },
